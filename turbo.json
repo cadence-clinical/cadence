@@ -22,6 +22,7 @@
       "env": ["CADENCE_BROWSERS"]
     },
     "dev": {
+      "dependsOn": ["^build"],
       "cache": false,
       "persistent": true
     }

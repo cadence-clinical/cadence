@@ -28,8 +28,8 @@
     "provenance": true
   },
   "scripts": {
-    "build": "tsdown && node scripts/write-css.mjs",
-    "dev": "tsdown --watch --on-success \"node scripts/write-css.mjs\"",
+    "build": "tsdown",
+    "dev": "tsdown --watch",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run"
