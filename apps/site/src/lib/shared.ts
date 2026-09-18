@@ -2,7 +2,7 @@ import { createGetUrl } from "fumadocs-core/source";
 
 export const appName = "Cadence Clinical";
 export const siteDescription =
-  "An open source design system for clinical software: accessible React components, clinical patterns and FHIR utilities.";
+  "An open source design system for building apps for clinicians and patients: accessible React components, clinical patterns and FHIR utilities.";
 
 // The canonical origin. Registry URLs are built from it, so it is set in one place.
 export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://cadenceclinical.app";

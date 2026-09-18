@@ -1,7 +1,7 @@
 {
   "name": "cadence",
   "private": true,
-  "description": "Cadence Clinical: an accessible design system for clinical software.",
+  "description": "Cadence Clinical: an accessible design system for building apps for clinicians and patients",
   "license": "MIT",
   "repository": {
     "type": "git",
