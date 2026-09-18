@@ -52,7 +52,17 @@ jobs:
           projectToken: ${{ env.CHROMATIC_PROJECT_TOKEN }}
           workingDir: apps/storybook
           storybookBuildDir: storybook-static
+          storybookBaseDir: apps/storybook
+          # TurboSnap: snapshot only the stories a change can reach. It follows JavaScript
+          # imports, read from the stats file that `storybook build --stats-json` writes.
           onlyChanged: true
+          # Colour, density and type reach every story through generated CSS, which TurboSnap
+          # cannot follow. A change to any of these files must re-snapshot everything, or a
+          # palette edit would pass with no visual check at all, and grades depend on that check.
+          externals: |
+            packages/tokens/**
+            packages/*/src/**/*.css
+            apps/storybook/.storybook/**
           # On main the new snapshots become the baseline. On a pull request a person accepts
           # or rejects each change in Chromatic, and that decision is the required check.
           autoAcceptChanges: main
