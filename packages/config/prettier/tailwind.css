@@ -1,0 +1,7 @@
+/*
+ * Read by prettier-plugin-tailwindcss so it can sort Cadence's own utilities (bg-muted,
+ * h-control, text-critical-text, ...). It imports token source, not dist, so formatting works
+ * before anything is built.
+ */
+@import "tailwindcss";
+@import "../../tokens/src/css/base.css";

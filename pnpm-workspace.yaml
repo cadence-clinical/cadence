@@ -1,0 +1,30 @@
+packages:
+  - apps/*
+  - packages/*
+
+# Dependencies allowed to run install scripts. Everything else is blocked by pnpm.
+allowBuilds:
+  esbuild: true
+  lefthook: true
+  # Ships prebuilt binaries; its install script is only a fallback compile.
+  unrs-resolver: false
+
+# One version of each shared dependency across the workspace.
+catalog:
+  # TypeScript 7 is out, but typescript-eslint supports <6.1 only. Revisit when it catches up.
+  typescript: ~6.0.3
+  react: ^19.3.0
+  react-dom: ^19.3.0
+  "@types/react": ^19.3.0
+  "@types/react-dom": ^19.3.0
+  "@types/node": ^24.13.5
+  tailwindcss: ^4.3.3
+  "@tailwindcss/postcss": ^4.3.3
+  "@tailwindcss/vite": ^4.3.3
+  # Vitest 5 is out, but @storybook/addon-vitest supports 3 and 4 only.
+  vitest: ^4.1.11
+  "@vitest/browser-playwright": ^4.1.11
+  playwright: ^1.63.0
+  tsdown: ^0.23.0
+  # ESLint 10 is out, but eslint-plugin-jsx-a11y supports 9 only, and a11y linting is not optional here.
+  eslint: ^9.39.5

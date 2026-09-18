@@ -1,0 +1,13 @@
+pnpm-lock.yaml
+dist
+.next
+.turbo
+storybook-static
+coverage
+.source
+apps/site/public/r
+.changeset/*.md
+.agents
+.claude/skills
+skills-lock.json
+CHANGELOG.md
