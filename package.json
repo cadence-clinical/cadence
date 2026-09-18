@@ -37,7 +37,7 @@
     "@commitlint/config-conventional": "^21.2.2",
     "lefthook": "^2.1.14",
     "prettier": "^3.9.0",
-    "prettier-plugin-tailwindcss": "^0.7.0",
+    "prettier-plugin-tailwindcss": "^0.8.1",
     "publint": "^0.3.0",
     "turbo": "^2.10.13",
     "typescript": "catalog:"
