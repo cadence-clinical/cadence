@@ -1,0 +1,31 @@
+name: Bug
+description: Something does not work as documented.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: If the bug could mislead a clinician, use the clinical safety template instead.
+  - type: input
+    id: package
+    attributes:
+      label: Package and version
+      placeholder: "@cadence-clinical/ui 0.1.0"
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: How to reproduce it
+      description: A minimal example. Made-up data only.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Browser and operating system

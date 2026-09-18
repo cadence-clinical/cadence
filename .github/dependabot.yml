@@ -1,0 +1,40 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: chore
+      include: scope
+    groups:
+      storybook:
+        patterns: ["storybook", "@storybook/*", "eslint-plugin-storybook", "chromatic"]
+      fumadocs:
+        patterns: ["fumadocs-*", "@fumadocs/*"]
+      testing:
+        patterns: ["vitest", "@vitest/*", "playwright", "@playwright/*"]
+      lint-and-format:
+        patterns: ["eslint", "eslint-*", "@eslint/*", "typescript-eslint", "prettier", "prettier-*"]
+      tailwind:
+        patterns: ["tailwindcss", "@tailwindcss/*", "tailwind-merge"]
+    ignore:
+      # Held back on purpose. See the comments in pnpm-workspace.yaml for what unblocks each one.
+      - dependency-name: typescript
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+      - dependency-name: eslint
+        update-types: ["version-update:semver-major"]
+      - dependency-name: vitest
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@vitest/*"
+        update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    commit-message:
+      prefix: ci
