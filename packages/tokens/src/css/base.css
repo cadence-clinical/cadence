@@ -1,0 +1,130 @@
+/*
+ * The static half of theme.css: density, shape, type and the Tailwind v4 theme mapping.
+ * Import it after Tailwind:
+ *
+ *   @import "tailwindcss";
+ *   @import "@cadence-clinical/tokens/theme.css";
+ */
+
+@custom-variant dark (&:where(.dark, .dark *, [data-mode="dark"], [data-mode="dark"] *));
+@custom-variant more-contrast (&:where([data-contrast="more"], [data-contrast="more"] *));
+@custom-variant comfortable (&:where([data-density="comfortable"], [data-density="comfortable"] *));
+
+:root {
+  --radius: 0.375rem;
+
+  /* Density: compact is the default, built for information-dense workstation screens. */
+  --control-height-sm: 1.75rem;
+  --control-height: 2rem;
+  --control-height-lg: 2.25rem;
+  --control-padding: 0.625rem;
+  --control-gap: 0.375rem;
+  --control-text: 0.8125rem;
+}
+
+/* Comfortable: 44px targets for touch, tablets and workstations on wheels. */
+:root[data-density="comfortable"] {
+  --control-height-sm: 2.25rem;
+  --control-height: 2.75rem;
+  --control-height-lg: 3rem;
+  --control-padding: 0.875rem;
+  --control-gap: 0.5rem;
+  --control-text: 0.9375rem;
+}
+
+/* A touch device that has not stated a density gets comfortable targets. */
+@media (pointer: coarse) {
+  :root:not([data-density]) {
+    --control-height-sm: 2.25rem;
+    --control-height: 2.75rem;
+    --control-height-lg: 3rem;
+    --control-padding: 0.875rem;
+    --control-gap: 0.5rem;
+    --control-text: 0.9375rem;
+  }
+}
+
+/* Brand hooks. Set --cadence-font-sans or --cadence-font-mono to theme the type. */
+@theme {
+  --font-sans: var(--cadence-font-sans, ui-sans-serif, system-ui, sans-serif);
+  --font-mono: var(--cadence-font-mono, ui-monospace, "SF Mono", Menlo, Consolas, monospace);
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
+
+  --spacing-control-sm: var(--control-height-sm);
+  --spacing-control: var(--control-height);
+  --spacing-control-lg: var(--control-height-lg);
+  --spacing-control-x: var(--control-padding);
+  --spacing-control-gap: var(--control-gap);
+  --text-control: var(--control-text);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-text: var(--primary-text);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-critical: var(--critical);
+  --color-critical-foreground: var(--critical-foreground);
+  --color-critical-subtle: var(--critical-subtle);
+  --color-critical-text: var(--critical-text);
+  --color-critical-border: var(--critical-border);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-warning-subtle: var(--warning-subtle);
+  --color-warning-text: var(--warning-text);
+  --color-warning-border: var(--warning-border);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-success-subtle: var(--success-subtle);
+  --color-success-text: var(--success-text);
+  --color-success-border: var(--success-border);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-info-subtle: var(--info-subtle);
+  --color-info-text: var(--info-text);
+  --color-info-border: var(--info-border);
+
+  /* Strong ease-out for UI feedback; the built-in curves are too soft to read as intentional. */
+  --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+  }
+
+  /* Windows High Contrast and similar: let the system palette win, keep focus visible. */
+  @media (forced-colors: active) {
+    :focus-visible {
+      outline: 2px solid CanvasText;
+      outline-offset: 2px;
+    }
+  }
+}
