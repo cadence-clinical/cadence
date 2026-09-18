@@ -70,10 +70,10 @@ importers:
         version: 2.1.14
       prettier:
         specifier: ^3.9.0
-        version: 3.9.7
+        version: 3.9.6
       prettier-plugin-tailwindcss:
-        specifier: ^0.7.0
-        version: 0.7.4(prettier@3.9.7)
+        specifier: ^0.8.1
+        version: 0.8.1(prettier@3.9.6)
       publint:
         specifier: ^0.3.0
         version: 0.3.24
@@ -204,7 +204,7 @@ importers:
         version: 4.1.11(playwright@1.63.0)(vite@8.3.0(@types/node@24.13.5)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.1))(vitest@4.1.11)
       chromatic:
         specifier: ^18.9.0
-        version: 18.9.1
+        version: 18.9.0
       eslint:
         specifier: 'catalog:'
         version: 9.39.5(jiti@2.7.0)
@@ -2607,8 +2607,8 @@ packages:
     resolution: {integrity: sha512-TQMmc3w+5AxjpL8iIiwebF73dRDF4fBIieAqGn9RGCWaEVwQ6Fb2cGe31Yns0RRIzii5goJ1Y7xbMwo1TxMplw==}
     engines: {node: '>= 20.19.0'}
 
-  chromatic@18.9.1:
-    resolution: {integrity: sha512-2XNnsqMU8xb5NN3MMO7E2/uclu8jNspJI42F3q+zgA0HCuvhj3CXqNHlyup5WkExVF5L8BkJS96TVmN5Q6igKw==}
+  chromatic@18.9.0:
+    resolution: {integrity: sha512-BFkxiSrelIX0S+Di31YiEEVPCDaN1kR20vDakzn+7vp56NwEgwHLBatOMV6CAhUjW+/5zqwbikQZN+LDX61iQg==}
     engines: {node: '>=22.0.0'}
     hasBin: true
     peerDependencies:
@@ -4343,8 +4343,8 @@ packages:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
 
-  prettier-plugin-tailwindcss@0.7.4:
-    resolution: {integrity: sha512-UKii4RjY05SNt/WQi6/NcOn/LsT0/ILLXsxygjbRg5/YZelsSu5jTqorYHPDGq4nZy5q5hpCu+XdGZ1xaJEQgw==}
+  prettier-plugin-tailwindcss@0.8.1:
+    resolution: {integrity: sha512-iaFMYqDsE4ffdDkn5qup0j5f2aCEBFZrdrZnvu9QKTlWx/iGPeQ4HHu7b7fCPMxeo9nwQBiOAh2nSypdFYWJkw==}
     engines: {node: '>=20.19'}
     peerDependencies:
       '@ianvs/prettier-plugin-sort-imports': '*'
@@ -4397,6 +4397,11 @@ packages:
         optional: true
       prettier-plugin-svelte:
         optional: true
+
+  prettier@3.9.6:
+    resolution: {integrity: sha512-OpN0zzVdiaiAhxpuuj5efpIS4sY9j7bY6uR5mnj5yPzGkdkjNKSJeUThPb60Jw29QuAZgA4o+/iB49kFiaBX6g==}
+    engines: {node: '>=14'}
+    hasBin: true
 
   prettier@3.9.7:
     resolution: {integrity: sha512-T3mF5P7HFzZVLDQuCUNtJj6WK1pcpLMweMNUVwGb01bLNkH9AkKxtZvmInw8K6bnn2O3d6/5RHl6zSHiBAD0Og==}
@@ -7278,7 +7283,7 @@ snapshots:
     dependencies:
       readdirp: 5.1.1
 
-  chromatic@18.9.1:
+  chromatic@18.9.0:
     dependencies:
       semver: 7.8.5
 
@@ -9409,11 +9414,14 @@ snapshots:
 
   prelude-ls@1.2.1: {}
 
-  prettier-plugin-tailwindcss@0.7.4(prettier@3.9.7):
+  prettier-plugin-tailwindcss@0.8.1(prettier@3.9.6):
     dependencies:
-      prettier: 3.9.7
+      prettier: 3.9.6
 
-  prettier@3.9.7: {}
+  prettier@3.9.6: {}
+
+  prettier@3.9.7:
+    optional: true
 
   pretty-format@27.5.1:
     dependencies:
