@@ -1,0 +1,42 @@
+{
+  "name": "@cadence-clinical/site",
+  "version": "0.0.0",
+  "private": true,
+  "description": "The Cadence Clinical website: landing page, documentation and component registry.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "next typegen && tsc --noEmit",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@cadence-clinical/core": "workspace:*",
+    "@cadence-clinical/tokens": "workspace:*",
+    "@cadence-clinical/ui": "workspace:*",
+    "fumadocs-core": "16.15.11",
+    "fumadocs-mdx": "15.4.1",
+    "fumadocs-ui": "npm:@fumadocs/base-ui@16.15.11",
+    "lucide-react": "^1.43.0",
+    "next": "^16.3.4",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@tailwindcss/postcss": "catalog:",
+    "@types/mdx": "^2.0.14",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "eslint": "catalog:",
+    "eslint-config-next": "^16.3.4",
+    "eslint-config-prettier": "^10.1.8",
+    "postcss": "^8.5.28",
+    "tailwindcss": "catalog:",
+    "typescript": "catalog:"
+  }
+}

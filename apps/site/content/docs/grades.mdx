@@ -1,0 +1,41 @@
+---
+title: Grades
+description: How Cadence records how far each component has been verified.
+---
+
+Every Cadence component carries a grade that tells you how far it has been verified. The grade is published with the package, shown on the component's documentation page and available to coding agents.
+
+<Callout type="warn" title="Provisional">
+  The grading matrix is still being designed. The level names and the criteria for each level will
+  change. The two rules under [What a grade applies to](#what-a-grade-applies-to) are settled.
+</Callout>
+
+## Levels
+
+| Level                  | Meaning                                                                            |
+| ---------------------- | ---------------------------------------------------------------------------------- |
+| Draft                  | In development. No guarantees.                                                     |
+| Tested                 | Passes its interaction tests and automated accessibility checks in a real browser. |
+| Verified by clinicians | Reviewed by practising clinicians against a recorded protocol.                     |
+| Used in production     | In use in a live clinical system.                                                  |
+
+## What a grade applies to
+
+**A grade above Tested applies to one version.** The grade names the version that was reviewed and links to the review record. When a later change alters how the component looks or behaves, the component returns to Tested until it is reviewed again. A refactor with no visual difference keeps its grade. Visual regression tests decide which kind of change it is.
+
+**A grade applies to the published component only.** If you install a component from the registry and edit the source, your copy carries no grade.
+
+## Where grades are recorded
+
+Each component has a `meta.json` file beside its source:
+
+```json title="packages/ui/src/components/button/meta.json"
+{
+  "name": "button",
+  "title": "Button",
+  "category": "primitive",
+  "grade": { "level": "tested" }
+}
+```
+
+The build collects these files into `@cadence-clinical/ui/meta.json`. Continuous integration rejects a grade above Tested that does not name a version and an evidence record.

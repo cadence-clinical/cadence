@@ -1,0 +1,65 @@
+---
+title: Button
+description: Triggers an action. Sized by the density set on the page.
+---
+
+<GradeBadge component="button" />
+
+<ComponentPreview>
+  <Button>Save observation</Button>
+</ComponentPreview>
+
+## Usage
+
+```tsx
+import { Button } from "@cadence-clinical/ui";
+
+<Button onClick={save}>Save observation</Button>;
+```
+
+Button is built on the Base UI [Button](https://base-ui.com/react/components/button) and accepts all of its props.
+
+## Variants
+
+<ComponentPreview>
+  <Button variant="primary">Primary</Button>
+  <Button variant="secondary">Secondary</Button>
+  <Button variant="outline">Outline</Button>
+  <Button variant="ghost">Ghost</Button>
+  <Button variant="destructive">Cease medication</Button>
+  <Button variant="link">View history</Button>
+</ComponentPreview>
+
+| Variant       | Use                                                                                                        |
+| ------------- | ---------------------------------------------------------------------------------------------------------- |
+| `primary`     | The main action in a view. Use one per view.                                                               |
+| `secondary`   | An action of equal weight beside others.                                                                   |
+| `outline`     | A lower-emphasis action that still needs a visible boundary.                                               |
+| `ghost`       | Toolbar and inline actions.                                                                                |
+| `destructive` | An action that stops, removes or cannot be undone. It is a solid critical fill so it cannot be overlooked. |
+| `link`        | Navigation in running text.                                                                                |
+
+Write the label as the action and its object, such as "Cease medication". Avoid "OK" and "Confirm".
+
+## Sizes
+
+<ComponentPreview>
+  <Button size="sm">Small</Button>
+  <Button size="md">Medium</Button>
+  <Button size="lg">Large</Button>
+</ComponentPreview>
+
+The `size` prop is relative to the page's [density](/docs/theming#density). A `md` button is 32px high when the density is compact and 44px when it is comfortable.
+
+## Accessibility
+
+- An icon-only button must have an `aria-label`.
+- The focus ring uses the accent's text role, which holds at least 3:1 against the page in every mode.
+- The press animation is removed when the user asks for reduced motion.
+
+## Props
+
+| Prop      | Type                                                                          | Default     |
+| --------- | ----------------------------------------------------------------------------- | ----------- |
+| `variant` | `"primary" \| "secondary" \| "outline" \| "ghost" \| "destructive" \| "link"` | `"primary"` |
+| `size`    | `"sm" \| "md" \| "lg" \| "icon"`                                              | `"md"`      |

@@ -1,0 +1,31 @@
+---
+title: Clinical safety
+description: What Cadence takes responsibility for, what it leaves to you, and how to report a safety concern.
+---
+
+Cadence is a presentation layer. It is not a medical device, it does not provide clinical decision support, and it does not replace clinical judgement. You are responsible for the clinical safety of the software you build with it, including any assessment your regulator requires.
+
+## Components display an interpretation
+
+No Cadence component contains a clinical threshold. A component that shows a heart rate does not decide whether 130 is abnormal. You pass the interpretation in, and the component renders it.
+
+Cadence works this way because what counts as abnormal is a clinical decision. It varies by site, by patient age and by criteria a clinician has modified for one patient. A design system that ships a default threshold is making that decision for every patient on every screen that uses it.
+
+## Regional rule sets are opt-in and cited
+
+Published rule sets, such as reference intervals or track and trigger chart bands, belong in a Region package that you choose to supply. The planned `@cadence-clinical/au` package is the first.
+
+Each rule set in a Region records:
+
+- the source document, its publisher and its version
+- the licence the source is published under
+- the date the source was last checked
+- its own [grade](/docs/grades)
+
+A Region package is not available yet.
+
+## Report a clinical safety concern
+
+If you believe a Cadence component could mislead a clinician, for example by truncating a medicine name, hiding a unit or showing a stale value as current, open a [clinical safety issue](https://github.com/cadence-clinical/cadence/issues/new?template=clinical-safety.yml). Clinical safety issues are triaged ahead of all other work.
+
+Do not include patient information in an issue.
