@@ -28,6 +28,7 @@ jobs:
       contents: write # push the version commit and tags
       pull-requests: write # open the "Version packages" pull request
       id-token: write # npm trusted publishing and provenance
+      actions: write # start CI on the version pull request (see the last step)
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -40,6 +41,7 @@ jobs:
           registry-url: https://registry.npmjs.org
       - run: pnpm install --frozen-lockfile
       - uses: changesets/action@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
+        id: changesets
         with:
           version-script: pnpm version-packages
           publish-script: ${{ vars.NPM_PUBLISH == 'true' && 'pnpm release' || '' }}
@@ -47,3 +49,14 @@ jobs:
           commit-message: "chore: version packages"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # GitHub does not start workflows for a pull request opened with the built-in token, so the
+      # version pull request would never receive its required check and could never merge.
+      # A manual dispatch is the one event that token may raise. The runs report against the
+      # branch's head commit, which is what the required check reads.
+      - name: Run the checks on the version pull request
+        if: steps.changesets.outputs.pr-number != ''
+        run: |
+          gh workflow run ci.yml --ref changeset-release/main
+          gh workflow run chromatic.yml --ref changeset-release/main
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
