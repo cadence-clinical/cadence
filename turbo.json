@@ -5,7 +5,8 @@
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": ["dist/**", ".next/**", "!.next/cache/**", "storybook-static/**", "public/r/**"]
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**", "storybook-static/**", "public/r/**"],
+      "env": ["NEXT_PUBLIC_*"]
     },
     "lint": {
       "dependsOn": ["^build"]
@@ -17,7 +18,8 @@
       "dependsOn": ["^build"]
     },
     "test:browser": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "env": ["CADENCE_BROWSERS"]
     },
     "dev": {
       "cache": false,
