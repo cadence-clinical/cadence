@@ -1,0 +1,5 @@
+@import "tailwindcss";
+@import "@cadence-clinical/tokens/theme.css";
+
+/* Stories render from source, so Tailwind scans the packages' source, not their dist. */
+@source "../../../packages/*/src/**/*.{ts,tsx}";
