@@ -1,5 +1,5 @@
 import type { Decorator, Preview } from "@storybook/react-vite";
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 
 import "./preview.css";
 
@@ -7,9 +7,16 @@ const ACCENTS = ["teal", "blue", "indigo", "violet", "plum", "slate"];
 
 type ThemeGlobals = Record<"mode" | "contrast" | "density" | "accent", string>;
 
-/** Mirrors the toolbar onto <html>, which is where Cadence themes are set in a real app. */
+/**
+ * Mirrors the toolbar onto <html>, which is where Cadence themes are set in a real app.
+ *
+ * This must be a layout effect. A layout effect runs in the same commit as the story, so the
+ * theme is in place before a play function measures anything and before Chromatic captures.
+ * A passive effect is flushed in time under Vitest but not in the real Storybook runtime, where
+ * a story asserting the 44px comfortable target measured the 32px compact button instead.
+ */
 function ThemeSync({ mode, contrast, density, accent }: ThemeGlobals) {
-  useEffect(() => {
+  useLayoutEffect(() => {
     Object.assign(document.documentElement.dataset, { mode, contrast, density, accent });
   }, [mode, contrast, density, accent]);
 
