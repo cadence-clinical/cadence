@@ -5,6 +5,8 @@ on:
   push:
     branches: [main]
   merge_group:
+  # Raised by the Release workflow for the version pull request. See release.yml.
+  workflow_dispatch:
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
