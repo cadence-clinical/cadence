@@ -1,0 +1,54 @@
+name: Clinical safety concern
+description: A component could mislead a clinician or contribute to patient harm.
+title: "[Clinical safety] "
+labels: ["clinical-safety"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Clinical safety concerns are triaged ahead of all other work.
+
+        **Do not include patient information**, including in screenshots. Recreate the problem with made-up data.
+  - type: input
+    id: component
+    attributes:
+      label: Component or function
+      placeholder: For example VitalSigns, or the unit conversion for creatinine
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+    validations:
+      required: true
+  - type: textarea
+    id: hazard
+    attributes:
+      label: What could a clinician misread or miss?
+      description: Describe what is shown, what it should show, and how that difference could affect care.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: How to reproduce it
+      description: Props, data and theme settings (mode, contrast, density, accent). Made-up data only.
+    validations:
+      required: true
+  - type: dropdown
+    id: seen
+    attributes:
+      label: Where was this seen?
+      options:
+        - In development or testing
+        - In a live clinical system
+    validations:
+      required: true
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Confirmation
+      options:
+        - label: This issue contains no patient information.
+          required: true

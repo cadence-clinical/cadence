@@ -1,0 +1,57 @@
+name: Chromatic
+
+# Visual regression. A visual change to a component graded above "tested" sends it back to
+# "tested" (docs/decisions/0004-component-grading.md), and this is the check that detects one.
+# The workflow skips itself until the CHROMATIC_PROJECT_TOKEN secret exists.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: chromatic-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  chromatic:
+    name: Visual regression
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    # Secrets are not available to pull requests from forks.
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+    env:
+      CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+    steps:
+      - name: Check for the Chromatic token
+        id: token
+        run: echo "present=${{ env.CHROMATIC_PROJECT_TOKEN != '' }}" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: steps.token.outputs.present == 'true'
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        if: steps.token.outputs.present == 'true'
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        if: steps.token.outputs.present == 'true'
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+        if: steps.token.outputs.present == 'true'
+      - run: pnpm turbo run build --filter=@cadence-clinical/storybook
+        if: steps.token.outputs.present == 'true'
+      - uses: chromaui/action@bb3b582719a93c1828c5e520e62992b2937d7889 # v18.9.4
+        if: steps.token.outputs.present == 'true'
+        with:
+          projectToken: ${{ env.CHROMATIC_PROJECT_TOKEN }}
+          workingDir: apps/storybook
+          storybookBuildDir: storybook-static
+          onlyChanged: true
+          # On main the new snapshots become the baseline. On a pull request a person accepts
+          # or rejects each change in Chromatic, and that decision is the required check.
+          autoAcceptChanges: main
+          exitZeroOnChanges: true

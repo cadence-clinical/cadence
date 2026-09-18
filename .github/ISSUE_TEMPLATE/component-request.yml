@@ -1,0 +1,21 @@
+name: Component request
+description: Propose a primitive or a clinical component.
+labels: ["component-request"]
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: What clinical task does it support?
+      description: Who uses it, where, and what they need to see or do.
+    validations:
+      required: true
+  - type: textarea
+    id: prior-art
+    attributes:
+      label: Standards and prior art
+      description: Published guidance the component should follow, such as on-screen medicines display guidelines, and examples from existing systems.
+  - type: textarea
+    id: data
+    attributes:
+      label: What data does it display?
+      description: The FHIR resources or fields involved, if you know them.
