@@ -1,0 +1,45 @@
+{
+  "name": "cadence",
+  "private": true,
+  "description": "Cadence Clinical: an accessible design system for clinical software.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cadence-clinical/cadence.git"
+  },
+  "type": "module",
+  "packageManager": "pnpm@11.5.2",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "build:packages": "turbo run build --filter=\"./packages/*\"",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "test:browser": "turbo run test:browser",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check:grades": "node scripts/check-grades.mjs",
+    "check:packages": "pnpm -r --filter \"./packages/*\" --filter \"!@cadence-clinical/config\" exec publint --strict",
+    "check": "pnpm format:check && turbo run lint typecheck test build && pnpm check:grades && pnpm check:packages",
+    "skills:install": "npx --yes skills experimental_install",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "pnpm build:packages && changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/changelog-github": "^1.0.1",
+    "@changesets/cli": "^3.0.3",
+    "@commitlint/cli": "^21.2.2",
+    "@commitlint/config-conventional": "^21.2.2",
+    "lefthook": "^2.1.14",
+    "prettier": "^3.9.0",
+    "prettier-plugin-tailwindcss": "^0.7.0",
+    "publint": "^0.3.0",
+    "turbo": "^2.10.13",
+    "typescript": "catalog:"
+  }
+}

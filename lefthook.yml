@@ -1,0 +1,13 @@
+# Git hooks. Fast checks only: CI is the gate, hooks just save a round trip.
+pre-commit:
+  parallel: true
+  jobs:
+    - name: format
+      glob: "*.{ts,tsx,js,mjs,json,css,md,mdx,yml,yaml}"
+      run: pnpm exec prettier --write --ignore-unknown {staged_files}
+      stage_fixed: true
+
+commit-msg:
+  jobs:
+    - name: conventional commit
+      run: pnpm exec commitlint --edit {1}
