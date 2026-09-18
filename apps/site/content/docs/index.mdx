@@ -1,0 +1,39 @@
+---
+title: Introduction
+description: What Cadence Clinical is, who it is for and what state it is in.
+---
+
+Cadence Clinical is an open source design system for software used by doctors, nurses and pharmacists. It gives you React components that stay legible and consistent on dense clinical screens.
+
+<Callout type="warn" title="Pre-release">
+  Cadence is under active development. The packages are not yet published to npm, and the API will
+  change. Do not use it for patient care.
+</Callout>
+
+## What is in it
+
+Cadence has two layers of components and a set of supporting packages.
+
+| Package                      | Purpose                                                                                  | Status  |
+| ---------------------------- | ---------------------------------------------------------------------------------------- | ------- |
+| `@cadence-clinical/ui`       | Primitives such as Button, built on [Base UI](https://base-ui.com) and Tailwind CSS.     | Started |
+| `@cadence-clinical/tokens`   | Colour modes, density, accents and the accent validator.                                 | Started |
+| `@cadence-clinical/core`     | The Region contract and the component grade schema.                                      | Started |
+| `@cadence-clinical/clinical` | Clinical components built on the primitives, such as vital signs and observation charts. | Planned |
+| `@cadence-clinical/fhir`     | Functions that turn FHIR R4 resources into the concise props the components take.        | Planned |
+| `@cadence-clinical/au`       | Australian conventions and cited clinical rule sets, supplied as a Region.               | Planned |
+
+## How it differs from a general design system
+
+- **Status colours are fixed.** Critical, warning and success look the same in every theme. A brand changes the accent, never the meaning of red. See [Theming](/docs/theming).
+- **Components display an interpretation. They do not make one.** No component contains a clinical threshold. See [Clinical safety](/docs/clinical-safety).
+- **Regional conventions are supplied, not built in.** Units, date formats and rule sets come from a Region object, so a deployment in another health system swaps the Region and keeps the components.
+- **Every component carries a grade** that says how far it has been verified. See [Grades](/docs/grades).
+
+## Next steps
+
+<Cards>
+  <Card title="Installation" href="/docs/installation" />
+  <Card title="Theming" href="/docs/theming" />
+  <Card title="Button" href="/docs/components/button" />
+</Cards>

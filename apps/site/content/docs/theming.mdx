@@ -1,0 +1,82 @@
+---
+title: Theming
+description: Set the colour mode, contrast, density, accent and font, and add your own brand accent.
+---
+
+You theme Cadence with four attributes on the `<html>` element and two CSS variables. Status colours are not themeable.
+
+```html
+<html data-mode="dark" data-contrast="more" data-density="comfortable" data-accent="indigo"></html>
+```
+
+## Attributes
+
+| Attribute       | Values                                              | When it is not set                                                                              |
+| --------------- | --------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `data-mode`     | `light`, `dark`                                     | Follows the operating system's `prefers-color-scheme`. The `dark` class also selects dark mode. |
+| `data-contrast` | `standard`, `more`                                  | Follows the operating system's `prefers-contrast`.                                              |
+| `data-density`  | `compact`, `comfortable`                            | Compact, or comfortable on a touch device.                                                      |
+| `data-accent`   | `teal`, `blue`, `indigo`, `violet`, `plum`, `slate` | `teal`                                                                                          |
+
+Set the attributes on `<html>` only. Cadence does not support a differently themed subtree.
+
+### Contrast
+
+Standard contrast meets WCAG 2.2 AA: 4.5:1 for text and 3:1 for control boundaries. `more` raises those to 7:1 and 4.5:1.
+
+Every pairing of tokens that a component relies on is asserted in the `@cadence-clinical/tokens` test suite, for each mode, contrast level and accent. A token change that lowers a pairing below its minimum fails the build.
+
+### Density
+
+Compact is the default. Controls are 32px high, which suits a workstation with a mouse. Comfortable raises controls to 44px for touch screens, tablets and workstations on wheels.
+
+## Font
+
+Cadence reads its fonts from two CSS variables. Without them it uses the system font stack.
+
+```css
+:root {
+  --cadence-font-sans: "Inter", sans-serif;
+  --cadence-font-mono: "JetBrains Mono", monospace;
+}
+```
+
+## Status colours
+
+`critical`, `warning`, `success` and `info` carry clinical meaning, so they are the same in every theme and no attribute changes them. Each status has five tokens:
+
+| Token                 | Use                                                   |
+| --------------------- | ----------------------------------------------------- |
+| `critical`            | A solid fill.                                         |
+| `critical-foreground` | Text and icons on the solid fill.                     |
+| `critical-subtle`     | A tinted surface.                                     |
+| `critical-text`       | Text on the page background or on the tinted surface. |
+| `critical-border`     | The edge of any status surface.                       |
+
+Put the border token on every status surface. No amber fill reaches 3:1 against a white page, so without its border a warning surface has no perceivable edge.
+
+Never signal status with colour alone. Pair it with text or an icon.
+
+## Add your own accent
+
+An accent is brand colour only. It drives primary buttons, links and focus rings.
+
+`createAccent` takes one brand colour and returns a complete accent. It keeps the hue and chroma, and solves the lightness of each role so that contrast holds in both modes and both contrast levels.
+
+```ts title="scripts/build-accent.ts"
+import { writeFile } from "node:fs/promises";
+import { assertAccent, generateAccentCss } from "@cadence-clinical/tokens";
+
+const definition = assertAccent("#0b5fff");
+await writeFile("app/brand-accent.css", generateAccentCss("brand", definition));
+```
+
+Import the generated file after the Cadence styles, and set `data-accent="brand"` on `<html>`.
+
+`assertAccent` throws when a colour cannot be made safe. Run it in your build so that an unsafe accent fails the build.
+
+### Colours Cadence rejects
+
+Cadence rejects an accent whose hue is within 30° of critical red, warning amber or success green in OKLCH. On a clinical screen, a brand colour in those ranges can be read as a status. If your brand is red, amber or green, use `slate` or another curated accent, and keep the brand colour in your logo.
+
+Greys are exempt from the hue check because a grey cannot be mistaken for a status.

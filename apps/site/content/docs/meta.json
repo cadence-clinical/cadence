@@ -1,0 +1,13 @@
+{
+  "title": "Documentation",
+  "pages": [
+    "index",
+    "installation",
+    "theming",
+    "---Principles---",
+    "clinical-safety",
+    "grades",
+    "---Primitives---",
+    "components/button"
+  ]
+}

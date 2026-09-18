@@ -1,0 +1,58 @@
+---
+title: Installation
+description: Add Cadence to a React 19 project that uses Tailwind CSS v4.
+---
+
+<Callout type="warn" title="Not yet on npm">
+  The packages are not published yet, so the install command below will fail today. Until the first
+  release, work from a clone of the [repository](https://github.com/cadence-clinical/cadence).
+</Callout>
+
+## Requirements
+
+- React 19
+- Tailwind CSS v4
+- A browser from the last two years: Chrome or Edge 111, Safari 16.4, Firefox 128, or later
+
+## Install the packages
+
+```bash
+pnpm add @cadence-clinical/ui
+```
+
+`@cadence-clinical/ui` brings in `@cadence-clinical/tokens`.
+
+## Import the styles
+
+In your Tailwind entry stylesheet, import Cadence after Tailwind:
+
+```css title="app/globals.css"
+@import "tailwindcss";
+@import "@cadence-clinical/ui/styles.css";
+```
+
+This one import loads the Cadence tokens and tells Tailwind to scan the compiled components for the classes they use.
+
+## Use a component
+
+```tsx title="app/page.tsx"
+import { Button } from "@cadence-clinical/ui";
+
+export default function Page() {
+  return <Button>Save observation</Button>;
+}
+```
+
+## Work from the repository
+
+To run Cadence locally you need Node.js 22 or later and pnpm 11.
+
+```bash
+git clone https://github.com/cadence-clinical/cadence.git
+cd cadence
+pnpm install
+pnpm build
+pnpm dev
+```
+
+`pnpm dev` starts this site on port 3000 and Storybook on port 6006.
