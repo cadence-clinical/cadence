@@ -1,0 +1,4 @@
+{
+  "extends": "@cadence-clinical/config/tsconfig/react-library.json",
+  "include": ["src", "*.config.ts"]
+}

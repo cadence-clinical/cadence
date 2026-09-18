@@ -1,0 +1,7 @@
+{
+  "extends": "@cadence-clinical/config/tsconfig/react-library.json",
+  "compilerOptions": {
+    "types": ["node", "vite/client"]
+  },
+  "include": [".storybook", "*.config.ts"]
+}
