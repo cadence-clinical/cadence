@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://cadenceclinical.app/schema/component-meta.json",
+  "$id": "https://www.cadenceclinical.dev/schema/component-meta.json",
   "title": "Cadence component metadata",
   "description": "Describes one component: what it is and what grade it holds. The grade levels are provisional until the grading matrix is agreed.",
   "type": "object",

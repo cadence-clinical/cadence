@@ -5,7 +5,7 @@ export const siteDescription =
   "An open source design system for building apps for clinicians and patients: accessible React components, clinical patterns and FHIR utilities.";
 
 // The canonical origin. Registry URLs are built from it, so it is set in one place.
-export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://cadenceclinical.app";
+export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.cadenceclinical.dev";
 
 export const docsRoute = "/docs";
 export const docsImageRoute = "/og/docs";

@@ -115,7 +115,7 @@ What comes next, in order:
 4. Australian rule sets, with Victoria as the first state variant.
 5. Screens and example apps, the registry, the agent skill and the Claude Design bundle.
 
-The documentation site lives in `apps/site` and is not deployed yet.
+The documentation is at [www.cadenceclinical.dev](https://www.cadenceclinical.dev). Its source is in `apps/site`.
 
 ### Run it locally
 
@@ -126,13 +126,13 @@ pnpm install
 pnpm dev            # builds the packages, then the website on :3000 and Storybook on :6006
 ```
 
-| Command                                         | What it does                                                                     |
-| ----------------------------------------------- | -------------------------------------------------------------------------------- |
-| `pnpm check`                                    | Format check, lint, typecheck, unit tests, build, grade check and package check. |
-| `pnpm test`                                     | Unit tests, including the contrast tests for every token pairing.                |
-| `pnpm test:browser`                             | Runs every story in a real browser: interactions and axe.                        |
-| `pnpm --filter @cadence-clinical/site test:e2e` | Website smoke tests on desktop and phone viewports. Build the site first.        |
-| `pnpm changeset`                                | Records a change to a published package.                                         |
+| Command                                         | What it does                                                                                                                    |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm check`                                    | Format check, lint, typecheck, unit tests, build, grade check and package check.                                                |
+| `pnpm test`                                     | Unit tests, including the contrast tests for every token pairing.                                                               |
+| `pnpm test:browser`                             | Runs every story in a real browser: interactions and axe.                                                                       |
+| `pnpm --filter @cadence-clinical/site test:e2e` | Website smoke tests on desktop and phone viewports. Build the site first, or set `PLAYWRIGHT_BASE_URL` to test a deployed site. |
+| `pnpm changeset`                                | Records a change to a published package.                                                                                        |
 
 ### Find your way around
 

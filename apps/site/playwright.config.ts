@@ -2,8 +2,12 @@ import { defineConfig, devices } from "@playwright/test";
 
 const port = 3100;
 
-// Smoke tests against the production build: the pages render, link together and pass axe-free
-// basics. Component behaviour is tested in Storybook, not here.
+// Set PLAYWRIGHT_BASE_URL to test a deployed site, for example the production domain.
+// Without it the tests start the local production build.
+const deployedUrl = process.env.PLAYWRIGHT_BASE_URL;
+
+// Smoke tests: the pages render, link together and do not overflow. Component behaviour is
+// tested in Storybook, not here.
 export default defineConfig({
   testDir: "./e2e",
   fullyParallel: true,
@@ -11,16 +15,18 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? [["github"], ["html", { open: "never" }]] : "list",
   use: {
-    baseURL: `http://localhost:${port}`,
+    baseURL: deployedUrl ?? `http://localhost:${port}`,
     trace: "on-first-retry",
   },
   projects: [
     { name: "desktop", use: { ...devices["Desktop Chrome"] } },
     { name: "phone", use: { ...devices["Pixel 7"] } },
   ],
-  webServer: {
-    command: `pnpm exec next start --port ${port}`,
-    url: `http://localhost:${port}`,
-    reuseExistingServer: !process.env.CI,
-  },
+  webServer: deployedUrl
+    ? undefined
+    : {
+        command: `pnpm exec next start --port ${port}`,
+        url: `http://localhost:${port}`,
+        reuseExistingServer: !process.env.CI,
+      },
 });
