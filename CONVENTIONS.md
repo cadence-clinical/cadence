@@ -38,6 +38,7 @@ A rule a tool can enforce is enforced by the tool. This file records the rest, a
 - **Explicit return types on exported functions.** Inference inside function bodies. React components are exempt. `planned`
 - **`import type` for types**, inline with value imports. `lint`
 - **`readonly` on inputs.** Never mutate an argument. `review`
+- **Imports inside a component package use consumer-shaped aliases**: `@/lib/cn`, `@/components/cadence/button`. They are mapped in the package's tsconfig `paths` and are exactly what the import will be once the registry installs the file in someone's project. No relative imports between source files ([decision 0011](docs/decisions/0011-registry.md)). `planned`
 - **The package entry is the only barrel.** `src/index.ts` lists every public export by name. Anything it does not export is private. `review`
 
 ## 3. Functions over classes
@@ -64,7 +65,7 @@ A rule a tool can enforce is enforced by the tool. This file records the rest, a
 - **No user-visible string is hard-coded in a clinical component.** Text comes from props or the Region, with en-AU defaults. `review`
 - **Clinical components take view models from `core`**, never FHIR types, and never import a Region package. `lint`
 - **Icons are `lucide-react`**, passed as components, never as string keys. An icon inside a component carries `data-icon="inline-start"` or `data-icon="inline-end"` and no size class: the component sizes and spaces it. `planned`
-- **One directory per component**: `button.tsx`, `button.stories.tsx`, `meta.json`. `ci`
+- **Component files are flat** in `src/components`: `button.tsx` and `button.stories.tsx`. The package's `registry.json` is the manifest: it lists each component's files, dependencies, category and grade. `ci`
 
 ## 5. Styling
 
@@ -74,7 +75,7 @@ A rule a tool can enforce is enforced by the tool. This file records the rest, a
 - **Numbers that are compared use `tabular-nums`.** `review`
 - **Controls are sized with the density scale** (`h-control`, `px-control-x`, `text-control`). A new scale key is registered in `cn.ts`, or a consumer's override silently loses. `review`
 - **`gap-*`, not `space-*`. `size-*` when width equals height. `cn()` for conditional classes.** `review`
-- **Motion**: movement animates only `transform` and `opacity`, and colour may transition on a state change. Name the properties (never `transition-all`), keep feedback under 200ms, use none on keyboard-initiated or high-frequency actions, and remove movement under `prefers-reduced-motion`. `review`
+- **Motion** (the `emil-design-eng` skill has the reasoning): movement animates only `transform` and `opacity`, and colour may transition on a state change. Name the properties (never `transition-all`), keep feedback under 200ms, use none on keyboard-initiated or high-frequency actions, and remove movement under `prefers-reduced-motion`. `review`
 - **Change a colour in `palette.ts`.** If a contrast test fails, fix the token. Do not relax the test. `test`
 - Class order is Prettier's. `lint`
 
@@ -140,10 +141,6 @@ A rule a tool can enforce is enforced by the tool. This file records the rest, a
 - **Comments say why.** The code says what. No commented-out code. A `TODO` links an issue. `review`
 - **Every exported symbol has a JSDoc sentence**, plus what a type cannot say: units, ranges, what it throws. `planned`
 - Documentation follows the `technical-writing` skill, and site copy follows `human-writing`. `review`
-
-## Open questions
-
-1. **Imports between components.** Relative imports or a path alias. The shadcn registry guide says registry source should import through the `@/registry` path, which the CLI rewrites on install. Cadence components use relative imports today, so this is settled with the registry design.
 
 ## References
 
