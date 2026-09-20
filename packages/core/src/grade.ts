@@ -7,10 +7,13 @@
  * - A copy installed from the registry and then edited carries no grade.
  */
 
+/** The grade levels, lowest first. Provisional until the grading matrix is agreed. */
 export const GRADE_LEVELS = ["draft", "tested", "clinician-verified", "in-production"] as const;
 
+/** How far a component has been verified. */
 export type GradeLevel = (typeof GRADE_LEVELS)[number];
 
+/** The grade a component declares in its package's registry.json. */
 export interface ComponentGrade {
   level: GradeLevel;
   /** The package version the grade was assessed against. Required above "tested". */
@@ -29,7 +32,7 @@ export function validateGrade(grade: ComponentGrade): string[] {
   const problems: string[] = [];
 
   if (!GRADE_LEVELS.includes(grade.level)) {
-    problems.push(`Unknown grade level "${String(grade.level)}".`);
+    problems.push(`Unknown grade level "${grade.level}".`);
     return problems;
   }
 

@@ -10,7 +10,7 @@
     "build": "pnpm registry && next build",
     "registry": "node scripts/build-registry.mjs",
     "start": "next start",
-    "lint": "eslint .",
+    "lint": "eslint . --max-warnings 0",
     "typecheck": "next typegen && tsc --noEmit",
     "test:e2e": "playwright test"
   },
@@ -27,6 +27,7 @@
     "react-dom": "catalog:"
   },
   "devDependencies": {
+    "@cadence-clinical/config": "workspace:*",
     "@playwright/test": "^1.63.0",
     "@tailwindcss/postcss": "catalog:",
     "@types/mdx": "^2.0.14",

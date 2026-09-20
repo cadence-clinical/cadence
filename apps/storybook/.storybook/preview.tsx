@@ -5,7 +5,11 @@ import "./preview.css";
 
 const ACCENTS = ["teal", "blue", "indigo", "violet", "plum", "slate"];
 
-type ThemeGlobals = Record<"mode" | "contrast" | "density" | "accent", string>;
+type ThemeGlobals = Partial<Record<"mode" | "contrast" | "density" | "accent", string>>;
+
+/** Storybook types every global as `any`. Only a string is a theme value. */
+const text = (value: unknown): string | undefined =>
+  typeof value === "string" ? value : undefined;
 
 /**
  * Mirrors the toolbar onto <html>, which is where Cadence themes are set in a real app.
@@ -17,23 +21,29 @@ type ThemeGlobals = Record<"mode" | "contrast" | "density" | "accent", string>;
  */
 function ThemeSync({ mode, contrast, density, accent }: ThemeGlobals) {
   useLayoutEffect(() => {
-    Object.assign(document.documentElement.dataset, { mode, contrast, density, accent });
+    for (const [name, value] of Object.entries({ mode, contrast, density, accent })) {
+      if (value === undefined) document.documentElement.removeAttribute(`data-${name}`);
+      else document.documentElement.setAttribute(`data-${name}`, value);
+    }
   }, [mode, contrast, density, accent]);
 
   return null;
 }
 
-const withTheme: Decorator = (Story, { globals }) => (
-  <>
-    <ThemeSync
-      mode={globals.mode}
-      contrast={globals.contrast}
-      density={globals.density}
-      accent={globals.accent}
-    />
-    <Story />
-  </>
-);
+const withTheme: Decorator = (Story, context) => {
+  const globals: Record<string, unknown> = context.globals;
+  return (
+    <>
+      <ThemeSync
+        mode={text(globals.mode)}
+        contrast={text(globals.contrast)}
+        density={text(globals.density)}
+        accent={text(globals.accent)}
+      />
+      <Story />
+    </>
+  );
+};
 
 const preview: Preview = {
   decorators: [withTheme],

@@ -33,17 +33,28 @@ test("docs pages are available as markdown for agents", async ({ request }) => {
   expect(await response.text()).toContain("data-accent");
 });
 
+/** The item names in a registry index. The response is untyped, so it is checked, not cast. */
+function itemNames(index: unknown): string[] {
+  if (typeof index !== "object" || index === null || !("items" in index)) return [];
+  if (!Array.isArray(index.items)) return [];
+  return index.items.flatMap((item: unknown) =>
+    typeof item === "object" && item !== null && "name" in item && typeof item.name === "string"
+      ? [item.name]
+      : [],
+  );
+}
+
 test("the registry serves its index and each item it lists", async ({ request }) => {
   const index = await request.get("/r/registry.json");
   expect(index.ok()).toBe(true);
-  const { items }: { items: { name: string }[] } = await index.json();
-  expect(items.map((item) => item.name)).toEqual(expect.arrayContaining(["theme", "cn", "button"]));
+  const names = itemNames(await index.json());
+  expect(names).toEqual(expect.arrayContaining(["theme", "cn", "button"]));
 
-  for (const { name } of items) {
+  for (const name of names) {
     const response = await request.get(`/r/${name}.json`);
     expect(response.ok(), `/r/${name}.json`).toBe(true);
     expect(response.headers()["content-type"]).toContain("application/json");
-    expect((await response.json()).name).toBe(name);
+    expect(await response.json()).toMatchObject({ name });
   }
 
   expect((await request.get("/r/not-a-component.json")).status()).toBe(404);

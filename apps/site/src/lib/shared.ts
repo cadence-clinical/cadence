@@ -19,9 +19,14 @@ export const gitConfig = {
   contentDir: "apps/site/content/docs",
 };
 
+interface PageUrl {
+  segments: string[];
+  url: string;
+}
+
 const getContentUrl = createGetUrl(docsContentRoute);
 
-export function getPageMarkdownUrl(page: { slugs: string[]; locale?: string }) {
+export function getPageMarkdownUrl(page: { slugs: string[]; locale?: string }): PageUrl {
   const segments = [...page.slugs, "content.md"];
 
   return { segments, url: getContentUrl(segments, page.locale) };
@@ -29,7 +34,7 @@ export function getPageMarkdownUrl(page: { slugs: string[]; locale?: string }) {
 
 const getImageUrl = createGetUrl(docsImageRoute);
 
-export function getPageImageUrl(page: { slugs: string[]; locale?: string }) {
+export function getPageImageUrl(page: { slugs: string[]; locale?: string }): PageUrl {
   const segments = [...page.slugs, "image.png"];
 
   return { segments, url: getImageUrl(segments, page.locale) };
