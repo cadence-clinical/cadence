@@ -29,15 +29,22 @@ const buttonVariants = cva(
           "bg-critical text-critical-foreground hover:bg-critical/90 focus-visible:ring-critical-border",
         link: "text-primary-text underline-offset-4 hover:underline",
       },
+      // An icon is lighter than text, so the side that holds one takes less padding to look
+      // balanced. The icon says which side it is on with data-icon.
       size: {
-        sm: "h-control-sm gap-control-gap px-control-x text-control",
-        md: "h-control gap-control-gap px-control-x text-control",
-        lg: "h-control-lg gap-control-gap px-control-x text-control",
+        sm: "h-control-sm gap-control-gap px-control-x text-control has-data-[icon=inline-end]:pr-[calc(var(--control-padding)*0.8)] has-data-[icon=inline-start]:pl-[calc(var(--control-padding)*0.8)]",
+        md: "h-control gap-control-gap px-control-x text-control has-data-[icon=inline-end]:pr-[calc(var(--control-padding)*0.8)] has-data-[icon=inline-start]:pl-[calc(var(--control-padding)*0.8)]",
+        lg: "h-control-lg gap-control-gap px-control-x text-control has-data-[icon=inline-end]:pr-[calc(var(--control-padding)*0.8)] has-data-[icon=inline-start]:pl-[calc(var(--control-padding)*0.8)]",
         icon: "size-control",
       },
     },
     // A link sits in running text, so it drops the control box whatever size was asked for.
-    compoundVariants: [{ variant: "link", class: "h-auto px-0" }],
+    compoundVariants: [
+      {
+        variant: "link",
+        class: "h-auto px-0 has-data-[icon=inline-end]:pr-0 has-data-[icon=inline-start]:pl-0",
+      },
+    ],
     defaultVariants: {
       variant: "primary",
       size: "md",
@@ -52,7 +59,8 @@ type ButtonProps = ButtonPrimitive.Props & VariantProps<typeof buttonVariants>;
  * Triggers an action. Height, padding and text size follow the density set on <html>, so the
  * same button is 32px on a workstation and 44px on a touch device.
  *
- * An icon-only button must carry an `aria-label`.
+ * An icon beside the label carries `data-icon="inline-start"` or `data-icon="inline-end"` and no
+ * size class: the button sizes and spaces it. An icon-only button must carry an `aria-label`.
  */
 function Button({ className, variant, size, ...props }: ButtonProps) {
   return (

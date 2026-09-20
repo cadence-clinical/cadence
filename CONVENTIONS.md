@@ -64,7 +64,7 @@ A rule a tool can enforce is enforced by the tool. This file records the rest, a
 - **No effect for derived state.** Compute it during render. A DOM change that a test or a snapshot depends on goes in a layout effect, because passive effects are flushed late outside Vitest. `review`
 - **No user-visible string is hard-coded in a clinical component.** Text comes from props or the Region, with en-AU defaults. `review`
 - **Clinical components take view models from `core`**, never FHIR types, and never import a Region package. `lint`
-- **Icons are `lucide-react`**, passed as components, never as string keys. An icon inside a component carries `data-icon="inline-start"` or `data-icon="inline-end"` and no size class: the component sizes and spaces it. `planned`
+- **Icons are `lucide-react`**, passed as components, never as string keys. An icon inside a component carries `data-icon="inline-start"` or `data-icon="inline-end"` and no size class: the component sizes and spaces it. `review`
 - **Component files are flat** in `src/components`: `button.tsx` and `button.stories.tsx`. The package's `registry.json` is the manifest: it lists each component's files, dependencies, category and grade. `ci`
 
 ## 5. Styling

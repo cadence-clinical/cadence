@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { ArrowRight, Plus, Printer } from "lucide-react";
 import { expect, fn, userEvent, within } from "storybook/test";
 
 import { Button } from "@/components/cadence/button";
@@ -63,6 +64,42 @@ export const Sizes: Story = {
       </Button>
     </div>
   ),
+};
+
+export const WithIcons: Story = {
+  render: (args) => (
+    <div className="flex flex-wrap items-center gap-3">
+      <Button {...args}>
+        <Plus data-icon="inline-start" />
+        Add observation
+      </Button>
+      <Button {...args} variant="outline">
+        Next chart
+        <ArrowRight data-icon="inline-end" />
+      </Button>
+      <Button {...args} variant="link">
+        Open history
+        <ArrowRight data-icon="inline-end" />
+      </Button>
+      <Button {...args} variant="outline" size="icon" aria-label="Print chart">
+        <Printer />
+      </Button>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const padding = (name: string) => {
+      const style = getComputedStyle(within(canvasElement).getByRole("button", { name }));
+      return { start: parseFloat(style.paddingLeft), end: parseFloat(style.paddingRight) };
+    };
+
+    // The side that holds the icon is the tighter one.
+    const leading = padding("Add observation");
+    await expect(leading.start).toBeLessThan(leading.end);
+    const trailing = padding("Next chart");
+    await expect(trailing.end).toBeLessThan(trailing.start);
+    // A link sits in running text and has no padding on either side.
+    await expect(padding("Open history")).toEqual({ start: 0, end: 0 });
+  },
 };
 
 export const Disabled: Story = {
