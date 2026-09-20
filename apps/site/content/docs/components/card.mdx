@@ -111,7 +111,7 @@ Put one control in `CardAction`. It stays at the top end of the header, and a lo
 
 ## Size
 
-`size="sm"` tightens the spacing and the title, for a card inside a dense layout.
+`size="sm"` tightens the spacing and the title one step further than the density does, for a card inside another surface.
 
 <ComponentPreview>
   <Card size="sm" className="w-full max-w-sm">
@@ -124,6 +124,8 @@ Put one control in `CardAction`. It stays at the top end of the header, and a lo
 </ComponentPreview>
 
 ## What Cadence changes
+
+- **Text and spacing follow the [density](/docs/theming#density).** The card's text is the size of the text in a Button inside it, at both densities. The shadcn card is fixed at 14px text and 16px padding.
 
 - **Nothing is truncated or clipped.** Text wraps, including a value with nowhere to break. The card does not hide its overflow, so a focus ring at its edge stays whole. The shadcn card clips its content to round the corners of an image, which this card does not do.
 - **The boundary is the `border` token**, so it follows the mode and the contrast setting.

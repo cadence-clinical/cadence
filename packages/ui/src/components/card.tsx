@@ -16,7 +16,8 @@ type CardProps = CardPartProps & {
 };
 
 /**
- * Groups related content on its own surface. It does not clip its content, so a focus ring at its
+ * Groups related content on its own surface. Its text and spacing follow the density set on <html>.
+ * It does not clip its content, so a focus ring at its
  * edge stays whole, and its text wraps: nothing in a card is truncated.
  *
  * Pass `render` to give it meaning, for example `render={<section aria-labelledby={id} />}`.
@@ -28,8 +29,10 @@ function Card({ className, render, size = "md", ...props }: CardProps) {
     props: mergeProps<"div">(
       {
         className: cn(
-          "group/card flex flex-col gap-(--card-spacing) rounded-lg border bg-card py-(--card-spacing) text-sm wrap-break-word text-card-foreground [--card-spacing:--spacing(4)]",
-          "has-data-[slot=card-footer]:pb-0 data-[size=sm]:[--card-spacing:--spacing(3)]",
+          "group/card flex flex-col gap-(--card-spacing) rounded-lg border bg-card py-(--card-spacing) text-body wrap-break-word text-card-foreground",
+          // Spacing and text follow the density set on <html>, like the controls inside the card.
+          "[--card-spacing:var(--container-padding)] data-[size=sm]:[--card-spacing:var(--container-padding-sm)]",
+          "has-data-[slot=card-footer]:pb-0",
           className,
         ),
       },
@@ -69,10 +72,7 @@ function CardTitle({ className, render, ...props }: CardPartProps) {
     render,
     props: mergeProps<"div">(
       {
-        className: cn(
-          "text-base leading-snug font-medium group-data-[size=sm]/card:text-sm",
-          className,
-        ),
+        className: cn("text-title font-medium group-data-[size=sm]/card:text-body", className),
       },
       props,
     ),
@@ -85,7 +85,10 @@ function CardDescription({ className, render, ...props }: CardPartProps) {
   return useRender({
     defaultTagName: "div",
     render,
-    props: mergeProps<"div">({ className: cn("text-sm text-muted-foreground", className) }, props),
+    props: mergeProps<"div">(
+      { className: cn("text-body text-muted-foreground", className) },
+      props,
+    ),
     state: { slot: "card-description" },
   });
 }

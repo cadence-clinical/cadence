@@ -6,8 +6,16 @@ import { extendTailwindMerge } from "tailwind-merge";
 const twMerge = extendTailwindMerge({
   extend: {
     theme: {
-      spacing: ["control-sm", "control", "control-lg", "control-x", "control-gap"],
-      text: ["control"],
+      spacing: [
+        "control-sm",
+        "control",
+        "control-lg",
+        "control-x",
+        "control-gap",
+        "container",
+        "container-sm",
+      ],
+      text: ["control", "body", "title"],
     },
   },
 });
