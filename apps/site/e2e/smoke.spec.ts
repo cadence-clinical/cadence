@@ -32,3 +32,19 @@ test("docs pages are available as markdown for agents", async ({ request }) => {
   expect(response.ok()).toBe(true);
   expect(await response.text()).toContain("data-accent");
 });
+
+test("the registry serves its index and each item it lists", async ({ request }) => {
+  const index = await request.get("/r/registry.json");
+  expect(index.ok()).toBe(true);
+  const { items }: { items: { name: string }[] } = await index.json();
+  expect(items.map((item) => item.name)).toEqual(expect.arrayContaining(["theme", "cn", "button"]));
+
+  for (const { name } of items) {
+    const response = await request.get(`/r/${name}.json`);
+    expect(response.ok(), `/r/${name}.json`).toBe(true);
+    expect(response.headers()["content-type"]).toContain("application/json");
+    expect((await response.json()).name).toBe(name);
+  }
+
+  expect((await request.get("/r/not-a-component.json")).status()).toBe(404);
+});

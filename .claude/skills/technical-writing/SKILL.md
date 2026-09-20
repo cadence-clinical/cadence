@@ -33,13 +33,13 @@ Clinical statements have a stricter rule. A threshold, reference interval, unit,
 ## Follow Cadence conventions
 
 - Do not document planned behaviour as shipped. Packages that do not exist yet (`clinical`, `fhir`, `au`) are described as planned, and the install instructions say the packages are not on npm until they are.
-- Never describe a component as validated, verified, safe or approved unless its `meta.json` grade and evidence records say so. State the grade, not an impression of quality.
+- Never describe a component as validated, verified, safe or approved unless its grade in `registry.json` and its evidence records say so. State the grade, not an impression of quality.
 - Keep the boundary visible: components display an interpretation and never make one. Do not write examples in which a component decides what is abnormal.
 - Examples use synthetic data only. Never use a real patient's details, and never a realistic-looking identifier that could belong to a person.
 - Write doses and values so they cannot be misread: a space between the value and the unit (`5 mg`), a leading zero before a decimal point (`0.5 mg`), and no trailing zero (`5 mg`, not `5.0 mg`). When Cadence adopts a published on-screen display guideline, that guideline governs and is cited.
 - Use exact public names such as `createAccent`, `data-density` and `critical-border`.
 - Distinguish the terms. An accent is brand colour and drives the `primary` token; shadcn's `accent` token is a hover surface. A Region is a contract in `core`; a Region package implements it. A grade belongs to a version of a component.
-- Treat `apps/site/content/docs/**` as published documentation. Update `meta.json` when navigation changes.
+- Treat `apps/site/content/docs/**` as published documentation. Update `content/docs/meta.json` when navigation changes.
 - Use MDX components only when nearby pages establish the convention: `Callout`, `Cards`, `ComponentPreview`, `GradeBadge`.
 - Every component page opens with `<GradeBadge>` and a live `<ComponentPreview>`.
 - Preserve published routes and heading anchors when possible.

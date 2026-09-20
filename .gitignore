@@ -12,7 +12,7 @@ next-env.d.ts
 
 # generated
 apps/site/.source
-apps/site/public/r
+apps/site/.registry
 design-sync/dist
 
 # tests

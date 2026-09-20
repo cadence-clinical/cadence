@@ -1,4 +1,12 @@
 {
   "extends": "@cadence-clinical/config/tsconfig/react-library.json",
+  "compilerOptions": {
+    // The aliases a consumer's project has, so a component's imports are already the ones the
+    // registry installs. See docs/decisions/0011-registry.md.
+    "paths": {
+      "@/lib/*": ["./src/lib/*"],
+      "@/components/cadence/*": ["./src/components/*"]
+    }
+  },
   "include": ["src"]
 }

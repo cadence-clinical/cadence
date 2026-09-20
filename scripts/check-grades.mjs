@@ -1,5 +1,6 @@
-// Validates every component's meta.json. A grade is a public claim, so CI checks that each
-// claim is backed by what it requires. Run after `pnpm build:packages`.
+// Validates the component manifests. A grade is a public claim, so CI checks that each claim is
+// backed by what it requires, and that every component is installable the way
+// docs/decisions/0011-registry.md describes. Run after `pnpm build:packages`.
 import { access, glob, readFile } from "node:fs/promises";
 import path from "node:path";
 
@@ -7,47 +8,71 @@ import { compareGrades, validateGrade } from "../packages/core/dist/index.mjs";
 
 const root = new URL("../", import.meta.url).pathname;
 const CATEGORIES = ["primitive", "clinical"];
+const COMPONENT_TYPES = ["registry:component", "registry:ui", "registry:block"];
+const INSTALL_DIR = "components/cadence/";
 const problems = [];
-let count = 0;
 
 const exists = (file) =>
-  access(file).then(
+  access(path.join(root, file)).then(
     () => true,
     () => false,
   );
+const readJson = async (file) => JSON.parse(await readFile(path.join(root, file), "utf8"));
 
-for await (const file of glob("packages/*/src/components/*/meta.json", { cwd: root })) {
-  count += 1;
-  const dir = path.dirname(path.join(root, file));
-  const meta = JSON.parse(await readFile(path.join(root, file), "utf8"));
-  const report = (message) => problems.push(`${file}: ${message}`);
+const listed = new Set();
+let count = 0;
 
-  if (meta.name !== path.basename(dir)) {
-    report(`name "${meta.name}" must match its directory "${path.basename(dir)}".`);
-  }
-  for (const field of ["title", "description"]) {
-    if (!meta[field]) report(`missing "${field}".`);
-  }
-  if (!CATEGORIES.includes(meta.category)) {
-    report(`category must be one of ${CATEGORIES.join(", ")}.`);
-  }
-  if (!meta.grade) {
-    report(`missing "grade".`);
-    continue;
-  }
+for (const manifest of (await readJson("registry.json")).include ?? []) {
+  const dir = path.dirname(manifest);
 
-  validateGrade(meta.grade).forEach(report);
+  for (const item of (await readJson(manifest)).items ?? []) {
+    const files = (item.files ?? []).map((file) => ({ ...file, path: path.join(dir, file.path) }));
+    files.forEach((file) => listed.add(file.path));
+    if (!COMPONENT_TYPES.includes(item.type)) continue;
 
-  // "Tested" means the component has stories, because every story runs as a browser test.
-  const tested = compareGrades(meta.grade.level, "tested") >= 0;
-  if (tested && !(await exists(path.join(dir, `${meta.name}.stories.tsx`)))) {
-    report(`grade "${meta.grade.level}" needs ${meta.name}.stories.tsx beside it.`);
-  }
-  for (const evidence of meta.grade.evidence ?? []) {
-    if (!(await exists(path.join(root, evidence)))) {
-      report(`evidence record "${evidence}" does not exist.`);
+    count += 1;
+    const report = (message) => problems.push(`${manifest}: ${item.name}: ${message}`);
+
+    for (const field of ["title", "description"]) {
+      if (!item[field]) report(`missing "${field}".`);
+    }
+    if (!CATEGORIES.includes(item.meta?.category)) {
+      report(`meta.category must be one of ${CATEGORIES.join(", ")}.`);
+    }
+    if (!item.docs?.includes("carries no Cadence grade")) {
+      report(`docs must say that an edited copy carries no Cadence grade.`);
+    }
+
+    const source = files.find((file) => path.basename(file.path) === `${item.name}.tsx`);
+    if (!source) report(`no file named ${item.name}.tsx.`);
+    for (const file of files) {
+      if (!file.target?.startsWith(INSTALL_DIR)) {
+        report(`${file.path} needs a target under ${INSTALL_DIR}.`);
+      }
+    }
+
+    if (!item.meta?.grade) {
+      report(`missing meta.grade.`);
+      continue;
+    }
+    validateGrade(item.meta.grade).forEach(report);
+
+    // "Tested" means the component has stories, because every story runs as a browser test.
+    const tested = compareGrades(item.meta.grade.level, "tested") >= 0;
+    const stories = source?.path.replace(/\.tsx$/, ".stories.tsx");
+    if (tested && stories && !(await exists(stories))) {
+      report(`grade "${item.meta.grade.level}" needs ${stories}.`);
+    }
+    for (const evidence of item.meta.grade.evidence ?? []) {
+      if (!(await exists(evidence))) report(`evidence record "${evidence}" does not exist.`);
     }
   }
+}
+
+// A component that is in a package but not in its manifest has no grade and cannot be installed.
+for await (const file of glob("packages/*/src/components/*.tsx", { cwd: root })) {
+  if (/\.(stories|test)\.tsx$/.test(file)) continue;
+  if (!listed.has(file)) problems.push(`${file}: not listed in its package's registry.json.`);
 }
 
 if (problems.length > 0) {

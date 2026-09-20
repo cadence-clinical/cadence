@@ -20,6 +20,7 @@
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
     "test:browser": "turbo run test:browser",
+    "test:registry": "node tests/registry/run.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "check:grades": "node scripts/check-grades.mjs",

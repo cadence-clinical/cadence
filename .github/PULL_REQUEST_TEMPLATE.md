@@ -12,4 +12,4 @@
 ## Grade impact
 
 <!-- Does this change how a component graded above "tested" looks or behaves? If so, name it
-and update its meta.json. Otherwise write "None". -->
+and lower its grade in registry.json. Otherwise write "None". -->

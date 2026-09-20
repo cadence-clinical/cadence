@@ -1,0 +1,33 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "items": [
+    {
+      "name": "cn",
+      "type": "registry:lib",
+      "title": "cn",
+      "description": "Joins class names and resolves Tailwind conflicts, with the Cadence density scale registered.",
+      "dependencies": ["clsx", "tailwind-merge"],
+      "files": [{ "path": "src/lib/cn.ts", "type": "registry:lib" }]
+    },
+    {
+      "name": "button",
+      "type": "registry:component",
+      "title": "Button",
+      "description": "Triggers an action. Sized by the density set on the page.",
+      "dependencies": ["@base-ui/react", "class-variance-authority"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/button.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/button.tsx"
+        }
+      ],
+      "docs": "Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "category": "primitive",
+        "grade": { "level": "tested" }
+      }
+    }
+  ]
+}

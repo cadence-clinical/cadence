@@ -14,6 +14,7 @@ pnpm build                 # packages first, then apps
 pnpm dev                   # website on :3000, Storybook on :6006
 pnpm check                 # format, lint, typecheck, unit tests, build, grades, package checks
 pnpm test:browser          # every story in a real browser: interactions and axe
+pnpm test:registry         # installs from the registry into a scratch app with the shadcn CLI
 pnpm --filter @cadence-clinical/site test:e2e   # website smoke tests; build the site first
 pnpm changeset             # record a change to a published package
 ```
@@ -24,10 +25,13 @@ Run `pnpm check` and `pnpm test:browser` before you say a change is done.
 
 - `packages/core`: Region contract, view-model types, grade schema. No React.
 - `packages/tokens`: the palette in TypeScript, `theme.css` generated from it, contrast tests.
-- `packages/ui`: primitives on Base UI. Each component has its source, stories and `meta.json`
-  in `src/components/<name>/`.
+- `packages/ui`: primitives on Base UI. Component files are flat in `src/components`
+  (`button.tsx`, `button.stories.tsx`), and `registry.json` is the manifest: each component's
+  files, dependencies, category and grade. Source imports through `@/lib/*` and
+  `@/components/cadence/*`, never a relative path, because the registry installs it as written.
 - `packages/config`: shared tsconfig and ESLint, including the package boundary rules.
-- `apps/site`: Next.js and Fumadocs. Docs content is in `content/docs`.
+- `apps/site`: Next.js and Fumadocs. Docs content is in `content/docs`. Its build also runs
+  `shadcn build` on the root `registry.json` and serves the result at `/r/{name}.json`.
 - `apps/storybook`: Storybook config and the Vitest browser runner. Stories live in the packages.
 
 ## Rules
@@ -43,8 +47,9 @@ Run `pnpm check` and `pnpm test:browser` before you say a change is done.
   Every status surface carries its `-border` token. Never signal status by colour alone.
 - **Size controls with the density scale** (`h-control`, `px-control-x`, `text-control`), so
   compact and comfortable both work. Register any new scale key in `packages/ui/src/lib/cn.ts`.
-- **Change colours in `packages/tokens/src/palette.ts`**, never in generated CSS. If a contrast
-  test fails, fix the token. Do not relax the test.
+- **Change colours in `packages/tokens/src/palette.ts`**, never in generated CSS or in
+  `packages/tokens/registry.json`, which the build rewrites: commit it when it changes. If a
+  contrast test fails, fix the token. Do not relax the test.
 - **Grades are claims.** Do not raise a grade. If you change how a component graded above
   `tested` looks or behaves, lower it to `tested` and say so in the pull request.
 - **Synthetic data only.** No patient information anywhere.

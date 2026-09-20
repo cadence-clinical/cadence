@@ -35,7 +35,8 @@ These are enforced by lint or CI where possible. The reasons are in
 ## Definition of done for a component
 
 - The component, built on Base UI where a primitive exists
-- `meta.json` with an honest grade
+- An entry in the package's `registry.json`: its file with a `target` under
+  `components/cadence/`, its dependencies, its category and an honest grade
 - Stories that cover its variants, with play functions for its interactions
 - Passes axe in every story, at compact and comfortable density
 - A deliberate layout at phone width
@@ -48,4 +49,4 @@ A clinical component also needs its view-model type in `core` and its FHIR trans
 
 A change that alters how a component looks or behaves returns it to the tested grade until it is
 reviewed again. If your pull request changes a component graded above tested, say so in the
-description and update its `meta.json`.
+description and lower its grade in `registry.json`.
