@@ -110,7 +110,7 @@ try {
   }
 
   const css = await readFile(path.join(consumer, "src/index.css"), "utf8");
-  for (const stylesheet of ["theme.css", "typeset.css"]) {
+  for (const stylesheet of ["theme.css", "fonts.css", "typeset.css"]) {
     assert.equal(
       css.split(`@import "@cadence-clinical/tokens/${stylesheet}"`).length - 1,
       1,
@@ -143,6 +143,10 @@ try {
     assert.ok(built.includes(utility), `The consumer's CSS has no ${utility} utility.`);
   }
   assert.ok(built.includes(".typeset"), "The consumer's CSS has no Typeset rules.");
+  assert.ok(
+    built.includes("Public Sans Variable"),
+    "The consumer's CSS does not load Public Sans.",
+  );
 
   console.log("Registry install test passed.");
 } catch (error) {

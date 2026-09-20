@@ -4,8 +4,9 @@
  *   @import "tailwindcss";
  *   @import "@cadence-clinical/ui/styles.css";
  *
- * It brings in the Cadence tokens and tells Tailwind to scan the compiled components for the
- * classes they use.
+ * It brings in the Cadence tokens and Public Sans, the default typeface, and tells Tailwind to scan
+ * the compiled components for the classes they use.
  */
 @import "@cadence-clinical/tokens/theme.css";
+@import "@cadence-clinical/tokens/fonts.css";
 @source "./";

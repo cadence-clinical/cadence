@@ -28,7 +28,10 @@ const registry = {
       description:
         "Cadence's colour, density and type tokens: light and dark modes, more contrast, six accents and fixed clinical status colours.",
       dependencies: ["@cadence-clinical/tokens"],
-      css: { '@import "@cadence-clinical/tokens/theme.css"': {} },
+      css: {
+        '@import "@cadence-clinical/tokens/theme.css"': {},
+        '@import "@cadence-clinical/tokens/fonts.css"': {},
+      },
       cssVars: { theme: radiusScale, light: { ...light, radius }, dark },
       docs: [
         "Cadence's tokens come from @cadence-clinical/tokens/theme.css, which is versioned and contrast-tested.",

@@ -22,6 +22,7 @@
     },
     "./theme.css": "./dist/theme.css",
     "./typeset.css": "./dist/typeset.css",
+    "./fonts.css": "./dist/fonts.css",
     "./package.json": "./package.json"
   },
   "publishConfig": {
@@ -36,6 +37,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@fontsource-variable/public-sans": "^5.3.0",
     "culori": "^4.0.2"
   },
   "devDependencies": {

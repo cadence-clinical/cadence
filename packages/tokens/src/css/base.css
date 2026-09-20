@@ -44,9 +44,19 @@
   }
 }
 
-/* Brand hooks. Set --cadence-font-sans or --cadence-font-mono to theme the type. */
+/*
+ * Brand hooks. Set --cadence-font-sans or --cadence-font-mono to theme the type. The default is
+ * Public Sans, which fonts.css loads. Without fonts.css the system typeface is used.
+ */
 @theme {
-  --font-sans: var(--cadence-font-sans, ui-sans-serif, system-ui, sans-serif);
+  --font-sans: var(
+    --cadence-font-sans,
+    "Public Sans Variable",
+    "Public Sans",
+    ui-sans-serif,
+    system-ui,
+    sans-serif
+  );
   --font-mono: var(--cadence-font-mono, ui-monospace, "SF Mono", Menlo, Consolas, monospace);
 }
 

@@ -14,23 +14,23 @@ All of these are general components in `packages/ui`. Clinical components are pl
 
 One control or one element. Built first, in this order, because the composites need them.
 
-| Component   | Status   | Base UI primitive | Why                                                                                                     |
-| ----------- | -------- | ----------------- | ------------------------------------------------------------------------------------------------------- |
-| Button      | Built    | Button            |                                                                                                         |
-| Typeset     | Built    | None              | Long-form text. Cadence has no Text component (decision 0012).                                          |
-| Label       | Built    | None              |                                                                                                         |
-| Input       | Built    | Input             |                                                                                                         |
-| Select      | Agreed   | Select            |                                                                                                         |
-| Toggle      | Agreed   | Toggle            |                                                                                                         |
-| Textarea    | Proposed | None              | Field needs it: free-text notes are the most common clinical input.                                     |
-| Checkbox    | Proposed | Checkbox          | Field needs it, and the data table needs it for row selection.                                          |
-| Radio group | Proposed | Radio group       | Field needs it: one choice from a few, all visible at once.                                             |
-| Switch      | Proposed | Switch            | Field needs it for a setting that applies at once.                                                      |
-| Separator   | Proposed | Separator         | The sidebar and menus need it.                                                                          |
-| Badge       | Proposed | None              | A short status or count, in tables and items. Carries its border token.                                 |
-| Tooltip     | Proposed | Tooltip           | The collapsed sidebar needs it to name its icons.                                                       |
-| Spinner     | Proposed | None              | A pending Button composes it. shadcn has no `isLoading` prop.                                           |
-| Section     | Proposed | None              | Named by the maintainer. Read as a labelled region of a page with a heading and no surface. To confirm. |
+| Component   | Status   | Base UI primitive | Why                                                                             |
+| ----------- | -------- | ----------------- | ------------------------------------------------------------------------------- |
+| Button      | Built    | Button            |                                                                                 |
+| Typeset     | Built    | None              | Long-form text. Cadence has no Text component (decision 0012).                  |
+| Label       | Built    | None              |                                                                                 |
+| Input       | Built    | Input             |                                                                                 |
+| Select      | Agreed   | Select            |                                                                                 |
+| Toggle      | Agreed   | Toggle            |                                                                                 |
+| Textarea    | Proposed | None              | Field needs it: free-text notes are the most common clinical input.             |
+| Checkbox    | Proposed | Checkbox          | Field needs it, and the data table needs it for row selection.                  |
+| Radio group | Proposed | Radio group       | Field needs it: one choice from a few, all visible at once.                     |
+| Switch      | Proposed | Switch            | Field needs it for a setting that applies at once.                              |
+| Separator   | Proposed | Separator         | The sidebar and menus need it.                                                  |
+| Badge       | Proposed | None              | A short status or count, in tables and items. Carries its border token.         |
+| Tooltip     | Proposed | Tooltip           | The collapsed sidebar needs it to name its icons.                               |
+| Spinner     | Proposed | None              | A pending Button composes it. shadcn has no `isLoading` prop.                   |
+| Section     | Agreed   | None              | A layout primitive: a region of a page. Its parts are settled when it is built. |
 
 ## 2. Composites
 
@@ -71,6 +71,6 @@ Places patterns in the frame of a page.
 
 Layouts filled with synthetic content. They live in the example apps and are not shipped.
 
-## After the components
+## Done ahead of the components
 
-- **Public Sans as the default font**, shipped as an import. It changes every snapshot and the metrics every component is designed against, so there is a case for doing it before the next primitive. The maintainer's call.
+- **Public Sans is the default font**, shipped as `@cadence-clinical/tokens/fonts.css`. It went in before the next primitive because it changes the metrics every component is designed against.
