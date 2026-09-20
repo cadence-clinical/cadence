@@ -29,7 +29,7 @@ Run `pnpm check` and `pnpm test:browser` before you say a change is done.
   `docs/decisions/0012-typography.md`.
 - `packages/ui`: primitives on Base UI. Component files are flat in `src/components`
   (`button.tsx`, `button.stories.tsx`), and `registry.json` is the manifest: each component's
-  files, dependencies, category and grade. Source imports through `@/lib/*` and
+  files, dependencies, level, domain and grade. Source imports through `@/lib/*` and
   `@/components/cadence/*`, never a relative path, because the registry installs it as written.
 - `packages/config`: shared tsconfig and ESLint, including the package boundary rules.
 - `apps/site`: Next.js and Fumadocs. Docs content is in `content/docs`. Its build also runs
@@ -63,6 +63,9 @@ Run `pnpm check` and `pnpm test:browser` before you say a change is done.
 
 Follow the definition of done in [CONTRIBUTING.md](CONTRIBUTING.md). Components are agreed one
 at a time with the maintainer before they are built. Do not add components speculatively.
+[docs/components.md](docs/components.md) is the plan: build only what is marked agreed, from the
+bottom level up, and never import from a level above
+([decision 0013](docs/decisions/0013-component-levels.md)).
 
 ## Workflow
 
