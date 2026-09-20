@@ -28,7 +28,9 @@ for (const manifest of (await readJson("registry.json")).include ?? []) {
   for (const item of (await readJson(manifest)).items ?? []) {
     const files = (item.files ?? []).map((file) => ({ ...file, path: path.join(dir, file.path) }));
     files.forEach((file) => listed.add(file.path));
-    if (!COMPONENT_TYPES.includes(item.type)) continue;
+    // A component is anything that declares a category. Most are React files. Typeset is a
+    // stylesheet from npm, so it has no file here, but it is graded like any other.
+    if (!COMPONENT_TYPES.includes(item.type) && !item.meta?.category) continue;
 
     count += 1;
     const report = (message) => problems.push(`${manifest}: ${item.name}: ${message}`);
@@ -44,7 +46,7 @@ for (const manifest of (await readJson("registry.json")).include ?? []) {
     }
 
     const source = files.find((file) => path.basename(file.path) === `${item.name}.tsx`);
-    if (!source) report(`no file named ${item.name}.tsx.`);
+    if (files.length > 0 && !source) report(`no file named ${item.name}.tsx.`);
     for (const file of files) {
       if (!file.target?.startsWith(INSTALL_DIR)) {
         report(`${file.path} needs a target under ${INSTALL_DIR}.`);
@@ -59,8 +61,8 @@ for (const manifest of (await readJson("registry.json")).include ?? []) {
 
     // "Tested" means the component has stories, because every story runs as a browser test.
     const tested = compareGrades(item.meta.grade.level, "tested") >= 0;
-    const stories = source?.path.replace(/\.tsx$/, ".stories.tsx");
-    if (tested && stories && !(await exists(stories))) {
+    const stories = path.join(dir, "src/components", `${item.name}.stories.tsx`);
+    if (tested && !(await exists(stories))) {
       report(`grade "${item.meta.grade.level}" needs ${stories}.`);
     }
     for (const evidence of item.meta.grade.evidence ?? []) {

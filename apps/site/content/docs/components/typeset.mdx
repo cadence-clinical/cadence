@@ -1,0 +1,130 @@
+---
+title: Typeset
+description: Styles plain HTML inside a container, such as rendered markdown, patient information and clinical notes.
+---
+
+<GradeBadge component="typeset" />
+
+<TypesetPreview />
+
+Typeset is a stylesheet, not a React component. Add the `typeset` class to a container and the headings, paragraphs, lists, tables and code inside it are styled from Cadence tokens.
+
+It follows [shadcn/typeset](https://ui.shadcn.com/docs/typeset) and keeps its class names and variables, so what you know about one applies to the other. [What Cadence changes](#what-cadence-changes) lists the differences.
+
+## Usage
+
+Import the stylesheet after the Cadence styles:
+
+```css title="app/globals.css"
+@import "tailwindcss";
+@import "@cadence-clinical/ui/styles.css";
+@import "@cadence-clinical/ui/typeset.css";
+```
+
+If you install from the [shadcn registry](/docs/installation#install-from-the-shadcn-registry), add the item instead. It imports the same stylesheet from `@cadence-clinical/tokens`:
+
+```bash
+pnpm dlx shadcn@latest add @cadence/typeset
+```
+
+Then wrap the content:
+
+```tsx
+<article className="typeset">
+  <Markdown>{content}</Markdown>
+</article>
+```
+
+`Markdown` stands for whichever renderer you use. Typeset styles the HTML it produces.
+
+## There is no Text component
+
+Cadence has no `Text` or `Heading` component. Text is styled in one of two places:
+
+- **Interface text belongs to the component part that shows it**, such as a card's title or a field's label. The part sets its own size, weight and colour.
+- **Content you do not write element by element goes in a Typeset container.** That covers rendered markdown, patient information and the body of a clinical note.
+
+## Presets
+
+A preset is a second class on the container. It changes the size and rhythm, and nothing else.
+
+| Class             | Use                                                                                     |
+| ----------------- | --------------------------------------------------------------------------------------- |
+| `typeset`         | The default. Text follows the size of the surrounding layout.                           |
+| `typeset-compact` | A note or summary inside a dense workstation layout.                                    |
+| `typeset-reading` | Long-form content read by patients and carers. Larger text, and a line of 68ch at most. |
+
+<TypesetPreview preset="compact" />
+
+<TypesetPreview preset="reading" />
+
+## Variables
+
+Set a variable on the container to tune one place, or define your own preset class that sets several.
+
+```tsx
+<article className="typeset [--typeset-flow:1.75em]">...</article>
+```
+
+| Variable                 | Default       | Controls                                                                 |
+| ------------------------ | ------------- | ------------------------------------------------------------------------ |
+| `--typeset-size`         | `1em`         | Base text size. `1em` follows the surrounding layout.                    |
+| `--typeset-leading`      | `1.65`        | Space between lines.                                                     |
+| `--typeset-flow`         | `1.25em`      | Space between blocks. Headings and other elements derive theirs from it. |
+| `--typeset-small-screen` | `1.125`       | How much larger text is below 48rem. `typeset-compact` sets it to `1`.   |
+| `--typeset-font-body`    | `inherit`     | Body font.                                                               |
+| `--typeset-font-heading` | `inherit`     | Heading font.                                                            |
+| `--typeset-font-mono`    | `--font-mono` | Font for `code`, `pre` and `kbd`.                                        |
+
+## Override one element
+
+Typeset's selectors have no specificity and sit in the `components` layer, so a Tailwind utility on an element wins without `!important`:
+
+```tsx
+<div className="typeset">
+  <p className="mt-0 font-semibold">...</p>
+</div>
+```
+
+## Leave a component alone
+
+Add `not-typeset`, or the `data-not-typeset` attribute, to a component inside the container. Typeset styles nothing inside it.
+
+```tsx
+<div className="typeset">
+  <p>Styled by Typeset.</p>
+  <Button className="not-typeset">Untouched</Button>
+</div>
+```
+
+## Wide tables
+
+A table shrinks to fit its container and its headings wrap. A table that still does not fit makes the page scroll sideways, so wrap it in `typeset-scroll`. Give the wrapper a role, a label and `tabIndex={0}`, so it can be scrolled from the keyboard:
+
+```tsx
+<div className="typeset-scroll" role="region" aria-labelledby="clinic-times" tabIndex={0}>
+  <table>...</table>
+</div>
+```
+
+With a markdown renderer, do this where the renderer lets you replace the `table` element.
+
+## Content that arrives in pieces
+
+Appending content never restyles content that is already on screen, which makes Typeset safe for streamed text. Space only flows forward, from the top of each block, and no rule depends on an element being the last one.
+
+## What Cadence changes
+
+Typeset is adapted from shadcn/typeset under the MIT licence. Four things differ:
+
+- **Nothing changes the case of text.** shadcn sets its smallest heading in capitals. [Mixed-case lettering](https://www.safetyandquality.gov.au/sites/default/files/2024-04/mixed-case_lettering_-_principles_for_application.pdf), also known as Tall Man lettering, tells look-alike medicine names apart by selective capitalisation, and a capitalised heading would erase it.
+- **Colour comes from Cadence tokens**, so each pairing is contrast-tested. Links use the accent's text role and are always underlined. Highlighted text is tinted with the accent, because a yellow highlight sits on the warning hue.
+- **In a definition list the term is muted and the value is not.** Clinical screens put a label in `dt` and the patient's data in `dd`.
+- **A table heading may wrap**, so a table is less likely to be wider than a phone.
+
+## Accessibility
+
+- Text, links and muted text use token pairings that hold at least 4.5:1, and 7:1 when the user asks for more contrast.
+- A link is underlined, so it is never shown by colour alone.
+- Content reflows at 320px. Text wraps, including a long unbroken identifier, and nothing is truncated.
+- When printed, a table, quotation or figure stays in one piece and a heading stays with the text below it.

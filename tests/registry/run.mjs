@@ -75,8 +75,8 @@ try {
   // The order the installation guide gives: the theme by name, then components.
   step("shadcn add @cadence/theme");
   await run(shadcn, ["add", "@cadence/theme", "--yes", "--cwd", consumer]);
-  step("shadcn add @cadence/button");
-  await run(shadcn, ["add", "@cadence/button", "--yes", "--cwd", consumer]);
+  step("shadcn add @cadence/button @cadence/typeset");
+  await run(shadcn, ["add", "@cadence/button", "@cadence/typeset", "--yes", "--cwd", consumer]);
 
   step("Checking what was installed");
   const button = await readFile(path.join(consumer, "src/components/cadence/button.tsx"), "utf8");
@@ -100,11 +100,13 @@ try {
   }
 
   const css = await readFile(path.join(consumer, "src/index.css"), "utf8");
-  assert.equal(
-    css.split('@import "@cadence-clinical/tokens/theme.css"').length - 1,
-    1,
-    "index.css must import theme.css exactly once.",
-  );
+  for (const stylesheet of ["theme.css", "typeset.css"]) {
+    assert.equal(
+      css.split(`@import "@cadence-clinical/tokens/${stylesheet}"`).length - 1,
+      1,
+      `index.css must import ${stylesheet} exactly once.`,
+    );
+  }
   // The stock values are replaced, and what Cadence does not define is kept.
   assert.deepEqual(
     block(css, ":root"),
@@ -130,6 +132,7 @@ try {
   for (const utility of [".h-control-lg", ".px-control-x", ".bg-critical", ".text-control"]) {
     assert.ok(built.includes(utility), `The consumer's CSS has no ${utility} utility.`);
   }
+  assert.ok(built.includes(".typeset"), "The consumer's CSS has no Typeset rules.");
 
   console.log("Registry install test passed.");
 } catch (error) {

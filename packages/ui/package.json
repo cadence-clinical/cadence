@@ -21,6 +21,7 @@
       "default": "./dist/index.mjs"
     },
     "./styles.css": "./dist/styles.css",
+    "./typeset.css": "./dist/typeset.css",
     "./meta.json": "./dist/meta.json",
     "./package.json": "./package.json"
   },

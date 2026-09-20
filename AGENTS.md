@@ -24,7 +24,9 @@ Run `pnpm check` and `pnpm test:browser` before you say a change is done.
 ## Layout
 
 - `packages/core`: Region contract, view-model types, grade schema. No React.
-- `packages/tokens`: the palette in TypeScript, `theme.css` generated from it, contrast tests.
+- `packages/tokens`: the palette in TypeScript, `theme.css` generated from it, contrast tests, and
+  `typeset.css`, which styles long-form HTML. There is no `Text` component: see
+  `docs/decisions/0012-typography.md`.
 - `packages/ui`: primitives on Base UI. Component files are flat in `src/components`
   (`button.tsx`, `button.stories.tsx`), and `registry.json` is the manifest: each component's
   files, dependencies, category and grade. Source imports through `@/lib/*` and

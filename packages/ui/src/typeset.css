@@ -1,0 +1,11 @@
+/*
+ * Typeset for consumers of this package, placed after styles.css:
+ *
+ *   @import "tailwindcss";
+ *   @import "@cadence-clinical/ui/styles.css";
+ *   @import "@cadence-clinical/ui/typeset.css";
+ *
+ * The stylesheet lives in @cadence-clinical/tokens. It is re-exported here because a package
+ * manager that does not hoist cannot resolve tokens from an application's stylesheet.
+ */
+@import "@cadence-clinical/tokens/typeset.css";
