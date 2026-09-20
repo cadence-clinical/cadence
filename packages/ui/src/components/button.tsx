@@ -3,6 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/cn";
 
+/** The Button's classes, for giving another element, such as a link, the look of a button. */
 const buttonVariants = cva(
   [
     "inline-flex shrink-0 items-center justify-center rounded-md border border-transparent",
@@ -44,6 +45,7 @@ const buttonVariants = cva(
   },
 );
 
+/** The Base UI Button's props, plus `variant` and `size`. */
 type ButtonProps = ButtonPrimitive.Props & VariantProps<typeof buttonVariants>;
 
 /**

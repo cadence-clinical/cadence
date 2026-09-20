@@ -35,11 +35,19 @@ const aliasRule = {
     "Import through the @/ aliases. The shadcn CLI installs a relative import unchanged, and it does not resolve in a consumer's project.",
 };
 
+/**
+ * Component source is what the registry installs, so it imports through the aliases. A test is
+ * never installed, and it has to reach the package entry and registry.json.
+ */
+const componentPackage = (patterns) => [
+  restrict([...patterns, aliasRule]),
+  { files: ["**/*.test.{ts,tsx}"], ...restrict(patterns) },
+];
+
 /** For packages/ui: primitives know nothing about regions, FHIR or clinical components. */
-export const uiBoundaries = restrict([
+export const uiBoundaries = componentPackage([
   regionRule,
   fhirRule,
-  aliasRule,
   {
     group: ["@cadence-clinical/clinical", "@cadence-clinical/clinical/*"],
     message: "Primitives must not depend on clinical components.",
@@ -47,7 +55,7 @@ export const uiBoundaries = restrict([
 ]);
 
 /** For packages/clinical: clinical components are render-only and region-agnostic. */
-export const clinicalBoundaries = restrict([regionRule, fhirRule, aliasRule]);
+export const clinicalBoundaries = componentPackage([regionRule, fhirRule]);
 
 /** For packages/core, fhir and region packages: no React, no DOM. */
 export const frameworkFreeBoundaries = restrict([

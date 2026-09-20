@@ -31,6 +31,10 @@ export interface RuleSet<TData = unknown> {
   data: TData;
 }
 
+/**
+ * A region's conventions and cited rule sets. Components receive one at runtime and never import
+ * a Region package, so a region can be swapped. See docs/decisions/0003-region-contract.md.
+ */
 export interface Region {
   /** Stable identifier, for example "au" or "au-vic". */
   id: string;
@@ -50,6 +54,7 @@ export interface Region {
   ruleSets: Readonly<Record<string, RuleSet>>;
 }
 
+/** What defineRegion takes: an id, an optional region to extend, and the parts that differ. */
 export type RegionDefinition = {
   id: string;
   extends?: Region;

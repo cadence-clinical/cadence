@@ -19,7 +19,7 @@ A rule a tool can enforce is enforced by the tool. This file records the rest, a
 - **React 19, ESM only, TypeScript strict.** No CommonJS output and no support for older React. `tsc`
 - **Browsers from the last two years**: Chrome and Edge 111, Safari 16.4, Firefox 128. Use the platform (`Intl`, container queries, OKLCH, `:has`) before a library. `review`
 - **Consumers run Tailwind CSS v4.** Components ship class names, not compiled CSS. `review`
-- **Server-safe.** Every component renders on the server. No browser globals at module scope or during render. `"use client"` only in files that use hooks or event handlers. `planned`
+- **Server-safe.** Every component renders on the server. No browser globals at module scope or during render. `"use client"` only in files that use hooks or event handlers. `test` (each component is rendered without a DOM) and `review`
 - **Desktop, tablet and phone are all first-class**, at compact and comfortable density. `test`
 - **Synthetic data only.** Identifiers in fixtures are obviously fake. No patient information anywhere. `review`
 - **Left-to-right only.** There is no right-to-left requirement, so physical utilities (`pl-`, `mr-`) are fine. `review`
@@ -29,13 +29,13 @@ A rule a tool can enforce is enforced by the tool. This file records the rest, a
 
 - `strict` and `noUncheckedIndexedAccess` stay on. An index into an array or record may be `undefined`, so handle it. `tsc`
 - **No `any`.** Use `unknown` and narrow. `lint`
-- **No non-null assertions (`!`) and no type assertions (`as`)**, except `as const`. If the compiler cannot see what you know, fix the type. Tests may assert to build invalid input. `planned`
+- **No non-null assertions (`!`) and no type assertions (`as`)**, except `as const`. If the compiler cannot see what you know, fix the type. Tests may assert to build invalid input. `lint`
 - **Data from outside is `unknown` until parsed.** A FHIR resource, a JSON file and a URL parameter are never cast to a type. `review`
-- **`interface` for object shapes, `type` for unions, mapped types and function types.** `planned`
-- **Discriminated unions over optional fields and boolean flags.** Make invalid states unrepresentable. Exhaustive `switch` with a `never` check. `planned`
-- **No `enum`, no `namespace`, no parameter properties.** Use an `as const` object and derive the union from it. These features are not erasable, so they break type-stripping tools. `planned` (`erasableSyntaxOnly`)
-- **Named exports only.** Default exports only where a framework requires one: Next.js routes, Storybook meta and config files. `planned`
-- **Explicit return types on exported functions.** Inference inside function bodies. React components are exempt. `planned`
+- **`interface` for object shapes, `type` for unions, mapped types and function types.** `lint`
+- **Discriminated unions over optional fields and boolean flags.** Make invalid states unrepresentable. Exhaustive `switch` with a `never` check. `lint` (the switch) and `review`
+- **No `enum`, no `namespace`, no parameter properties.** Use an `as const` object and derive the union from it. These features are not erasable, so they break type-stripping tools. `tsc` (`erasableSyntaxOnly`)
+- **Named exports only.** Default exports only where a framework requires one: Next.js routes, Storybook meta and config files. `lint`
+- **Explicit return types on exported functions.** Inference inside function bodies. React components are exempt. `lint`
 - **`import type` for types**, inline with value imports. `lint`
 - **`readonly` on inputs.** Never mutate an argument. `review`
 - **Imports inside a component package use consumer-shaped aliases**: `@/lib/cn`, `@/components/cadence/button`. They are mapped in the package's tsconfig `paths` and are exactly what the import will be once the registry installs the file in someone's project. No relative imports between source files ([decision 0011](docs/decisions/0011-registry.md)). `lint`
@@ -43,7 +43,7 @@ A rule a tool can enforce is enforced by the tool. This file records the rest, a
 
 ## 3. Functions over classes
 
-- **Plain functions and plain data.** No classes, no `this`, no inheritance. Compose functions. `planned`
+- **Plain functions and plain data.** No classes, no `this`, no inheritance. Compose functions. `lint`
 - The one exception is an `Error` subclass, when a caller needs to tell failures apart.
 - **Pure by default.** Same input, same output, no side effects. `core`, `tokens`, `fhir` and Region packages are pure apart from their build scripts. `review`
 - **Side effects live at the edge**: I/O, the DOM, the clock, randomness and locale. Pass `now`, the time zone and the Region in as arguments. A function that reads the clock cannot be tested and will show a different answer on a server in another zone. `review`
@@ -69,7 +69,7 @@ A rule a tool can enforce is enforced by the tool. This file records the rest, a
 
 ## 5. Styling
 
-- **Semantic tokens only.** No raw colours, no arbitrary hex values and no `dark:` overrides. Modes are the tokens' job. `planned`
+- **Semantic tokens only.** No raw colours, no arbitrary hex values and no `dark:` overrides. Modes are the tokens' job. `lint`
 - **Status is never colour alone**, and every status surface carries its `-border` token. `review`
 - **Never truncate clinical content**: medicine names, doses, units, identifiers, allergies. Wrap it. `truncate` is for navigation and decoration. `review`
 - **Numbers that are compared use `tabular-nums`.** `review`
@@ -104,20 +104,20 @@ A rule a tool can enforce is enforced by the tool. This file records the rest, a
 - **Unit tests (Vitest) for pure code**: `core`, `tokens`, `fhir`, Regions. Table-driven with `it.each`. `test`
 - **Stories are the component tests.** Every story runs in Chromium and WebKit. A play function asserts behaviour the way a user meets it: query by role and name, act with `userEvent`. `test`
 - **Test behaviour, not implementation.** No assertions on class names or internal state, and no markup snapshots. Appearance belongs to Chromatic. `review`
-- **Type tests where a type carries a guarantee**: the clinical view models in `core`, generic helpers such as `defineRegion`, and props that must reject invalid combinations. Write them in `*.test-d.ts` with Vitest's `expectTypeOf`, mostly as negative tests with `@ts-expect-error`. Plain interfaces do not need them. `planned`
+- **Type tests where a type carries a guarantee**: the clinical view models in `core`, generic helpers such as `defineRegion`, and props that must reject invalid combinations. Write them in `*.test-d.ts` with Vitest's `expectTypeOf`, mostly as negative tests with `@ts-expect-error`. Plain interfaces do not need them. `test`
 - **Every bug fix lands with a test that failed before it.** `review`
 - **Deterministic**: no real clock, randomness or network, and a fixed time zone. `review`
 - **Clinical transforms are table-driven, and each expected value cites its source.** Edge rows are required: missing fields, unknown units, comparators, zero, negatives and extremes. `review`
 - **Playwright end-to-end tests are smoke tests of the website only.** Component behaviour is not tested there. `review`
 - **A change to tokens, CSS or Storybook config re-snapshots every story.** New styling sources are added to the `externals` list in `chromatic.yml`. `ci`
-- **Clinical transforms require 100% branch coverage**: unit conversion, FHIR mapping and Region rule sets, enforced by coverage thresholds in those packages. Everywhere else coverage is a signal, not a target. `planned`
+- **Clinical transforms require 100% branch coverage**: unit conversion, FHIR mapping and Region rule sets, enforced by coverage thresholds in those packages. Everywhere else coverage is a signal, not a target. `planned`: no such package exists yet, and the threshold goes in with the first one.
 
 ## 9. Linting and formatting
 
 - **Prettier formats. ESLint finds bugs.** No stylistic lint rules. `lint`
-- **A rule is an error or it is off.** No warnings, and lint runs with `--max-warnings 0`. `planned`
-- **No `eslint-disable` or `@ts-expect-error` without a reason on the same line.** Fix the code, not the rule. `planned`
-- **Type-aware linting** (`strictTypeChecked`) is the target: floating promises, unsafe `any` flow, exhaustive switches. `planned`
+- **A rule is an error or it is off.** No warnings, and lint runs with `--max-warnings 0`. `lint`
+- **No `eslint-disable` or `@ts-expect-error` without a reason on the same line.** Fix the code, not the rule. `lint`
+- **Linting is type-aware** (`strictTypeChecked`) in every package and app: floating promises, unsafe `any` flow, exhaustive switches. Config files are the exception, because package tsconfigs leave Node types out. `lint`
 - **Package boundaries are lint rules**, in `packages/config/eslint/boundaries.js`. A new package gets its boundary there first. `lint`
 - **Git hooks only format and check the commit message.** CI is the gate. `ci`
 
@@ -139,7 +139,7 @@ A rule a tool can enforce is enforced by the tool. This file records the rest, a
 ## 12. Comments and documentation
 
 - **Comments say why.** The code says what. No commented-out code. A `TODO` links an issue. `review`
-- **Every exported symbol has a JSDoc sentence**, plus what a type cannot say: units, ranges, what it throws. `planned`
+- **Every exported symbol has a JSDoc sentence**, plus what a type cannot say: units, ranges, what it throws. `lint` in packages. The website is an application with no public API, so it is exempt.
 - Documentation follows the `technical-writing` skill, and site copy follows `human-writing`. `review`
 
 ## References
