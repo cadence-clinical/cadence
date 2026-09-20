@@ -10,7 +10,7 @@ const meta = {
   parameters: { layout: "padded" },
   args: { defaultValue: "text", onValueChange: fn() },
   render: (args) => (
-    <div className="grid gap-2">
+    <div className="grid gap-1">
       <p id="contact-by" className="text-control font-medium">
         Contact me by
       </p>

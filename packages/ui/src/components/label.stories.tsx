@@ -10,7 +10,7 @@ const meta = {
   parameters: { layout: "padded" },
   args: { children: "Family name", htmlFor: "family-name" },
   render: (args) => (
-    <div className="grid w-64 gap-2">
+    <div className="grid w-64 gap-1">
       <Label {...args} />
       <Input id="family-name" />
     </div>
@@ -35,7 +35,7 @@ export const ClickingItFocusesTheControl: Story = {
 export const WrapsWithoutColliding: Story = {
   args: { children: "Name of the person to contact if we cannot reach you on the day" },
   render: (args) => (
-    <div className="grid w-40 gap-2">
+    <div className="grid w-40 gap-1">
       <Label {...args} />
       <Input id="family-name" />
     </div>
@@ -52,7 +52,7 @@ export const WrapsWithoutColliding: Story = {
 
 export const BesideADisabledControl: Story = {
   render: (args) => (
-    <div className="flex w-64 flex-col-reverse gap-2">
+    <div className="flex w-64 flex-col-reverse gap-1">
       <Input id="family-name" className="peer" disabled />
       <Label {...args} />
     </div>
