@@ -32,7 +32,16 @@ Compact is the default. Controls are 32px high, which suits a workstation with a
 
 ## Font
 
-Cadence reads its fonts from two CSS variables. Without them it uses the system font stack.
+The default typeface is [Public Sans](https://public-sans.digital.gov), a variable font in upright and italic. `@cadence-clinical/ui/styles.css` loads it, and so does the registry's theme, so there is nothing to set up. Its figures line up in columns wherever a component asks for tabular numbers.
+
+If you import `@cadence-clinical/tokens/theme.css` yourself, add the font beside it. Without it, Cadence falls back to the system typeface.
+
+```css
+@import "@cadence-clinical/tokens/theme.css";
+@import "@cadence-clinical/tokens/fonts.css";
+```
+
+To use your own typeface, set the variables. A browser downloads a font only when text uses it, so Public Sans then costs nothing.
 
 ```css
 :root {
@@ -40,6 +49,8 @@ Cadence reads its fonts from two CSS variables. Without them it uses the system 
   --cadence-font-mono: "JetBrains Mono", monospace;
 }
 ```
+
+The monospaced font stays the system's. Use `font-mono` for an identifier or a code: in Public Sans a capital I and a lowercase l look alike.
 
 ## Status colours
 

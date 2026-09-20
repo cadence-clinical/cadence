@@ -1,0 +1,13 @@
+/*
+ * Public Sans, Cadence's default typeface, as a variable font in upright and italic.
+ * @cadence-clinical/ui/styles.css imports this for you. If you import theme.css yourself, add:
+ *
+ *   @import "@cadence-clinical/tokens/fonts.css";
+ *
+ * A browser downloads a font file only when text uses it, so this costs nothing if you set
+ * --cadence-font-sans to a typeface of your own.
+ *
+ * Public Sans is licensed under the SIL Open Font License 1.1 and is packaged by Fontsource.
+ */
+@import "@fontsource-variable/public-sans/wght.css";
+@import "@fontsource-variable/public-sans/wght-italic.css";

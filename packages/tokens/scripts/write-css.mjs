@@ -1,5 +1,5 @@
 // Writes dist/theme.css from the built palette, so the CSS can never drift from the tested tokens,
-// and ships typeset.css beside it.
+// and ships typeset.css and fonts.css beside it.
 import { copyFile, readFile, writeFile } from "node:fs/promises";
 
 import { generateColorCss } from "../dist/index.mjs";
@@ -12,7 +12,9 @@ await writeFile(
   `${banner}\n${generateColorCss()}\n${base}`,
 );
 
-await copyFile(
-  new URL("../src/css/typeset.css", import.meta.url),
-  new URL("../dist/typeset.css", import.meta.url),
-);
+for (const stylesheet of ["typeset.css", "fonts.css"]) {
+  await copyFile(
+    new URL(`../src/css/${stylesheet}`, import.meta.url),
+    new URL(`../dist/${stylesheet}`, import.meta.url),
+  );
+}

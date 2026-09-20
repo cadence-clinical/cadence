@@ -32,6 +32,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
+## Public Sans
+
+`@cadence-clinical/tokens` depends on
+[`@fontsource-variable/public-sans`](https://fontsource.org/fonts/public-sans), which packages
+[Public Sans](https://github.com/uswds/public-sans), Copyright 2015 The Public Sans Project
+Authors, under the SIL Open Font License, Version 1.1. The font files are not copied into this
+repository. The licence ships inside that package.
+
 ## Agent skills
 
 The `technical-writing` and `human-writing` skills under `.claude/skills` are adapted from

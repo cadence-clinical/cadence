@@ -10,7 +10,8 @@
         "@cadence-clinical/tokens"
       ],
       "css": {
-        "@import \"@cadence-clinical/tokens/theme.css\"": {}
+        "@import \"@cadence-clinical/tokens/theme.css\"": {},
+        "@import \"@cadence-clinical/tokens/fonts.css\"": {}
       },
       "cssVars": {
         "theme": {
