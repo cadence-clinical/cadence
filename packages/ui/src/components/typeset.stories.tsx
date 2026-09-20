@@ -250,7 +250,7 @@ export const UtilitiesWin: Story = {
 export const WrapsLongContent: Story = {
   render: () => (
     <div className="typeset w-60 border p-2" data-testid="narrow">
-      <p>SYNTHETIC-IDENTIFIER-0000-0000-0000-0000-0000-0000-0000-0000-0000-0000-0000-0000</p>
+      <p>SYNTHETICIDENTIFIER000000000000000000000000000000000000000000000000000000000000</p>
     </div>
   ),
   play: async ({ canvasElement }) => {
