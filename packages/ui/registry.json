@@ -7,7 +7,12 @@
       "title": "cn",
       "description": "Joins class names and resolves Tailwind conflicts, with the Cadence density scale registered.",
       "dependencies": ["clsx", "tailwind-merge"],
-      "files": [{ "path": "src/lib/cn.ts", "type": "registry:lib" }]
+      "files": [
+        {
+          "path": "src/lib/cn.ts",
+          "type": "registry:lib"
+        }
+      ]
     },
     {
       "name": "button",
@@ -26,7 +31,27 @@
       "docs": "Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
       "meta": {
         "category": "primitive",
-        "grade": { "level": "tested" }
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
+      "name": "typeset",
+      "type": "registry:item",
+      "title": "Typeset",
+      "description": "Styles plain HTML inside a typeset container: rendered markdown, patient information and clinical notes.",
+      "dependencies": ["@cadence-clinical/tokens"],
+      "registryDependencies": ["@cadence/theme"],
+      "css": {
+        "@import \"@cadence-clinical/tokens/typeset.css\"": {}
+      },
+      "docs": "Wrap content in an element with the typeset class. Cadence grades the stylesheet it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "category": "primitive",
+        "grade": {
+          "level": "tested"
+        }
       }
     }
   ]

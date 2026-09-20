@@ -17,5 +17,6 @@ supersedes an earlier one.
 | [0009](0009-delivery.md)                | Hosting, visual regression and release                           | Accepted, domain superseded by 0010 |
 | [0010](0010-canonical-domain.md)        | The canonical origin is www.cadenceclinical.dev                  | Accepted                            |
 | [0011](0011-registry.md)                | The registry: authored with aliases, served by the website       | Accepted                            |
+| [0012](0012-typography.md)              | Typography: no Text component, and Typeset for long-form content | Accepted                            |
 
 To add a record, copy the structure of an existing one, take the next number and add a row here.

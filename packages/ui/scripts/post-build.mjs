@@ -1,11 +1,13 @@
-// Runs after tsdown. Ships what the compiler does not: the stylesheet, and meta.json, which lists
+// Runs after tsdown. Ships what the compiler does not: the stylesheets, and meta.json, which lists
 // every component with its grade. It is derived from registry.json, the one place a grade is
 // declared, so the docs and the agent skill read the same claim the registry serves.
 import { copyFile, readFile, writeFile } from "node:fs/promises";
 
 const root = new URL("../", import.meta.url);
 
-await copyFile(new URL("src/styles.css", root), new URL("dist/styles.css", root));
+for (const stylesheet of ["styles.css", "typeset.css"]) {
+  await copyFile(new URL(`src/${stylesheet}`, root), new URL(`dist/${stylesheet}`, root));
+}
 
 const registry = JSON.parse(await readFile(new URL("registry.json", root), "utf8"));
 const components = registry.items

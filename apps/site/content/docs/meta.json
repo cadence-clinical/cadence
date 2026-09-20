@@ -8,6 +8,7 @@
     "clinical-safety",
     "grades",
     "---Primitives---",
-    "components/button"
+    "components/button",
+    "components/typeset"
   ]
 }

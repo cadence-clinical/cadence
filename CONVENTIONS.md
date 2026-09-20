@@ -65,6 +65,7 @@ A rule a tool can enforce is enforced by the tool. This file records the rest, a
 - **No user-visible string is hard-coded in a clinical component.** Text comes from props or the Region, with en-AU defaults. `review`
 - **Clinical components take view models from `core`**, never FHIR types, and never import a Region package. `lint`
 - **Icons are `lucide-react`**, passed as components, never as string keys. An icon inside a component carries `data-icon="inline-start"` or `data-icon="inline-end"` and no size class: the component sizes and spaces it. `review`
+- **There is no `Text` or `Heading` component.** Interface text is styled by the component part that shows it. Content that is not written element by element (rendered markdown, patient information, the body of a note) goes in a `typeset` container ([decision 0012](docs/decisions/0012-typography.md)). `review`
 - **Component files are flat** in `src/components`: `button.tsx` and `button.stories.tsx`. The package's `registry.json` is the manifest: it lists each component's files, dependencies, category and grade. `ci`
 
 ## 5. Styling
@@ -72,6 +73,7 @@ A rule a tool can enforce is enforced by the tool. This file records the rest, a
 - **Semantic tokens only.** No raw colours, no arbitrary hex values and no `dark:` overrides. Modes are the tokens' job. `lint`
 - **Status is never colour alone**, and every status surface carries its `-border` token. `review`
 - **Never truncate clinical content**: medicine names, doses, units, identifiers, allergies. Wrap it. `truncate` is for navigation and decoration. `review`
+- **Never change the case of text that can hold clinical content.** No `uppercase`, `capitalize` or small caps: [mixed-case lettering](https://www.safetyandquality.gov.au/sites/default/files/2024-04/mixed-case_lettering_-_principles_for_application.pdf) tells look-alike medicine names apart by capitalisation. `test` in Typeset, `review` elsewhere
 - **Numbers that are compared use `tabular-nums`.** `review`
 - **Controls are sized with the density scale** (`h-control`, `px-control-x`, `text-control`). A new scale key is registered in `cn.ts`, or a consumer's override silently loses. `review`
 - **`gap-*`, not `space-*`. `size-*` when width equals height. `cn()` for conditional classes.** `review`
@@ -149,5 +151,5 @@ A rule a tool can enforce is enforced by the tool. This file records the rest, a
 - Components and styling: [Base UI](https://base-ui.com/react/overview/quick-start), [shadcn/ui](https://ui.shadcn.com/docs), [Tailwind CSS theme variables](https://tailwindcss.com/docs/theme)
 - Accessibility: [WCAG 2.2](https://www.w3.org/TR/WCAG22/), [ARIA Authoring Practices Guide](https://www.w3.org/WAI/ARIA/apg/)
 - Testing: [Testing Library guiding principles](https://testing-library.com/docs/guiding-principles), [Storybook: writing tests](https://storybook.js.org/docs/writing-tests)
-- Clinical data: [UCUM](https://ucum.org/ucum), [National guidelines for on-screen display of medicines information](https://www.safetyandquality.gov.au/resources/national-guidelines-screen-display-medicines-information) (ACSQHC)
+- Clinical data: [UCUM](https://ucum.org/ucum), [National guidelines for on-screen display of medicines information](https://www.safetyandquality.gov.au/resources/national-guidelines-screen-display-medicines-information) and ['Mixed-case lettering': Principles for application](https://www.safetyandquality.gov.au/sites/default/files/2024-04/mixed-case_lettering_-_principles_for_application.pdf) (ACSQHC)
 - Process: [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)

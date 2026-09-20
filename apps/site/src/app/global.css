@@ -2,6 +2,7 @@
 @import "fumadocs-ui/css/neutral.css";
 @import "fumadocs-ui/css/preset.css";
 @import "@cadence-clinical/ui/styles.css";
+@import "@cadence-clinical/ui/typeset.css";
 
 /*
  * The docs chrome runs on Cadence tokens, so the site is the first consumer of the theme.

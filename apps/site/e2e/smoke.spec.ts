@@ -17,8 +17,27 @@ test("the Button page renders live components and their grade", async ({ page })
   await expect(page.getByRole("link", { name: /Grade\s*Tested/ })).toBeVisible();
 });
 
+test("the Typeset page styles its live sample", async ({ page }) => {
+  await page.goto("/docs/components/typeset");
+  await expect(page.getByRole("link", { name: /Grade\s*Tested/ })).toBeVisible();
+
+  // Inside the sample, Typeset sets the list marker. Outside it, the docs' own styles apply.
+  const item = page.locator(".typeset li").first();
+  await expect(item).toBeVisible();
+  const marker = await item.evaluate(
+    (node) => getComputedStyle(node.parentElement ?? node).listStyleType,
+  );
+  expect(marker).toBe("decimal");
+});
+
 test("no page scrolls sideways at the current viewport", async ({ page }) => {
-  for (const path of ["/", "/docs", "/docs/theming", "/docs/components/button"]) {
+  for (const path of [
+    "/",
+    "/docs",
+    "/docs/theming",
+    "/docs/components/button",
+    "/docs/components/typeset",
+  ]) {
     await page.goto(path);
     const overflow = await page.evaluate(
       () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
