@@ -38,6 +38,8 @@ test("no page scrolls sideways at the current viewport", async ({ page }) => {
     "/docs/levels",
     "/docs/components/button",
     "/docs/components/card",
+    "/docs/components/input",
+    "/docs/components/label",
     "/docs/components/typeset",
   ]) {
     await page.goto(path);

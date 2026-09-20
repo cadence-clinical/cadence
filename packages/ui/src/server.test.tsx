@@ -3,7 +3,7 @@ import { renderToString } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
 import registry from "../registry.json";
-import { Button, Card, CardContent, CardHeader, CardTitle } from "./index";
+import { Button, Card, CardContent, CardHeader, CardTitle, Input, Label } from "./index";
 
 /**
  * One render per component, with the least it needs. This runs without a DOM, so a component
@@ -11,6 +11,8 @@ import { Button, Card, CardContent, CardHeader, CardTitle } from "./index";
  */
 const RENDERS: Record<string, ReactElement> = {
   button: <Button>Save observation</Button>,
+  input: <Input aria-label="Family name" />,
+  label: <Label htmlFor="family-name">Family name</Label>,
   card: (
     <Card>
       <CardHeader>

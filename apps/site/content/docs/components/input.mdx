@@ -1,0 +1,65 @@
+---
+title: Input
+description: A single-line text input. Sized by the density set on the page.
+---
+
+import { Input, Label } from "@cadence-clinical/ui";
+
+<GradeBadge component="input" />
+
+<ComponentPreview>
+  <div className="grid w-full max-w-64 gap-2">
+    <Label htmlFor="input-preview">Family name</Label>
+    <Input id="input-preview" placeholder="As shown on your referral" />
+  </div>
+</ComponentPreview>
+
+## Usage
+
+```tsx
+import { Input, Label } from "@cadence-clinical/ui";
+
+<Label htmlFor="family-name">Family name</Label>
+<Input id="family-name" onValueChange={setFamilyName} />
+```
+
+Input is built on the Base UI [Input](https://base-ui.com/react/components/input) and accepts all of its props, including `onValueChange`. It follows the shadcn [Input](https://ui.shadcn.com/docs/components/input).
+
+## States
+
+<ComponentPreview>
+  <div className="grid w-full max-w-64 gap-3">
+    <Input aria-label="Read-only example" readOnly defaultValue="Read-only" />
+    <Input aria-label="Disabled example" disabled defaultValue="Disabled" />
+    <Input aria-label="Invalid example" aria-invalid defaultValue="Invalid" />
+  </div>
+</ComponentPreview>
+
+| State     | Set            | Shows as                                                                  |
+| --------- | -------------- | ------------------------------------------------------------------------- |
+| Read-only | `readOnly`     | A muted fill at full contrast. The value is still there to be read.       |
+| Disabled  | `disabled`     | Faded. Use it for a control that does not apply, not for a value to read. |
+| Invalid   | `aria-invalid` | A heavier border in the critical colour.                                  |
+
+An invalid input also needs a message in text that says what is wrong. Connect it with `aria-describedby`:
+
+```tsx
+<Input id="family-name" aria-invalid aria-describedby="family-name-error" />
+<p id="family-name-error" className="text-control text-critical-text">
+  Enter a name using letters.
+</p>
+```
+
+## What Cadence changes
+
+- **Height, padding and text follow the [density](/docs/theming#density)**, so an input is 32px high when compact and 44px when comfortable, and always as high as a Button beside it.
+- **Text is 16px on a touch device.** iOS zooms the page when a focused input's text is smaller.
+- **Focus and the boundary are never faded.** The boundary and the focus ring each hold 3:1 against the page and against a card, which the token tests check. shadcn fades both.
+- **Read-only and disabled look different**, because a read-only clinical value must stay legible.
+- **Digits are tabular**, so numbers line up when inputs are stacked.
+
+## Accessibility
+
+- Give every input a [Label](/docs/components/label) or an `aria-label`. A placeholder is not a name.
+- An invalid input shows a heavier border as well as a colour, and needs its message in text.
+- The focus transition is removed when the user asks for reduced motion.

@@ -36,6 +36,9 @@ export const REQUIRED_PAIRINGS: readonly Pairing[] = [
   { foreground: "primary-text", background: "background", kind: "text" },
   { foreground: "primary-text", background: "card", kind: "text" },
   { foreground: "input", background: "background", kind: "boundary" },
+  // Controls also sit on cards.
+  { foreground: "input", background: "card", kind: "boundary" },
+  { foreground: "ring", background: "card", kind: "boundary" },
   { foreground: "ring", background: "background", kind: "boundary" },
   { foreground: "primary", background: "background", kind: "boundary" },
   ...STATUSES.flatMap((status): Pairing[] => [
