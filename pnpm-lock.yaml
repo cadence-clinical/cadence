@@ -342,6 +342,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      lucide-react:
+        specifier: ^1.46.0
+        version: 1.46.0(react@19.3.0)
       tailwind-merge:
         specifier: ^3.7.0
         version: 3.7.0
@@ -361,9 +364,6 @@ importers:
       eslint:
         specifier: 'catalog:'
         version: 9.39.5(jiti@2.7.0)
-      lucide-react:
-        specifier: ^1.46.0
-        version: 1.46.0(react@19.3.0)
       react:
         specifier: 'catalog:'
         version: 19.3.0

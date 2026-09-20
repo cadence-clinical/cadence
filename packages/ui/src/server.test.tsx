@@ -3,7 +3,20 @@ import { renderToString } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
 import registry from "../registry.json";
-import { Button, Card, CardContent, CardHeader, CardTitle, Input, Label } from "./index";
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Checkbox,
+  Input,
+  Label,
+  RadioGroup,
+  RadioGroupItem,
+  Switch,
+  Textarea,
+} from "./index";
 
 /**
  * One render per component, with the least it needs. This runs without a DOM, so a component
@@ -11,7 +24,15 @@ import { Button, Card, CardContent, CardHeader, CardTitle, Input, Label } from "
  */
 const RENDERS: Record<string, ReactElement> = {
   button: <Button>Save observation</Button>,
+  checkbox: <Checkbox aria-label="Interpreter needed" />,
   input: <Input aria-label="Family name" />,
+  "radio-group": (
+    <RadioGroup aria-label="Contact by" defaultValue="phone">
+      <RadioGroupItem value="phone" aria-label="Phone" />
+    </RadioGroup>
+  ),
+  switch: <Switch aria-label="Appointment reminders" />,
+  textarea: <Textarea aria-label="Notes" />,
   label: <Label htmlFor="family-name">Family name</Label>,
   card: (
     <Card>

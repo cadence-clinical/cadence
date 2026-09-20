@@ -12,6 +12,7 @@ const twMerge = extendTailwindMerge({
         "control-lg",
         "control-x",
         "control-gap",
+        "control-indicator",
         "container",
         "container-sm",
       ],

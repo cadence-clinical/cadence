@@ -1,0 +1,54 @@
+---
+title: Radio group
+description: One choice from a few, all visible at once.
+---
+
+import { Label, RadioGroup, RadioGroupItem } from "@cadence-clinical/ui";
+
+<GradeBadge component="radio-group" />
+
+<ComponentPreview>
+  <RadioGroup defaultValue="text" aria-label="Contact me by" className="w-auto">
+    <Label>
+      <RadioGroupItem value="text" />
+      Text message
+    </Label>
+    <Label>
+      <RadioGroupItem value="phone" />
+      Phone call
+    </Label>
+  </RadioGroup>
+</ComponentPreview>
+
+## Usage
+
+```tsx
+import { Label, RadioGroup, RadioGroupItem } from "@cadence-clinical/ui";
+
+<RadioGroup defaultValue="text" aria-labelledby="contact-by" onValueChange={setContactBy}>
+  <Label>
+    <RadioGroupItem value="text" />
+    Text message
+  </Label>
+  <Label>
+    <RadioGroupItem value="phone" />
+    Phone call
+  </Label>
+</RadioGroup>;
+```
+
+Radio group is built on the Base UI [Radio](https://base-ui.com/react/components/radio) and accepts all of its props. It follows the shadcn [Radio Group](https://ui.shadcn.com/docs/components/radio-group) and keeps its part names.
+
+Use it when there are a few options and seeing them all helps the choice. For a long list, the planned Select takes less room.
+
+## What Cadence changes
+
+- **Each item's target is as large as a control**: 32px when compact and 44px when comfortable.
+- **The gap between items follows the [density](/docs/theming#density).**
+- **The focus ring and the boundary are never faded.**
+
+## Accessibility
+
+- Name the group with `aria-labelledby` or `aria-label`, and wrap each item in a [Label](/docs/components/label).
+- The arrow keys move the choice, and Tab moves past the group.
+- The chosen item differs by its dot as well as its fill.

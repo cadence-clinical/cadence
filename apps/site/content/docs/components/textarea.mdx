@@ -1,0 +1,37 @@
+---
+title: Textarea
+description: A multi-line text input that grows with what is typed.
+---
+
+import { Label, Textarea } from "@cadence-clinical/ui";
+
+<GradeBadge component="textarea" />
+
+<ComponentPreview>
+  <div className="grid w-full max-w-72 gap-2">
+    <Label htmlFor="textarea-preview">Notes for the clinic</Label>
+    <Textarea id="textarea-preview" placeholder="Anything we should know" />
+  </div>
+</ComponentPreview>
+
+## Usage
+
+```tsx
+import { Label, Textarea } from "@cadence-clinical/ui";
+
+<Label htmlFor="visit-notes">Notes for the clinic</Label>
+<Textarea id="visit-notes" />
+```
+
+Textarea is a native `textarea` and accepts all of its props. It follows the shadcn [Textarea](https://ui.shadcn.com/docs/components/textarea), and its states match [Input](/docs/components/input#states): read-only keeps full contrast, disabled is faded, and invalid is a heavier border that needs a message in text.
+
+## What Cadence changes
+
+- **It grows with what is typed**, where the browser supports `field-sizing`, so a long note is not hidden behind a scrollbar. Elsewhere it keeps its height and can be dragged taller.
+- **Padding and text follow the [density](/docs/theming#density)**, and the first line sits where an Input's text does.
+- **Text is 16px on a touch device**, so iOS does not zoom on focus.
+- **The boundary and focus ring are never faded.**
+
+## Accessibility
+
+- Give every textarea a [Label](/docs/components/label) or an `aria-label`. A placeholder is not a name.
