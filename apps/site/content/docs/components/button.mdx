@@ -51,6 +51,27 @@ Write the label as the action and its object, such as "Cease medication". Avoid 
 
 The `size` prop is relative to the page's [density](/docs/theming#density). A `md` button is 32px high when the density is compact and 44px when it is comfortable.
 
+## Icons
+
+Pass an icon as a child and say which side of the label it is on with `data-icon`. The button sizes the icon and tightens the padding on that side, so do not add a size class or a margin.
+
+```tsx
+import { Button } from "@cadence-clinical/ui";
+import { ArrowRight, Plus } from "lucide-react";
+
+<Button>
+  <Plus data-icon="inline-start" />
+  Add observation
+</Button>;
+
+<Button variant="outline">
+  Next chart
+  <ArrowRight data-icon="inline-end" />
+</Button>;
+```
+
+Cadence uses [Lucide](https://lucide.dev) icons. An icon beside a label is decorative, and Lucide hides it from assistive technology by default.
+
 ## Accessibility
 
 - An icon-only button must have an `aria-label`.
