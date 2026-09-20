@@ -13,10 +13,11 @@ const twMerge = extendTailwindMerge({
         "control-x",
         "control-gap",
         "control-indicator",
+        "control-icon",
         "container",
         "container-sm",
       ],
-      text: ["control", "body", "title"],
+      text: ["control-sm", "control", "control-lg", "body", "title"],
     },
   },
 });

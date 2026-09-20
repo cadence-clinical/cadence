@@ -29,10 +29,8 @@ const meta = {
         <p>Monday at 10:15 with the review clinic. Bring your referral letter.</p>
       </CardContent>
       <CardFooter>
-        <Button size="sm">Confirm attendance</Button>
-        <Button size="sm" variant="outline">
-          Ask to reschedule
-        </Button>
+        <Button>Confirm attendance</Button>
+        <Button variant="outline">Ask to reschedule</Button>
       </CardFooter>
     </Card>
   ),
@@ -52,8 +50,9 @@ export const WithAction: Story = {
         <CardTitle render={<h2 />}>Contact details</CardTitle>
         <CardDescription>Checked at the last visit</CardDescription>
         <CardAction>
-          <Button variant="ghost" size="icon" aria-label="Edit contact details">
+          <Button variant="ghost" iconOnly>
             <Pencil />
+            Edit contact details
           </Button>
         </CardAction>
       </CardHeader>
@@ -74,8 +73,8 @@ export const ContentOnly: Story = {
   ),
 };
 
-// A card and the controls inside it change size together. Its text is the size of a Button's
-// text, and its padding follows the density set on <html>.
+// A card and the controls inside it change size together. Its text is the size of a default
+// Button's text, and its padding follows the density set on <html>.
 const followsDensity =
   (expected: { padding: number }) =>
   async ({ canvasElement }: { canvasElement: HTMLElement }) => {
@@ -137,8 +136,9 @@ export const WrapsLongContent: Story = {
         <CardTitle render={<h2 />}>SYNTHETICIDENTIFIER0000000000000000000000000000</CardTitle>
         <CardDescription>SYNTHETICLOCATION000000000000000000000000</CardDescription>
         <CardAction>
-          <Button variant="ghost" size="icon" aria-label="Edit identifier">
+          <Button variant="ghost" iconOnly>
             <Pencil />
+            Edit identifier
           </Button>
         </CardAction>
       </CardHeader>

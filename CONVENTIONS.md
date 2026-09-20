@@ -87,7 +87,7 @@ A rule a tool can enforce is enforced by the tool. This file records the rest, a
 - **WCAG 2.2 AA is the floor.** Contrast is guaranteed by the tokens: 4.5:1 text and 3:1 boundaries, 7:1 and 4.5:1 at more contrast. `test`
 - **Semantic HTML first, ARIA second.** No ARIA is better than wrong ARIA. `lint` (jsx-a11y strict) and `review`
 - **Everything works from the keyboard**, with a visible focus ring that holds 3:1. `test`
-- **An icon-only control has an accessible name.** `test` (axe)
+- **An icon-only control has an accessible name.** Button's `iconOnly` takes it from the button's text, which it hides from sight. `test` (axe)
 - **Targets are at least 24px, and 44px when comfortable.** `test`
 - **Content reflows at 320px wide** with no sideways scroll. The smoke tests check the website at phone width; components at 320px are `review`.
 - **Honour `prefers-reduced-motion`, `prefers-contrast` and `forced-colors`.** `review`
