@@ -1,0 +1,40 @@
+---
+title: Switch
+description: Turns a setting on or off, and the change applies at once.
+---
+
+import { Label, Switch } from "@cadence-clinical/ui";
+
+<GradeBadge component="switch" />
+
+<ComponentPreview>
+  <Label>
+    <Switch defaultChecked />
+    Appointment reminders
+  </Label>
+</ComponentPreview>
+
+## Usage
+
+```tsx
+import { Label, Switch } from "@cadence-clinical/ui";
+
+<Label>
+  <Switch onCheckedChange={setReminders} />
+  Appointment reminders
+</Label>;
+```
+
+Switch is built on the Base UI [Switch](https://base-ui.com/react/components/switch) and accepts all of its props. It follows the shadcn [Switch](https://ui.shadcn.com/docs/components/switch).
+
+Use a switch for a setting that applies the moment it changes. For a choice that is saved with the rest of a form, use a [Checkbox](/docs/components/checkbox).
+
+## What Cadence changes
+
+- **Its size follows the [density](/docs/theming#density)**, so there is no `size` prop. The target is as high as a control.
+- **The thumb always sits on a track it is contrast-tested against**, in every mode and at more contrast, with no `dark:` overrides.
+
+## Accessibility
+
+- On and off differ by where the thumb sits as well as by colour.
+- The thumb's movement is removed when the user asks for reduced motion.

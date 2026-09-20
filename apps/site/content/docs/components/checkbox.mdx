@@ -1,0 +1,49 @@
+---
+title: Checkbox
+description: A choice that is on, off or partly on. Its target is as large as a control.
+---
+
+import { Checkbox, Label } from "@cadence-clinical/ui";
+
+<GradeBadge component="checkbox" />
+
+<ComponentPreview>
+  <Label>
+    <Checkbox defaultChecked />
+    Interpreter needed
+  </Label>
+</ComponentPreview>
+
+## Usage
+
+```tsx
+import { Checkbox, Label } from "@cadence-clinical/ui";
+
+<Label>
+  <Checkbox onCheckedChange={setInterpreterNeeded} />
+  Interpreter needed
+</Label>;
+```
+
+Checkbox is built on the Base UI [Checkbox](https://base-ui.com/react/components/checkbox) and accepts all of its props. It follows the shadcn [Checkbox](https://ui.shadcn.com/docs/components/checkbox). Wrap it in a [Label](/docs/components/label) to name it.
+
+## Partly on
+
+Set `indeterminate` when a checkbox stands for a group in which some items are selected, such as the heading of a table.
+
+<ComponentPreview>
+  <Label>
+    <Checkbox indeterminate />
+    Select all
+  </Label>
+</ComponentPreview>
+
+## What Cadence changes
+
+- **The target is as large as a control.** The box is 16px when compact and 20px when comfortable. The area that takes a click or a tap is 32px and 44px. shadcn's target is a fixed size.
+- **The focus ring and the boundary are never faded.**
+
+## Accessibility
+
+- Checked and unchecked differ by the tick as well as the fill.
+- A checkbox is for a choice that is saved with the rest of a form. For a setting that applies at once, use a [Switch](/docs/components/switch).

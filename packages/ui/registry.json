@@ -38,6 +38,52 @@
       }
     },
     {
+      "name": "card",
+      "type": "registry:component",
+      "title": "Card",
+      "description": "Groups related content on its own surface, with a header, content and footer.",
+      "dependencies": ["@base-ui/react"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/card.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/card.tsx"
+        }
+      ],
+      "docs": "Give CardTitle a heading level with render={<h2 />}. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "composite",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
+      "name": "checkbox",
+      "type": "registry:component",
+      "title": "Checkbox",
+      "description": "A choice that is on, off or partly on. Its target is as large as a control.",
+      "dependencies": ["@base-ui/react", "lucide-react"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/checkbox.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/checkbox.tsx"
+        }
+      ],
+      "docs": "Wrap each Checkbox in a Label. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "primitive",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "input",
       "type": "registry:component",
       "title": "Input",
@@ -84,22 +130,68 @@
       }
     },
     {
-      "name": "card",
+      "name": "radio-group",
       "type": "registry:component",
-      "title": "Card",
-      "description": "Groups related content on its own surface, with a header, content and footer.",
+      "title": "Radio group",
+      "description": "One choice from a few, all visible at once.",
       "dependencies": ["@base-ui/react"],
       "registryDependencies": ["@cadence/theme", "@cadence/cn"],
       "files": [
         {
-          "path": "src/components/card.tsx",
+          "path": "src/components/radio-group.tsx",
           "type": "registry:component",
-          "target": "components/cadence/card.tsx"
+          "target": "components/cadence/radio-group.tsx"
         }
       ],
-      "docs": "Give CardTitle a heading level with render={<h2 />}. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "docs": "Name the group, and wrap each item in a Label. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
       "meta": {
-        "level": "composite",
+        "level": "primitive",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
+      "name": "switch",
+      "type": "registry:component",
+      "title": "Switch",
+      "description": "Turns a setting on or off, and the change applies at once.",
+      "dependencies": ["@base-ui/react"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/switch.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/switch.tsx"
+        }
+      ],
+      "docs": "Wrap the Switch in a Label. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "primitive",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
+      "name": "textarea",
+      "type": "registry:component",
+      "title": "Textarea",
+      "description": "A multi-line text input that grows with what is typed.",
+      "dependencies": [],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/textarea.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/textarea.tsx"
+        }
+      ],
+      "docs": "Give every Textarea a Label or an aria-label. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "primitive",
         "domain": "general",
         "grade": {
           "level": "tested"

@@ -10,8 +10,12 @@
     "levels",
     "---Primitives---",
     "components/button",
+    "components/checkbox",
     "components/input",
     "components/label",
+    "components/radio-group",
+    "components/switch",
+    "components/textarea",
     "components/typeset",
     "---Composites---",
     "components/card"

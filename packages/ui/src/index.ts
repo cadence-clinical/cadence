@@ -10,8 +10,16 @@ export {
   CardTitle,
 } from "@/components/cadence/card";
 export type { CardPartProps, CardProps } from "@/components/cadence/card";
+export { Checkbox } from "@/components/cadence/checkbox";
+export type { CheckboxProps } from "@/components/cadence/checkbox";
 export { Input } from "@/components/cadence/input";
 export type { InputProps } from "@/components/cadence/input";
 export { Label } from "@/components/cadence/label";
 export type { LabelProps } from "@/components/cadence/label";
+export { RadioGroup, RadioGroupItem } from "@/components/cadence/radio-group";
+export type { RadioGroupItemProps, RadioGroupProps } from "@/components/cadence/radio-group";
+export { Switch } from "@/components/cadence/switch";
+export type { SwitchProps } from "@/components/cadence/switch";
+export { Textarea } from "@/components/cadence/textarea";
+export type { TextareaProps } from "@/components/cadence/textarea";
 export { cn } from "@/lib/cn";
