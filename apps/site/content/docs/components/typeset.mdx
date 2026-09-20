@@ -120,6 +120,7 @@ Typeset is adapted from shadcn/typeset under the MIT licence. Four things differ
 - **Nothing changes the case of text.** shadcn sets its smallest heading in capitals. [Mixed-case lettering](https://www.safetyandquality.gov.au/sites/default/files/2024-04/mixed-case_lettering_-_principles_for_application.pdf), also known as Tall Man lettering, tells look-alike medicine names apart by selective capitalisation, and a capitalised heading would erase it.
 - **Colour comes from Cadence tokens**, so each pairing is contrast-tested. Links use the accent's text role and are always underlined. Highlighted text is tinted with the accent, because a yellow highlight sits on the warning hue.
 - **In a definition list the term is muted and the value is not.** Clinical screens put a label in `dt` and the patient's data in `dd`.
+- **A small heading and a definition term look the same.** An `h5` over a paragraph and a `dt` over its `dd` are both a label above a block, and content arrives marked up either way. They share one style, and what follows each sits the same distance below.
 - **A table heading may wrap**, so a table is less likely to be wider than a phone.
 
 ## Accessibility

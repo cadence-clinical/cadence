@@ -20,6 +20,8 @@
  *   as a clinical status.
  * - In a definition list the term is muted and the value is not. Clinical screens put a label in
  *   `dt` and the patient's data in `dd`, and the data is what must be read.
+ * - A small heading (h5) and a definition term look the same, and what follows each sits the same
+ *   distance below. Both are a label above a block, and content arrives marked up either way.
  * - A table heading may wrap. A heading held on one line makes a table wider than a phone, and
  *   the page then scrolls sideways.
  */
@@ -108,9 +110,12 @@
       line-height: 1.5;
       margin-block-start: var(--typeset-flow);
     }
-    &:where(h5) {
+    /* h5 is a small label above a block, which is also what a definition term is. The two are
+       styled as one thing below, so a label looks the same whichever element it arrives in. */
+    &:where(h5, dt) {
       font-size: 0.875em;
       line-height: 1.5;
+      font-weight: 500;
       color: var(--typeset-muted);
       margin-block-start: calc(var(--typeset-flow) / 0.875);
     }
@@ -126,10 +131,6 @@
       scroll-margin-block-start: var(--typeset-flow);
     }
 
-    /* Headings own the space below them. */
-    &:where(h1 + *, h2 + *, h3 + *, h4 + *, h5 + *, h6 + *) {
-      margin-block-start: 0.75em;
-    }
     &:where(:is(h1, h2, h3, h4) :is(code)) {
       font-size: 0.9em;
     }
@@ -271,21 +272,16 @@
       padding: 0.0625em 0.35em;
     }
 
-    /* Definition lists. The term is the label, so it is the muted one. */
+    /* Definition lists. The term is the label, so it is the muted one, and it is styled with h5
+       above. A term and its definition read exactly as an h5 and the paragraph under it. */
     &:where(dl) {
       margin-block-start: var(--typeset-flow);
       margin-block-end: 0;
-    }
-    &:where(dt) {
-      color: var(--typeset-muted);
-      font-size: 0.875em;
-      margin-block-start: 0.75em;
     }
     &:where(dt + dt) {
       margin-block-start: 0.25em;
     }
     &:where(dd) {
-      margin-block-start: 0.125em;
       margin-inline-start: 0;
     }
 
@@ -449,6 +445,24 @@
       margin-block-start: calc(0.5em / 0.875);
     }
 
+    /* Headings own the space below them. These rules come after every element's own, because all
+       of them have the same specificity and the later one wins: declared earlier, they applied to
+       a paragraph and lost to a list, a table or a definition list. */
+    &:where(h1 + *, h2 + *, h3 + *, h4 + *, h5 + *, h6 + *) {
+      margin-block-start: 0.75em;
+    }
+    /* A smaller heading measures its margin in its own smaller em, so it is scaled back up to sit
+       where any other block would. */
+    &:where(:is(h1, h2, h3, h4) + h5) {
+      margin-block-start: calc(0.75em / 0.875);
+    }
+    &:where(:is(h1, h2, h3, h4) + h6) {
+      margin-block-start: calc(0.75em / 0.8125);
+    }
+    /* A label sits close to what it names: the same distance as a definition under its term. */
+    &:where(h5 + *, h6 + *, dd) {
+      margin-block-start: 0.25em;
+    }
     /* Patient information is printed. Keep a block in one piece and a heading with its text. */
     @media print {
       &:where(pre, table, blockquote, figure) {
@@ -484,6 +498,7 @@
       td > :first-child,
       th > :first-child,
       dd > :first-child,
+      dl > :first-child,
       figure > :first-child,
       figure > picture > img
     ):not(:where(.not-typeset, [data-not-typeset], .not-typeset *, [data-not-typeset] *)) {

@@ -207,6 +207,51 @@ export const KeepsMixedCaseLettering: Story = {
   },
 };
 
+// A small heading over a paragraph and a term over its definition are the same thing to a reader:
+// a label above a block. Content arrives marked up either way, so they have to look the same.
+export const SmallHeadingsMatchDefinitionTerms: Story = {
+  render: () => (
+    <article className="typeset grid grid-cols-2 gap-8">
+      <div>
+        <h4>As headings</h4>
+        <h5>Entrance</h5>
+        <p>Main building, east door</p>
+        <h5>Clinic</h5>
+        <p>Outpatients, Level 2</p>
+      </div>
+      <div>
+        <h4 className="mt-0">As a definition list</h4>
+        <dl>
+          <dt>Entrance</dt>
+          <dd>Main building, east door</dd>
+          <dt>Clinic</dt>
+          <dd>Outpatients, Level 2</dd>
+        </dl>
+      </div>
+    </article>
+  ),
+  play: async ({ canvasElement }) => {
+    const [headings, list] = [...canvasElement.querySelectorAll(".typeset > div")];
+    if (!headings || !list) throw new Error("The story needs both columns.");
+    const look = (element: Element | null) => {
+      if (!element) throw new Error("An element the story needs is missing.");
+      const { fontSize, fontWeight, color, lineHeight } = getComputedStyle(element);
+      return { fontSize, fontWeight, color, lineHeight };
+    };
+    // Where each line of text sits, measured from the column's own heading.
+    const layout = (column: Element, selector: string) => {
+      const origin = column.querySelector("h4")?.getBoundingClientRect().bottom ?? 0;
+      return [...column.querySelectorAll(selector)].map((element) =>
+        Math.round(element.getBoundingClientRect().top - origin),
+      );
+    };
+
+    await expect(look(headings.querySelector("h5"))).toEqual(look(list.querySelector("dt")));
+    await expect(look(headings.querySelector("p"))).toEqual(look(list.querySelector("dd")));
+    await expect(layout(headings, "h5, p")).toEqual(layout(list, "dt, dd"));
+  },
+};
+
 export const OptsOutWithNotTypeset: Story = {
   render: () => (
     <div className="typeset">
