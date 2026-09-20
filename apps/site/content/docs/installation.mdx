@@ -4,9 +4,17 @@ description: Add Cadence to a React 19 project that uses Tailwind CSS v4.
 ---
 
 <Callout type="warn" title="Not yet on npm">
-  The packages are not published yet, so the install command below will fail today. Until the first
+  The packages are not published yet, so the install commands below will fail today. That includes
+  the registry, because its theme installs `@cadence-clinical/tokens` from npm. Until the first
   release, work from a clone of the [repository](https://github.com/cadence-clinical/cadence).
 </Callout>
+
+Cadence ships two ways from the same source. Choose one for each project.
+
+| Route                                                | You get                                    | Choose it when                                                     |
+| ---------------------------------------------------- | ------------------------------------------ | ------------------------------------------------------------------ |
+| [npm package](#install-the-packages)                 | Compiled components, updated by version    | You want each component to keep its [grade](/docs/grades).         |
+| [shadcn registry](#install-from-the-shadcn-registry) | Component source, copied into your project | You already use the shadcn CLI, or you need to change a component. |
 
 ## Requirements
 
@@ -42,6 +50,54 @@ export default function Page() {
   return <Button>Save observation</Button>;
 }
 ```
+
+## Install from the shadcn registry
+
+The registry copies component source into your project with the [shadcn CLI](https://ui.shadcn.com/docs/cli). Your project needs a `components.json`, which `shadcn init` creates.
+
+A component you install this way is yours to edit, and **an edited copy carries no Cadence grade**. [Grades](/docs/grades) explains what a grade applies to.
+
+### 1. Add the registry
+
+Add the `@cadence` namespace to `components.json`:
+
+```json title="components.json"
+{
+  "registries": {
+    "@cadence": "https://www.cadenceclinical.dev/r/{name}.json"
+  }
+}
+```
+
+### 2. Add the theme by name
+
+```bash
+pnpm dlx shadcn@latest add @cadence/theme
+```
+
+This installs `@cadence-clinical/tokens` and imports its `theme.css` into your stylesheet. It also replaces the values `shadcn init` wrote to `:root`, `.dark` and `@theme inline` for the variables Cadence defines. Those stock values come after the import, so they would otherwise win in light mode. Variables Cadence does not define, such as `--chart-1`, are kept.
+
+Run this command even though every component depends on the theme. The CLI replaces existing values only for an item you name. For a dependency, it adds what is missing and leaves the stock values in place.
+
+Do not edit the values the theme writes. Set the [theme attributes](/docs/theming) on `<html>` instead.
+
+### 3. Add components
+
+```bash
+pnpm dlx shadcn@latest add @cadence/button
+```
+
+Components install to `components/cadence/`, and the `cn` utility they share installs to `lib/cn.ts`. Nothing in your `components/ui` directory is changed, so a Cadence Button and a stock shadcn Button can sit side by side.
+
+```tsx title="app/page.tsx"
+import { Button } from "@/components/cadence/button";
+
+export default function Page() {
+  return <Button>Save observation</Button>;
+}
+```
+
+Each item the registry serves records the package version and the commit it was built from, under `meta` in its JSON. The registry follows the `main` branch, so it can be ahead of the latest npm release.
 
 ## Work from the repository
 

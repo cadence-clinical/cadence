@@ -27,15 +27,18 @@ Every Cadence component carries a grade that tells you how far it has been verif
 
 ## Where grades are recorded
 
-Each component has a `meta.json` file beside its source:
+Each component package has a `registry.json` manifest, and a component's entry declares its grade under `meta`:
 
-```json title="packages/ui/src/components/button/meta.json"
+```json title="packages/ui/registry.json"
 {
   "name": "button",
+  "type": "registry:component",
   "title": "Button",
-  "category": "primitive",
-  "grade": { "level": "tested" }
+  "meta": {
+    "category": "primitive",
+    "grade": { "level": "tested" }
+  }
 }
 ```
 
-The build collects these files into `@cadence-clinical/ui/meta.json`. Continuous integration rejects a grade above Tested that does not name a version and an evidence record.
+The manifest is the only place a grade is declared. The [shadcn registry](/docs/installation#install-from-the-shadcn-registry) serves it, and the package build derives `@cadence-clinical/ui/meta.json` from it, which is where this site reads the grade shown on each component page. Continuous integration rejects a grade above Tested that does not name a version and an evidence record.

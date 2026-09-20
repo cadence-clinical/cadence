@@ -1,0 +1,6 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "cadence",
+  "homepage": "https://www.cadenceclinical.dev",
+  "include": ["packages/tokens/registry.json", "packages/ui/registry.json"]
+}

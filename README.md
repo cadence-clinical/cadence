@@ -37,7 +37,7 @@ Cadence is a presentation layer. It displays clinical information and does not m
 | Route                                        | Who it suits                                            | State             |
 | -------------------------------------------- | ------------------------------------------------------- | ----------------- |
 | Install the `@cadence-clinical/*` packages   | Teams who want versioned, graded components             | Not yet on npm    |
-| Copy components from a shadcn-style registry | Teams who need to own and change the source             | Planned           |
+| Copy components from a shadcn-style registry | Teams who need to own and change the source             | Waits on npm      |
 | Give a coding agent the Cadence skill        | Anyone building with an agent                           | Planned           |
 | Prototype with clinicians in Claude Design   | Designers and clinicians iterating on a screen together | Planned           |
 | Clone this repository and run it             | Anyone who wants to look today                          | Works – see below |
@@ -113,7 +113,7 @@ What comes next, in order:
 2. The grading matrix: what each level requires and who can verify.
 3. Clinical components, each built with the FHIR transform that feeds it.
 4. Australian rule sets, with Victoria as the first state variant.
-5. Screens and example apps, the registry, the agent skill and the Claude Design bundle.
+5. Screens and example apps, the agent skill and the Claude Design bundle.
 
 The documentation is at [www.cadenceclinical.dev](https://www.cadenceclinical.dev). Its source is in `apps/site`.
 

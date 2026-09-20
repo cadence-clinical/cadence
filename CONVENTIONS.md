@@ -38,7 +38,7 @@ A rule a tool can enforce is enforced by the tool. This file records the rest, a
 - **Explicit return types on exported functions.** Inference inside function bodies. React components are exempt. `planned`
 - **`import type` for types**, inline with value imports. `lint`
 - **`readonly` on inputs.** Never mutate an argument. `review`
-- **Imports inside a component package use consumer-shaped aliases**: `@/lib/cn`, `@/components/cadence/button`. They are mapped in the package's tsconfig `paths` and are exactly what the import will be once the registry installs the file in someone's project. No relative imports between source files ([decision 0011](docs/decisions/0011-registry.md)). `planned`
+- **Imports inside a component package use consumer-shaped aliases**: `@/lib/cn`, `@/components/cadence/button`. They are mapped in the package's tsconfig `paths` and are exactly what the import will be once the registry installs the file in someone's project. No relative imports between source files ([decision 0011](docs/decisions/0011-registry.md)). `lint`
 - **The package entry is the only barrel.** `src/index.ts` lists every public export by name. Anything it does not export is private. `review`
 
 ## 3. Functions over classes

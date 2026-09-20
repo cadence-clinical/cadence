@@ -1,3 +1,3 @@
-export { Button, buttonVariants } from "./components/button/button";
-export type { ButtonProps } from "./components/button/button";
-export { cn } from "./lib/cn";
+export { Button, buttonVariants } from "@/components/cadence/button";
+export type { ButtonProps } from "@/components/cadence/button";
+export { cn } from "@/lib/cn";

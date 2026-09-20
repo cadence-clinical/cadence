@@ -10,8 +10,9 @@ is Cadence's main point of difference from a general design system.
 
 ## Decision
 
-1. Every component has a `meta.json` beside its source that declares its grade. The provisional
-   levels are draft, tested, clinician-verified and in-production.
+1. Every component declares its grade in its package's manifest. The provisional levels are
+   draft, tested, clinician-verified and in-production. The manifest was a `meta.json` beside
+   each component until [0011](0011-registry.md) made it the package's `registry.json`.
 2. A grade above tested is a claim about one version. It names the version that was reviewed and
    references evidence records kept in `docs/evidence/`.
 3. A change that alters how a component looks or behaves returns it to tested until it is

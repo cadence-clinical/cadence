@@ -2,6 +2,13 @@
   "$schema": "https://turborepo.dev/schema.json",
   "extends": ["//"],
   "tasks": {
+    "build": {
+      // The build also writes the registry, from a manifest outside this package and stamped
+      // with the commit Vercel is building.
+      "inputs": ["$TURBO_DEFAULT$", ".env*", "../../registry.json"],
+      "outputs": [".next/**", "!.next/cache/**", ".registry/**"],
+      "env": ["NEXT_PUBLIC_*", "VERCEL_GIT_COMMIT_SHA"]
+    },
     "typecheck": {
       "dependsOn": ["^build", "build"]
     }

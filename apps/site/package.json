@@ -6,8 +6,9 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "pnpm registry && next dev",
+    "build": "pnpm registry && next build",
+    "registry": "node scripts/build-registry.mjs",
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "next typegen && tsc --noEmit",
@@ -36,6 +37,7 @@
     "eslint-config-next": "^16.3.4",
     "eslint-config-prettier": "^10.1.8",
     "postcss": "^8.5.28",
+    "shadcn": "^4.21.0",
     "tailwindcss": "catalog:",
     "typescript": "catalog:"
   }

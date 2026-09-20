@@ -9,6 +9,9 @@ const config: StorybookConfig = {
   async viteFinal(viteConfig) {
     const { default: tailwindcss } = await import("@tailwindcss/vite");
     viteConfig.plugins = [...(viteConfig.plugins ?? []), tailwindcss()];
+    // Components import through the @/ aliases a consumer's project has. Vite reads them from the
+    // tsconfig nearest the importing file, so @/ can mean a different directory in each package.
+    viteConfig.resolve = { ...viteConfig.resolve, tsconfigPaths: true };
     return viteConfig;
   },
 };
