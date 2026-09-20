@@ -1,0 +1,39 @@
+---
+title: Label
+description: Names a control. Its text follows the density set on the page.
+---
+
+import { Input, Label } from "@cadence-clinical/ui";
+
+<GradeBadge component="label" />
+
+<ComponentPreview>
+  <div className="grid w-full max-w-64 gap-2">
+    <Label htmlFor="label-preview">Family name</Label>
+    <Input id="label-preview" />
+  </div>
+</ComponentPreview>
+
+## Usage
+
+```tsx
+import { Input, Label } from "@cadence-clinical/ui";
+
+<Label htmlFor="family-name">Family name</Label>
+<Input id="family-name" />
+```
+
+Label is a native `label` and accepts all of its props. Point `htmlFor` at the control's `id`, or wrap the control in the label. Clicking the label then focuses the control.
+
+Label follows the shadcn [Label](https://ui.shadcn.com/docs/components/label). For a control with a description and an error message, the planned Field composite will place the label for you.
+
+## What Cadence changes
+
+- **The text follows the [density](/docs/theming#density)**, like the control it names.
+- **A long label wraps and its lines do not collide.** shadcn sets a line height of 1, which suits a label of one line only. Cadence never truncates a label, so it has to wrap cleanly.
+
+## Accessibility
+
+- Every control needs a label. A placeholder is not a label: it disappears when someone types.
+- Write the label as what to enter, such as "Family name". Put guidance on format in a description, not in the label.
+- A label beside a disabled control is faded. Give the control the `peer` class and place the label after it in the markup.

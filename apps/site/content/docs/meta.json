@@ -10,6 +10,8 @@
     "levels",
     "---Primitives---",
     "components/button",
+    "components/input",
+    "components/label",
     "components/typeset",
     "---Composites---",
     "components/card"

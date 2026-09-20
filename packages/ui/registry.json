@@ -38,6 +38,52 @@
       }
     },
     {
+      "name": "input",
+      "type": "registry:component",
+      "title": "Input",
+      "description": "A single-line text input. Sized by the density set on the page.",
+      "dependencies": ["@base-ui/react"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/input.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/input.tsx"
+        }
+      ],
+      "docs": "Give every Input a Label or an aria-label. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "primitive",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
+      "name": "label",
+      "type": "registry:component",
+      "title": "Label",
+      "description": "Names a control. Its text follows the density set on the page.",
+      "dependencies": [],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/label.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/label.tsx"
+        }
+      ],
+      "docs": "Point htmlFor at the control's id. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "primitive",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "card",
       "type": "registry:component",
       "title": "Card",
