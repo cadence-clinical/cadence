@@ -7,7 +7,13 @@ import {
   type AccentDefinition,
   type AccentName,
 } from "./accent";
-import { baseTokens, type ColorTokens, type Contrast, type Mode } from "./palette";
+import {
+  baseTokens,
+  type ColorTokens,
+  type Contrast,
+  type Mode,
+  type ResolvedTokens,
+} from "./palette";
 
 const curated = new Map<AccentName, AccentDefinition>();
 
@@ -25,16 +31,16 @@ export function resolveTokens(
   mode: Mode,
   contrast: Contrast = "standard",
   accent: AccentName | AccentDefinition = DEFAULT_ACCENT,
-): ColorTokens {
+): ResolvedTokens {
   const definition = typeof accent === "string" ? curatedAccent(accent) : accent;
-  const tokens: ColorTokens = {
-    ...baseTokens(mode, contrast),
+  const base = baseTokens(mode, contrast);
+  return {
+    ...base,
     ...accentTokens(definition, mode, contrast),
+    // shadcn components reach for "destructive". In Cadence that is the critical status.
+    destructive: base.critical,
+    "destructive-foreground": base["critical-foreground"],
   };
-  // shadcn components reach for "destructive". In Cadence that is the critical status.
-  tokens.destructive = tokens.critical!;
-  tokens["destructive-foreground"] = tokens["critical-foreground"]!;
-  return tokens;
 }
 
 interface Context {
