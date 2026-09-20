@@ -29,6 +29,10 @@ describe("cn", () => {
     ["px-control-x", "px-4"],
     ["gap-control-gap", "gap-2"],
     ["text-control", "text-sm"],
+    ["text-body", "text-sm"],
+    ["text-title", "text-lg"],
+    ["p-container", "p-6"],
+    ["px-container-sm", "px-2"],
   ])("the component's %s gives way to a consumer's %s", (own, override) => {
     expect(cn(own, override)).toBe(override);
   });

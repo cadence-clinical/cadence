@@ -74,6 +74,33 @@ export const ContentOnly: Story = {
   ),
 };
 
+// A card and the controls inside it change size together. Its text is the size of a Button's
+// text, and its padding follows the density set on <html>.
+const followsDensity =
+  (expected: { padding: number }) =>
+  async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+    const canvas = within(canvasElement);
+    const size = (element: Element) => getComputedStyle(element).fontSize;
+    const content = canvas.getByText(/Bring your referral letter/);
+    await expect(size(content)).toBe(
+      size(canvas.getByRole("button", { name: "Confirm attendance" })),
+    );
+
+    const header = canvas.getByRole("heading", { level: 2 }).parentElement;
+    if (!header) throw new Error("The title has no header around it.");
+    await expect(parseFloat(getComputedStyle(header).paddingLeft)).toBe(expected.padding);
+  };
+
+export const FollowsCompactDensity: Story = {
+  globals: { density: "compact" },
+  play: followsDensity({ padding: 12 }),
+};
+
+export const FollowsComfortableDensity: Story = {
+  globals: { density: "comfortable" },
+  play: followsDensity({ padding: 16 }),
+};
+
 // Only the page knows which heading level fits, so the title takes it through `render`. A title
 // left as a div cannot be found by someone navigating by headings.
 export const TitleIsAHeading: Story = {

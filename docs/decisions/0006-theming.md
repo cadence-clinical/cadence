@@ -10,7 +10,7 @@ red, amber and green carry meaning, and a brand must never be able to change or 
 
 ## Decision
 
-Updated 2026-09-20: the default typeface is Public Sans, shipped as `@cadence-clinical/tokens/fonts.css` and loaded by `@cadence-clinical/ui/styles.css` and the registry's theme. `--cadence-font-sans` still replaces it.
+Updated 2026-09-20: the default typeface is Public Sans, shipped as `@cadence-clinical/tokens/fonts.css` and loaded by `@cadence-clinical/ui/styles.css` and the registry's theme. `--cadence-font-sans` still replaces it. The density scale also covers content: `text-body`, `text-title` and `p-container` follow `data-density`, so a card and the controls inside it change size together.
 
 1. Theme axes: colour mode (light, dark), contrast (standard, more), density (compact,
    comfortable), accent and font. They are set as attributes on `<html>`; unset mode and contrast

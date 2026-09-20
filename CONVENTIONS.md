@@ -76,7 +76,7 @@ A rule a tool can enforce is enforced by the tool. This file records the rest, a
 - **Never truncate clinical content**: medicine names, doses, units, identifiers, allergies. Wrap it. `truncate` is for navigation and decoration. `review`
 - **Never change the case of text that can hold clinical content.** No `uppercase`, `capitalize` or small caps: [mixed-case lettering](https://www.safetyandquality.gov.au/sites/default/files/2024-04/mixed-case_lettering_-_principles_for_application.pdf) tells look-alike medicine names apart by capitalisation. `test` in Typeset, `review` elsewhere
 - **Numbers that are compared use `tabular-nums`.** `review`
-- **Controls are sized with the density scale** (`h-control`, `px-control-x`, `text-control`). A new scale key is registered in `cn.ts`, or a consumer's override silently loses. `review`
+- **Size with the density scale.** Controls use `h-control`, `px-control-x` and `text-control`. Content uses `text-body`, `text-title` and `p-container`, so a card and the controls inside it change size together. No fixed `text-sm` or `p-4` in a component. A new scale key is registered in `cn.ts`, or a consumer's override silently loses. `review`
 - **`gap-*`, not `space-*`. `size-*` when width equals height. `cn()` for conditional classes.** `review`
 - **Motion** (the `emil-design-eng` skill has the reasoning): movement animates only `transform` and `opacity`, and colour may transition on a state change. Name the properties (never `transition-all`), keep feedback under 200ms, use none on keyboard-initiated or high-frequency actions, and remove movement under `prefers-reduced-motion`. `review`
 - **Change a colour in `palette.ts`.** If a contrast test fails, fix the token. Do not relax the test. `test`

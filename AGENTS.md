@@ -47,8 +47,10 @@ Run `pnpm check` and `pnpm test:browser` before you say a change is done.
 - **Status colours are fixed.** Do not add a way to theme critical, warning, success or info.
 - **Use semantic tokens only**: no raw colour values, and no `dark:` overrides in components.
   Every status surface carries its `-border` token. Never signal status by colour alone.
-- **Size controls with the density scale** (`h-control`, `px-control-x`, `text-control`), so
-  compact and comfortable both work. Register any new scale key in `packages/ui/src/lib/cn.ts`.
+- **Size with the density scale**, so compact and comfortable both work: controls with
+  `h-control`, `px-control-x` and `text-control`, and content with `text-body`, `text-title` and
+  `p-container`. Never `text-sm` or `p-4` in a component. Register any new scale key in
+  `packages/ui/src/lib/cn.ts`.
 - **Change colours in `packages/tokens/src/palette.ts`**, never in generated CSS or in
   `packages/tokens/registry.json`, which the build rewrites: commit it when it changes. If a
   contrast test fails, fix the token. Do not relax the test.

@@ -30,7 +30,7 @@ Clinical software has a lot of that HTML: patient information, discharge instruc
 
 ## Consequences
 
-- Each new component decides the type of its own parts. There is no shared type scale beyond Tailwind's and the density scale's `text-control`. If parts start to disagree, a scale is a later decision.
+- Each new component decides the type of its own parts, from the density scale: `text-control` for a control and its label, `text-body` for content and `text-title` for a title.
 - Typeset does not follow `data-density`. A preset is chosen where the content is placed.
 - The adapted stylesheet keeps shadcn's copyright line, and `THIRD_PARTY_NOTICES.md` holds the licence.
 - The Cadence docs site still uses Fumadocs' prose styles for its own pages. Moving it to Typeset is possible and not planned.
