@@ -32,9 +32,9 @@
     /* Base text size. 1em follows the surrounding layout. */
     --typeset-size: 1em;
     /* Space between lines. */
-    --typeset-leading: 1.65;
+    --typeset-leading: 1.5;
     /* Space between blocks. Headings and other elements derive their spacing from it. */
-    --typeset-flow: 1.25em;
+    --typeset-flow: 1em;
     /* How much larger text is below 48rem, where long-form content is read on a phone. */
     --typeset-small-screen: 1.125;
   }
@@ -42,16 +42,16 @@
   /* Dense: notes and summaries inside a workstation layout. It does not grow on a small screen. */
   .typeset-compact {
     --typeset-size: 0.875rem;
-    --typeset-leading: 1.5;
-    --typeset-flow: 0.875em;
+    --typeset-leading: 1.4;
+    --typeset-flow: 0.75em;
     --typeset-small-screen: 1;
   }
 
   /* Long-form content read by patients and carers: larger, looser, and a line no wider than 68ch. */
   .typeset-reading {
     --typeset-size: 1.125rem;
-    --typeset-leading: 1.75;
-    --typeset-flow: 1.5em;
+    --typeset-leading: 1.6;
+    --typeset-flow: 1.25em;
     max-width: 68ch;
   }
 }
@@ -128,7 +128,7 @@
 
     /* Headings own the space below them. */
     &:where(h1 + *, h2 + *, h3 + *, h4 + *, h5 + *, h6 + *) {
-      margin-block-start: 1em;
+      margin-block-start: 0.75em;
     }
     &:where(:is(h1, h2, h3, h4) :is(code)) {
       font-size: 0.9em;
@@ -223,11 +223,11 @@
       padding-inline-start: 1.5em;
     }
     &:where(li) {
-      margin-block-start: 0.5em;
+      margin-block-start: 0.3em;
       padding-inline-start: 0.4em;
     }
     &:where(li > p, li > ul, li > ol) {
-      margin-block-start: 0.5em;
+      margin-block-start: 0.3em;
     }
     &:where(ul > li)::marker {
       color: var(--typeset-muted);
@@ -279,7 +279,7 @@
     &:where(dt) {
       color: var(--typeset-muted);
       font-size: 0.875em;
-      margin-block-start: 1em;
+      margin-block-start: 0.75em;
     }
     &:where(dt + dt) {
       margin-block-start: 0.25em;
@@ -389,7 +389,7 @@
     &:where(table) {
       max-width: 100%;
       font-size: 1em;
-      line-height: 1.5;
+      line-height: 1.4;
       font-variant-numeric: tabular-nums;
       border-collapse: separate;
       border-spacing: 0;
@@ -420,10 +420,10 @@
       font-weight: 500;
       text-align: start;
       vertical-align: bottom;
-      padding: 0.65em 1em;
+      padding: 0.5em 0.75em;
     }
     &:where(:is(tbody, tfoot) :is(td, th)) {
-      padding: 0.75em 1em;
+      padding: 0.5em 0.75em;
       text-align: start;
       vertical-align: top;
       border-block-start: 1px solid var(--typeset-rule);
