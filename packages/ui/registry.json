@@ -37,6 +37,28 @@
       }
     },
     {
+      "name": "card",
+      "type": "registry:component",
+      "title": "Card",
+      "description": "Groups related content on its own surface, with a header, content and footer.",
+      "dependencies": ["@base-ui/react"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/card.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/card.tsx"
+        }
+      ],
+      "docs": "Give CardTitle a heading level with render={<h2 />}. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "category": "primitive",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "typeset",
       "type": "registry:item",
       "title": "Typeset",

@@ -19,6 +19,12 @@ export default tseslint.config(
   {
     rules: {
       "react/prop-types": "off",
+      // Base UI's `render` prop takes an empty element as a template, such as
+      // `<CardTitle render={<h2 />}>`, and the part supplies the content. These rules read only
+      // the JSX, so they see an empty heading or link. axe checks the rendered DOM for both in
+      // every story, and a violation there fails the build.
+      "jsx-a11y/heading-has-content": "off",
+      "jsx-a11y/anchor-has-content": "off",
     },
   },
 );

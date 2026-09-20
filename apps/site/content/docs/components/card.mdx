@@ -1,0 +1,142 @@
+---
+title: Card
+description: Groups related content on its own surface, with a header, content and footer.
+---
+
+import {
+  Button,
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@cadence-clinical/ui";
+
+<GradeBadge component="card" />
+
+<ComponentPreview>
+  <Card className="w-full max-w-sm">
+    <CardHeader>
+      <CardTitle render={<h3 />}>Next appointment</CardTitle>
+      <CardDescription>Outpatients, Level 2</CardDescription>
+    </CardHeader>
+    <CardContent>Monday at 10:15 with the review clinic. Bring your referral letter.</CardContent>
+    <CardFooter>
+      <Button size="sm">Confirm attendance</Button>
+      <Button size="sm" variant="outline">
+        Ask to reschedule
+      </Button>
+    </CardFooter>
+  </Card>
+</ComponentPreview>
+
+## Usage
+
+```tsx
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@cadence-clinical/ui";
+
+<Card>
+  <CardHeader>
+    <CardTitle render={<h2 />}>Next appointment</CardTitle>
+    <CardDescription>Outpatients, Level 2</CardDescription>
+  </CardHeader>
+  <CardContent>Monday at 10:15 with the review clinic.</CardContent>
+  <CardFooter>
+    <Button size="sm">Confirm attendance</Button>
+  </CardFooter>
+</Card>;
+```
+
+Card follows the shadcn [Card](https://ui.shadcn.com/docs/components/card) and keeps its part names. Every part is optional.
+
+| Part              | Use                                                         |
+| ----------------- | ----------------------------------------------------------- |
+| `Card`            | The surface.                                                |
+| `CardHeader`      | Holds the title, the description and the action.            |
+| `CardTitle`       | The title. Give it a heading level.                         |
+| `CardDescription` | Supporting text under the title.                            |
+| `CardAction`      | A control at the top end of the header, beside the title.   |
+| `CardContent`     | The body.                                                   |
+| `CardFooter`      | Actions for the whole card. They wrap when they do not fit. |
+
+## Give the title a heading level
+
+`CardTitle` renders a `div` unless you say otherwise, because only the page knows which heading level fits. Pass the heading through the `render` prop:
+
+```tsx
+<CardTitle render={<h2 />}>Care team</CardTitle>
+```
+
+A title left as a `div` cannot be found by someone who navigates by headings, so set a level whenever the card is a section of the page.
+
+Every part takes `render`, which is the Base UI [render prop](https://base-ui.com/react/utils/use-render). Use it to make the card a labelled region:
+
+```tsx
+<Card render={<section aria-labelledby="care-team-title" />}>
+  <CardHeader>
+    <CardTitle id="care-team-title" render={<h2 />}>
+      Care team
+    </CardTitle>
+  </CardHeader>
+</Card>
+```
+
+## Action
+
+Put one control in `CardAction`. It stays at the top end of the header, and a long title wraps beside it.
+
+<ComponentPreview>
+  <Card className="w-full max-w-sm">
+    <CardHeader>
+      <CardTitle render={<h3 />}>Contact details</CardTitle>
+      <CardDescription>Checked at the last visit</CardDescription>
+      <CardAction>
+        <Button size="sm" variant="outline">
+          Edit
+        </Button>
+      </CardAction>
+    </CardHeader>
+    <CardContent>Main building, east door.</CardContent>
+  </Card>
+</ComponentPreview>
+
+## Size
+
+`size="sm"` tightens the spacing and the title, for a card inside a dense layout.
+
+<ComponentPreview>
+  <Card size="sm" className="w-full max-w-sm">
+    <CardHeader>
+      <CardTitle render={<h3 />}>Next appointment</CardTitle>
+      <CardDescription>Outpatients, Level 2</CardDescription>
+    </CardHeader>
+    <CardContent>Monday at 10:15 with the review clinic.</CardContent>
+  </Card>
+</ComponentPreview>
+
+## What Cadence changes
+
+- **Nothing is truncated or clipped.** Text wraps, including a value with nowhere to break. The card does not hide its overflow, so a focus ring at its edge stays whole. The shadcn card clips its content to round the corners of an image, which this card does not do.
+- **The boundary is the `border` token**, so it follows the mode and the contrast setting.
+- **The card renders on the server.** It has no client-side code of its own.
+
+## Accessibility
+
+- Give `CardTitle` a heading level when the card is a section of the page.
+- A card is not a status surface. To show that something is critical or needs attention, do not recolour a card: wait for the alert component.
+
+## Props
+
+| Prop     | On       | Type                                    | Default |
+| -------- | -------- | --------------------------------------- | ------- |
+| `size`   | `Card`   | `"sm" \| "md"`                          | `"md"`  |
+| `render` | Any part | An element or a function, as in Base UI | A `div` |

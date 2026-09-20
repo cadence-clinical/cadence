@@ -75,10 +75,20 @@ try {
   // The order the installation guide gives: the theme by name, then components.
   step("shadcn add @cadence/theme");
   await run(shadcn, ["add", "@cadence/theme", "--yes", "--cwd", consumer]);
-  step("shadcn add @cadence/button @cadence/typeset");
-  await run(shadcn, ["add", "@cadence/button", "@cadence/typeset", "--yes", "--cwd", consumer]);
+  // Then everything else the registry lists, so a new component is covered when it arrives.
+  const index = await readJson(path.join(registryDir, "registry.json"));
+  const items = index.items
+    .map((item) => `@cadence/${item.name}`)
+    .filter((name) => name !== "@cadence/theme");
+  step(`shadcn add ${items.join(" ")}`);
+  await run(shadcn, ["add", ...items, "--yes", "--cwd", consumer]);
 
   step("Checking what was installed");
+  for (const item of index.items) {
+    for (const file of item.files ?? []) {
+      if (file.target) await readFile(path.join(consumer, "src", file.target));
+    }
+  }
   const button = await readFile(path.join(consumer, "src/components/cadence/button.tsx"), "utf8");
   assert.match(button, /from "@\/lib\/cn"/, "Button must import cn through the consumer's alias.");
   await readFile(path.join(consumer, "src/lib/cn.ts"));

@@ -9,6 +9,7 @@
     "grades",
     "---Primitives---",
     "components/button",
+    "components/card",
     "components/typeset"
   ]
 }
