@@ -68,5 +68,8 @@ Load the matching skill from `.claude/skills` before the work it covers:
 - `emil-design-eng` when building or reviewing component interaction and motion.
 - `web-design-guidelines` when reviewing UI code.
 - `fhir-developer-skill` when working with FHIR resources.
+- `shadcn` for composition and styling rules and the registry format. Do not use it to add
+  components from a registry.
+- `typescript-advanced-types` when designing generic or conditional types.
 
-The last three are restored with `pnpm skills:install`.
+All but the two writing skills are restored with `pnpm skills:install`.
