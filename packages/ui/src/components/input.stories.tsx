@@ -11,7 +11,7 @@ const meta = {
   parameters: { layout: "padded" },
   args: { id: "family-name", onValueChange: fn() },
   render: (args) => (
-    <div className="grid w-64 gap-2">
+    <div className="grid w-64 gap-1">
       <Label htmlFor={args.id}>Family name</Label>
       <Input {...args} />
     </div>
@@ -32,7 +32,7 @@ export const ReadOnly: Story = { args: { readOnly: true, defaultValue: "Sample" 
 export const Invalid: Story = {
   args: { "aria-invalid": true, "aria-describedby": "family-name-error", defaultValue: "12" },
   render: (args) => (
-    <div className="grid w-64 gap-2">
+    <div className="grid w-64 gap-1">
       <Label htmlFor={args.id}>Family name</Label>
       <Input {...args} />
       <p id="family-name-error" className="text-control text-critical-text">
@@ -52,7 +52,7 @@ export const Invalid: Story = {
 export const File: Story = {
   args: { type: "file" },
   render: (args) => (
-    <div className="grid w-64 gap-2">
+    <div className="grid w-64 gap-1">
       <Label htmlFor={args.id}>Referral letter</Label>
       <Input {...args} />
     </div>
@@ -95,7 +95,7 @@ export const MeetsTouchTargetWhenComfortable: Story = {
 export const MatchesAButtonsHeight: Story = {
   render: (args) => (
     <div className="flex items-end gap-2">
-      <div className="grid w-64 gap-2">
+      <div className="grid w-64 gap-1">
         <Label htmlFor={args.id}>Family name</Label>
         <Input {...args} />
       </div>

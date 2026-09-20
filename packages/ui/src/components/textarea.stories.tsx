@@ -11,7 +11,7 @@ const meta = {
   parameters: { layout: "padded" },
   args: { id: "visit-notes" },
   render: (args) => (
-    <div className="grid w-72 gap-2">
+    <div className="grid w-72 gap-1">
       <Label htmlFor={args.id}>Notes for the clinic</Label>
       <Textarea {...args} />
     </div>
@@ -32,7 +32,7 @@ export const Disabled: Story = { args: { disabled: true, defaultValue: "Sample n
 export const Invalid: Story = {
   args: { "aria-invalid": true, "aria-describedby": "visit-notes-error" },
   render: (args) => (
-    <div className="grid w-72 gap-2">
+    <div className="grid w-72 gap-1">
       <Label htmlFor={args.id}>Notes for the clinic</Label>
       <Textarea {...args} />
       <p id="visit-notes-error" className="text-control text-critical-text">
