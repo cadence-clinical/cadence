@@ -3,6 +3,8 @@
 Cadence Clinical is a design system for clinical software: React primitives, clinical components
 built on them, and FHIR utilities. Read [docs/decisions](docs/decisions/README.md) before making
 a structural change. The records there explain why the rules below exist.
+[CONVENTIONS.md](CONVENTIONS.md) is how code is written here: follow it, and if a rule in it is
+tagged `planned`, follow it anyway.
 
 ## Commands
 
