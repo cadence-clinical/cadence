@@ -22,7 +22,7 @@ Clinical software has a lot of that HTML: patient information, discharge instruc
    - In a definition list the term is muted and the value is not, the reverse of shadcn. Clinical screens put the label in `dt` and the patient's data in `dd`.
    - Table headings may wrap, so a table is less likely to be wider than a phone.
 
-4. **Three presets to start**: the default, `typeset-compact` for a note inside a dense layout, and `typeset-reading` for patients and carers. More are added when a screen needs one.
+4. **Three presets to start**: the default, `typeset-compact` for a note inside a dense layout, and `typeset-reading` for patients and carers. More are added when a screen needs one. The rhythm is tighter than shadcn's (a line height of 1.5 against 1.75, and 1em between blocks against 1.25em), because clinical screens are dense and the text sits beside compact controls.
 
 5. **The stylesheet ships from `@cadence-clinical/tokens`**, and `@cadence-clinical/ui/typeset.css` re-exports it. shadcn's Typeset is a file the consumer owns. Cadence's is versioned, for the reason 0011 gives for the theme: it carries contrast and clinical-safety guarantees that an edited copy would lose. The registry item `@cadence/typeset` adds the import and depends on the theme. Consumers still tune it with variables, their own preset classes and utilities.
 
