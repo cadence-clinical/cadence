@@ -5,3 +5,4 @@ export type { ContrastFailure, Pairing } from "./contrast";
 export { CONTRASTS, MODES, RESERVED_HUES, STATUSES } from "./palette";
 export type { ColorTokens, Contrast, Mode, Status } from "./palette";
 export { generateAccentCss, generateColorCss, resolveTokens } from "./resolve";
+export { SHADCN_TOKEN_NAMES, shadcnCssVars } from "./shadcn";

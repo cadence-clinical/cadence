@@ -5,7 +5,8 @@ dist
 storybook-static
 coverage
 .source
-apps/site/public/r
+apps/site/.registry
+packages/tokens/registry.json
 .changeset/*.md
 .agents
 .claude/skills
