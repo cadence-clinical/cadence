@@ -36,7 +36,7 @@ These are enforced by lint or CI where possible. The reasons are in
 
 - The component, built on Base UI where a primitive exists
 - An entry in the package's `registry.json`: its file with a `target` under
-  `components/cadence/`, its dependencies, its category and an honest grade
+  `components/cadence/`, its dependencies, its level and domain, and an honest grade
 - Stories that cover its variants, with play functions for its interactions
 - Passes axe in every story, at compact and comfortable density
 - A deliberate layout at phone width

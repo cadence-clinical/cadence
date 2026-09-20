@@ -66,7 +66,8 @@ A rule a tool can enforce is enforced by the tool. This file records the rest, a
 - **Clinical components take view models from `core`**, never FHIR types, and never import a Region package. `lint`
 - **Icons are `lucide-react`**, passed as components, never as string keys. An icon inside a component carries `data-icon="inline-start"` or `data-icon="inline-end"` and no size class: the component sizes and spaces it. `review`
 - **There is no `Text` or `Heading` component.** Interface text is styled by the component part that shows it. Content that is not written element by element (rendered markdown, patient information, the body of a note) goes in a `typeset` container ([decision 0012](docs/decisions/0012-typography.md)). `review`
-- **Component files are flat** in `src/components`: `button.tsx` and `button.stories.tsx`. The package's `registry.json` is the manifest: it lists each component's files, dependencies, category and grade. `ci`
+- **Every component has a level** (primitive, composite, pattern or layout) and a domain (general or clinical), declared in its manifest entry. A component never imports one from a level above its own, a primitive imports no other component, and components are built from the bottom up ([decision 0013](docs/decisions/0013-component-levels.md)). `ci`
+- **Component files are flat** in `src/components`: `button.tsx` and `button.stories.tsx`. The package's `registry.json` is the manifest: it lists each component's files, dependencies, level, domain and grade. `ci`
 
 ## 5. Styling
 

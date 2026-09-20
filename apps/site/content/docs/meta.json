@@ -7,9 +7,11 @@
     "---Principles---",
     "clinical-safety",
     "grades",
+    "levels",
     "---Primitives---",
     "components/button",
-    "components/card",
-    "components/typeset"
+    "components/typeset",
+    "---Composites---",
+    "components/card"
   ]
 }

@@ -30,7 +30,8 @@
       ],
       "docs": "Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
       "meta": {
-        "category": "primitive",
+        "level": "primitive",
+        "domain": "general",
         "grade": {
           "level": "tested"
         }
@@ -52,7 +53,8 @@
       ],
       "docs": "Give CardTitle a heading level with render={<h2 />}. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
       "meta": {
-        "category": "primitive",
+        "level": "composite",
+        "domain": "general",
         "grade": {
           "level": "tested"
         }
@@ -70,7 +72,8 @@
       },
       "docs": "Wrap content in an element with the typeset class. Cadence grades the stylesheet it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
       "meta": {
-        "category": "primitive",
+        "level": "primitive",
+        "domain": "general",
         "grade": {
           "level": "tested"
         }

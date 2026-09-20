@@ -1,0 +1,51 @@
+---
+title: Component levels
+description: Every component has a level, from a single control to the frame of a page, and dependencies only point down.
+---
+
+Cadence sorts its components into levels by how much they hold. The level tells you what a component may depend on, where to find it, and how much there is to check before you rely on it.
+
+The levels follow [atomic design](https://atomicdesign.bradfrost.com/chapter-2/), which names five stages from atoms to pages. Cadence keeps plainer names.
+
+| Level     | Atomic design | What it is                                                                                       | Examples                                                               |
+| --------- | ------------- | ------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------- |
+| Primitive | Atom          | One control or one element. It cannot be broken down further and stay useful.                    | [Button](/docs/components/button), [Typeset](/docs/components/typeset) |
+| Composite | Molecule      | A small group of parts or primitives that works as one unit.                                     | [Card](/docs/components/card)                                          |
+| Pattern   | Organism      | A discrete section of an interface with behaviour of its own, such as a data table.              | Planned                                                                |
+| Layout    | Template      | Places patterns in the frame of a page. It holds no content of its own.                          | Planned                                                                |
+| Screen    | Page          | A layout filled with content. Screens live in the example apps and are not shipped in a package. | Planned                                                                |
+
+## Place a component
+
+Ask what a user would call it:
+
+- **One thing to operate or read is a primitive**, however many parts it has underneath. A select is a primitive.
+- **A unit that arranges content or combines primitives is a composite.** A card has a header, content and a footer. A field has a label, a control and an error.
+- **A section of a screen that sorts, filters, navigates or otherwise behaves is a pattern.**
+
+A component that is hard to place is usually two components.
+
+## Dependencies only point down
+
+A component never imports a component from a level above its own, and a primitive imports no other component. Continuous integration checks this from each package's `registry.json`, so a button can never come to depend on a data table.
+
+Components are also built from the bottom up. A component is built when everything beneath it that it needs exists and has at least the Tested [grade](/docs/grades).
+
+## Level and domain
+
+Level is separate from domain. A component is general or clinical at any level: a display of one quantity with its unit is a clinical primitive, and an observation chart is a clinical pattern. Clinical components are planned and none has been built.
+
+Each component declares both in its manifest entry:
+
+```json title="packages/ui/registry.json"
+{
+  "name": "card",
+  "meta": {
+    "level": "composite",
+    "domain": "general",
+    "grade": { "level": "tested" }
+  }
+}
+```
+
+The level is also the group a component sits under in this site's sidebar and in Storybook.

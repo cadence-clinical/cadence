@@ -16,7 +16,8 @@ const components = registry.items
     name,
     title,
     description,
-    category: meta.category,
+    level: meta.level,
+    domain: meta.domain,
     grade: meta.grade,
   }))
   .sort((a, b) => a.name.localeCompare(b.name));

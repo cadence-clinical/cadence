@@ -15,7 +15,7 @@ import {
 
 // All content is synthetic.
 const meta = {
-  title: "Primitives/Card",
+  title: "Composites/Card",
   component: Card,
   parameters: { layout: "padded" },
   argTypes: { size: { control: "select", options: ["sm", "md"] } },

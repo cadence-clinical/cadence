@@ -26,7 +26,7 @@ Clinical software has a lot of that HTML: patient information, discharge instruc
 
 5. **The stylesheet ships from `@cadence-clinical/tokens`**, and `@cadence-clinical/ui/typeset.css` re-exports it. shadcn's Typeset is a file the consumer owns. Cadence's is versioned, for the reason 0011 gives for the theme: it carries contrast and clinical-safety guarantees that an edited copy would lose. The registry item `@cadence/typeset` adds the import and depends on the theme. Consumers still tune it with variables, their own preset classes and utilities.
 
-6. **Typeset is graded like a component.** Its manifest entry is in `packages/ui/registry.json` with no file of its own, its stories are its tests, and the grade check accepts an item with a category and no `.tsx` file.
+6. **Typeset is graded like a component.** Its manifest entry is in `packages/ui/registry.json` with no file of its own, its stories are its tests, and the grade check accepts an item with a level and no `.tsx` file.
 
 ## Consequences
 

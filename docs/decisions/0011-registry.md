@@ -38,7 +38,7 @@ Findings 9 and 10 came from building the registry, after the first eight were re
 
 2. **Component files are flat**, because a `paths` pattern has one wildcard: `button.tsx` and `button.stories.tsx` sit directly in `src/components`. This replaces one directory per component.
 
-3. **`registry.json` is the component manifest.** Each package has one, the root `registry.json` includes them, and an item's `meta` carries its category and grade. This replaces `meta.json`: the grade check reads the registry, and the package's published `meta.json` is derived from it.
+3. **`registry.json` is the component manifest.** Each package has one, the root `registry.json` includes them, and an item's `meta` carries its category and grade ([0013](0013-component-levels.md) later split the category into a level and a domain). This replaces `meta.json`: the grade check reads the registry, and the package's published `meta.json` is derived from it.
 
 4. **Components install to `components/cadence/`**, through an explicit `target` on each file. Nothing in a consumer's `components/ui` is touched, and a Cadence component always sits on Cadence primitives. Utilities install as `registry:lib`.
 
