@@ -14,6 +14,11 @@ approach.
 5. Open a pull request. `CI passed` must be green, and any visual change must be accepted in
    Chromatic.
 
+## How code is written
+
+[CONVENTIONS.md](CONVENTIONS.md) covers TypeScript, functions over classes, React components,
+styling, accessibility, clinical data, testing and linting. Each rule says how it is enforced.
+
 ## Rules that hold everywhere
 
 These are enforced by lint or CI where possible. The reasons are in
