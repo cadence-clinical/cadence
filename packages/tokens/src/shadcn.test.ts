@@ -24,24 +24,25 @@ describe("shadcn variables", () => {
 // changed: run `pnpm --filter @cadence-clinical/tokens build` and commit registry.json.
 describe("the committed registry theme", () => {
   const theme = registry.items.find((item) => item.name === "theme");
+  if (!theme) throw new Error("registry.json has no theme item.");
+  const { light, dark, theme: scale } = theme.cssVars;
 
   it("matches the palette", () => {
-    const { radius: _radius, ...light } = theme?.cssVars.light ?? {};
-    expect(light).toEqual(shadcnCssVars().light);
-    expect(theme?.cssVars.dark).toEqual(shadcnCssVars().dark);
+    const colours = Object.fromEntries(Object.entries(light).filter(([name]) => name !== "radius"));
+    expect(colours).toEqual(shadcnCssVars().light);
+    expect(dark).toEqual(shadcnCssVars().dark);
   });
 
   it("matches the radius and its scale in base.css", () => {
-    const declared = Object.fromEntries(
-      [...base.matchAll(/^\s*--(radius[a-z0-9-]*):([^;]+);/gm)].map(([, name, value]) => [
-        name,
-        value?.trim(),
-      ]),
+    const declared = new Map(
+      [...base.matchAll(/^\s*--(radius[a-z0-9-]*):([^;]+);/gm)].map(
+        ([, name = "", value = ""]): [string, string] => [name, value.trim()],
+      ),
     );
-    const { radius, ...scale } = declared;
-    expect(radius).toBeDefined();
-    expect(theme?.cssVars.light.radius).toBe(radius);
-    expect(theme?.cssVars.theme).toEqual(scale);
-    expect(Object.keys(scale)).not.toEqual([]);
+    expect(declared.get("radius")).toBeDefined();
+    expect(light.radius).toBe(declared.get("radius"));
+    declared.delete("radius");
+    expect(declared.size).toBeGreaterThan(0);
+    expect(scale).toEqual(Object.fromEntries(declared));
   });
 });

@@ -14,14 +14,20 @@
  * that Cadence calls an accent drives "primary".
  */
 
+/** Light or dark. Set by `data-mode` or the `.dark` class on <html>, or left to the operating system. */
 export type Mode = "light" | "dark";
+/** Standard contrast meets WCAG AA. More contrast meets AAA for text. Set by `data-contrast`. */
 export type Contrast = "standard" | "more";
 
+/** Every mode, in the order theme.css declares them. */
 export const MODES = ["light", "dark"] as const satisfies readonly Mode[];
+/** Every contrast level, in the order theme.css declares them. */
 export const CONTRASTS = ["standard", "more"] as const satisfies readonly Contrast[];
 
+/** Token names mapped to CSS colours, for a set whose names are not known in advance. */
 export type ColorTokens = Record<string, string>;
 
+/** Surfaces, text and boundaries. They carry no meaning and no brand. */
 export const neutral = {
   light: {
     background: "oklch(1 0 0)",
@@ -169,14 +175,30 @@ export const moreContrast = {
   },
 } satisfies Record<Mode, ColorTokens>;
 
+/** The clinical statuses. Each has a solid, foreground, subtle, text and border token. */
 export const STATUSES = ["critical", "warning", "success", "info"] as const;
+/** One of the clinical statuses. */
 export type Status = (typeof STATUSES)[number];
+
+/** A neutral or status token. Only a name that both modes define counts. */
+export type BaseTokenName = keyof (typeof neutral)[Mode] | keyof (typeof status)[Mode];
+/** A token an accent supplies. */
+export type AccentTokenName = "primary" | "primary-foreground" | "primary-text" | "ring";
+/** shadcn's names for the critical status, so a stock shadcn component matches Cadence. */
+export type AliasTokenName = "destructive" | "destructive-foreground";
+/** Every colour token theme.css declares. */
+export type TokenName = BaseTokenName | AccentTokenName | AliasTokenName;
+
+/** The neutral and status tokens for one mode and contrast level. */
+export type BaseTokens = Record<BaseTokenName, string>;
+/** Every colour token, resolved for one mode, contrast level and accent. */
+export type ResolvedTokens = Record<TokenName, string>;
 
 /** Hues, in OKLCH degrees, that carry clinical meaning and which no accent may approach. */
 export const RESERVED_HUES = { critical: 27, warning: 80, success: 150 } as const;
 
 /** Neutral and status tokens for one mode and contrast level. Accent tokens are added on top. */
-export function baseTokens(mode: Mode, contrast: Contrast): ColorTokens {
+export function baseTokens(mode: Mode, contrast: Contrast): BaseTokens {
   return {
     ...neutral[mode],
     ...status[mode],

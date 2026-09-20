@@ -11,15 +11,15 @@ import { clampChroma, converter, parse } from "culori";
 
 import { contrastRatio, MINIMUM_CONTRAST } from "./contrast";
 import {
-  CONTRASTS,
-  MODES,
   RESERVED_HUES,
   baseTokens,
-  type ColorTokens,
+  type AccentTokenName,
+  type BaseTokens,
   type Contrast,
   type Mode,
 } from "./palette";
 
+/** The colours an accent needs in one mode at one contrast level. */
 export interface AccentRoles {
   /** Fill for primary actions. */
   solid: string;
@@ -29,8 +29,10 @@ export interface AccentRoles {
   text: string;
 }
 
+/** An accent's roles in every mode and at every contrast level. */
 export type AccentDefinition = Record<Mode, Record<Contrast, AccentRoles>>;
 
+/** What createAccent found: the accent, and every reason it is not safe to use. */
 export interface AccentResult {
   seed: string;
   definition: AccentDefinition;
@@ -51,7 +53,7 @@ const toOklch = converter("oklch");
 function format(l: number, c: number, h: number): string {
   const clamped = clampChroma({ mode: "oklch", l, c, h }, "oklch");
   const round = (value: number, places: number) => Number(value.toFixed(places));
-  return `oklch(${round(clamped.l, 3)} ${round(clamped.c ?? 0, 3)} ${round(clamped.h ?? h, 1)})`;
+  return `oklch(${round(clamped.l, 3)} ${round(clamped.c, 3)} ${round(clamped.h, 1)})`;
 }
 
 function hueDistance(a: number, b: number): number {
@@ -94,10 +96,10 @@ function solveRoles(
   seedLightness: number,
   mode: Mode,
   contrast: Contrast,
-  base: ColorTokens,
+  base: BaseTokens,
 ): AccentRoles | undefined {
   const minimum = MINIMUM_CONTRAST[contrast];
-  const surfaces = [base.background!, base.card!];
+  const surfaces = [base.background, base.card];
 
   // On dark with more contrast the fill flips to light with dark text. See palette.ts.
   const flipped = mode === "dark" && contrast === "more";
@@ -141,21 +143,20 @@ export function createAccent(seed: string): AccentResult {
     }
   }
 
-  const definition = {} as AccentDefinition;
-  for (const mode of MODES) {
-    definition[mode] = {} as Record<Contrast, AccentRoles>;
-    for (const contrast of CONTRASTS) {
-      const roles = solveRoles(c, h, l, mode, contrast, baseTokens(mode, contrast));
-      if (roles) {
-        definition[mode][contrast] = roles;
-      } else {
-        problems.push(`No lightness of this colour meets ${contrast} contrast in ${mode} mode.`);
-        definition[mode][contrast] = { solid: seed, foreground: ON_SOLID_LIGHT, text: seed };
-      }
-    }
-  }
+  // An unsolvable combination is reported and filled with the seed, so the result is complete
+  // and the caller decides what a problem means.
+  const solve = (mode: Mode, contrast: Contrast): AccentRoles => {
+    const roles = solveRoles(c, h, l, mode, contrast, baseTokens(mode, contrast));
+    if (roles) return roles;
+    problems.push(`No lightness of this colour meets ${contrast} contrast in ${mode} mode.`);
+    return { solid: seed, foreground: ON_SOLID_LIGHT, text: seed };
+  };
+  const solveMode = (mode: Mode): Record<Contrast, AccentRoles> => ({
+    standard: solve(mode, "standard"),
+    more: solve(mode, "more"),
+  });
 
-  return { seed, definition, problems };
+  return { seed, definition: { light: solveMode("light"), dark: solveMode("dark") }, problems };
 }
 
 /** Throws when the accent has problems. Use this in a build step or a test. */
@@ -167,6 +168,11 @@ export function assertAccent(seed: string): AccentDefinition {
   return result.definition;
 }
 
+/** The curated accents, in the order theme.css declares them. */
+export const ACCENT_NAMES = ["teal", "blue", "indigo", "violet", "plum", "slate"] as const;
+/** The name of a curated accent, as set in `data-accent`. */
+export type AccentName = (typeof ACCENT_NAMES)[number];
+
 /** The curated accents. Each is a seed; its roles are solved, not hand-tuned. */
 export const ACCENT_SEEDS = {
   teal: "oklch(0.5 0.09 200)",
@@ -175,12 +181,9 @@ export const ACCENT_SEEDS = {
   violet: "oklch(0.5 0.2 300)",
   plum: "oklch(0.48 0.17 340)",
   slate: "oklch(0.42 0.03 255)",
-} as const;
+} as const satisfies Record<AccentName, string>;
 
-export type AccentName = keyof typeof ACCENT_SEEDS;
-
-export const ACCENT_NAMES = Object.keys(ACCENT_SEEDS) as AccentName[];
-
+/** The accent a page gets when `data-accent` is not set. */
 export const DEFAULT_ACCENT: AccentName = "teal";
 
 /** The tokens an accent contributes for one mode and contrast level. */
@@ -188,7 +191,7 @@ export function accentTokens(
   definition: AccentDefinition,
   mode: Mode,
   contrast: Contrast,
-): ColorTokens {
+): Record<AccentTokenName, string> {
   const roles = definition[mode][contrast];
   return {
     primary: roles.solid,

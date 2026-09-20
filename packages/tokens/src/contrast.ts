@@ -1,19 +1,21 @@
 import { wcagContrast } from "culori";
 
-import { STATUSES, type ColorTokens, type Contrast } from "./palette";
+import { STATUSES, type Contrast, type ResolvedTokens, type TokenName } from "./palette";
 
 /** WCAG 2.x contrast ratio between two CSS colours, from 1 to 21. */
 export function contrastRatio(a: string, b: string): number {
   return wcagContrast(a, b);
 }
 
+/** Two tokens that are used together, and so must contrast. */
 export interface Pairing {
-  foreground: string;
-  background: string;
+  foreground: TokenName;
+  background: TokenName;
   /** "text" pairings follow WCAG 1.4.3 / 1.4.6; "boundary" pairings follow WCAG 1.4.11. */
   kind: "text" | "boundary";
 }
 
+/** The WCAG ratio each kind of pairing must reach, at each contrast level. */
 export const MINIMUM_CONTRAST = {
   standard: { text: 4.5, boundary: 3 },
   more: { text: 7, boundary: 4.5 },
@@ -46,22 +48,18 @@ export const REQUIRED_PAIRINGS: readonly Pairing[] = [
   ]),
 ];
 
+/** A pairing that fell short, with the ratio it reached and the ratio it needed. */
 export interface ContrastFailure extends Pairing {
   ratio: number;
   minimum: number;
 }
 
 /** Checks a resolved token set against every required pairing. */
-export function checkContrast(tokens: ColorTokens, contrast: Contrast): ContrastFailure[] {
+export function checkContrast(tokens: ResolvedTokens, contrast: Contrast): ContrastFailure[] {
   const failures: ContrastFailure[] = [];
 
   for (const pairing of REQUIRED_PAIRINGS) {
-    const foreground = tokens[pairing.foreground];
-    const background = tokens[pairing.background];
-    if (!foreground || !background) {
-      throw new Error(`Missing token for pairing ${pairing.foreground} on ${pairing.background}.`);
-    }
-    const ratio = contrastRatio(foreground, background);
+    const ratio = contrastRatio(tokens[pairing.foreground], tokens[pairing.background]);
     const minimum = MINIMUM_CONTRAST[contrast][pairing.kind];
     if (ratio < minimum) {
       failures.push({ ...pairing, ratio: Math.round(ratio * 100) / 100, minimum });

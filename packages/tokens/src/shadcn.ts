@@ -1,4 +1,4 @@
-import type { ColorTokens, Mode } from "./palette";
+import type { ColorTokens, Mode, TokenName } from "./palette";
 import { resolveTokens } from "./resolve";
 
 /**
@@ -26,17 +26,11 @@ export const SHADCN_TOKEN_NAMES = [
   "border",
   "input",
   "ring",
-] as const;
+] as const satisfies readonly TokenName[];
 
 function pick(mode: Mode): ColorTokens {
   const tokens = resolveTokens(mode);
-  return Object.fromEntries(
-    SHADCN_TOKEN_NAMES.map((name) => {
-      const value = tokens[name];
-      if (value === undefined) throw new Error(`Cadence defines no "${name}" token.`);
-      return [name, value];
-    }),
-  );
+  return Object.fromEntries(SHADCN_TOKEN_NAMES.map((name) => [name, tokens[name]]));
 }
 
 /**
