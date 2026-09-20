@@ -16,7 +16,8 @@ const meta = {
       control: "select",
       options: ["primary", "secondary", "outline", "ghost", "destructive", "link"],
     },
-    size: { control: "select", options: ["sm", "md", "lg", "icon"] },
+    size: { control: "select", options: ["sm", "md", "lg"] },
+    iconOnly: { control: "boolean" },
   },
 } satisfies Meta<typeof Button>;
 
@@ -81,8 +82,9 @@ export const WithIcons: Story = {
         Open history
         <ArrowRight data-icon="inline-end" />
       </Button>
-      <Button {...args} variant="outline" size="icon" aria-label="Print chart">
+      <Button {...args} variant="outline" iconOnly>
         <Printer />
+        Print chart
       </Button>
     </div>
   ),
@@ -99,6 +101,94 @@ export const WithIcons: Story = {
     await expect(trailing.end).toBeLessThan(trailing.start);
     // A link sits in running text and has no padding on either side.
     await expect(padding("Open history")).toEqual({ start: 0, end: 0 });
+  },
+};
+
+// Icon-only is its own option, so it comes in every size. The label stays in the markup as the
+// button's name and is only hidden from sight, so there is no aria-label to forget.
+export const IconOnly: Story = {
+  render: (args) => (
+    <div className="flex flex-wrap items-center gap-3">
+      <Button {...args} variant="outline" size="sm" iconOnly>
+        <Printer />
+        Print small
+      </Button>
+      <Button {...args} variant="outline" size="md" iconOnly>
+        <Printer />
+        Print medium
+      </Button>
+      <Button {...args} variant="outline" size="lg" iconOnly>
+        <Printer />
+        Print large
+      </Button>
+      <Button {...args} variant="ghost" iconOnly>
+        <Plus />
+        Add observation
+      </Button>
+      <Button {...args} variant="destructive" iconOnly>
+        <Plus className="rotate-45" />
+        Remove observation
+      </Button>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const heights: number[] = [];
+
+    for (const name of ["Print small", "Print medium", "Print large"]) {
+      const button = canvas.getByRole("button", { name });
+      const box = button.getBoundingClientRect();
+      // Square, with nothing spilling out of it.
+      await expect(Math.round(box.width), name).toBe(Math.round(box.height));
+      await expect(button.scrollWidth, name).toBeLessThanOrEqual(button.clientWidth);
+      // The label is still there for a screen reader, and takes no room on screen.
+      await expect(canvas.getByText(name).getBoundingClientRect().width).toBeLessThanOrEqual(1);
+      heights.push(box.height);
+    }
+
+    await expect(heights).toEqual([...heights].sort((a, b) => a - b));
+    await expect(new Set(heights).size).toBe(3);
+  },
+};
+
+export const TextStepsWithSize: Story = {
+  render: (args) => (
+    <div className="flex flex-wrap items-center gap-3">
+      <Button {...args} size="sm">
+        Small
+      </Button>
+      <Button {...args} size="md">
+        Medium
+      </Button>
+      <Button {...args} size="lg">
+        Large
+      </Button>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const size = (name: string) =>
+      parseFloat(getComputedStyle(within(canvasElement).getByRole("button", { name })).fontSize);
+
+    await expect(size("Small")).toBeLessThan(size("Medium"));
+    await expect(size("Medium")).toBeLessThan(size("Large"));
+  },
+};
+
+// An icon follows the density, like the button it sits in.
+export const IconFollowsDensity: Story = {
+  globals: { density: "comfortable" },
+  render: (args) => (
+    <Button {...args} variant="outline" iconOnly>
+      <Printer />
+      Print chart
+    </Button>
+  ),
+  play: async ({ canvasElement }) => {
+    const button = within(canvasElement).getByRole("button", { name: "Print chart" });
+    await expect(button.getBoundingClientRect().height).toBeGreaterThanOrEqual(44);
+    const icon = button.querySelector("svg");
+    if (!icon) throw new Error("The button has no icon.");
+    await expect(icon.getBoundingClientRect().width).toBe(20);
   },
 };
 
