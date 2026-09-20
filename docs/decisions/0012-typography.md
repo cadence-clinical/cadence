@@ -21,6 +21,7 @@ Clinical software has a lot of that HTML: patient information, discharge instruc
    - Every colour is a Cadence token, so every pairing is contrast-tested. Links use `primary-text` and are always underlined. `mark` is tinted with the accent, because yellow sits on the warning hue. No status colour is used.
    - In a definition list the term is muted and the value is not, the reverse of shadcn. Clinical screens put the label in `dt` and the patient's data in `dd`.
    - Table headings may wrap, so a table is less likely to be wider than a phone.
+   - A small heading (`h5`) and a definition term (`dt`) share one style, and what follows each sits the same distance below. Both are a label above a block. A definition list is still the right markup for a label and its value, because it pairs them for assistive technology and keeps field labels out of the heading outline.
 
 4. **Three presets to start**: the default, `typeset-compact` for a note inside a dense layout, and `typeset-reading` for patients and carers. More are added when a screen needs one. The rhythm is tighter than shadcn's (a line height of 1.5 against 1.75, and 1em between blocks against 1.25em), because clinical screens are dense and the text sits beside compact controls.
 
