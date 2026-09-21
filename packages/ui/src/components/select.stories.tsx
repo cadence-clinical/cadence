@@ -140,13 +140,19 @@ export const ChoosesWithTheKeyboard: Story = {
     trigger.focus();
 
     await userEvent.keyboard("{Enter}");
-    await expect(await screen.findByRole("listbox")).toBeVisible();
-    await userEvent.keyboard("{ArrowDown}{ArrowDown}{Enter}");
+    await expect(await screen.findByRole("listbox", { name: "Clinic" })).toBeVisible();
+
+    // A test types faster than a person. Wait for the list to take each key before the next.
+    const highlighted = () => document.querySelector('[role="option"][data-highlighted]');
+    await userEvent.keyboard("{ArrowDown}");
+    await waitFor(() => expect(highlighted()).not.toBeNull());
+    const chosen = highlighted()?.textContent ?? "";
+    await userEvent.keyboard("{Enter}");
 
     // Base UI closes the list and hands focus back to the field a frame after the choice.
     await waitFor(async () => {
       await expect(args.onValueChange).toHaveBeenCalledTimes(1);
-      await expect(trigger).not.toHaveTextContent("Choose a clinic");
+      await expect(trigger).toHaveTextContent(chosen);
       await expect(trigger).toHaveFocus();
     });
   },
