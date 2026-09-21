@@ -128,6 +128,16 @@ export type { SpinnerProps } from "@/components/cadence/spinner";
 export { Switch } from "@/components/cadence/switch";
 export type { SwitchProps } from "@/components/cadence/switch";
 export {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/cadence/table";
+export {
   Tabs,
   TabsContent,
   TabsList,
