@@ -27,14 +27,12 @@ const meta = {
   args: { items: CLINICS, onValueChange: fn() },
   render: (args) => (
     <div className="grid w-64 gap-1">
-      <Label id="clinic-label" htmlFor="clinic">
-        Clinic
-      </Label>
+      <Label htmlFor="clinic">Clinic</Label>
       <Select {...args}>
         <SelectTrigger id="clinic">
           <SelectValue placeholder="Choose a clinic" />
         </SelectTrigger>
-        <SelectContent aria-labelledby="clinic-label">
+        <SelectContent>
           {CLINICS.map((clinic) => (
             <SelectItem key={clinic.value} value={clinic.value}>
               {clinic.label}
@@ -65,7 +63,7 @@ export const Sizes: Story = {
           <SelectTrigger size={size} aria-label={`Clinic, ${size}`}>
             <SelectValue />
           </SelectTrigger>
-          <SelectContent aria-label={`Clinic, ${size}`}>
+          <SelectContent>
             <SelectItem value="general">General clinic</SelectItem>
           </SelectContent>
         </Select>
@@ -92,14 +90,12 @@ export const Grouped: Story = {
   args: { defaultOpen: true },
   render: (args) => (
     <div className="grid h-72 w-64 content-start gap-1">
-      <Label id="clinic-label" htmlFor="clinic">
-        Clinic
-      </Label>
+      <Label htmlFor="clinic">Clinic</Label>
       <Select {...args}>
         <SelectTrigger id="clinic">
           <SelectValue placeholder="Choose a clinic" />
         </SelectTrigger>
-        <SelectContent aria-labelledby="clinic-label">
+        <SelectContent>
           <SelectGroup>
             <SelectLabel>Outpatients</SelectLabel>
             <SelectItem value="general">General clinic</SelectItem>
@@ -122,8 +118,8 @@ export const ChoosesWithThePointer: Story = {
     await expect(trigger).toHaveTextContent("Choose a clinic");
 
     await userEvent.click(trigger);
-    // The list is rendered in a portal, outside the story's own element, and carries the
-    // field's name, which Base UI does not give it.
+    // The list is rendered in a portal, outside the story's own element. Base UI leaves it
+    // unnamed, so it takes the trigger's name: here, the text of the label that points at it.
     await expect(await screen.findByRole("listbox", { name: "Clinic" })).toBeVisible();
     await userEvent.click(screen.getByRole("option", { name: "Review clinic" }));
 
@@ -173,6 +169,113 @@ export const MarksTheChoiceWithATick: Story = {
   },
 };
 
+// However the trigger is named, the list that opens from it carries the same name.
+export const TheListTakesTheTriggersName: Story = {
+  render: (args) => (
+    <div className="grid w-64 gap-3">
+      <div className="grid gap-1">
+        <Label htmlFor="by-label">Named by a label</Label>
+        <Select {...args}>
+          <SelectTrigger id="by-label">
+            <SelectValue placeholder="Choose" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="general">General clinic</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+      <div className="grid gap-1">
+        <Label id="a-label-with-an-id" htmlFor="by-reference">
+          Named by reference
+        </Label>
+        <Select {...args}>
+          <SelectTrigger id="by-reference">
+            <SelectValue placeholder="Choose" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="general">General clinic</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+      <Select {...args}>
+        <SelectTrigger aria-label="Named by aria-label">
+          <SelectValue placeholder="Choose" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="general">General clinic</SelectItem>
+        </SelectContent>
+      </Select>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    for (const name of ["Named by a label", "Named by reference", "Named by aria-label"]) {
+      await userEvent.click(within(canvasElement).getByRole("combobox", { name }));
+      await expect(await screen.findByRole("listbox", { name })).toBeVisible();
+      await userEvent.keyboard("{Escape}");
+      await waitFor(() => expect(screen.queryByRole("listbox")).not.toBeInTheDocument());
+    }
+    // A label with an id is referred to, so the list's name follows the label if it changes.
+    await userEvent.click(
+      within(canvasElement).getByRole("combobox", { name: "Named by reference" }),
+    );
+    await expect(await screen.findByRole("listbox")).toHaveAttribute(
+      "aria-labelledby",
+      "a-label-with-an-id",
+    );
+    await userEvent.keyboard("{Escape}");
+  },
+};
+
+export const AGivenListNameOverrules: Story = {
+  render: (args) => (
+    <div className="grid w-64 gap-1">
+      <Label htmlFor="clinic">Clinic</Label>
+      <Select {...args}>
+        <SelectTrigger id="clinic">
+          <SelectValue placeholder="Choose a clinic" />
+        </SelectTrigger>
+        <SelectContent aria-label="Clinics at this site">
+          <SelectItem value="general">General clinic</SelectItem>
+        </SelectContent>
+      </Select>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    await userEvent.click(within(canvasElement).getByRole("combobox", { name: "Clinic" }));
+    await expect(
+      await screen.findByRole("listbox", { name: "Clinics at this site" }),
+    ).toBeVisible();
+    await userEvent.keyboard("{Escape}");
+  },
+};
+
+// The list finds its name through a ref on the trigger. A consumer's own ref must still be set,
+// and must not cost the list its name.
+const consumerRef: { current: HTMLButtonElement | null } = { current: null };
+
+export const AConsumersRefKeepsTheListNamed: Story = {
+  render: (args) => (
+    <div className="grid w-64 gap-1">
+      <Label htmlFor="clinic">Clinic</Label>
+      <Select {...args}>
+        <SelectTrigger id="clinic" ref={consumerRef}>
+          <SelectValue placeholder="Choose a clinic" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="general">General clinic</SelectItem>
+        </SelectContent>
+      </Select>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const trigger = within(canvasElement).getByRole("combobox", { name: "Clinic" });
+    await expect(consumerRef.current).toBe(trigger);
+    await userEvent.click(trigger);
+    await expect(await screen.findByRole("listbox", { name: "Clinic" })).toBeVisible();
+    await userEvent.keyboard("{Escape}");
+  },
+};
+
 const LONG = "SYNTHETICCLINICNAME" + "0".repeat(40);
 
 // A chosen value is never truncated. The field grows to fit it, and a long option wraps in the
@@ -181,14 +284,12 @@ export const LongValuesWrap: Story = {
   args: { items: [{ value: "long", label: LONG }], defaultValue: "long" },
   render: (args) => (
     <div className="grid w-48 gap-1">
-      <Label id="clinic-label" htmlFor="clinic">
-        Clinic
-      </Label>
+      <Label htmlFor="clinic">Clinic</Label>
       <Select {...args}>
         <SelectTrigger id="clinic">
           <SelectValue />
         </SelectTrigger>
-        <SelectContent aria-labelledby="clinic-label">
+        <SelectContent>
           <SelectItem value="long">{LONG}</SelectItem>
         </SelectContent>
       </Select>

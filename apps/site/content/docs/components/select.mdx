@@ -16,9 +16,7 @@ import {
 
 <ComponentPreview>
   <div className="grid w-full max-w-64 gap-1">
-    <Label id="select-preview-label" htmlFor="select-preview">
-      Clinic
-    </Label>
+    <Label htmlFor="select-preview">Clinic</Label>
     <Select
       items={[
         { value: "general", label: "General clinic" },
@@ -28,7 +26,7 @@ import {
       <SelectTrigger id="select-preview">
         <SelectValue placeholder="Choose a clinic" />
       </SelectTrigger>
-      <SelectContent aria-labelledby="select-preview-label">
+      <SelectContent>
         <SelectItem value="general">General clinic</SelectItem>
         <SelectItem value="review">Review clinic</SelectItem>
       </SelectContent>
@@ -53,14 +51,12 @@ const clinics = [
   { value: "review", label: "Review clinic" },
 ];
 
-<Label id="clinic-label" htmlFor="clinic">
-  Clinic
-</Label>
+<Label htmlFor="clinic">Clinic</Label>
 <Select items={clinics} onValueChange={setClinic}>
   <SelectTrigger id="clinic">
     <SelectValue placeholder="Choose a clinic" />
   </SelectTrigger>
-  <SelectContent aria-labelledby="clinic-label">
+  <SelectContent>
     {clinics.map((clinic) => (
       <SelectItem key={clinic.value} value={clinic.value}>
         {clinic.label}
@@ -76,14 +72,11 @@ Pass `items` to `Select`, so the field shows the chosen option's label and not i
 
 Use a select when there are more options than fit on the screen at once. For a few, a [Radio group](/docs/components/radio-group) shows them all and takes one action fewer.
 
-## Name the field and the list
+## Name the field
 
-A select has two things a screen reader announces: the field and the list that opens. Base UI names the field from its label and leaves the list unnamed, so name both:
+Point a [Label](/docs/components/label)'s `htmlFor` at the `SelectTrigger`, or give the trigger an `aria-label`.
 
-- Give the [Label](/docs/components/label) an `id`, and point its `htmlFor` at the `SelectTrigger`.
-- Pass the label's `id` to `SelectContent` as `aria-labelledby`.
-
-The planned Field composite will do this for you.
+A select has two things a screen reader announces: the field and the list that opens. Base UI names the field and leaves the list unnamed. Here the list takes the field's name when it opens, so you name the field once. To name the list differently, pass `aria-label` or `aria-labelledby` to `SelectContent`.
 
 ## Sizes
 
@@ -95,7 +88,7 @@ The planned Field composite will do this for you.
 - **The list opens below the field**, so the field and its label stay in view. Set `alignItemWithTrigger` on `SelectContent` for the Base UI default, which lays the list over the field.
 - **The list opens at once.** A select is opened often and from the keyboard, where an animation only delays.
 - **An option is as high as a control**, so it is a 44px target when the density is comfortable.
-- **The list can be named**, through `aria-labelledby` or `aria-label` on `SelectContent`.
+- **The list is named.** It takes the field's name when it opens. Base UI leaves it unnamed, which axe reports as a failure.
 - **Read-only keeps full contrast**, and only disabled is faded. The boundary and focus ring are never faded.
 
 ## Accessibility
@@ -105,11 +98,11 @@ The planned Field composite will do this for you.
 
 ## Props
 
-| Prop                   | On              | Type                          | Default    |
-| ---------------------- | --------------- | ----------------------------- | ---------- |
-| `items`                | `Select`        | `{ value, label }[]`          |            |
-| `size`                 | `SelectTrigger` | `"sm" \| "md" \| "lg"`        | `"md"`     |
-| `aria-labelledby`      | `SelectContent` | The `id` of the field's label |            |
-| `side`                 | `SelectContent` | As in Base UI's Positioner    | `"bottom"` |
-| `align`                | `SelectContent` | As in Base UI's Positioner    | `"start"`  |
-| `alignItemWithTrigger` | `SelectContent` | `boolean`                     | `false`    |
+| Prop                   | On              | Type                       | Default          |
+| ---------------------- | --------------- | -------------------------- | ---------------- |
+| `items`                | `Select`        | `{ value, label }[]`       |                  |
+| `size`                 | `SelectTrigger` | `"sm" \| "md" \| "lg"`     | `"md"`           |
+| `aria-label`           | `SelectContent` | `string`                   | The field's name |
+| `side`                 | `SelectContent` | As in Base UI's Positioner | `"bottom"`       |
+| `align`                | `SelectContent` | As in Base UI's Positioner | `"start"`        |
+| `alignItemWithTrigger` | `SelectContent` | `boolean`                  | `false`          |
