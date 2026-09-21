@@ -51,6 +51,8 @@ import {
   TabsTrigger,
   Textarea,
   Toggle,
+  ToggleGroup,
+  ToggleGroupItem,
   Tooltip,
   TooltipContent,
   TooltipTrigger,
@@ -84,6 +86,11 @@ const RENDERS: Record<string, ReactElement> = {
   spinner: <Spinner />,
   switch: <Switch aria-label="Appointment reminders" />,
   textarea: <Textarea aria-label="Notes" />,
+  "toggle-group": (
+    <ToggleGroup aria-label="Text style">
+      <ToggleGroupItem value="bold">Bold</ToggleGroupItem>
+    </ToggleGroup>
+  ),
   "dropdown-menu": (
     <DropdownMenu>
       <DropdownMenuTrigger>Appointment actions</DropdownMenuTrigger>

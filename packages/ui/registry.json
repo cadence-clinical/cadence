@@ -475,6 +475,29 @@
       }
     },
     {
+      "name": "toggle-group",
+      "type": "registry:component",
+      "title": "Toggle group",
+      "description": "A set of toggles that belong together, spaced or joined into one segmented control.",
+      "dependencies": ["@base-ui/react"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn", "@cadence/toggle"],
+      "files": [
+        {
+          "path": "src/components/toggle-group.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/toggle-group.tsx"
+        }
+      ],
+      "docs": "Give every ToggleGroup an aria-label. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "composite",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "tooltip",
       "type": "registry:component",
       "title": "Tooltip",
