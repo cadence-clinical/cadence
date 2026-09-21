@@ -90,10 +90,16 @@ export const HoldsFocus: Story = {
     const dialog = await screen.findByRole("dialog");
     await waitFor(() => expect(dialog.contains(document.activeElement)).toBe(true));
     // Three things take focus. Tabbing past the last comes round to the first, not to the page.
+    // At each end Base UI catches focus on a guard outside the dialog and sends it back in, which
+    // takes a frame, so each press waits for focus to settle.
+    const held = new Set<Element>();
     for (let press = 0; press < 5; press += 1) {
       await userEvent.tab();
-      await expect(dialog.contains(document.activeElement)).toBe(true);
+      await waitFor(() => expect(dialog.contains(document.activeElement)).toBe(true));
+      if (document.activeElement) held.add(document.activeElement);
     }
+    // Focus moved between the controls. It was not simply stuck on one.
+    await expect(held.size).toBeGreaterThan(1);
   },
 };
 
