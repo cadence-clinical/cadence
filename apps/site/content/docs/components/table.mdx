@@ -1,0 +1,115 @@
+---
+title: Table
+description: A table of data. Cells wrap between words, a word is never broken, and a table that is too wide scrolls inside its own focusable box.
+---
+
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@cadence-clinical/ui";
+
+<GradeBadge component="table" />
+
+<ComponentPreview>
+  <Table>
+    <TableCaption>Appointments this week</TableCaption>
+    <TableHeader>
+      <TableRow>
+        <TableHead>Clinic</TableHead>
+        <TableHead>Day</TableHead>
+        <TableHead className="text-end">Minutes</TableHead>
+      </TableRow>
+    </TableHeader>
+    <TableBody>
+      <TableRow>
+        <TableCell>General clinic</TableCell>
+        <TableCell>Monday</TableCell>
+        <TableCell className="text-end">20</TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell>Review clinic</TableCell>
+        <TableCell>Thursday</TableCell>
+        <TableCell className="text-end">30</TableCell>
+      </TableRow>
+    </TableBody>
+    <TableFooter>
+      <TableRow>
+        <TableHead scope="row" colSpan={2}>
+          Total
+        </TableHead>
+        <TableCell className="text-end">50</TableCell>
+      </TableRow>
+    </TableFooter>
+  </Table>
+</ComponentPreview>
+
+## Usage
+
+```tsx
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@cadence-clinical/ui";
+
+<Table>
+  <TableCaption>Appointments this week</TableCaption>
+  <TableHeader>
+    <TableRow>
+      <TableHead>Clinic</TableHead>
+      <TableHead className="text-end">Minutes</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>Review clinic</TableCell>
+      <TableCell className="text-end">30</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>;
+```
+
+Table is the native `table` elements with Cadence's styles, and each part accepts its element's props. It follows the shadcn [Table](https://ui.shadcn.com/docs/components/table) and keeps its part names. It shows rows you give it. Sorting, filtering, selection and paging belong to the planned data table, which is built on this.
+
+## Name the table and its headings
+
+- Give the table a `TableCaption`, or an `aria-label` or `aria-labelledby` on `Table`. A screen reader reads the name before the table.
+- `TableHead` heads a column: it has `scope="col"` unless you set it. When the first cell of a row names that row, make it a `TableHead` with `scope="row"`.
+- Align a column of numbers to the end with `className="text-end"` on its heading and its cells. Digits are all one width, so the numbers line up.
+
+## Wrapping and wide tables
+
+A cell wraps between words, so a narrow table grows taller and not wider. **A word is never broken in the middle**, because a name split across lines can be misread. A value with nowhere to break is kept whole.
+
+A table that is still wider than its place scrolls sideways inside its own box, and the page does not. That box takes focus, so a keyboard can scroll it, and it shows the focus ring when it does. When the table has an `aria-label` or `aria-labelledby`, the box is a region with the same name, which a screen reader can move to.
+
+## A chosen row
+
+Set `aria-selected` on a `TableRow` to fill it. The fill is colour, so give a chosen row a second sign, such as a ticked [Checkbox](/docs/components/checkbox).
+
+## What Cadence changes
+
+- **Cells wrap.** shadcn sets every heading and cell to one line, which makes any sentence a sideways scroll.
+- **The scrolling box takes focus and is named.** shadcn's scrolls and cannot be reached from the keyboard.
+- **A row is about as high as a control**, and padding and text follow the [density](/docs/theming#density).
+- **Digits are all one width.**
+- **A heading cell has a `scope`.**
+- **A row's fill does not fade in.** A row is pointed at all day.
+
+## Props
+
+| Prop            | On          | Type             | Default |
+| --------------- | ----------- | ---------------- | ------- |
+| `aria-label`    | `Table`     | `string`         |         |
+| `scope`         | `TableHead` | `"col" \| "row"` | `"col"` |
+| `aria-selected` | `TableRow`  | `boolean`        |         |
