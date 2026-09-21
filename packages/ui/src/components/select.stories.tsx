@@ -144,6 +144,9 @@ export const ChoosesWithTheKeyboard: Story = {
     const highlighted = () => document.querySelector('[role="option"][data-highlighted]');
     await userEvent.keyboard("{ArrowDown}");
     await waitFor(() => expect(highlighted()).not.toBeNull());
+    // The option is marked a frame before focus reaches it, and a key goes to whatever has focus.
+    // Pressed in that frame, Enter lands on the field, which closes the list with nothing chosen.
+    await waitFor(() => expect(highlighted()).toBe(document.activeElement));
     const chosen = highlighted()?.textContent ?? "";
     await userEvent.keyboard("{Enter}");
 
