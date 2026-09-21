@@ -51,7 +51,9 @@ interface Context {
 }
 
 const DARK = ':is(.dark, [data-mode="dark"])';
-const MODE_UNSET = ":not(.dark, [data-mode])";
+// A theme switcher that works by class, such as next-themes, states light as `.light`. That is a
+// stated mode too: without it here, a light choice on a dark operating system stays dark.
+const MODE_UNSET = ":not(.dark, .light, [data-mode])";
 const MORE = '[data-contrast="more"]';
 const CONTRAST_UNSET = ":not([data-contrast])";
 const OS_DARK = "(prefers-color-scheme: dark)";
@@ -92,8 +94,8 @@ function block(selector: string, tokens: ColorTokens, media?: string): string {
 
 /**
  * Generates the colour half of theme.css. Theme attributes belong on <html>: data-mode
- * ("light" | "dark", or the .dark class), data-contrast ("standard" | "more") and data-accent.
- * Leave data-mode or data-contrast off and the operating system preference decides.
+ * ("light" | "dark", or the .light and .dark classes), data-contrast ("standard" | "more") and
+ * data-accent. Leave the mode or data-contrast off and the operating system preference decides.
  */
 export function generateColorCss(): string {
   const blocks: string[] = [];

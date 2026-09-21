@@ -11,14 +11,18 @@ You theme Cadence with four attributes on the `<html>` element and two CSS varia
 
 ## Attributes
 
-| Attribute       | Values                                              | When it is not set                                                                              |
-| --------------- | --------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| `data-mode`     | `light`, `dark`                                     | Follows the operating system's `prefers-color-scheme`. The `dark` class also selects dark mode. |
-| `data-contrast` | `standard`, `more`                                  | Follows the operating system's `prefers-contrast`.                                              |
-| `data-density`  | `compact`, `comfortable`                            | Compact, or comfortable on a touch device.                                                      |
-| `data-accent`   | `teal`, `blue`, `indigo`, `violet`, `plum`, `slate` | `teal`                                                                                          |
+| Attribute       | Values                                              | When it is not set                                     |
+| --------------- | --------------------------------------------------- | ------------------------------------------------------ |
+| `data-mode`     | `light`, `dark`                                     | Follows the operating system's `prefers-color-scheme`. |
+| `data-contrast` | `standard`, `more`                                  | Follows the operating system's `prefers-contrast`.     |
+| `data-density`  | `compact`, `comfortable`                            | Compact, or comfortable on a touch device.             |
+| `data-accent`   | `teal`, `blue`, `indigo`, `violet`, `plum`, `slate` | `teal`                                                 |
 
 Set the attributes on `<html>` only. Cadence does not support a differently themed subtree.
+
+### Mode
+
+The `light` and `dark` classes on `<html>` state the mode as `data-mode` does. A theme switcher that works by class, such as `next-themes` with `attribute="class"`, therefore needs no configuration. Either class overrules the operating system, so a reader on a dark operating system who chooses light gets light.
 
 ### Contrast
 
