@@ -153,6 +153,29 @@
       }
     },
     {
+      "name": "select",
+      "type": "registry:component",
+      "title": "Select",
+      "description": "One choice from a list that opens below the field. A long value wraps and is never truncated.",
+      "dependencies": ["@base-ui/react", "lucide-react"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/select.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/select.tsx"
+        }
+      ],
+      "docs": "Pass items to Select so the field shows an option's label, and give SelectTrigger a Label or an aria-label. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "primitive",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "switch",
       "type": "registry:component",
       "title": "Switch",

@@ -18,6 +18,19 @@ export { Label } from "@/components/cadence/label";
 export type { LabelProps } from "@/components/cadence/label";
 export { RadioGroup, RadioGroupItem } from "@/components/cadence/radio-group";
 export type { RadioGroupItemProps, RadioGroupProps } from "@/components/cadence/radio-group";
+export {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectScrollDownButton,
+  SelectScrollUpButton,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/cadence/select";
+export type { SelectContentProps, SelectTriggerProps } from "@/components/cadence/select";
 export { Switch } from "@/components/cadence/switch";
 export type { SwitchProps } from "@/components/cadence/switch";
 export { Textarea } from "@/components/cadence/textarea";
