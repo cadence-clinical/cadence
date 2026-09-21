@@ -11,6 +11,10 @@ import {
   CardHeader,
   CardTitle,
   Checkbox,
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldLabel,
   Input,
   Item,
   ItemContent,
@@ -61,6 +65,14 @@ const RENDERS: Record<string, ReactElement> = {
   spinner: <Spinner />,
   switch: <Switch aria-label="Appointment reminders" />,
   textarea: <Textarea aria-label="Notes" />,
+  field: (
+    <Field invalid>
+      <FieldLabel>Ward</FieldLabel>
+      <Input />
+      <FieldDescription>The ward the bed is on.</FieldDescription>
+      <FieldError>Enter a ward.</FieldError>
+    </Field>
+  ),
   toggle: <Toggle>Show ceased</Toggle>,
   tooltip: (
     <Tooltip>
@@ -112,5 +124,23 @@ describe("Card", () => {
     expect(html).toContain('data-slot="card"');
     expect(html).toContain('data-size="sm"');
     expect(html).toMatch(/<h2[^>]*data-slot="card-title"[^>]*>Next appointment<\/h2>/);
+  });
+});
+
+describe("Field", () => {
+  it("ties the label to the control before any script has run", () => {
+    const html = renderToString(
+      <Field invalid>
+        <FieldLabel>Ward</FieldLabel>
+        <Input />
+        <FieldError>Enter a ward.</FieldError>
+      </Field>,
+    );
+
+    const labelFor = /<label[^>]*for="([^"]+)"/.exec(html)?.[1];
+    expect(labelFor).toBeDefined();
+    expect(html).toMatch(new RegExp(`<input[^>]*id="${labelFor ?? ""}"`));
+    expect(html).toMatch(/<input[^>]*aria-invalid="true"/);
+    expect(html).toMatch(/role="alert"[^>]*>.*Enter a ward\./);
   });
 });

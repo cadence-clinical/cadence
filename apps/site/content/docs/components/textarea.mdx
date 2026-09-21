@@ -23,7 +23,7 @@ import { Label, Textarea } from "@cadence-clinical/ui";
 <Textarea id="visit-notes" />
 ```
 
-Textarea is a native `textarea` and accepts all of its props. It follows the shadcn [Textarea](https://ui.shadcn.com/docs/components/textarea), and its states match [Input](/docs/components/input#states): read-only keeps full contrast, disabled is faded, and invalid is a heavier border that needs a message in text.
+Textarea is a native `textarea` and accepts all of its props. It is rendered through Base UI's Field Control, so a [Field](/docs/components/field) can name it, describe it and mark it invalid, as it does an Input. It follows the shadcn [Textarea](https://ui.shadcn.com/docs/components/textarea), and its states match [Input](/docs/components/input#states): read-only keeps full contrast, disabled is faded, and invalid is a heavier border that needs a message in text.
 
 ## What Cadence changes
 

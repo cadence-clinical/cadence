@@ -25,6 +25,7 @@
     "components/typeset",
     "---Composites---",
     "components/card",
+    "components/field",
     "components/item"
   ]
 }
