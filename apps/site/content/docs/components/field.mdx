@@ -1,0 +1,201 @@
+---
+title: Field
+description: One control with its label, description and error, tied together so none of it is wired by hand.
+---
+
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
+  FieldSet,
+  Input,
+  RadioGroup,
+  RadioGroupItem,
+  Switch,
+} from "@cadence-clinical/ui";
+
+<GradeBadge component="field" />
+
+<ComponentPreview>
+  <Field invalid className="w-full max-w-xs">
+    <FieldLabel>Ward</FieldLabel>
+    <Input defaultValue="4 Esat" />
+    <FieldDescription>The ward the bed is on, not the home ward.</FieldDescription>
+    <FieldError>There is no ward called 4 Esat.</FieldError>
+  </Field>
+</ComponentPreview>
+
+## Usage
+
+```tsx
+import { Field, FieldDescription, FieldError, FieldLabel, Input } from "@cadence-clinical/ui";
+
+<Field invalid={Boolean(error)}>
+  <FieldLabel>Ward</FieldLabel>
+  <Input value={ward} onChange={(event) => setWard(event.target.value)} />
+  <FieldDescription>The ward the bed is on, not the home ward.</FieldDescription>
+  {error ? <FieldError>{error}</FieldError> : null}
+</Field>;
+```
+
+Put one control in each `Field`. The Field ties its parts to that control, so you set no `id`, `htmlFor`, `aria-describedby` or `aria-invalid`:
+
+- `FieldLabel` names the control, and pressing it focuses the control.
+- `FieldDescription` and `FieldError` describe the control. A screen reader reads them after its name.
+- `invalid` on the Field marks the control with `aria-invalid`, which gives it a heavier border in the critical colour.
+
+This works for [Input](/docs/components/input), [Textarea](/docs/components/textarea), [Select](/docs/components/select), [Checkbox](/docs/components/checkbox), [Switch](/docs/components/switch) and [Radio group](/docs/components/radio-group). In a Field, a Select's list takes the label's name as well as its trigger.
+
+Field is built on the Base UI [Field](https://base-ui.com/react/components/field) and [Fieldset](https://base-ui.com/react/components/fieldset), and accepts their props. It follows the shadcn [Field](https://ui.shadcn.com/docs/components/field) and keeps its part names. Field is a [composite](/docs/levels): it uses the [Label](/docs/components/label) primitive.
+
+## Show an error
+
+`FieldError` shows the message it is given, so render it only while the value is wrong. It has an icon as well as its colour, and `role="alert"`, so a screen reader announces it when it appears.
+
+A form library reports errors as objects with a `message`. Pass them to `errors`. A repeated message is shown once, several messages become a list, and an entry that is `undefined` is skipped. With nothing to show, `FieldError` renders nothing:
+
+```tsx
+<FieldError errors={[fieldState.error]} />
+```
+
+## Let the Field validate
+
+Base UI's Field can run the check itself. Give the Field a `validate` function that returns a message or `null`, and leave `FieldError` empty. It then shows the message that `validate` returned:
+
+```tsx
+<Field
+  validationMode="onBlur"
+  validate={(value) => (wards.includes(String(value)) ? null : "There is no ward by that name.")}
+>
+  <FieldLabel>Ward</FieldLabel>
+  <Input />
+  <FieldError />
+</Field>
+```
+
+`validationMode` is `onSubmit` unless you set it, as in Base UI. To show your own words for one kind of failure, pass `match`, for example `<FieldError match="valueMissing">Enter a ward.</FieldError>`.
+
+## A control beside its label
+
+`orientation="horizontal"` puts a checkbox, a radio or a switch beside its label. `FieldContent` stacks a label and its description:
+
+<ComponentPreview>
+  <Field orientation="horizontal" className="w-full max-w-xs">
+    <FieldContent>
+      <FieldLabel>Send reminders</FieldLabel>
+      <FieldDescription>By text message, the day before.</FieldDescription>
+    </FieldContent>
+    <Switch />
+  </Field>
+</ComponentPreview>
+
+```tsx
+<Field orientation="horizontal">
+  <FieldContent>
+    <FieldLabel>Send reminders</FieldLabel>
+    <FieldDescription>By text message, the day before.</FieldDescription>
+  </FieldContent>
+  <Switch />
+</Field>
+```
+
+`orientation="responsive"` is vertical until its `FieldGroup` is 28rem wide, then horizontal. It measures the `FieldGroup` and not the screen, so a form in a narrow panel stays stacked.
+
+## A set of options
+
+A question with several options is one Field around a `FieldSet`. Each option is a Field inside it. The outer Field owns the `name`, the error and `invalid`. Each inner Field gives one option its own label and description:
+
+<ComponentPreview>
+  <Field name="contact" className="w-full max-w-xs">
+    <FieldSet>
+      <FieldLegend variant="label">Contact by</FieldLegend>
+      <RadioGroup defaultValue="phone">
+        <Field orientation="horizontal">
+          <RadioGroupItem value="phone" />
+          <FieldLabel>Phone</FieldLabel>
+        </Field>
+        <Field orientation="horizontal">
+          <RadioGroupItem value="letter" />
+          <FieldContent>
+            <FieldLabel>Letter</FieldLabel>
+            <FieldDescription>Sent to the address on file.</FieldDescription>
+          </FieldContent>
+        </Field>
+      </RadioGroup>
+    </FieldSet>
+  </Field>
+</ComponentPreview>
+
+```tsx
+<Field name="contact" invalid={Boolean(error)}>
+  <FieldSet>
+    <FieldLegend variant="label">Contact by</FieldLegend>
+    <RadioGroup>
+      <Field orientation="horizontal">
+        <RadioGroupItem value="phone" />
+        <FieldLabel>Phone</FieldLabel>
+      </Field>
+      <Field orientation="horizontal">
+        <RadioGroupItem value="letter" />
+        <FieldContent>
+          <FieldLabel>Letter</FieldLabel>
+          <FieldDescription>Sent to the address on file.</FieldDescription>
+        </FieldContent>
+      </Field>
+    </RadioGroup>
+  </FieldSet>
+  {error ? <FieldError>{error}</FieldError> : null}
+</Field>
+```
+
+The legend names the radio group, and the error describes it. `variant="label"` makes the legend look like a label and sit as close to its options. The default, `variant="legend"`, heads a set of separate fields.
+
+## Several fields
+
+`FieldGroup` stacks fields, and the space between them follows the [density](/docs/theming#density): 12px when compact and 16px when comfortable. `FieldSet` with a `FieldLegend` names a set of them. `disabled` on a `FieldSet` disables every control inside it, including the Base UI ones that a native `fieldset` does not reach. `FieldSeparator` draws a rule between fields, with optional words in the middle, such as "or".
+
+```tsx
+<FieldSet>
+  <FieldLegend>Reminders</FieldLegend>
+  <FieldGroup>
+    <Field>...</Field>
+    <Field>...</Field>
+  </FieldGroup>
+</FieldSet>
+```
+
+`FieldTitle` looks like a label and names nothing. Use it to head content in a Field that is not a control.
+
+## What Cadence changes
+
+- **The Field does the wiring.** The shadcn field is layout only: you give the control an `id`, point the label at it, and set `aria-invalid` and `data-invalid` yourself, and nothing ties the description or the error to the control. Here Base UI's Field does all of it.
+- **The label sits 4px above the control**, where shadcn leaves 8px. The space between fields is three or four times that, so each label reads as belonging to the control below it.
+- **An error has an icon**, so it does not rely on its colour. The label of an invalid field keeps its colour: the control's border and the message mark it.
+- **Nothing is cut short.** A label, a description and an error all wrap, even with nowhere to break.
+- **The separator's words need no background.** shadcn sets them on a patch of the page colour, which shows on a card. Here a rule is drawn on each side of them.
+- **Left out:** the shadcn label that turns into a bordered card around a choice.
+
+## Accessibility
+
+- A Field's label, description and error are tied to its control once the page's script has run. Before that, the label is already tied to the control, and pressing it focuses the control.
+- The error is announced when it appears, and read again with the control when focus reaches it.
+- A disabled Field fades its label with its control. Its description keeps full contrast, because it may say why the field is disabled.
+
+## Props
+
+| Prop             | On            | Type                                         | Default      |
+| ---------------- | ------------- | -------------------------------------------- | ------------ |
+| `orientation`    | `Field`       | `"vertical" \| "horizontal" \| "responsive"` | `"vertical"` |
+| `invalid`        | `Field`       | `boolean`                                    |              |
+| `disabled`       | `Field`       | `boolean`                                    | `false`      |
+| `name`           | `Field`       | `string`                                     |              |
+| `validate`       | `Field`       | As in Base UI's Field                        |              |
+| `validationMode` | `Field`       | `"onSubmit" \| "onBlur" \| "onChange"`       | `"onSubmit"` |
+| `errors`         | `FieldError`  | `({ message?: string } \| undefined)[]`      |              |
+| `match`          | `FieldError`  | As in Base UI's Field Error                  |              |
+| `variant`        | `FieldLegend` | `"legend" \| "label"`                        | `"legend"`   |
+| `disabled`       | `FieldSet`    | `boolean`                                    | `false`      |

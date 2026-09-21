@@ -25,7 +25,7 @@ import { Input, Label } from "@cadence-clinical/ui";
 
 Label is a native `label` and accepts all of its props. Point `htmlFor` at the control's `id`, or wrap the control in the label. Clicking the label then focuses the control.
 
-Label follows the shadcn [Label](https://ui.shadcn.com/docs/components/label). For a control with a description and an error message, the planned Field composite will place the label for you.
+Label follows the shadcn [Label](https://ui.shadcn.com/docs/components/label). For a control with a description and an error message, use a [Field](/docs/components/field): its `FieldLabel` is this label, and it needs no `htmlFor`.
 
 ## What Cadence changes
 

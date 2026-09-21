@@ -107,6 +107,29 @@
       }
     },
     {
+      "name": "field",
+      "type": "registry:component",
+      "title": "Field",
+      "description": "One control with its label, description and error, tied together so none of it is wired by hand.",
+      "dependencies": ["@base-ui/react", "class-variance-authority", "lucide-react"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn", "@cadence/label"],
+      "files": [
+        {
+          "path": "src/components/field.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/field.tsx"
+        }
+      ],
+      "docs": "Put one control in each Field. Render FieldError only while the value is wrong. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "composite",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "input",
       "type": "registry:component",
       "title": "Input",
@@ -295,7 +318,7 @@
       "type": "registry:component",
       "title": "Textarea",
       "description": "A multi-line text input that grows with what is typed.",
-      "dependencies": [],
+      "dependencies": ["@base-ui/react"],
       "registryDependencies": ["@cadence/theme", "@cadence/cn"],
       "files": [
         {
@@ -304,7 +327,7 @@
           "target": "components/cadence/textarea.tsx"
         }
       ],
-      "docs": "Give every Textarea a Label or an aria-label. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "docs": "Give every Textarea a Label or an aria-label, or put it in a Field. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
       "meta": {
         "level": "primitive",
         "domain": "general",

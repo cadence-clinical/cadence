@@ -14,6 +14,24 @@ export {
 export type { CardPartProps, CardProps } from "@/components/cadence/card";
 export { Checkbox } from "@/components/cadence/checkbox";
 export type { CheckboxProps } from "@/components/cadence/checkbox";
+export {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
+  FieldSeparator,
+  FieldSet,
+  FieldTitle,
+} from "@/components/cadence/field";
+export type {
+  FieldErrorMessage,
+  FieldErrorProps,
+  FieldLegendProps,
+  FieldProps,
+} from "@/components/cadence/field";
 export { Input } from "@/components/cadence/input";
 export type { InputProps } from "@/components/cadence/input";
 export {
