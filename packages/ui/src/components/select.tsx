@@ -2,12 +2,27 @@
 
 import { Select as SelectPrimitive } from "@base-ui/react/select";
 import { Check, ChevronDown, ChevronUp } from "lucide-react";
-import { createContext, useCallback, useContext, useRef, useState, type RefObject } from "react";
+import { createContext, useCallback, useContext, useMemo, useRef, useState } from "react";
 
 import { cn } from "@/lib/cn";
 
-/** Where the trigger leaves itself for the list, which opens in a portal, to find. */
-const TriggerContext = createContext<RefObject<HTMLButtonElement | null> | null>(null);
+/** The name of a list: a reference to its label, or the words themselves. */
+interface ListName {
+  "aria-label"?: string;
+  "aria-labelledby"?: string;
+}
+
+/** What the parts of one Select share, so that the list can take the trigger's name. */
+interface SelectContextValue {
+  /** Where the trigger leaves itself. */
+  setTrigger: (trigger: HTMLButtonElement | null) => void;
+  /** The trigger's name, as last read. */
+  name: ListName;
+  /** Reads the trigger's name again. */
+  readName: () => void;
+}
+
+const SelectContext = createContext<SelectContextValue | null>(null);
 
 /**
  * One choice from a list that opens below the field. Pass `items` so the field shows an option's
@@ -15,14 +30,38 @@ const TriggerContext = createContext<RefObject<HTMLButtonElement | null> | null>
  *
  * For a few options that are better seen all at once, use a Radio group.
  */
-function Select<Value, Multiple extends boolean | undefined = false>(
-  props: SelectPrimitive.Root.Props<Value, Multiple>,
-) {
+function Select<Value, Multiple extends boolean | undefined = false>({
+  onOpenChange,
+  ...props
+}: SelectPrimitive.Root.Props<Value, Multiple>) {
   const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const [name, setName] = useState<ListName>({});
+  const readName = useCallback(() => {
+    const next = triggerRef.current ? nameOf(triggerRef.current) : {};
+    // The same name is the same state, so reading it again does not render again.
+    setName((last) =>
+      last["aria-label"] === next["aria-label"] &&
+      last["aria-labelledby"] === next["aria-labelledby"]
+        ? last
+        : next,
+    );
+  }, []);
+  const setTrigger = useCallback((trigger: HTMLButtonElement | null) => {
+    triggerRef.current = trigger;
+  }, []);
+  const context = useMemo(() => ({ setTrigger, name, readName }), [setTrigger, name, readName]);
   return (
-    <TriggerContext value={triggerRef}>
-      <SelectPrimitive.Root {...props} />
-    </TriggerContext>
+    <SelectContext value={context}>
+      <SelectPrimitive.Root
+        {...props}
+        // Base UI keeps the list mounted once it has opened, so its name is read at every
+        // opening: by then a label may have changed.
+        onOpenChange={(open, details) => {
+          onOpenChange?.(open, details);
+          if (open) readName();
+        }}
+      />
+    </SelectContext>
   );
 }
 
@@ -43,16 +82,16 @@ type SelectTriggerProps = SelectPrimitive.Trigger.Props & {
  * a long value wraps and the field grows, because a chosen value is never truncated.
  */
 function SelectTrigger({ className, size = "md", children, ref, ...props }: SelectTriggerProps) {
-  const triggerRef = useContext(TriggerContext);
+  const setTrigger = useContext(SelectContext)?.setTrigger;
   // The list reads its name from this element, so a consumer's own ref must not displace ours.
   const setRefs = useCallback(
     (node: HTMLButtonElement | null) => {
-      if (triggerRef) triggerRef.current = node;
+      setTrigger?.(node);
       if (typeof ref === "function") return ref(node);
       if (ref) ref.current = node;
       return undefined;
     },
-    [ref, triggerRef],
+    [ref, setTrigger],
   );
   return (
     <SelectPrimitive.Trigger
@@ -102,12 +141,6 @@ type SelectContentProps = SelectPrimitive.Popup.Props &
     "align" | "alignOffset" | "side" | "sideOffset" | "alignItemWithTrigger"
   >;
 
-/** The name of a list: a reference to its label, or the words themselves. */
-interface ListName {
-  "aria-label"?: string;
-  "aria-labelledby"?: string;
-}
-
 /**
  * The trigger's name, in a form the list can carry: what names it by reference, its own
  * `aria-label`, or the `label` element that points at it.
@@ -128,8 +161,8 @@ function nameOf(trigger: HTMLButtonElement): ListName {
  * It is as wide as the field, and an option too long for that wraps.
  *
  * Base UI names the trigger and leaves the list unnamed, and a screen reader announces the list.
- * So the list takes the trigger's name when it opens. `aria-labelledby` or `aria-label` here
- * overrules that.
+ * So the list takes the trigger's name, read again at each opening. `aria-labelledby` or
+ * `aria-label` here overrules that.
  */
 function SelectContent({
   className,
@@ -143,21 +176,20 @@ function SelectContent({
   alignItemWithTrigger = false,
   ...props
 }: SelectContentProps) {
-  const triggerRef = useContext(TriggerContext);
-  const [inherited, setInherited] = useState<ListName>({});
-  const named = ariaLabel !== undefined || ariaLabelledBy !== undefined;
-  // The list mounts each time it opens, long after the trigger and its label, so the name is read
-  // then: by the next opening a label may have changed.
-  // The callback is stable, so React calls it when the list mounts and not on every render.
-  const readName = useCallback(
+  const select = useContext(SelectContext);
+  const readName = select?.readName;
+  // A select that starts open never reports an opening, so the name is also read when the list
+  // mounts. The callback is stable, so React calls it then and not on every render.
+  const readOnMount = useCallback(
     (list: HTMLElement | null) => {
-      if (list && !named && triggerRef?.current) setInherited(nameOf(triggerRef.current));
+      if (list) readName?.();
     },
-    [named, triggerRef],
+    [readName],
   );
+  const named = ariaLabel !== undefined || ariaLabelledBy !== undefined;
   const name: ListName = named
     ? { "aria-label": ariaLabel, "aria-labelledby": ariaLabelledBy }
-    : inherited;
+    : (select?.name ?? {});
   return (
     <SelectPrimitive.Portal>
       <SelectPrimitive.Positioner
@@ -177,7 +209,7 @@ function SelectContent({
           {...props}
         >
           <SelectScrollUpButton />
-          <SelectPrimitive.List ref={readName} className="p-1" {...name}>
+          <SelectPrimitive.List ref={readOnMount} className="p-1" {...name}>
             {children}
           </SelectPrimitive.List>
           <SelectScrollDownButton />

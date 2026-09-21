@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useState } from "react";
 import { expect, fn, screen, userEvent, waitFor, within } from "storybook/test";
 
+import { Button } from "@/components/cadence/button";
 import { Label } from "@/components/cadence/label";
 import {
   Select,
@@ -222,6 +224,49 @@ export const TheListTakesTheTriggersName: Story = {
       "aria-labelledby",
       "a-label-with-an-id",
     );
+    await userEvent.keyboard("{Escape}");
+  },
+};
+
+function RenamedBetweenOpenings() {
+  const [name, setName] = useState("Clinic");
+  return (
+    <div className="grid w-64 gap-1">
+      <Label htmlFor="renamed">{name}</Label>
+      <Select items={CLINICS}>
+        <SelectTrigger id="renamed">
+          <SelectValue placeholder="Choose" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="general">General clinic</SelectItem>
+        </SelectContent>
+      </Select>
+      <Button
+        variant="outline"
+        onClick={() => {
+          setName("Review clinic");
+        }}
+      >
+        Rename the field
+      </Button>
+    </div>
+  );
+}
+
+// Base UI keeps the list mounted once it has opened. A name copied from a label is therefore
+// read again at each opening, or a renamed field would leave the list with its old name.
+export const TheNameIsReadAtEachOpening: Story = {
+  render: () => <RenamedBetweenOpenings />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole("combobox", { name: "Clinic" }));
+    await expect(await screen.findByRole("listbox", { name: "Clinic" })).toBeVisible();
+    await userEvent.keyboard("{Escape}");
+    await waitFor(() => expect(screen.queryByRole("listbox")).not.toBeInTheDocument());
+
+    await userEvent.click(canvas.getByRole("button", { name: "Rename the field" }));
+    await userEvent.click(canvas.getByRole("combobox", { name: "Review clinic" }));
+    await expect(await screen.findByRole("listbox", { name: "Review clinic" })).toBeVisible();
     await userEvent.keyboard("{Escape}");
   },
 };
