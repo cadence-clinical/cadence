@@ -14,6 +14,11 @@ import {
   Label,
   RadioGroup,
   RadioGroupItem,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
   Switch,
   Textarea,
 } from "./index";
@@ -30,6 +35,16 @@ const RENDERS: Record<string, ReactElement> = {
     <RadioGroup aria-label="Contact by" defaultValue="phone">
       <RadioGroupItem value="phone" aria-label="Phone" />
     </RadioGroup>
+  ),
+  select: (
+    <Select defaultValue="general" items={[{ value: "general", label: "General clinic" }]}>
+      <SelectTrigger aria-label="Clinic">
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="general">General clinic</SelectItem>
+      </SelectContent>
+    </Select>
   ),
   switch: <Switch aria-label="Appointment reminders" />,
   textarea: <Textarea aria-label="Notes" />,
@@ -52,7 +67,8 @@ describe("every component renders on the server", () => {
   it.each(components)("%s", (name) => {
     const element = RENDERS[name];
     if (!element) throw new Error(`Add a render for "${name}" to RENDERS in server.test.tsx.`);
-    expect(renderToString(element)).toContain(`data-slot="${name}"`);
+    // A root such as Select's renders no element of its own, so its parts carry the slot.
+    expect(renderToString(element)).toContain(`data-slot="${name}`);
   });
 });
 

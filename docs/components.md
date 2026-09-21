@@ -23,7 +23,7 @@ One control or one element. Built first, in this order, because the composites n
 | Typeset     | Built  | None              | Long-form text. Cadence has no Text component (decision 0012).                  |
 | Label       | Built  | None              |                                                                                 |
 | Input       | Built  | Input             |                                                                                 |
-| Select      | Agreed | Select            |                                                                                 |
+| Select      | Built  | Select            |                                                                                 |
 | Toggle      | Agreed | Toggle            |                                                                                 |
 | Textarea    | Built  | None              | Field needs it: free-text notes are the most common clinical input.             |
 | Checkbox    | Built  | Checkbox          | Field needs it, and the data table needs it for row selection.                  |

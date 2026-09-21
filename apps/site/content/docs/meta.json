@@ -14,6 +14,7 @@
     "components/input",
     "components/label",
     "components/radio-group",
+    "components/select",
     "components/switch",
     "components/textarea",
     "components/typeset",

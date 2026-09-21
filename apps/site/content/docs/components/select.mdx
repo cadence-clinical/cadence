@@ -1,0 +1,115 @@
+---
+title: Select
+description: One choice from a list that opens below the field. A long value wraps and is never truncated.
+---
+
+import {
+  Label,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@cadence-clinical/ui";
+
+<GradeBadge component="select" />
+
+<ComponentPreview>
+  <div className="grid w-full max-w-64 gap-1">
+    <Label id="select-preview-label" htmlFor="select-preview">
+      Clinic
+    </Label>
+    <Select
+      items={[
+        { value: "general", label: "General clinic" },
+        { value: "review", label: "Review clinic" },
+      ]}
+    >
+      <SelectTrigger id="select-preview">
+        <SelectValue placeholder="Choose a clinic" />
+      </SelectTrigger>
+      <SelectContent aria-labelledby="select-preview-label">
+        <SelectItem value="general">General clinic</SelectItem>
+        <SelectItem value="review">Review clinic</SelectItem>
+      </SelectContent>
+    </Select>
+  </div>
+</ComponentPreview>
+
+## Usage
+
+```tsx
+import {
+  Label,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@cadence-clinical/ui";
+
+const clinics = [
+  { value: "general", label: "General clinic" },
+  { value: "review", label: "Review clinic" },
+];
+
+<Label id="clinic-label" htmlFor="clinic">
+  Clinic
+</Label>
+<Select items={clinics} onValueChange={setClinic}>
+  <SelectTrigger id="clinic">
+    <SelectValue placeholder="Choose a clinic" />
+  </SelectTrigger>
+  <SelectContent aria-labelledby="clinic-label">
+    {clinics.map((clinic) => (
+      <SelectItem key={clinic.value} value={clinic.value}>
+        {clinic.label}
+      </SelectItem>
+    ))}
+  </SelectContent>
+</Select>
+```
+
+Select is built on the Base UI [Select](https://base-ui.com/react/components/select) and accepts all of its props. It follows the shadcn [Select](https://ui.shadcn.com/docs/components/select) and keeps its part names. `SelectGroup`, `SelectLabel` and `SelectSeparator` divide a long list.
+
+Pass `items` to `Select`, so the field shows the chosen option's label and not its value.
+
+Use a select when there are more options than fit on the screen at once. For a few, a [Radio group](/docs/components/radio-group) shows them all and takes one action fewer.
+
+## Name the field and the list
+
+A select has two things a screen reader announces: the field and the list that opens. Base UI names the field from its label and leaves the list unnamed, so name both:
+
+- Give the [Label](/docs/components/label) an `id`, and point its `htmlFor` at the `SelectTrigger`.
+- Pass the label's `id` to `SelectContent` as `aria-labelledby`.
+
+The planned Field composite will do this for you.
+
+## Sizes
+
+`SelectTrigger` takes `size`, with the same three steps as a [Button](/docs/components/button#sizes): `sm`, `md` and `lg`. Height and text step together and follow the [density](/docs/theming#density).
+
+## What Cadence changes
+
+- **Nothing is truncated.** The shadcn select clamps the chosen value to one line and clips an option that is wider than the list. Here the field has a minimum height and grows when its value wraps, and a long option wraps in the list, even when it has nowhere to break.
+- **The list opens below the field**, so the field and its label stay in view. Set `alignItemWithTrigger` on `SelectContent` for the Base UI default, which lays the list over the field.
+- **The list opens at once.** A select is opened often and from the keyboard, where an animation only delays.
+- **An option is as high as a control**, so it is a 44px target when the density is comfortable.
+- **The list can be named**, through `aria-labelledby` or `aria-label` on `SelectContent`.
+- **Read-only keeps full contrast**, and only disabled is faded. The boundary and focus ring are never faded.
+
+## Accessibility
+
+- The chosen option carries a tick as well as its highlight.
+- Enter, Space or an arrow key opens the list. The arrow keys move through it, typing jumps to a match, Enter chooses and Escape closes. Focus returns to the field.
+
+## Props
+
+| Prop                   | On              | Type                          | Default    |
+| ---------------------- | --------------- | ----------------------------- | ---------- |
+| `items`                | `Select`        | `{ value, label }[]`          |            |
+| `size`                 | `SelectTrigger` | `"sm" \| "md" \| "lg"`        | `"md"`     |
+| `aria-labelledby`      | `SelectContent` | The `id` of the field's label |            |
+| `side`                 | `SelectContent` | As in Base UI's Positioner    | `"bottom"` |
+| `align`                | `SelectContent` | As in Base UI's Positioner    | `"start"`  |
+| `alignItemWithTrigger` | `SelectContent` | `boolean`                     | `false`    |
