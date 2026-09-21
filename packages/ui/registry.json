@@ -314,6 +314,29 @@
       }
     },
     {
+      "name": "tabs",
+      "type": "registry:component",
+      "title": "Tabs",
+      "description": "Views of one subject, one shown at a time. Tabs that do not fit wrap, and none is clipped.",
+      "dependencies": ["@base-ui/react", "class-variance-authority"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/tabs.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/tabs.tsx"
+        }
+      ],
+      "docs": "Give each TabsTrigger and its TabsContent the same value. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "composite",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "textarea",
       "type": "registry:component",
       "title": "Textarea",

@@ -30,6 +30,10 @@ import {
   Separator,
   Spinner,
   Switch,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
   Textarea,
   Toggle,
   Tooltip,
@@ -65,6 +69,14 @@ const RENDERS: Record<string, ReactElement> = {
   spinner: <Spinner />,
   switch: <Switch aria-label="Appointment reminders" />,
   textarea: <Textarea aria-label="Notes" />,
+  tabs: (
+    <Tabs defaultValue="letters">
+      <TabsList>
+        <TabsTrigger value="letters">Letters</TabsTrigger>
+      </TabsList>
+      <TabsContent value="letters">No letters have been sent.</TabsContent>
+    </Tabs>
+  ),
   field: (
     <Field invalid>
       <FieldLabel>Ward</FieldLabel>
