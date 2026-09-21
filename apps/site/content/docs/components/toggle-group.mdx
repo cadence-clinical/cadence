@@ -1,0 +1,82 @@
+---
+title: Toggle group
+description: A set of toggles that belong together, spaced or joined into one segmented control.
+---
+
+import { Bold, Italic, Underline } from "lucide-react";
+import { ToggleGroup, ToggleGroupItem } from "@cadence-clinical/ui";
+
+<GradeBadge component="toggle-group" />
+
+<ComponentPreview>
+  <ToggleGroup
+    aria-label="Text style"
+    variant="outline"
+    spacing={0}
+    multiple
+    defaultValue={["bold"]}
+  >
+    <ToggleGroupItem value="bold">
+      <Bold aria-hidden />
+      Bold
+    </ToggleGroupItem>
+    <ToggleGroupItem value="italic">
+      <Italic aria-hidden />
+      Italic
+    </ToggleGroupItem>
+    <ToggleGroupItem value="underline">
+      <Underline aria-hidden />
+      Underline
+    </ToggleGroupItem>
+  </ToggleGroup>
+</ComponentPreview>
+
+## Usage
+
+```tsx
+import { ToggleGroup, ToggleGroupItem } from "@cadence-clinical/ui";
+
+<ToggleGroup aria-label="Text style" multiple value={styles} onValueChange={setStyles}>
+  <ToggleGroupItem value="bold">Bold</ToggleGroupItem>
+  <ToggleGroupItem value="italic">Italic</ToggleGroupItem>
+  <ToggleGroupItem value="underline">Underline</ToggleGroupItem>
+</ToggleGroup>;
+```
+
+Give the group an `aria-label`, which names the set. `value` is always an array. One toggle is pressed at a time unless you set `multiple`.
+
+Each `ToggleGroupItem` is a [Toggle](/docs/components/toggle). Set `variant`, `size` and `iconOnly` once on the group, and they apply to every toggle in it. With `iconOnly`, keep each toggle's words: they are hidden from sight and are still its name.
+
+Toggle group is built on the Base UI [Toggle Group](https://base-ui.com/react/components/toggle-group) and accepts all of its props. It follows the shadcn [Toggle Group](https://ui.shadcn.com/docs/components/toggle-group). Toggle group is a [composite](/docs/levels): it uses the Toggle primitive.
+
+## Spaced or joined
+
+`spacing` is the gap between toggles, in spacing units, and is `2` unless you set it. `spacing={0}` joins the toggles into one segmented control: they share their boundaries, and only the ends of the group are rounded. `orientation="vertical"` stacks them.
+
+## A group can have nothing pressed
+
+Pressing the pressed toggle releases it, so a group can end up with nothing pressed. That suits a set of filters or text styles. For a choice that must always have an answer, such as which of two views is shown, use [Tabs](/docs/components/tabs) or a [Radio group](/docs/components/radio-group).
+
+## What Cadence changes
+
+- **Pressed never rests on colour.** A pressed toggle has a fill and a boundary, as a [Toggle](/docs/components/toggle) does. Joined, the pressed toggle's boundary sits over its neighbours', so it stays whole. shadcn removes the shared edge, which leaves a pressed toggle with three sides.
+- **A group that does not fit wraps** onto another row. No toggle is clipped.
+- **`iconOnly` can be set on the group**, as `variant` and `size` can.
+- **Sizes follow the [density](/docs/theming#density).** A toggle is a 44px target when the density is comfortable.
+
+## Accessibility
+
+- The group is one stop for Tab. The arrow keys move between its toggles, and Space or Enter presses one.
+- Each toggle has `aria-pressed`, and the group is named by its `aria-label`.
+
+## Props
+
+| Prop          | On            | Type                         | Default        |
+| ------------- | ------------- | ---------------------------- | -------------- |
+| `value`       | `ToggleGroup` | `string[]`                   |                |
+| `multiple`    | `ToggleGroup` | `boolean`                    | `false`        |
+| `spacing`     | `ToggleGroup` | `number`                     | `2`            |
+| `orientation` | `ToggleGroup` | `"horizontal" \| "vertical"` | `"horizontal"` |
+| `variant`     | `ToggleGroup` | `"ghost" \| "outline"`       | `"ghost"`      |
+| `size`        | `ToggleGroup` | `"sm" \| "md" \| "lg"`       | `"md"`         |
+| `iconOnly`    | `ToggleGroup` | `boolean`                    | `false`        |

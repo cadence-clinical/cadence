@@ -31,6 +31,7 @@
     "components/field",
     "components/item",
     "components/popover",
-    "components/tabs"
+    "components/tabs",
+    "components/toggle-group"
   ]
 }
