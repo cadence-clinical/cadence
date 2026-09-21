@@ -107,7 +107,8 @@ export const OpensOnFocusAtOnce: Story = {
       selector: "[data-slot=tooltip-content]",
     });
     await expect(hint).toHaveAttribute("data-instant");
-    await expect(getComputedStyle(hint).transitionDuration).toBe("0s");
+    // Nothing is left to transition, which is what stops the animation. The duration stays set.
+    await expect(getComputedStyle(hint).transitionProperty).toBe("none");
 
     await userEvent.keyboard("{Escape}");
     await waitFor(() =>
