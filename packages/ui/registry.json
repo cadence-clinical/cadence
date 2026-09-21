@@ -245,6 +245,29 @@
       }
     },
     {
+      "name": "popover",
+      "type": "registry:component",
+      "title": "Popover",
+      "description": "A small panel that opens from a trigger and leaves the page in reach. It never outgrows the room it has.",
+      "dependencies": ["@base-ui/react"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/popover.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/popover.tsx"
+        }
+      ],
+      "docs": "Give every Popover a PopoverTitle, or an aria-label on PopoverContent. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "composite",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "radio-group",
       "type": "registry:component",
       "title": "Radio group",

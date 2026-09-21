@@ -49,7 +49,7 @@ A small group of parts or primitives that works as one unit.
 | Alert        | Built    | None                             | The first status surface: fill, border token, icon and text, never colour alone.                   |
 | Dialog       | Built    | Base UI Dialog, Button           | One task over the page, such as editing a record. The sidebar also needs a sheet on a phone.       |
 | Alert dialog | Proposed | Base UI Alert dialog, Button     | Confirming a destructive action. It must be answered, and a press outside does not close it.       |
-| Popover      | Agreed   | Base UI Popover                  | The data table's filters and column settings.                                                      |
+| Popover      | Built    | Base UI Popover                  | The data table's filters and column settings.                                                      |
 | Menu         | Agreed   | Base UI Menu                     | Row actions in the data table, and the sidebar's user menu.                                        |
 | Toggle group | Agreed   | Base UI Toggle group, Toggle     | One of a few views, such as chart or table.                                                        |
 
