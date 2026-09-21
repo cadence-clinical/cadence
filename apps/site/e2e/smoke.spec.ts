@@ -41,6 +41,7 @@ test("no page scrolls sideways at the current viewport", async ({ page }) => {
     "/docs/components/button",
     "/docs/components/card",
     "/docs/components/checkbox",
+    "/docs/components/dialog",
     "/docs/components/field",
     "/docs/components/radio-group",
     "/docs/components/select",

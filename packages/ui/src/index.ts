@@ -23,6 +23,19 @@ export type { CardPartProps, CardProps } from "@/components/cadence/card";
 export { Checkbox } from "@/components/cadence/checkbox";
 export type { CheckboxProps } from "@/components/cadence/checkbox";
 export {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogOverlay,
+  DialogPortal,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/cadence/dialog";
+export type { DialogContentProps, DialogFooterProps } from "@/components/cadence/dialog";
+export {
   Field,
   FieldContent,
   FieldDescription,

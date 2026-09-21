@@ -49,6 +49,9 @@ export const neutral = {
     border: "oklch(0.9 0.006 255)",
     // Control boundaries (inputs, checkboxes) must reach 3:1 against the background (WCAG 1.4.11).
     input: "oklch(0.6 0.012 255)",
+    // The scrim behind a dialog. It darkens the page in both modes: a tint of the foreground
+    // would lighten a dark page and make the page behind look more active, not less.
+    overlay: "oklch(0 0 0 / 0.4)",
   },
   dark: {
     background: "oklch(0.17 0.01 255)",
@@ -65,6 +68,7 @@ export const neutral = {
     "accent-foreground": "oklch(0.96 0.005 255)",
     border: "oklch(0.3 0.012 255)",
     input: "oklch(0.55 0.012 255)",
+    overlay: "oklch(0 0 0 / 0.6)",
   },
 } satisfies Record<Mode, ColorTokens>;
 

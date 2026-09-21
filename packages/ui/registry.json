@@ -130,6 +130,29 @@
       }
     },
     {
+      "name": "dialog",
+      "type": "registry:component",
+      "title": "Dialog",
+      "description": "A window over the page for one task. It holds focus, is never taller than the screen, and its scrim darkens the page in both modes.",
+      "dependencies": ["@base-ui/react", "lucide-react"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn", "@cadence/button"],
+      "files": [
+        {
+          "path": "src/components/dialog.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/dialog.tsx"
+        }
+      ],
+      "docs": "Give every Dialog a DialogTitle: it is the dialog's name. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "composite",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "field",
       "type": "registry:component",
       "title": "Field",

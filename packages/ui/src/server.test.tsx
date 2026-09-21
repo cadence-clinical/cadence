@@ -14,6 +14,10 @@ import {
   CardHeader,
   CardTitle,
   Checkbox,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
   Field,
   FieldDescription,
   FieldError,
@@ -72,6 +76,14 @@ const RENDERS: Record<string, ReactElement> = {
   spinner: <Spinner />,
   switch: <Switch aria-label="Appointment reminders" />,
   textarea: <Textarea aria-label="Notes" />,
+  dialog: (
+    <Dialog>
+      <DialogTrigger>Cancel appointment</DialogTrigger>
+      <DialogContent>
+        <DialogTitle>Cancel this appointment?</DialogTitle>
+      </DialogContent>
+    </Dialog>
+  ),
   alert: (
     <Alert variant="warning">
       <AlertTitle>This chart is open in another window</AlertTitle>

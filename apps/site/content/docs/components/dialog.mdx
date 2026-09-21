@@ -1,0 +1,108 @@
+---
+title: Dialog
+description: A window over the page for one task. It holds focus, is never taller than the screen, and its scrim darkens the page in both modes.
+---
+
+import {
+  Button,
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@cadence-clinical/ui";
+
+<GradeBadge component="dialog" />
+
+<ComponentPreview>
+  <Dialog>
+    <DialogTrigger render={<Button variant="outline" />}>Cancel appointment</DialogTrigger>
+    <DialogContent>
+      <DialogHeader>
+        <DialogTitle>Cancel this appointment?</DialogTitle>
+        <DialogDescription>
+          The Review clinic appointment on Thursday will be cancelled. No letter is sent.
+        </DialogDescription>
+      </DialogHeader>
+      <DialogFooter>
+        <DialogClose render={<Button variant="outline" />}>Keep appointment</DialogClose>
+        <Button variant="destructive">Cancel appointment</Button>
+      </DialogFooter>
+    </DialogContent>
+  </Dialog>
+</ComponentPreview>
+
+## Usage
+
+```tsx
+import {
+  Button,
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@cadence-clinical/ui";
+
+<Dialog>
+  <DialogTrigger render={<Button variant="outline" />}>Cancel appointment</DialogTrigger>
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>Cancel this appointment?</DialogTitle>
+      <DialogDescription>
+        The Review clinic appointment on Thursday will be cancelled. No letter is sent.
+      </DialogDescription>
+    </DialogHeader>
+    <DialogFooter>
+      <DialogClose render={<Button variant="outline" />}>Keep appointment</DialogClose>
+      <Button variant="destructive" onClick={cancelAppointment}>
+        Cancel appointment
+      </Button>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>;
+```
+
+Give every dialog a `DialogTitle`: it is the dialog's name. `DialogDescription` is read after it. Render `DialogTrigger` and `DialogClose` as a [Button](/docs/components/button) through `render`. To open the dialog from your own state, pass `open` and `onOpenChange` to `Dialog`.
+
+Dialog is built on the Base UI [Dialog](https://base-ui.com/react/components/dialog) and accepts all of its props. It follows the shadcn [Dialog](https://ui.shadcn.com/docs/components/dialog) and keeps its part names. Dialog is a [composite](/docs/levels): it uses the [Button](/docs/components/button) primitive.
+
+Use a dialog for one task that must finish before the page carries on. A dialog covers the page, so do not put in one what a reader needs to compare with the page behind it.
+
+## Focus
+
+Opening a dialog moves focus to the first control inside it, and closing it sends focus back to the trigger. While it is open, Tab stays inside it and the page behind does not scroll or take a press.
+
+Put the safe choice first in the footer. It is then the control that takes focus, so Enter does not confirm something destructive. On a phone the footer shows its buttons in reverse, so the main action is on top.
+
+## Closing
+
+Escape closes a dialog, and so does a press outside it. Where a stray press would lose work, or for a choice that must be made, set `disablePointerDismissal` on `Dialog`. Escape still closes it.
+
+`DialogContent` has a close button in its corner. It shows an icon and is named "Close". If you turn it off with `showCloseButton={false}`, keep a `DialogClose` in the footer: a touch screen reader needs a control inside the dialog to leave it. `showCloseButton` on `DialogFooter` adds a "Close" button, for a dialog that only informs.
+
+## What Cadence changes
+
+- **A dialog is never taller than the screen.** The shadcn dialog has no maximum height, so tall content runs off the screen with its buttons. Here what does not fit scrolls inside the dialog, and the last button can always be reached.
+- **The scrim is a token that darkens the page in both modes.** shadcn uses black at 10% with a blur. The new `overlay` token is black at 40% in light mode and 60% in dark, so the page reads as out of reach. It does not blur, which is slow in Safari.
+- **The title wraps and clears the close button.** shadcn sets the title's line height to 1, so a second line collides with the first, and lets a long title run under the button.
+- **Spacing and text follow the [density](/docs/theming#density).**
+- **Motion is short.** The dialog fades in over 150ms and grows slightly from its centre, and closes in 100ms. With reduced motion it only fades.
+- **The description's contrast is asserted.** Muted text on the `popover` surface joins the pairings in the `@cadence-clinical/tokens` test suite.
+
+## Props
+
+| Prop                      | On                             | Type                      | Default    |
+| ------------------------- | ------------------------------ | ------------------------- | ---------- |
+| `open`, `onOpenChange`    | `Dialog`                       |                           |            |
+| `defaultOpen`             | `Dialog`                       | `boolean`                 | `false`    |
+| `disablePointerDismissal` | `Dialog`                       | `boolean`                 | `false`    |
+| `showCloseButton`         | `DialogContent`                | `boolean`                 | `true`     |
+| `showCloseButton`         | `DialogFooter`                 | `boolean`                 | `false`    |
+| `render`                  | `DialogTrigger`, `DialogClose` | An element, as in Base UI | A `button` |
