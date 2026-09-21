@@ -27,6 +27,10 @@ import {
   ItemContent,
   ItemTitle,
   Label,
+  Popover,
+  PopoverContent,
+  PopoverTitle,
+  PopoverTrigger,
   RadioGroup,
   RadioGroupItem,
   Select,
@@ -76,6 +80,14 @@ const RENDERS: Record<string, ReactElement> = {
   spinner: <Spinner />,
   switch: <Switch aria-label="Appointment reminders" />,
   textarea: <Textarea aria-label="Notes" />,
+  popover: (
+    <Popover>
+      <PopoverTrigger>Filters</PopoverTrigger>
+      <PopoverContent>
+        <PopoverTitle>Filter appointments</PopoverTitle>
+      </PopoverContent>
+    </Popover>
+  ),
   dialog: (
     <Dialog>
       <DialogTrigger>Cancel appointment</DialogTrigger>
