@@ -27,6 +27,7 @@
     "components/alert",
     "components/card",
     "components/dialog",
+    "components/dropdown-menu",
     "components/field",
     "components/item",
     "components/popover",

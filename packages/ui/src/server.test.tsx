@@ -18,6 +18,10 @@ import {
   DialogContent,
   DialogTitle,
   DialogTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
   Field,
   FieldDescription,
   FieldError,
@@ -80,6 +84,14 @@ const RENDERS: Record<string, ReactElement> = {
   spinner: <Spinner />,
   switch: <Switch aria-label="Appointment reminders" />,
   textarea: <Textarea aria-label="Notes" />,
+  "dropdown-menu": (
+    <DropdownMenu>
+      <DropdownMenuTrigger>Appointment actions</DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuItem>Reschedule</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  ),
   popover: (
     <Popover>
       <PopoverTrigger>Filters</PopoverTrigger>
