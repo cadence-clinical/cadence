@@ -149,9 +149,8 @@ function FieldLabel({ className, ...props }: FieldPrimitive.Label.Props) {
     <FieldPrimitive.Label
       data-slot="field-label"
       render={<Label />}
-      // Only the words are the target, not the width of the form. A label is a flex container,
-      // where text with nowhere to break only wraps if it may break anywhere.
-      className={cn("w-fit wrap-anywhere data-disabled:opacity-50", className)}
+      // Only the words are the target, not the width of the form.
+      className={cn("w-fit data-disabled:opacity-50", className)}
       {...props}
     />
   );

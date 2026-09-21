@@ -18,7 +18,9 @@ function Label({ className, ...props }: LabelProps) {
       data-slot="label"
       className={cn(
         // leading-snug, not leading-none: the lines of a label that wraps must not collide.
-        "flex items-center gap-2 text-control leading-snug font-medium select-none",
+        // A label is a flex container, where words with nowhere to break only wrap if they may
+        // break anywhere.
+        "flex items-center gap-2 text-control leading-snug font-medium wrap-anywhere select-none",
         "group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50",
         "peer-disabled:cursor-not-allowed peer-disabled:opacity-50",
         className,
