@@ -14,7 +14,10 @@
  * that Cadence calls an accent drives "primary".
  */
 
-/** Light or dark. Set by `data-mode` or the `.dark` class on <html>, or left to the operating system. */
+/**
+ * Light or dark. Set by `data-mode`, or the `.light` or `.dark` class, on <html>, or left to the
+ * operating system.
+ */
 export type Mode = "light" | "dark";
 /** Standard contrast meets WCAG AA. More contrast meets AAA for text. Set by `data-contrast`. */
 export type Contrast = "standard" | "more";

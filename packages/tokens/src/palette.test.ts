@@ -46,6 +46,18 @@ describe("generateColorCss", () => {
     expect(css).toContain("@media (prefers-color-scheme: dark) and (prefers-contrast: more) {");
   });
 
+  // next-themes and shadcn's own switcher state light as a class. If the operating system rule
+  // ignored it, choosing light on a dark operating system would leave the page dark.
+  it("lets a stated light mode overrule a dark operating system", () => {
+    const osRules = [
+      ...css.matchAll(/@media \(prefers-color-scheme: dark\)[^{]*\{\n {2}([^{]+) \{/g),
+    ];
+    expect(osRules.length).toBeGreaterThan(0);
+    for (const [, selector] of osRules) {
+      expect(selector).toContain(":not(.dark, .light, [data-mode])");
+    }
+  });
+
   it("scopes each curated accent to its attribute", () => {
     for (const accent of ACCENT_NAMES.filter((name) => name !== "teal")) {
       expect(css).toContain(`:root[data-accent="${accent}"] {`);
