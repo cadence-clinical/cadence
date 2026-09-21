@@ -110,6 +110,7 @@ A rule a tool can enforce is enforced by the tool. This file records the rest, a
 - **Type tests where a type carries a guarantee**: the clinical view models in `core`, generic helpers such as `defineRegion`, and props that must reject invalid combinations. Write them in `*.test-d.ts` with Vitest's `expectTypeOf`, mostly as negative tests with `@ts-expect-error`. Plain interfaces do not need them. `test`
 - **Every bug fix lands with a test that failed before it.** `review`
 - **Deterministic**: no real clock, randomness or network, and a fixed time zone. `review`
+- **The browser tests are never served from cache.** Turborepo runs them every time, because a rerun is how a flaky story is found. After adding an interaction test, run `pnpm test:browser` several times. `ci`
 - **Clinical transforms are table-driven, and each expected value cites its source.** Edge rows are required: missing fields, unknown units, comparators, zero, negatives and extremes. `review`
 - **Playwright end-to-end tests are smoke tests of the website only.** Component behaviour is not tested there. `review`
 - **A change to tokens, CSS or Storybook config re-snapshots every story.** New styling sources are added to the `externals` list in `chromatic.yml`. `ci`

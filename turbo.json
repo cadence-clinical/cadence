@@ -19,7 +19,10 @@
     },
     "test:browser": {
       "dependsOn": ["^build"],
-      "env": ["CADENCE_BROWSERS"]
+      "env": ["CADENCE_BROWSERS"],
+      // Never replayed from cache. These tests drive a real browser, so a rerun is how a flaky
+      // story is found, and a cached pass would report a run that never happened.
+      "cache": false
     },
     "dev": {
       "dependsOn": ["^build"],
