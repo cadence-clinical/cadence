@@ -36,7 +36,21 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Open: Story = { args: { defaultOpen: true } };
+export const Open: Story = {
+  args: { defaultOpen: true },
+  play: async () => {
+    // The growth is set with `scale`, a property of its own, so `scale` must be what transitions.
+    // Transitioning `transform` animated the fade and let the growth snap.
+    await waitFor(async () => {
+      const popup = document.querySelector("[data-slot=tooltip-content]");
+      if (!popup) throw new Error("The tooltip has not opened");
+      await expect(getComputedStyle(popup).transitionProperty.split(", ")).toEqual([
+        "opacity",
+        "scale",
+      ]);
+    });
+  },
+};
 
 // Base UI keeps one tooltip open at a time, so each side is its own story and its own snapshot.
 const onSide = (side: "top" | "right" | "bottom" | "left"): Story => ({

@@ -55,7 +55,8 @@ function TooltipContent({
           className={cn(
             "w-fit max-w-xs origin-(--transform-origin) rounded-md bg-foreground px-2 py-1 text-control-sm leading-snug wrap-break-word text-background",
             // Fast, and from where the trigger is. Only opacity and transform move.
-            "transition-[opacity,transform] duration-[125ms] ease-out-strong",
+            // Tailwind sets `scale` as its own property, so that is the one that transitions.
+            "transition-[opacity,scale] duration-[125ms] ease-out-strong",
             "data-ending-style:scale-[0.97] data-ending-style:opacity-0 data-starting-style:scale-[0.97] data-starting-style:opacity-0",
             // No animation when it follows another tooltip or opens from the keyboard.
             "data-instant:transition-none",
