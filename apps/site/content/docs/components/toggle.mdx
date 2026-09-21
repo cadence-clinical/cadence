@@ -1,0 +1,62 @@
+---
+title: Toggle
+description: A button that stays pressed. Pressed is a fill and a boundary, never colour alone.
+---
+
+import { Toggle } from "@cadence-clinical/ui";
+
+<GradeBadge component="toggle" />
+
+<ComponentPreview>
+  <Toggle>Show ceased</Toggle>
+  <Toggle defaultPressed>Show ceased</Toggle>
+  <Toggle variant="outline" defaultPressed>
+    Only mine
+  </Toggle>
+</ComponentPreview>
+
+## Usage
+
+```tsx
+import { Toggle } from "@cadence-clinical/ui";
+
+<Toggle pressed={showCeased} onPressedChange={setShowCeased}>
+  Show ceased
+</Toggle>;
+```
+
+Toggle is built on the Base UI [Toggle](https://base-ui.com/react/components/toggle) and accepts all of its props. It follows the shadcn [Toggle](https://ui.shadcn.com/docs/components/toggle).
+
+Use a toggle for something that is on or off in a toolbar or a filter row. For a setting with a label beside it that applies at once, use a [Switch](/docs/components/switch).
+
+## Variants, sizes and icon only
+
+`variant` is `ghost` or `outline`. `size` and `iconOnly` work as they do on a [Button](/docs/components/button#icons): three sizes whose height and text step together, and an icon-only option that keeps the label as hidden text.
+
+```tsx
+import { Toggle } from "@cadence-clinical/ui";
+import { Bold } from "lucide-react";
+
+<Toggle iconOnly size="sm">
+  <Bold />
+  Bold
+</Toggle>;
+```
+
+## What Cadence changes
+
+- **Pressed is a fill and a boundary.** The shadcn toggle marks pressed with a muted fill alone, which is too close to the page to tell the two states apart without colour. Here a `ghost` toggle gains a boundary when pressed, and an `outline` toggle's boundary becomes heavier and takes the accent.
+- **Size, text and icon follow the [density](/docs/theming#density)**, and `iconOnly` is its own option, as on Button.
+- **The focus ring is never faded.**
+
+## Accessibility
+
+- A toggle is announced as a button that is pressed or not pressed, so its label names the thing and not the state: "Show ceased", not "Showing ceased".
+
+## Props
+
+| Prop       | Type                   | Default   |
+| ---------- | ---------------------- | --------- |
+| `variant`  | `"ghost" \| "outline"` | `"ghost"` |
+| `size`     | `"sm" \| "md" \| "lg"` | `"md"`    |
+| `iconOnly` | `boolean`              | `false`   |

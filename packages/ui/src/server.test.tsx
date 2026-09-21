@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 
 import registry from "../registry.json";
 import {
+  Badge,
   Button,
   Card,
   CardContent,
@@ -19,8 +20,11 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  Separator,
+  Spinner,
   Switch,
   Textarea,
+  Toggle,
 } from "./index";
 
 /**
@@ -28,6 +32,7 @@ import {
  * that touches `window` or `document` at module scope or during render fails here.
  */
 const RENDERS: Record<string, ReactElement> = {
+  badge: <Badge variant="info">New</Badge>,
   button: <Button>Save observation</Button>,
   checkbox: <Checkbox aria-label="Interpreter needed" />,
   input: <Input aria-label="Family name" />,
@@ -46,8 +51,11 @@ const RENDERS: Record<string, ReactElement> = {
       </SelectContent>
     </Select>
   ),
+  separator: <Separator />,
+  spinner: <Spinner />,
   switch: <Switch aria-label="Appointment reminders" />,
   textarea: <Textarea aria-label="Notes" />,
+  toggle: <Toggle>Show ceased</Toggle>,
   label: <Label htmlFor="family-name">Family name</Label>,
   card: (
     <Card>

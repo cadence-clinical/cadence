@@ -24,15 +24,15 @@ One control or one element. Built first, in this order, because the composites n
 | Label       | Built  | None              |                                                                                 |
 | Input       | Built  | Input             |                                                                                 |
 | Select      | Built  | Select            |                                                                                 |
-| Toggle      | Agreed | Toggle            |                                                                                 |
+| Toggle      | Built  | Toggle            |                                                                                 |
 | Textarea    | Built  | None              | Field needs it: free-text notes are the most common clinical input.             |
 | Checkbox    | Built  | Checkbox          | Field needs it, and the data table needs it for row selection.                  |
 | Radio group | Built  | Radio group       | Field needs it: one choice from a few, all visible at once.                     |
 | Switch      | Built  | Switch            | Field needs it for a setting that applies at once.                              |
-| Separator   | Agreed | Separator         | The sidebar and menus need it.                                                  |
-| Badge       | Agreed | None              | A short status or count, in tables and items. Carries its border token.         |
+| Separator   | Built  | Separator         | The sidebar and menus need it.                                                  |
+| Badge       | Built  | None              | A short status or count, in tables and items. Carries its border token.         |
 | Tooltip     | Agreed | Tooltip           | The collapsed sidebar needs it to name its icons.                               |
-| Spinner     | Agreed | None              | A pending Button composes it. shadcn has no `isLoading` prop.                   |
+| Spinner     | Built  | None              | A pending Button composes it. shadcn has no `isLoading` prop.                   |
 | Section     | Agreed | None              | A layout primitive: a region of a page. Its parts are settled when it is built. |
 
 ## 2. Composites

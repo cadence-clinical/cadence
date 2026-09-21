@@ -1,0 +1,47 @@
+---
+title: Spinner
+description: Shows that something is in progress. It fades instead of turning under reduced motion.
+---
+
+import { Button, Spinner } from "@cadence-clinical/ui";
+
+<GradeBadge component="spinner" />
+
+<ComponentPreview>
+  <Spinner />
+  <Button disabled>
+    <Spinner aria-hidden data-icon="inline-start" />
+    Saving
+  </Button>
+</ComponentPreview>
+
+## Usage
+
+```tsx
+import { Spinner } from "@cadence-clinical/ui";
+
+<Spinner aria-label="Loading results" />;
+```
+
+Spinner follows the shadcn [Spinner](https://ui.shadcn.com/docs/components/spinner). It is an `svg` and accepts all of its props.
+
+## In a pending button
+
+Button has no loading prop. Compose it: disable the button, put a spinner where the icon goes, and say what is happening in the label. Hide the spinner from assistive technology, because the label already announces it.
+
+```tsx
+<Button disabled>
+  <Spinner aria-hidden data-icon="inline-start" />
+  Saving
+</Button>
+```
+
+## What Cadence changes
+
+- **Its size follows the [density](/docs/theming#density)**: 16px compact and 20px comfortable, like any icon in a control.
+- **It fades in and out instead of turning** when the user asks for reduced motion, so it still shows that something is happening.
+
+## Accessibility
+
+- On its own a spinner is a status named "Loading". Pass `aria-label` to name it in your users' language and to say what is loading.
+- Beside text that already says what is happening, pass `aria-hidden`.
