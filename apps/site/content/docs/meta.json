@@ -9,15 +9,24 @@
     "grades",
     "levels",
     "---Primitives---",
+    "components/badge",
     "components/button",
     "components/checkbox",
     "components/input",
     "components/label",
     "components/radio-group",
+    "components/select",
+    "components/separator",
+    "components/spinner",
     "components/switch",
     "components/textarea",
+    "components/toggle",
+    "components/tooltip",
     "components/typeset",
     "---Composites---",
-    "components/card"
+    "components/card",
+    "components/field",
+    "components/item",
+    "components/tabs"
   ]
 }

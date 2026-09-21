@@ -2,12 +2,13 @@
 
 The components Cadence intends to build, by [level](decisions/0013-component-levels.md), in build order. This is a working document: edit it. A component is built only when its status is **agreed**.
 
-| Status   | Means                                                  |
-| -------- | ------------------------------------------------------ |
-| Built    | Merged or in an open pull request                      |
-| Agreed   | The maintainer has asked for it, or approved it        |
-| Proposed | Suggested, with the reason. Not built until agreed     |
-| Planned  | Intended, and agreed one at a time when its turn comes |
+| Status   | Means                                                       |
+| -------- | ----------------------------------------------------------- |
+| Built    | Merged or in an open pull request                           |
+| Agreed   | The maintainer has asked for it, or approved it             |
+| Proposed | Suggested, with the reason. Not built until agreed          |
+| Planned  | Intended, and agreed one at a time when its turn comes      |
+| Deferred | Agreed in principle, and set aside until something needs it |
 
 The maintainer approved this plan on 2026-09-20.
 
@@ -17,23 +18,23 @@ Sections 1 to 4 are general components in `packages/ui`. [Clinical components](#
 
 One control or one element. Built first, in this order, because the composites need them.
 
-| Component   | Status | Base UI primitive | Why                                                                             |
-| ----------- | ------ | ----------------- | ------------------------------------------------------------------------------- |
-| Button      | Built  | Button            |                                                                                 |
-| Typeset     | Built  | None              | Long-form text. Cadence has no Text component (decision 0012).                  |
-| Label       | Built  | None              |                                                                                 |
-| Input       | Built  | Input             |                                                                                 |
-| Select      | Agreed | Select            |                                                                                 |
-| Toggle      | Agreed | Toggle            |                                                                                 |
-| Textarea    | Built  | None              | Field needs it: free-text notes are the most common clinical input.             |
-| Checkbox    | Built  | Checkbox          | Field needs it, and the data table needs it for row selection.                  |
-| Radio group | Built  | Radio group       | Field needs it: one choice from a few, all visible at once.                     |
-| Switch      | Built  | Switch            | Field needs it for a setting that applies at once.                              |
-| Separator   | Agreed | Separator         | The sidebar and menus need it.                                                  |
-| Badge       | Agreed | None              | A short status or count, in tables and items. Carries its border token.         |
-| Tooltip     | Agreed | Tooltip           | The collapsed sidebar needs it to name its icons.                               |
-| Spinner     | Agreed | None              | A pending Button composes it. shadcn has no `isLoading` prop.                   |
-| Section     | Agreed | None              | A layout primitive: a region of a page. Its parts are settled when it is built. |
+| Component   | Status   | Base UI primitive | Why                                                                                          |
+| ----------- | -------- | ----------------- | -------------------------------------------------------------------------------------------- |
+| Button      | Built    | Button            |                                                                                              |
+| Typeset     | Built    | None              | Long-form text. Cadence has no Text component (decision 0012).                               |
+| Label       | Built    | None              |                                                                                              |
+| Input       | Built    | Input             |                                                                                              |
+| Select      | Built    | Select            |                                                                                              |
+| Toggle      | Built    | Toggle            |                                                                                              |
+| Textarea    | Built    | None              | Field needs it: free-text notes are the most common clinical input.                          |
+| Checkbox    | Built    | Checkbox          | Field needs it, and the data table needs it for row selection.                               |
+| Radio group | Built    | Radio group       | Field needs it: one choice from a few, all visible at once.                                  |
+| Switch      | Built    | Switch            | Field needs it for a setting that applies at once.                                           |
+| Separator   | Built    | Separator         | The sidebar and menus need it.                                                               |
+| Badge       | Built    | None              | A short status or count, in tables and items. Carries its border token.                      |
+| Tooltip     | Built    | Tooltip           | The collapsed sidebar needs it to name its icons.                                            |
+| Spinner     | Built    | None              | A pending Button composes it. shadcn has no `isLoading` prop.                                |
+| Section     | Deferred | None              | A layout primitive. Skipped for now, and revisited with the layouts if one of them needs it. |
 
 ## 2. Composites
 
@@ -42,9 +43,9 @@ A small group of parts or primitives that works as one unit.
 | Component    | Status | Built on                         | Why                                                                                                |
 | ------------ | ------ | -------------------------------- | -------------------------------------------------------------------------------------------------- |
 | Card         | Built  | None                             |                                                                                                    |
-| Item         | Agreed | None                             | A row of media, title, description and actions.                                                    |
-| Field        | Agreed | Base UI Field, Label, the inputs | Label, control, description and error as one unit. The label sits 4px (`gap-1`) above its control. |
-| Tabs         | Agreed | Base UI Tabs                     |                                                                                                    |
+| Item         | Built  | None                             | A row of media, title, description and actions.                                                    |
+| Field        | Built  | Base UI Field, Label, the inputs | Label, control, description and error as one unit. The label sits 4px (`gap-1`) above its control. |
+| Tabs         | Built  | Base UI Tabs                     |                                                                                                    |
 | Alert        | Agreed | None                             | The first status surface: fill, border token, icon and text, never colour alone.                   |
 | Dialog       | Agreed | Base UI Dialog, Button           | Confirming a destructive action. The sidebar also needs a sheet on a phone.                        |
 | Popover      | Agreed | Base UI Popover                  | The data table's filters and column settings.                                                      |

@@ -41,7 +41,7 @@ Input is built on the Base UI [Input](https://base-ui.com/react/components/input
 | Disabled  | `disabled`     | Faded. Use it for a control that does not apply, not for a value to read. |
 | Invalid   | `aria-invalid` | A heavier border in the critical colour.                                  |
 
-An invalid input also needs a message in text that says what is wrong. Connect it with `aria-describedby`:
+An invalid input also needs a message in text that says what is wrong. A [Field](/docs/components/field) connects the message and sets `aria-invalid` for you. Without one, connect it with `aria-describedby`:
 
 ```tsx
 <Input id="family-name" aria-invalid aria-describedby="family-name-error" />

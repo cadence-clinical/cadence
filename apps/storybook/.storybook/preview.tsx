@@ -85,7 +85,13 @@ const preview: Preview = {
     layout: "centered",
     controls: { expanded: true },
     // An accessibility violation fails the test run. It is not a warning here.
-    a11y: { test: "error" },
+    a11y: {
+      test: "error",
+      // Base UI puts focus guards around an open popup: hidden, focusable spans that catch Tab
+      // and hand focus on at once. axe reads each as a focusable element hidden from assistive
+      // technology, which is what it is meant to be. Nothing of Cadence's is excluded.
+      context: { exclude: ["[data-base-ui-focus-guard]"] },
+    },
   },
 };
 

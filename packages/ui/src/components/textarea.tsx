@@ -1,3 +1,4 @@
+import { Field as FieldPrimitive } from "@base-ui/react/field";
 import type { ComponentProps } from "react";
 
 import { cn } from "@/lib/cn";
@@ -10,12 +11,22 @@ type TextareaProps = ComponentProps<"textarea">;
  * scrollbar, and its first line sits where an Input's text does.
  *
  * It needs an accessible name: a `Label` whose `htmlFor` is this textarea's `id`, or an
- * `aria-label`. Set `aria-invalid` when the value is wrong, and say what is wrong in text.
+ * `aria-label`. Set `aria-invalid` when the value is wrong, and say what is wrong in text. Inside a
+ * Field, the Field does all of that.
  */
-function Textarea({ className, ...props }: TextareaProps) {
+function Textarea({ className, id, name, value, defaultValue, disabled, ...props }: TextareaProps) {
   return (
-    <textarea
+    // Base UI has no textarea of its own. Its Field Control is what lets a Field name, describe
+    // and validate a native control, and it keeps the props it manages. The rest are the
+    // textarea's own, such as `rows`, which an input does not have.
+    <FieldPrimitive.Control
       data-slot="textarea"
+      id={id}
+      name={name}
+      value={value}
+      defaultValue={defaultValue}
+      disabled={disabled}
+      render={<textarea {...props} />}
       className={cn(
         "field-sizing-content min-h-[calc(var(--control-height)*2)] w-full min-w-0 resize-y rounded-md border border-input bg-background px-control-x text-control leading-normal text-foreground",
         // The padding that centres one line of text in the height of an Input.
@@ -30,7 +41,6 @@ function Textarea({ className, ...props }: TextareaProps) {
         "read-only:bg-muted disabled:cursor-not-allowed disabled:bg-muted disabled:opacity-50",
         className,
       )}
-      {...props}
     />
   );
 }

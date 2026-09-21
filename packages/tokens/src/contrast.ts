@@ -40,6 +40,8 @@ export const REQUIRED_PAIRINGS: readonly Pairing[] = [
   { foreground: "input", background: "card", kind: "boundary" },
   { foreground: "ring", background: "card", kind: "boundary" },
   { foreground: "ring", background: "background", kind: "boundary" },
+  // A tab's focus ring sits on the muted list, as a read-only field's does on its own fill.
+  { foreground: "ring", background: "muted", kind: "boundary" },
   { foreground: "primary", background: "background", kind: "boundary" },
   ...STATUSES.flatMap((status): Pairing[] => [
     { foreground: `${status}-foreground`, background: status, kind: "text" },

@@ -15,6 +15,29 @@
       ]
     },
     {
+      "name": "badge",
+      "type": "registry:component",
+      "title": "Badge",
+      "description": "A short label or count. A status variant carries its fill, text and border tokens.",
+      "dependencies": ["@base-ui/react", "class-variance-authority"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/badge.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/badge.tsx"
+        }
+      ],
+      "docs": "A status badge's text must say what the status is. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "primitive",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "button",
       "type": "registry:component",
       "title": "Button",
@@ -84,6 +107,29 @@
       }
     },
     {
+      "name": "field",
+      "type": "registry:component",
+      "title": "Field",
+      "description": "One control with its label, description and error, tied together so none of it is wired by hand.",
+      "dependencies": ["@base-ui/react", "class-variance-authority", "lucide-react"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn", "@cadence/label"],
+      "files": [
+        {
+          "path": "src/components/field.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/field.tsx"
+        }
+      ],
+      "docs": "Put one control in each Field. Render FieldError only while the value is wrong. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "composite",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "input",
       "type": "registry:component",
       "title": "Input",
@@ -100,6 +146,29 @@
       "docs": "Give every Input a Label or an aria-label. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
       "meta": {
         "level": "primitive",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
+      "name": "item",
+      "type": "registry:component",
+      "title": "Item",
+      "description": "A row of media, a title and a description, and actions. Its text wraps and is never cut short.",
+      "dependencies": ["@base-ui/react", "class-variance-authority"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn", "@cadence/separator"],
+      "files": [
+        {
+          "path": "src/components/item.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/item.tsx"
+        }
+      ],
+      "docs": "For a list, render ItemGroup as a ul and each Item as an li. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "composite",
         "domain": "general",
         "grade": {
           "level": "tested"
@@ -153,6 +222,75 @@
       }
     },
     {
+      "name": "select",
+      "type": "registry:component",
+      "title": "Select",
+      "description": "One choice from a list that opens below the field. A long value wraps and is never truncated.",
+      "dependencies": ["@base-ui/react", "lucide-react"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/select.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/select.tsx"
+        }
+      ],
+      "docs": "Pass items to Select so the field shows an option's label, and give SelectTrigger a Label or an aria-label. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "primitive",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
+      "name": "separator",
+      "type": "registry:component",
+      "title": "Separator",
+      "description": "A rule between two groups of content, announced as a separator.",
+      "dependencies": ["@base-ui/react"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/separator.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/separator.tsx"
+        }
+      ],
+      "docs": "Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "primitive",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
+      "name": "spinner",
+      "type": "registry:component",
+      "title": "Spinner",
+      "description": "Shows that something is in progress. It fades instead of turning under reduced motion.",
+      "dependencies": ["lucide-react"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/spinner.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/spinner.tsx"
+        }
+      ],
+      "docs": "Pass aria-hidden when text beside it already says what is happening. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "primitive",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "switch",
       "type": "registry:component",
       "title": "Switch",
@@ -176,11 +314,34 @@
       }
     },
     {
+      "name": "tabs",
+      "type": "registry:component",
+      "title": "Tabs",
+      "description": "Views of one subject, one shown at a time. Tabs that do not fit wrap, and none is clipped.",
+      "dependencies": ["@base-ui/react", "class-variance-authority"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/tabs.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/tabs.tsx"
+        }
+      ],
+      "docs": "Give each TabsTrigger and its TabsContent the same value. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "composite",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "textarea",
       "type": "registry:component",
       "title": "Textarea",
       "description": "A multi-line text input that grows with what is typed.",
-      "dependencies": [],
+      "dependencies": ["@base-ui/react"],
       "registryDependencies": ["@cadence/theme", "@cadence/cn"],
       "files": [
         {
@@ -189,7 +350,53 @@
           "target": "components/cadence/textarea.tsx"
         }
       ],
-      "docs": "Give every Textarea a Label or an aria-label. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "docs": "Give every Textarea a Label or an aria-label, or put it in a Field. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "primitive",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
+      "name": "toggle",
+      "type": "registry:component",
+      "title": "Toggle",
+      "description": "A button that stays pressed. Pressed is a fill and a boundary, never colour alone.",
+      "dependencies": ["@base-ui/react", "class-variance-authority"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/toggle.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/toggle.tsx"
+        }
+      ],
+      "docs": "With iconOnly, keep the label as the toggle's text. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "primitive",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
+      "name": "tooltip",
+      "type": "registry:component",
+      "title": "Tooltip",
+      "description": "A short hint shown when its trigger is hovered or focused. Never the only place something is said.",
+      "dependencies": ["@base-ui/react"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/tooltip.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/tooltip.tsx"
+        }
+      ],
+      "docs": "A tooltip does not open on a touch screen and is not announced by a screen reader, so its trigger needs its own name. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
       "meta": {
         "level": "primitive",
         "domain": "general",

@@ -4,18 +4,41 @@ import { describe, expect, it } from "vitest";
 
 import registry from "../registry.json";
 import {
+  Badge,
   Button,
   Card,
   CardContent,
   CardHeader,
   CardTitle,
   Checkbox,
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldLabel,
   Input,
+  Item,
+  ItemContent,
+  ItemTitle,
   Label,
   RadioGroup,
   RadioGroupItem,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  Separator,
+  Spinner,
   Switch,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
   Textarea,
+  Toggle,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
 } from "./index";
 
 /**
@@ -23,6 +46,7 @@ import {
  * that touches `window` or `document` at module scope or during render fails here.
  */
 const RENDERS: Record<string, ReactElement> = {
+  badge: <Badge variant="info">New</Badge>,
   button: <Button>Save observation</Button>,
   checkbox: <Checkbox aria-label="Interpreter needed" />,
   input: <Input aria-label="Family name" />,
@@ -31,8 +55,50 @@ const RENDERS: Record<string, ReactElement> = {
       <RadioGroupItem value="phone" aria-label="Phone" />
     </RadioGroup>
   ),
+  select: (
+    <Select defaultValue="general" items={[{ value: "general", label: "General clinic" }]}>
+      <SelectTrigger aria-label="Clinic">
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="general">General clinic</SelectItem>
+      </SelectContent>
+    </Select>
+  ),
+  separator: <Separator />,
+  spinner: <Spinner />,
   switch: <Switch aria-label="Appointment reminders" />,
   textarea: <Textarea aria-label="Notes" />,
+  tabs: (
+    <Tabs defaultValue="letters">
+      <TabsList>
+        <TabsTrigger value="letters">Letters</TabsTrigger>
+      </TabsList>
+      <TabsContent value="letters">No letters have been sent.</TabsContent>
+    </Tabs>
+  ),
+  field: (
+    <Field invalid>
+      <FieldLabel>Ward</FieldLabel>
+      <Input />
+      <FieldDescription>The ward the bed is on.</FieldDescription>
+      <FieldError>Enter a ward.</FieldError>
+    </Field>
+  ),
+  toggle: <Toggle>Show ceased</Toggle>,
+  tooltip: (
+    <Tooltip>
+      <TooltipTrigger>Print chart</TooltipTrigger>
+      <TooltipContent>Prints the chart as shown</TooltipContent>
+    </Tooltip>
+  ),
+  item: (
+    <Item render={<li />}>
+      <ItemContent>
+        <ItemTitle>Review clinic</ItemTitle>
+      </ItemContent>
+    </Item>
+  ),
   label: <Label htmlFor="family-name">Family name</Label>,
   card: (
     <Card>
@@ -52,7 +118,8 @@ describe("every component renders on the server", () => {
   it.each(components)("%s", (name) => {
     const element = RENDERS[name];
     if (!element) throw new Error(`Add a render for "${name}" to RENDERS in server.test.tsx.`);
-    expect(renderToString(element)).toContain(`data-slot="${name}"`);
+    // A root such as Select's renders no element of its own, so its parts carry the slot.
+    expect(renderToString(element)).toContain(`data-slot="${name}`);
   });
 });
 
@@ -69,5 +136,23 @@ describe("Card", () => {
     expect(html).toContain('data-slot="card"');
     expect(html).toContain('data-size="sm"');
     expect(html).toMatch(/<h2[^>]*data-slot="card-title"[^>]*>Next appointment<\/h2>/);
+  });
+});
+
+describe("Field", () => {
+  it("ties the label to the control before any script has run", () => {
+    const html = renderToString(
+      <Field invalid>
+        <FieldLabel>Ward</FieldLabel>
+        <Input />
+        <FieldError>Enter a ward.</FieldError>
+      </Field>,
+    );
+
+    const labelFor = /<label[^>]*for="([^"]+)"/.exec(html)?.[1];
+    expect(labelFor).toBeDefined();
+    expect(html).toMatch(new RegExp(`<input[^>]*id="${labelFor ?? ""}"`));
+    expect(html).toMatch(/<input[^>]*aria-invalid="true"/);
+    expect(html).toMatch(/role="alert"[^>]*>.*Enter a ward\./);
   });
 });
