@@ -8,8 +8,15 @@
  * The docs chrome runs on Cadence tokens, so the site is the first consumer of the theme.
  * Fumadocs uses one "primary" for both link text and fills; primary-text on background is the
  * Cadence pairing that holds contrast in both roles and both modes.
+ *
+ * The neutral preset sets its own greys under `.dark`, and again for the sidebar, in plain rules
+ * that beat anything in the theme layer. So the mapping is a plain rule too, on the same selectors
+ * and after them, the way Fumadocs' own shadcn preset does it. Without `.dark` here the chrome
+ * reads Fumadocs' greys in dark mode and Cadence tokens in light.
  */
-@theme inline {
+:root,
+.dark,
+.dark #nd-sidebar {
   --color-fd-background: var(--background);
   --color-fd-foreground: var(--foreground);
   --color-fd-muted: var(--muted);
