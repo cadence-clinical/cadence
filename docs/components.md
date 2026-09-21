@@ -51,7 +51,7 @@ A small group of parts or primitives that works as one unit.
 | Alert dialog  | Proposed | Base UI Alert dialog, Button     | Confirming a destructive action. It must be answered, and a press outside does not close it.       |
 | Popover       | Built    | Base UI Popover                  | The data table's filters and column settings.                                                      |
 | Dropdown menu | Built    | Base UI Menu                     | Row actions in the data table, and the sidebar's user menu. No submenus.                           |
-| Toggle group  | Agreed   | Base UI Toggle group, Toggle     | One of a few views, such as chart or table.                                                        |
+| Toggle group  | Built    | Base UI Toggle group, Toggle     | A set of filters or text styles. A view switch must have an answer, so it is Tabs.                 |
 
 ## 3. Patterns
 

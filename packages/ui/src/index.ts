@@ -138,6 +138,8 @@ export type { TabsListProps } from "@/components/cadence/tabs";
 export { Textarea } from "@/components/cadence/textarea";
 export type { TextareaProps } from "@/components/cadence/textarea";
 export { Toggle, toggleVariants } from "@/components/cadence/toggle";
+export { ToggleGroup, ToggleGroupItem } from "@/components/cadence/toggle-group";
+export type { ToggleGroupOptions, ToggleGroupProps } from "@/components/cadence/toggle-group";
 export type { ToggleProps } from "@/components/cadence/toggle";
 export {
   Tooltip,
