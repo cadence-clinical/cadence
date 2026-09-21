@@ -68,9 +68,15 @@ export const OnTheRight: Story = onSide("right");
 export const Below: Story = onSide("bottom");
 export const OnTheLeft: Story = onSide("left");
 
+// These three end with the tooltip closed, so there is nothing for a snapshot to show, and they
+// depend on real focus and timing that Chromatic's capture browser does not give. The component
+// tests in CI run them in Chromium and WebKit.
+const interactionOnly = { chromatic: { disableSnapshot: true } };
+
 // The trigger keeps its own name. The tooltip is a hint for someone who can hover or focus, and it
 // is never announced, so the name cannot come from it.
 export const OpensOnHoverAfterADelay: Story = {
+  parameters: interactionOnly,
   play: async ({ canvasElement }) => {
     const trigger = within(canvasElement).getByRole("button", { name: "Print chart" });
 
@@ -98,6 +104,7 @@ export const OpensOnHoverAfterADelay: Story = {
 
 // From the keyboard it opens at once and without animation, and Escape closes it.
 export const OpensOnFocusAtOnce: Story = {
+  parameters: interactionOnly,
   play: async ({ canvasElement }) => {
     const trigger = within(canvasElement).getByRole("button", { name: "Print chart" });
     await userEvent.tab();
@@ -123,6 +130,7 @@ export const OpensOnFocusAtOnce: Story = {
 // Inside a provider the first tooltip waits and the next one does not, which is what makes a
 // toolbar quick to explore.
 export const TheNextOneOpensAtOnce: Story = {
+  parameters: interactionOnly,
   render: () => (
     <TooltipProvider>
       <div className="flex gap-2 p-16">
@@ -157,7 +165,8 @@ export const TheNextOneOpensAtOnce: Story = {
     await waitFor(() => expect(screen.getByText("Print")).toBeVisible(), { timeout: 3000 });
 
     await userEvent.hover(canvas.getByRole("button", { name: "Edit chart" }));
-    const next = await screen.findByText("Edit", undefined, { timeout: 300 });
+    // Well inside the delay the first one waited, and marked as instant.
+    const next = await screen.findByText("Edit", undefined, { timeout: 500 });
     await expect(next).toHaveAttribute("data-instant");
     await userEvent.unhover(canvas.getByRole("button", { name: "Edit chart" }));
   },
