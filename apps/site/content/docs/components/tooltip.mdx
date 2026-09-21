@@ -1,0 +1,82 @@
+---
+title: Tooltip
+description: A short hint shown when its trigger is hovered or focused. Never the only place something is said.
+---
+
+import { Printer } from "lucide-react";
+import { Button, Tooltip, TooltipContent, TooltipTrigger } from "@cadence-clinical/ui";
+
+<GradeBadge component="tooltip" />
+
+<ComponentPreview>
+  <Tooltip>
+    <TooltipTrigger
+      render={
+        <Button variant="outline" iconOnly>
+          <Printer />
+          Print chart
+        </Button>
+      }
+    />
+    <TooltipContent>Print chart</TooltipContent>
+  </Tooltip>
+</ComponentPreview>
+
+## Usage
+
+```tsx
+import { Button, Tooltip, TooltipContent, TooltipTrigger } from "@cadence-clinical/ui";
+import { Printer } from "lucide-react";
+
+<Tooltip>
+  <TooltipTrigger
+    render={
+      <Button variant="outline" iconOnly>
+        <Printer />
+        Print chart
+      </Button>
+    }
+  />
+  <TooltipContent>Print chart</TooltipContent>
+</Tooltip>;
+```
+
+Tooltip is built on the Base UI [Tooltip](https://base-ui.com/react/components/tooltip) and accepts all of its props. It follows the shadcn [Tooltip](https://ui.shadcn.com/docs/components/tooltip) and keeps its part names. Pass the control to `TooltipTrigger` through `render`.
+
+## A tooltip is never the only place something is said
+
+A tooltip does not open on a touch screen, and a screen reader does not announce it. So:
+
+- **The trigger keeps its own name.** An icon-only [Button](/docs/components/button#icon-only) takes its name from its hidden text, not from the tooltip.
+- **Anything a person needs in order to act belongs on the screen.** A dose, an allergy, a warning or an instruction never goes in a tooltip. Use one for a hint that someone could do without, such as the name of an icon.
+
+## A row of tooltips
+
+Wrap a toolbar, or the whole app, in `TooltipProvider`. The first tooltip waits before it opens. While one is open, the next opens at once and without animation, so a row of icons is quick to explore.
+
+```tsx
+<TooltipProvider>
+  <Toolbar />
+</TooltipProvider>
+```
+
+## What Cadence changes
+
+- **The first tooltip waits.** The shadcn tooltip opens with no delay. Here Base UI's delay is kept, so a pointer that is only passing over a dense toolbar does not set tooltips off.
+- **It opens from the keyboard at once**, with no animation. With a pointer it fades and grows from the side of its trigger in 125ms, and when the user asks for reduced motion it only fades.
+- **The hint wraps** inside its maximum width and is never cut short.
+- **Its text follows the [density](/docs/theming#density).**
+
+## Accessibility
+
+- Focusing the trigger opens the tooltip, and Escape closes it without moving focus.
+- The colours are the page's text and background, swapped, so they hold the same contrast in every mode.
+
+## Props
+
+| Prop         | On                | Type                                     | Default    |
+| ------------ | ----------------- | ---------------------------------------- | ---------- |
+| `render`     | `TooltipTrigger`  | The control the tooltip describes        | A `button` |
+| `side`       | `TooltipContent`  | `"top" \| "right" \| "bottom" \| "left"` | `"top"`    |
+| `sideOffset` | `TooltipContent`  | `number`                                 | `6`        |
+| `delay`      | `TooltipProvider` | `number`, in milliseconds                | Base UI's  |

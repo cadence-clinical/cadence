@@ -25,6 +25,9 @@ import {
   Switch,
   Textarea,
   Toggle,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
 } from "./index";
 
 /**
@@ -56,6 +59,12 @@ const RENDERS: Record<string, ReactElement> = {
   switch: <Switch aria-label="Appointment reminders" />,
   textarea: <Textarea aria-label="Notes" />,
   toggle: <Toggle>Show ceased</Toggle>,
+  tooltip: (
+    <Tooltip>
+      <TooltipTrigger>Print chart</TooltipTrigger>
+      <TooltipContent>Prints the chart as shown</TooltipContent>
+    </Tooltip>
+  ),
   label: <Label htmlFor="family-name">Family name</Label>,
   card: (
     <Card>

@@ -32,7 +32,7 @@ One control or one element. Built first, in this order, because the composites n
 | Switch      | Built    | Switch            | Field needs it for a setting that applies at once.                                           |
 | Separator   | Built    | Separator         | The sidebar and menus need it.                                                               |
 | Badge       | Built    | None              | A short status or count, in tables and items. Carries its border token.                      |
-| Tooltip     | Agreed   | Tooltip           | The collapsed sidebar needs it to name its icons.                                            |
+| Tooltip     | Built    | Tooltip           | The collapsed sidebar needs it to name its icons.                                            |
 | Spinner     | Built    | None              | A pending Button composes it. shadcn has no `isLoading` prop.                                |
 | Section     | Deferred | None              | A layout primitive. Skipped for now, and revisited with the layouts if one of them needs it. |
 

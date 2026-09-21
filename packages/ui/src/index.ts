@@ -43,4 +43,11 @@ export { Textarea } from "@/components/cadence/textarea";
 export type { TextareaProps } from "@/components/cadence/textarea";
 export { Toggle, toggleVariants } from "@/components/cadence/toggle";
 export type { ToggleProps } from "@/components/cadence/toggle";
+export {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/cadence/tooltip";
+export type { TooltipContentProps } from "@/components/cadence/tooltip";
 export { cn } from "@/lib/cn";

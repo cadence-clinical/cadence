@@ -314,6 +314,29 @@
       }
     },
     {
+      "name": "tooltip",
+      "type": "registry:component",
+      "title": "Tooltip",
+      "description": "A short hint shown when its trigger is hovered or focused. Never the only place something is said.",
+      "dependencies": ["@base-ui/react"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/tooltip.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/tooltip.tsx"
+        }
+      ],
+      "docs": "A tooltip does not open on a touch screen and is not announced by a screen reader, so its trigger needs its own name. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "primitive",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "typeset",
       "type": "registry:item",
       "title": "Typeset",
