@@ -49,6 +49,8 @@ export const REQUIRED_PAIRINGS: readonly Pairing[] = [
     { foreground: `${status}-foreground`, background: status, kind: "text" },
     { foreground: `${status}-text`, background: "background", kind: "text" },
     { foreground: `${status}-text`, background: "card", kind: "text" },
+    // A destructive item in a menu, and any status text in a dialog or a popover.
+    { foreground: `${status}-text`, background: "popover", kind: "text" },
     { foreground: `${status}-text`, background: `${status}-subtle`, kind: "text" },
     // An alert's message is body text, so it takes the page's foreground on the status fill.
     { foreground: "foreground", background: `${status}-subtle`, kind: "text" },

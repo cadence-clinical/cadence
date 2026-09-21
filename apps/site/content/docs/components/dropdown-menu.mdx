@@ -1,0 +1,137 @@
+---
+title: Dropdown menu
+description: A list of actions that opens from a trigger. Each item is as high as a control, a checked item carries a tick, and a long item wraps.
+---
+
+import { Ellipsis, Pencil, Printer, Trash2 } from "lucide-react";
+import {
+  Button,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@cadence-clinical/ui";
+
+<GradeBadge component="dropdown-menu" />
+
+<ComponentPreview>
+  <DropdownMenu>
+    <DropdownMenuTrigger render={<Button variant="outline" size="sm" iconOnly />}>
+      <Ellipsis aria-hidden />
+      Appointment actions
+    </DropdownMenuTrigger>
+    <DropdownMenuContent>
+      <DropdownMenuGroup>
+        <DropdownMenuLabel>Review clinic, Thursday</DropdownMenuLabel>
+        <DropdownMenuItem>
+          <Pencil aria-hidden />
+          Reschedule
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <Printer aria-hidden />
+          Print letter
+        </DropdownMenuItem>
+      </DropdownMenuGroup>
+      <DropdownMenuSeparator />
+      <DropdownMenuItem variant="destructive">
+        <Trash2 aria-hidden />
+        Cancel appointment
+      </DropdownMenuItem>
+    </DropdownMenuContent>
+  </DropdownMenu>
+</ComponentPreview>
+
+## Usage
+
+```tsx
+import {
+  Button,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@cadence-clinical/ui";
+
+<DropdownMenu>
+  <DropdownMenuTrigger render={<Button variant="outline" size="sm" iconOnly />}>
+    <Ellipsis aria-hidden />
+    Appointment actions
+  </DropdownMenuTrigger>
+  <DropdownMenuContent>
+    <DropdownMenuItem onClick={reschedule}>Reschedule</DropdownMenuItem>
+    <DropdownMenuItem onClick={printLetter}>Print letter</DropdownMenuItem>
+    <DropdownMenuSeparator />
+    <DropdownMenuItem variant="destructive" onClick={cancel}>
+      Cancel appointment
+    </DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>;
+```
+
+Render `DropdownMenuTrigger` as a [Button](/docs/components/button) through `render`. The menu takes its name from its trigger, so an [icon-only](/docs/components/button#icon-only) trigger still needs its words.
+
+A menu does things. To hold a choice, use a [Select](/docs/components/select). For controls rather than actions, such as a set of filters, use a [Popover](/docs/components/popover).
+
+Dropdown menu is built on the Base UI [Menu](https://base-ui.com/react/components/menu) and accepts all of its props. It follows the shadcn [Dropdown menu](https://ui.shadcn.com/docs/components/dropdown-menu) and keeps its part names, so a menu copied from a shadcn block works as written.
+
+## Items that hold a state
+
+`DropdownMenuCheckboxItem` is on or off. `DropdownMenuRadioItem`, inside a `DropdownMenuRadioGroup`, is one of a set. Each carries a tick when it is on, so its state does not rely on colour.
+
+```tsx
+<DropdownMenuGroup>
+  <DropdownMenuLabel>Columns</DropdownMenuLabel>
+  <DropdownMenuCheckboxItem checked={showClinic} onCheckedChange={setShowClinic}>
+    Clinic
+  </DropdownMenuCheckboxItem>
+</DropdownMenuGroup>
+<DropdownMenuSeparator />
+<DropdownMenuGroup>
+  <DropdownMenuLabel>Sort by</DropdownMenuLabel>
+  <DropdownMenuRadioGroup value={sort} onValueChange={setSort}>
+    <DropdownMenuRadioItem value="date">Date</DropdownMenuRadioItem>
+    <DropdownMenuRadioItem value="clinic">Clinic</DropdownMenuRadioItem>
+  </DropdownMenuRadioGroup>
+</DropdownMenuGroup>
+```
+
+## Labels, shortcuts and submenus
+
+- `DropdownMenuLabel` inside a `DropdownMenuGroup` or a `DropdownMenuRadioGroup` names that set for a screen reader. On its own it is words above the items and names nothing.
+- `DropdownMenuShortcut` shows the keys that do what the item does, at the end of the item. It is a hint: handling the keys is up to you.
+- `DropdownMenuSub`, `DropdownMenuSubTrigger` and `DropdownMenuSubContent` open a menu from an item. The item carries a chevron, so it does not look like an action.
+- `inset` on an item or a label lines it up with items that have an icon.
+
+## A destructive item
+
+`variant="destructive"` sets an item in the critical colour. The colour adds to the words and never stands in for them: the item says what it does. For an action that cannot be undone, ask first in a [Dialog](/docs/components/dialog).
+
+## What Cadence changes
+
+- **An item is as high as a control**, so it is a 44px target when the [density](/docs/theming#density) is comfortable. The shadcn item is about 28px.
+- **A long item wraps**, and the menu is never wider or taller than the room it has. The shadcn menu is the width of its trigger with a small minimum, and hides what overflows sideways.
+- **The menu opens at once.** A menu is opened often and from the keyboard, where an animation only delays. shadcn zooms and slides it in.
+- **A label works outside a group.** Base UI's group label throws outside a group. shadcn's menus, such as the user menu of its sidebar, put a label straight into the content, so here that works.
+- **No `dark:` overrides or tinted text.** A destructive item uses `critical-text`, on `critical-subtle` when highlighted. Both pairings, and `critical-text` on the `popover` surface, are asserted in the `@cadence-clinical/tokens` test suite.
+
+## Accessibility
+
+- The arrow keys move through the items, Enter or Space acts on one, and Escape closes the menu. Focus goes back to the trigger.
+- The menu is named by its trigger, and a group by its label.
+- A disabled item has `aria-disabled` and does nothing.
+
+## Props
+
+| Prop                   | On                                                | Type                         | Default     |
+| ---------------------- | ------------------------------------------------- | ---------------------------- | ----------- |
+| `open`, `onOpenChange` | `DropdownMenu`                                    |                              |             |
+| `side`                 | `DropdownMenuContent`                             | As in Base UI's Positioner   | `"bottom"`  |
+| `align`                | `DropdownMenuContent`                             | As in Base UI's Positioner   | `"start"`   |
+| `variant`              | `DropdownMenuItem`                                | `"default" \| "destructive"` | `"default"` |
+| `inset`                | Items, `DropdownMenuLabel`                        | `boolean`                    | `false`     |
+| `checked`              | `DropdownMenuCheckboxItem`                        | `boolean`                    |             |
+| `value`                | `DropdownMenuRadioGroup`, `DropdownMenuRadioItem` | `string`                     |             |

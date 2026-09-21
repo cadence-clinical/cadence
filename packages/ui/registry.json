@@ -153,6 +153,29 @@
       }
     },
     {
+      "name": "dropdown-menu",
+      "type": "registry:component",
+      "title": "Dropdown menu",
+      "description": "A list of actions that opens from a trigger. Each item is as high as a control, a checked item carries a tick, and a long item wraps.",
+      "dependencies": ["@base-ui/react", "lucide-react"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/dropdown-menu.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/dropdown-menu.tsx"
+        }
+      ],
+      "docs": "A menu does things. To hold a choice, use a Select. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "composite",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "field",
       "type": "registry:component",
       "title": "Field",
