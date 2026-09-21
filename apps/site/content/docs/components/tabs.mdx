@@ -1,0 +1,87 @@
+---
+title: Tabs
+description: Views of one subject, one shown at a time. Tabs that do not fit wrap, and none is clipped.
+---
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@cadence-clinical/ui";
+
+<GradeBadge component="tabs" />
+
+<ComponentPreview>
+  <Tabs defaultValue="appointments" className="w-full max-w-md">
+    <TabsList>
+      <TabsTrigger value="appointments">Appointments</TabsTrigger>
+      <TabsTrigger value="letters">Letters</TabsTrigger>
+      <TabsTrigger value="contacts">Contacts</TabsTrigger>
+    </TabsList>
+    <TabsContent value="appointments">Two appointments are booked.</TabsContent>
+    <TabsContent value="letters">No letters have been sent.</TabsContent>
+    <TabsContent value="contacts">One contact is on file.</TabsContent>
+  </Tabs>
+</ComponentPreview>
+
+## Usage
+
+```tsx
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@cadence-clinical/ui";
+
+<Tabs defaultValue="appointments">
+  <TabsList>
+    <TabsTrigger value="appointments">Appointments</TabsTrigger>
+    <TabsTrigger value="letters">Letters</TabsTrigger>
+  </TabsList>
+  <TabsContent value="appointments">...</TabsContent>
+  <TabsContent value="letters">...</TabsContent>
+</Tabs>;
+```
+
+Give each `TabsTrigger` and its `TabsContent` the same `value`. Set `defaultValue` on `Tabs`, or control it with `value` and `onValueChange`.
+
+Tabs is built on the Base UI [Tabs](https://base-ui.com/react/components/tabs) and accepts all of its props. It follows the shadcn [Tabs](https://ui.shadcn.com/docs/components/tabs) and keeps its part names.
+
+Use tabs for views of one subject, where a reader needs one at a time. Do not use tabs to hide something a reader must see alongside the rest: a view that is not shown is not rendered.
+
+## Variants
+
+`TabsList` takes `variant`. The `default` list is a segmented control. The `line` list underlines the tab that is shown:
+
+<ComponentPreview>
+  <Tabs defaultValue="appointments" className="w-full max-w-md">
+    <TabsList variant="line">
+      <TabsTrigger value="appointments">Appointments</TabsTrigger>
+      <TabsTrigger value="letters">Letters</TabsTrigger>
+    </TabsList>
+    <TabsContent value="appointments">Two appointments are booked.</TabsContent>
+    <TabsContent value="letters">No letters have been sent.</TabsContent>
+  </Tabs>
+</ComponentPreview>
+
+```tsx
+<TabsList variant="line">...</TabsList>
+```
+
+Set `orientation="vertical"` on `Tabs` to stack the tabs beside the view.
+
+## What Cadence changes
+
+- **Tabs that do not fit wrap onto another row.** The shadcn list keeps one row and sets `whitespace-nowrap`, so on a narrow screen its tabs run out of view. Here none is clipped or scrolled away, and a long tab name wraps.
+- **The view shows its focus.** A view takes focus after its tab, so that a keyboard reaches a view with nothing of its own to focus. shadcn removes the outline from it. Here it gets the focus ring.
+- **The shown tab is marked by shape as well as colour:** a bordered fill in the `default` list and a rule in the `line` list. The rule uses the `primary-text` token, whose contrast is asserted on the page and on a card.
+- **Height, padding and text follow the [density](/docs/theming#density).** When the density is comfortable, each tab's target is 44px high.
+- **Nothing animates.** Tabs are changed often and from the keyboard, where an animation only delays.
+- **The focus ring is never faded.**
+
+## Accessibility
+
+- The arrow keys move between tabs, and Enter or Space shows one. Moving through the tabs does not show each view on the way, which matters when a view loads data. Set `activateOnFocus` on `TabsList` for a view to follow focus, as in Base UI.
+- Each view is named by its tab.
+- A disabled tab cannot be shown. The arrow keys still reach it, so a screen reader user can find it and hear that it is disabled. Its words fade and its focus ring does not.
+
+## Props
+
+| Prop              | On         | Type                         | Default        |
+| ----------------- | ---------- | ---------------------------- | -------------- |
+| `defaultValue`    | `Tabs`     | The `value` of a tab         |                |
+| `orientation`     | `Tabs`     | `"horizontal" \| "vertical"` | `"horizontal"` |
+| `variant`         | `TabsList` | `"default" \| "line"`        | `"default"`    |
+| `activateOnFocus` | `TabsList` | `boolean`                    | `false`        |

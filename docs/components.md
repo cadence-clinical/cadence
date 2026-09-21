@@ -45,7 +45,7 @@ A small group of parts or primitives that works as one unit.
 | Card         | Built  | None                             |                                                                                                    |
 | Item         | Built  | None                             | A row of media, title, description and actions.                                                    |
 | Field        | Built  | Base UI Field, Label, the inputs | Label, control, description and error as one unit. The label sits 4px (`gap-1`) above its control. |
-| Tabs         | Agreed | Base UI Tabs                     |                                                                                                    |
+| Tabs         | Built  | Base UI Tabs                     |                                                                                                    |
 | Alert        | Agreed | None                             | The first status surface: fill, border token, icon and text, never colour alone.                   |
 | Dialog       | Agreed | Base UI Dialog, Button           | Confirming a destructive action. The sidebar also needs a sheet on a phone.                        |
 | Popover      | Agreed | Base UI Popover                  | The data table's filters and column settings.                                                      |

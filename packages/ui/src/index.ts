@@ -76,6 +76,14 @@ export { Spinner } from "@/components/cadence/spinner";
 export type { SpinnerProps } from "@/components/cadence/spinner";
 export { Switch } from "@/components/cadence/switch";
 export type { SwitchProps } from "@/components/cadence/switch";
+export {
+  Tabs,
+  TabsContent,
+  TabsList,
+  tabsListVariants,
+  TabsTrigger,
+} from "@/components/cadence/tabs";
+export type { TabsListProps } from "@/components/cadence/tabs";
 export { Textarea } from "@/components/cadence/textarea";
 export type { TextareaProps } from "@/components/cadence/textarea";
 export { Toggle, toggleVariants } from "@/components/cadence/toggle";

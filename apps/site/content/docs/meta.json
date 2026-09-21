@@ -26,6 +26,7 @@
     "---Composites---",
     "components/card",
     "components/field",
-    "components/item"
+    "components/item",
+    "components/tabs"
   ]
 }
