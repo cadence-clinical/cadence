@@ -50,6 +50,24 @@ export const WrapsWithoutColliding: Story = {
   },
 };
 
+// Words with nowhere to break still wrap. A label is a flex container, which would otherwise
+// hold them on one line and push past its box.
+export const WrapsWordsWithNowhereToBreak: Story = {
+  args: { children: "SYNTHETIC" + "0".repeat(60) },
+  render: (args) => (
+    <div className="grid w-40 gap-1">
+      <Label {...args} />
+      <Input id="family-name" />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const box = canvasElement.querySelector(".w-40");
+    await expect(box?.scrollWidth).toBeLessThanOrEqual(box?.clientWidth ?? 0);
+    const label = within(canvasElement).getByText(/SYNTHETIC/);
+    await expect(label.scrollWidth).toBeLessThanOrEqual(label.clientWidth);
+  },
+};
+
 export const BesideADisabledControl: Story = {
   render: (args) => (
     <div className="flex w-64 flex-col-reverse gap-1">
