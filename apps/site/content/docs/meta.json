@@ -24,6 +24,7 @@
     "components/tooltip",
     "components/typeset",
     "---Composites---",
-    "components/card"
+    "components/card",
+    "components/item"
   ]
 }
