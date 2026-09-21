@@ -36,6 +36,7 @@ test("no page scrolls sideways at the current viewport", async ({ page }) => {
     "/docs",
     "/docs/theming",
     "/docs/levels",
+    "/docs/components/alert",
     "/docs/components/badge",
     "/docs/components/button",
     "/docs/components/card",

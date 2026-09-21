@@ -4,6 +4,9 @@ import { describe, expect, it } from "vitest";
 
 import registry from "../registry.json";
 import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
   Badge,
   Button,
   Card,
@@ -69,6 +72,11 @@ const RENDERS: Record<string, ReactElement> = {
   spinner: <Spinner />,
   switch: <Switch aria-label="Appointment reminders" />,
   textarea: <Textarea aria-label="Notes" />,
+  alert: (
+    <Alert variant="warning">
+      <AlertTitle>This chart is open in another window</AlertTitle>
+    </Alert>
+  ),
   tabs: (
     <Tabs defaultValue="letters">
       <TabsList>
@@ -154,5 +162,30 @@ describe("Field", () => {
     expect(html).toMatch(new RegExp(`<input[^>]*id="${labelFor ?? ""}"`));
     expect(html).toMatch(/<input[^>]*aria-invalid="true"/);
     expect(html).toMatch(/role="alert"[^>]*>.*Enter a ward\./);
+  });
+});
+
+describe("Alert", () => {
+  it("says a status in words as well as by its icon and colour", () => {
+    const html = renderToString(
+      <Alert variant="critical">
+        <AlertTitle>The observation was not saved</AlertTitle>
+        <AlertDescription>Try again.</AlertDescription>
+      </Alert>,
+    );
+
+    expect(html).toMatch(/data-slot="alert"[^>]*role="alert"|role="alert"[^>]*data-slot="alert"/);
+    expect(html).toMatch(/role="img"[^>]*aria-label="Critical"/);
+  });
+
+  it("gives a plain message no icon and a polite role", () => {
+    const html = renderToString(
+      <Alert>
+        <AlertTitle>The clinic list has changed</AlertTitle>
+      </Alert>,
+    );
+
+    expect(html).toContain('role="status"');
+    expect(html).not.toContain("<svg");
   });
 });
