@@ -1,3 +1,5 @@
+export { Badge, badgeVariants } from "@/components/cadence/badge";
+export type { BadgeProps } from "@/components/cadence/badge";
 export { Button, buttonVariants } from "@/components/cadence/button";
 export type { ButtonProps } from "@/components/cadence/button";
 export {
@@ -31,8 +33,14 @@ export {
   SelectValue,
 } from "@/components/cadence/select";
 export type { SelectContentProps, SelectTriggerProps } from "@/components/cadence/select";
+export { Separator } from "@/components/cadence/separator";
+export type { SeparatorProps } from "@/components/cadence/separator";
+export { Spinner } from "@/components/cadence/spinner";
+export type { SpinnerProps } from "@/components/cadence/spinner";
 export { Switch } from "@/components/cadence/switch";
 export type { SwitchProps } from "@/components/cadence/switch";
 export { Textarea } from "@/components/cadence/textarea";
 export type { TextareaProps } from "@/components/cadence/textarea";
+export { Toggle, toggleVariants } from "@/components/cadence/toggle";
+export type { ToggleProps } from "@/components/cadence/toggle";
 export { cn } from "@/lib/cn";

@@ -15,6 +15,29 @@
       ]
     },
     {
+      "name": "badge",
+      "type": "registry:component",
+      "title": "Badge",
+      "description": "A short label or count. A status variant carries its fill, text and border tokens.",
+      "dependencies": ["@base-ui/react", "class-variance-authority"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/badge.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/badge.tsx"
+        }
+      ],
+      "docs": "A status badge's text must say what the status is. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "primitive",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "button",
       "type": "registry:component",
       "title": "Button",
@@ -176,6 +199,52 @@
       }
     },
     {
+      "name": "separator",
+      "type": "registry:component",
+      "title": "Separator",
+      "description": "A rule between two groups of content, announced as a separator.",
+      "dependencies": ["@base-ui/react"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/separator.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/separator.tsx"
+        }
+      ],
+      "docs": "Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "primitive",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
+      "name": "spinner",
+      "type": "registry:component",
+      "title": "Spinner",
+      "description": "Shows that something is in progress. It fades instead of turning under reduced motion.",
+      "dependencies": ["lucide-react"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/spinner.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/spinner.tsx"
+        }
+      ],
+      "docs": "Pass aria-hidden when text beside it already says what is happening. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "primitive",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "switch",
       "type": "registry:component",
       "title": "Switch",
@@ -213,6 +282,29 @@
         }
       ],
       "docs": "Give every Textarea a Label or an aria-label. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "primitive",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
+      "name": "toggle",
+      "type": "registry:component",
+      "title": "Toggle",
+      "description": "A button that stays pressed. Pressed is a fill and a boundary, never colour alone.",
+      "dependencies": ["@base-ui/react", "class-variance-authority"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/toggle.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/toggle.tsx"
+        }
+      ],
+      "docs": "With iconOnly, keep the label as the toggle's text. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
       "meta": {
         "level": "primitive",
         "domain": "general",

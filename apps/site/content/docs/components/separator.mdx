@@ -1,0 +1,37 @@
+---
+title: Separator
+description: A rule between two groups of content, announced as a separator.
+---
+
+import { Separator } from "@cadence-clinical/ui";
+
+<GradeBadge component="separator" />
+
+<ComponentPreview>
+  <div className="flex h-6 items-center gap-3 text-body">
+    <span>General</span>
+    <Separator orientation="vertical" />
+    <span>Review</span>
+  </div>
+</ComponentPreview>
+
+## Usage
+
+```tsx
+import { Separator } from "@cadence-clinical/ui";
+
+<Separator />
+<Separator orientation="vertical" />
+```
+
+Separator is built on the Base UI [Separator](https://base-ui.com/react/components/separator) and follows the shadcn [Separator](https://ui.shadcn.com/docs/components/separator). A vertical separator stretches to the height of the row it sits in.
+
+## Accessibility
+
+- A separator is announced to a screen reader, so use it where the division means something, such as between two groups in a menu. For a line that is only decoration, use a border.
+
+## Props
+
+| Prop          | Type                         | Default        |
+| ------------- | ---------------------------- | -------------- |
+| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` |
