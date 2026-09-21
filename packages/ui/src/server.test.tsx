@@ -12,6 +12,9 @@ import {
   CardTitle,
   Checkbox,
   Input,
+  Item,
+  ItemContent,
+  ItemTitle,
   Label,
   RadioGroup,
   RadioGroupItem,
@@ -64,6 +67,13 @@ const RENDERS: Record<string, ReactElement> = {
       <TooltipTrigger>Print chart</TooltipTrigger>
       <TooltipContent>Prints the chart as shown</TooltipContent>
     </Tooltip>
+  ),
+  item: (
+    <Item render={<li />}>
+      <ItemContent>
+        <ItemTitle>Review clinic</ItemTitle>
+      </ItemContent>
+    </Item>
   ),
   label: <Label htmlFor="family-name">Family name</Label>,
   card: (

@@ -130,6 +130,29 @@
       }
     },
     {
+      "name": "item",
+      "type": "registry:component",
+      "title": "Item",
+      "description": "A row of media, a title and a description, and actions. Its text wraps and is never cut short.",
+      "dependencies": ["@base-ui/react", "class-variance-authority"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn", "@cadence/separator"],
+      "files": [
+        {
+          "path": "src/components/item.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/item.tsx"
+        }
+      ],
+      "docs": "For a list, render ItemGroup as a ul and each Item as an li. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "composite",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "label",
       "type": "registry:component",
       "title": "Label",

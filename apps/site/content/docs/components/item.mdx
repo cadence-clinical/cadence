@@ -1,0 +1,128 @@
+---
+title: Item
+description: A row of media, a title and a description, and actions. Its text wraps and is never cut short.
+---
+
+import { CalendarDays } from "lucide-react";
+import {
+  Button,
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemGroup,
+  ItemMedia,
+  ItemTitle,
+} from "@cadence-clinical/ui";
+
+<GradeBadge component="item" />
+
+<ComponentPreview>
+  <Item variant="outline" className="w-full max-w-md">
+    <ItemMedia variant="icon">
+      <CalendarDays aria-hidden />
+    </ItemMedia>
+    <ItemContent>
+      <ItemTitle>Review clinic</ItemTitle>
+      <ItemDescription>Thursday at 10:15. Outpatients, Level 2.</ItemDescription>
+    </ItemContent>
+    <ItemActions>
+      <Button variant="outline" size="sm">
+        Reschedule
+      </Button>
+    </ItemActions>
+  </Item>
+</ComponentPreview>
+
+## Usage
+
+```tsx
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemMedia,
+  ItemTitle,
+} from "@cadence-clinical/ui";
+
+<Item variant="outline">
+  <ItemMedia variant="icon">
+    <CalendarDays aria-hidden />
+  </ItemMedia>
+  <ItemContent>
+    <ItemTitle>Review clinic</ItemTitle>
+    <ItemDescription>Thursday at 10:15. Outpatients, Level 2.</ItemDescription>
+  </ItemContent>
+  <ItemActions>
+    <Button variant="outline" size="sm">
+      Reschedule
+    </Button>
+  </ItemActions>
+</Item>;
+```
+
+Item follows the shadcn [Item](https://ui.shadcn.com/docs/components/item) and keeps its part names. Every part is optional. `ItemHeader` and `ItemFooter` add a full-width row above or below the rest.
+
+Item is a [composite](/docs/levels): it uses the [Separator](/docs/components/separator) primitive.
+
+## A list of items
+
+A set of items is usually a list, so say so. Render the group as a `ul` and each item as an `li`, and set `divided` to draw a line between them:
+
+<ComponentPreview>
+  <ItemGroup
+    divided
+    render={<ul aria-label="Appointments" />}
+    className="w-full max-w-md rounded-lg border"
+  >
+    <Item render={<li />}>
+      <ItemContent>
+        <ItemTitle>General clinic</ItemTitle>
+        <ItemDescription>Monday at 08:30</ItemDescription>
+      </ItemContent>
+    </Item>
+    <Item render={<li />}>
+      <ItemContent>
+        <ItemTitle>Review clinic</ItemTitle>
+        <ItemDescription>Thursday at 10:15</ItemDescription>
+      </ItemContent>
+    </Item>
+  </ItemGroup>
+</ComponentPreview>
+
+```tsx
+<ItemGroup divided render={<ul aria-label="Appointments" />}>
+  <Item render={<li />}>...</Item>
+  <Item render={<li />}>...</Item>
+</ItemGroup>
+```
+
+A `ul` may hold only `li` elements, so do not put an `ItemSeparator` in one. `divided` draws its lines as borders. Use `ItemSeparator` between two sets of items in a group that is not a list.
+
+## An item that can be pressed
+
+Pass a link or a button through `render`, and the whole item becomes the target.
+
+```tsx
+<Item variant="outline" render={<a href="/appointments/review" />}>
+  ...
+</Item>
+```
+
+## What Cadence changes
+
+- **Nothing is cut short.** The shadcn item clamps its title to one line and its description to two. An item is where a medicine's name or a result is shown, so here both wrap, however long they are, and the actions stay in the row. On a narrow screen the actions drop under the content.
+- **Spacing and text follow the [density](/docs/theming#density).** `size="sm"` is one step tighter again. shadcn's third size, `xs`, is left out.
+- **A list is valid markup.** shadcn gives the group a list role and its items none, and puts separators between them. Here the list meaning comes through `render`, and `divided` draws the lines.
+- **The focus ring is never faded.**
+
+## Props
+
+| Prop      | On                               | Type                                    | Default   |
+| --------- | -------------------------------- | --------------------------------------- | --------- |
+| `variant` | `Item`                           | `"plain" \| "outline" \| "muted"`       | `"plain"` |
+| `size`    | `Item`                           | `"sm" \| "md"`                          | `"md"`    |
+| `variant` | `ItemMedia`                      | `"plain" \| "icon" \| "image"`          | `"plain"` |
+| `divided` | `ItemGroup`                      | `boolean`                               | `false`   |
+| `render`  | `Item`, `ItemGroup`, `ItemTitle` | An element or a function, as in Base UI | A `div`   |

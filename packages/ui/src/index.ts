@@ -16,6 +16,25 @@ export { Checkbox } from "@/components/cadence/checkbox";
 export type { CheckboxProps } from "@/components/cadence/checkbox";
 export { Input } from "@/components/cadence/input";
 export type { InputProps } from "@/components/cadence/input";
+export {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemFooter,
+  ItemGroup,
+  ItemHeader,
+  ItemMedia,
+  ItemSeparator,
+  ItemTitle,
+  itemVariants,
+} from "@/components/cadence/item";
+export type {
+  ItemGroupProps,
+  ItemMediaProps,
+  ItemPartProps,
+  ItemProps,
+} from "@/components/cadence/item";
 export { Label } from "@/components/cadence/label";
 export type { LabelProps } from "@/components/cadence/label";
 export { RadioGroup, RadioGroupItem } from "@/components/cadence/radio-group";

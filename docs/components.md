@@ -43,7 +43,7 @@ A small group of parts or primitives that works as one unit.
 | Component    | Status | Built on                         | Why                                                                                                |
 | ------------ | ------ | -------------------------------- | -------------------------------------------------------------------------------------------------- |
 | Card         | Built  | None                             |                                                                                                    |
-| Item         | Agreed | None                             | A row of media, title, description and actions.                                                    |
+| Item         | Built  | None                             | A row of media, title, description and actions.                                                    |
 | Field        | Agreed | Base UI Field, Label, the inputs | Label, control, description and error as one unit. The label sits 4px (`gap-1`) above its control. |
 | Tabs         | Agreed | Base UI Tabs                     |                                                                                                    |
 | Alert        | Agreed | None                             | The first status surface: fill, border token, icon and text, never colour alone.                   |
