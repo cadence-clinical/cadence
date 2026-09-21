@@ -1,0 +1,100 @@
+---
+title: Popover
+description: A small panel that opens from a trigger and leaves the page in reach. It never outgrows the room it has.
+---
+
+import {
+  Button,
+  Checkbox,
+  Field,
+  FieldGroup,
+  FieldLabel,
+  Popover,
+  PopoverContent,
+  PopoverDescription,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverTrigger,
+} from "@cadence-clinical/ui";
+
+<GradeBadge component="popover" />
+
+<ComponentPreview>
+  <Popover>
+    <PopoverTrigger render={<Button variant="outline" />}>Filters</PopoverTrigger>
+    <PopoverContent align="start">
+      <PopoverHeader>
+        <PopoverTitle>Filter appointments</PopoverTitle>
+        <PopoverDescription>Show only the appointments that match.</PopoverDescription>
+      </PopoverHeader>
+      <FieldGroup>
+        <Field orientation="horizontal">
+          <Checkbox defaultChecked />
+          <FieldLabel>Booked</FieldLabel>
+        </Field>
+        <Field orientation="horizontal">
+          <Checkbox />
+          <FieldLabel>Cancelled</FieldLabel>
+        </Field>
+      </FieldGroup>
+    </PopoverContent>
+  </Popover>
+</ComponentPreview>
+
+## Usage
+
+```tsx
+import {
+  Button,
+  Popover,
+  PopoverContent,
+  PopoverDescription,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverTrigger,
+} from "@cadence-clinical/ui";
+
+<Popover>
+  <PopoverTrigger render={<Button variant="outline" />}>Filters</PopoverTrigger>
+  <PopoverContent align="start">
+    <PopoverHeader>
+      <PopoverTitle>Filter appointments</PopoverTitle>
+      <PopoverDescription>Show only the appointments that match.</PopoverDescription>
+    </PopoverHeader>
+    ...
+  </PopoverContent>
+</Popover>;
+```
+
+Give the panel a `PopoverTitle`, which names it, or an `aria-label` on `PopoverContent`. Render `PopoverTrigger` as a [Button](/docs/components/button) through `render`. `PopoverContent` takes `side`, `align`, `sideOffset` and `alignOffset` to place the panel against its trigger.
+
+Popover is built on the Base UI [Popover](https://base-ui.com/react/components/popover) and accepts all of its props. It follows the shadcn [Popover](https://ui.shadcn.com/docs/components/popover) and keeps its part names.
+
+## Popover, dialog or tooltip
+
+- A **popover** leaves the page in reach. A press on the page closes it, and the press still lands. Use it for filters, settings or more about one thing.
+- A [Dialog](/docs/components/dialog) takes over the page until its task is finished.
+- A [Tooltip](/docs/components/tooltip) holds a few words and nothing to interact with. It does not open on a touch screen, so nothing that must be read goes in one. A popover opens on a press, so it works on touch.
+
+## What Cadence changes
+
+- **The panel never outgrows the room it has.** The shadcn panel is a fixed 18rem wide with no maximum height. Here it is 18rem at most, narrower on a narrow screen, and what does not fit scrolls inside it. Long words wrap.
+- **From the keyboard it opens at once.** Opened with the pointer, the panel grows from its trigger with a 150ms fade. Opened from the keyboard, or dismissed, it does not animate. With reduced motion it only fades.
+- **The panel shows its focus.** A panel with nothing inside to focus takes focus itself. shadcn hides its outline. Here it gets the focus ring.
+- **Padding and text follow the [density](/docs/theming#density).**
+
+## Accessibility
+
+- Opening the panel moves focus to the first control inside it, or to the panel when it has none. Escape closes it and sends focus back to the trigger.
+- The panel is a dialog named by its title and described by its description. It does not trap focus: Tab leaves it for the rest of the page.
+
+## Props
+
+| Prop                   | On               | Type                                     | Default    |
+| ---------------------- | ---------------- | ---------------------------------------- | ---------- |
+| `open`, `onOpenChange` | `Popover`        |                                          |            |
+| `defaultOpen`          | `Popover`        | `boolean`                                | `false`    |
+| `side`                 | `PopoverContent` | `"top" \| "right" \| "bottom" \| "left"` | `"bottom"` |
+| `align`                | `PopoverContent` | `"start" \| "center" \| "end"`           | `"center"` |
+| `sideOffset`           | `PopoverContent` | `number`                                 | `4`        |
+| `render`               | `PopoverTrigger` | An element, as in Base UI                | A `button` |

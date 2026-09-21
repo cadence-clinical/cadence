@@ -29,6 +29,7 @@
     "components/dialog",
     "components/field",
     "components/item",
+    "components/popover",
     "components/tabs"
   ]
 }

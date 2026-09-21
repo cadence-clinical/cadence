@@ -76,6 +76,15 @@ export type {
 } from "@/components/cadence/item";
 export { Label } from "@/components/cadence/label";
 export type { LabelProps } from "@/components/cadence/label";
+export {
+  Popover,
+  PopoverContent,
+  PopoverDescription,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverTrigger,
+} from "@/components/cadence/popover";
+export type { PopoverContentProps } from "@/components/cadence/popover";
 export { RadioGroup, RadioGroupItem } from "@/components/cadence/radio-group";
 export type { RadioGroupItemProps, RadioGroupProps } from "@/components/cadence/radio-group";
 export {
