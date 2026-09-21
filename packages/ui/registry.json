@@ -15,6 +15,29 @@
       ]
     },
     {
+      "name": "alert",
+      "type": "registry:component",
+      "title": "Alert",
+      "description": "A message that stands out from the page. A status carries its fill, border, icon and word, never colour alone.",
+      "dependencies": ["class-variance-authority", "lucide-react"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/alert.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/alert.tsx"
+        }
+      ],
+      "docs": "An Alert is announced when it appears. For a message that is on the page from the start, set role. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "composite",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "badge",
       "type": "registry:component",
       "title": "Badge",

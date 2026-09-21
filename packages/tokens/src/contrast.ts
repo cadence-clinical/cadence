@@ -48,6 +48,8 @@ export const REQUIRED_PAIRINGS: readonly Pairing[] = [
     { foreground: `${status}-text`, background: "background", kind: "text" },
     { foreground: `${status}-text`, background: "card", kind: "text" },
     { foreground: `${status}-text`, background: `${status}-subtle`, kind: "text" },
+    // An alert's message is body text, so it takes the page's foreground on the status fill.
+    { foreground: "foreground", background: `${status}-subtle`, kind: "text" },
     { foreground: `${status}-border`, background: "background", kind: "boundary" },
     { foreground: `${status}-border`, background: "card", kind: "boundary" },
   ]),

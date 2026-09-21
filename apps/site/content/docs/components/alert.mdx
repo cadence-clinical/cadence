@@ -1,0 +1,111 @@
+---
+title: Alert
+description: A message that stands out from the page. A status carries its fill, border, icon and word, never colour alone.
+---
+
+import { Alert, AlertAction, AlertDescription, AlertTitle, Button } from "@cadence-clinical/ui";
+
+<GradeBadge component="alert" />
+
+<ComponentPreview>
+  <Alert variant="critical" className="w-full max-w-md">
+    <AlertTitle>The observation was not saved</AlertTitle>
+    <AlertDescription>The connection dropped before it was sent.</AlertDescription>
+    <AlertAction>
+      <Button size="sm" variant="outline">
+        Try again
+      </Button>
+    </AlertAction>
+  </Alert>
+</ComponentPreview>
+
+## Usage
+
+```tsx
+import { Alert, AlertAction, AlertDescription, AlertTitle, Button } from "@cadence-clinical/ui";
+
+<Alert variant="critical">
+  <AlertTitle>The observation was not saved</AlertTitle>
+  <AlertDescription>The connection dropped before it was sent.</AlertDescription>
+  <AlertAction>
+    <Button size="sm" variant="outline" onClick={retry}>
+      Try again
+    </Button>
+  </AlertAction>
+</Alert>;
+```
+
+Say what happened in `AlertTitle` and what to do next in `AlertDescription`. `AlertAction` holds a button or two. Every part is optional.
+
+Alert follows the shadcn [Alert](https://ui.shadcn.com/docs/components/alert) and keeps its part names. For a status on a short label, use a [Badge](/docs/components/badge). For a message about one form control, use the error of a [Field](/docs/components/field).
+
+## Status
+
+`variant` takes `default` and the four statuses: `critical`, `warning`, `success` and `info`.
+
+<ComponentPreview>
+  <div className="grid w-full max-w-md gap-3">
+    <Alert variant="critical">
+      <AlertTitle>The observation was not saved</AlertTitle>
+    </Alert>
+    <Alert variant="warning">
+      <AlertTitle>This chart is open in another window</AlertTitle>
+    </Alert>
+    <Alert variant="success">
+      <AlertTitle>The appointment is booked</AlertTitle>
+    </Alert>
+    <Alert variant="info">
+      <AlertTitle>The clinic list updates each morning</AlertTitle>
+    </Alert>
+  </div>
+</ComponentPreview>
+
+A status is never shown by colour alone. Each status variant carries four things:
+
+- a tinted fill and its border token, which gives a pale fill an edge on a white page
+- an icon whose outline differs from the others: an octagon, a triangle, a ticked circle and a circled "i"
+- the status in words for a screen reader, in place of the icon: "Critical", "Warning", "Success" or "Information"
+- the title in the status's text colour, and the message in the page's text colour at full contrast
+
+An alert shows the status it is given. It never works one out: what counts as critical is decided outside Cadence, as [Clinical safety](/docs/clinical-safety) explains. The [status colours](/docs/theming#status-colours) are the same in every theme.
+
+### Change the icon
+
+Pass `icon` to replace a variant's icon. A status variant always has one, and still says its status in words. Pass `iconLabel` to change those words, for example into another language:
+
+```tsx
+<Alert variant="critical" icon={<WifiOff />} iconLabel="Offline">
+  <AlertTitle>Changes are kept on this device</AlertTitle>
+</Alert>
+```
+
+## When it is announced
+
+An alert that appears in response to something is announced by a screen reader. `critical` and `warning` have `role="alert"`, which interrupts. The other variants have `role="status"`, which waits until the screen reader is idle.
+
+Those roles are for a message that appears. A message that is on the page from the start is not an announcement, so give it a role that suits it. The GOV.UK [notification banner](https://design-system.service.gov.uk/components/notification-banner/) makes a standing message a region named by its title, which a screen reader can move to:
+
+```tsx
+<Alert variant="warning" role="region" aria-labelledby="training-title">
+  <AlertTitle id="training-title">This is a training environment</AlertTitle>
+  <AlertDescription>Nothing entered here reaches a real record.</AlertDescription>
+</Alert>
+```
+
+## What Cadence changes
+
+- **Four statuses with their tokens**, where shadcn has `default` and `destructive`. The shadcn `destructive` is `critical` here.
+- **The icon is a prop, and a status always has one.** In shadcn the icon is an `svg` you place as a child, so a status alert can be left with colour only. Here each status supplies its icon and its word.
+- **The message is at full contrast.** shadcn sets it in muted text, or in the destructive colour at 90%. The contrast of the page's text colour on each status fill is asserted in the `@cadence-clinical/tokens` test suite.
+- **The role follows the urgency.** shadcn gives every alert `role="alert"`.
+- **The action has its own column.** shadcn positions it over the corner and reserves a fixed 72px for it, which a wider button overruns. Here it takes the width it needs, and drops under the words when the alert is narrower than 24rem. The alert measures itself and not the screen, so this holds in a side panel.
+- **Padding and text follow the [density](/docs/theming#density)**, and long words wrap.
+
+## Props
+
+| Prop        | On      | Type                                                          | Default                           |
+| ----------- | ------- | ------------------------------------------------------------- | --------------------------------- |
+| `variant`   | `Alert` | `"default" \| "critical" \| "warning" \| "success" \| "info"` | `"default"`                       |
+| `icon`      | `Alert` | An element                                                    | The variant's icon                |
+| `iconLabel` | `Alert` | `string`                                                      | The variant's name                |
+| `role`      | `Alert` | `string`                                                      | `"alert"` or `"status"`, as above |
