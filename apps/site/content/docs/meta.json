@@ -26,6 +26,7 @@
     "---Composites---",
     "components/alert",
     "components/card",
+    "components/dialog",
     "components/field",
     "components/item",
     "components/tabs"

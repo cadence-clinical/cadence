@@ -47,7 +47,7 @@ A small group of parts or primitives that works as one unit.
 | Field        | Built  | Base UI Field, Label, the inputs | Label, control, description and error as one unit. The label sits 4px (`gap-1`) above its control. |
 | Tabs         | Built  | Base UI Tabs                     |                                                                                                    |
 | Alert        | Built  | None                             | The first status surface: fill, border token, icon and text, never colour alone.                   |
-| Dialog       | Agreed | Base UI Dialog, Button           | Confirming a destructive action. The sidebar also needs a sheet on a phone.                        |
+| Dialog       | Built  | Base UI Dialog, Button           | Confirming a destructive action. The sidebar also needs a sheet on a phone.                        |
 | Popover      | Agreed | Base UI Popover                  | The data table's filters and column settings.                                                      |
 | Menu         | Agreed | Base UI Menu                     | Row actions in the data table, and the sidebar's user menu.                                        |
 | Toggle group | Agreed | Base UI Toggle group, Toggle     | One of a few views, such as chart or table.                                                        |

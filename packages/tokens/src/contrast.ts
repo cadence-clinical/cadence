@@ -32,6 +32,8 @@ export const REQUIRED_PAIRINGS: readonly Pairing[] = [
   { foreground: "muted-foreground", background: "background", kind: "text" },
   { foreground: "muted-foreground", background: "card", kind: "text" },
   { foreground: "muted-foreground", background: "muted", kind: "text" },
+  // A dialog's description, on the surface a dialog and a menu share.
+  { foreground: "muted-foreground", background: "popover", kind: "text" },
   { foreground: "primary-foreground", background: "primary", kind: "text" },
   { foreground: "primary-text", background: "background", kind: "text" },
   { foreground: "primary-text", background: "card", kind: "text" },
