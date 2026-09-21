@@ -30,6 +30,7 @@ One control or one element. Built first, in this order, because the composites n
 | Checkbox    | Built    | Checkbox          | Field needs it, and the data table needs it for row selection.                               |
 | Radio group | Built    | Radio group       | Field needs it: one choice from a few, all visible at once.                                  |
 | Switch      | Built    | Switch            | Field needs it for a setting that applies at once.                                           |
+| Table       | Built    | None              | The data table is built on it. Asked for with TanStack Table.                                |
 | Separator   | Built    | Separator         | The sidebar and menus need it.                                                               |
 | Badge       | Built    | None              | A short status or count, in tables and items. Carries its border token.                      |
 | Tooltip     | Built    | Tooltip           | The collapsed sidebar needs it to name its icons.                                            |

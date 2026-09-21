@@ -406,6 +406,29 @@
       }
     },
     {
+      "name": "table",
+      "type": "registry:component",
+      "title": "Table",
+      "description": "A table of data. Cells wrap between words, a word is never broken, and a table that is too wide scrolls inside its own focusable box.",
+      "dependencies": [],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/table.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/table.tsx"
+        }
+      ],
+      "docs": "Name every Table with a TableCaption, an aria-label or aria-labelledby. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "primitive",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "tabs",
       "type": "registry:component",
       "title": "Tabs",

@@ -45,6 +45,10 @@ import {
   Separator,
   Spinner,
   Switch,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
   Tabs,
   TabsContent,
   TabsList,
@@ -86,6 +90,15 @@ const RENDERS: Record<string, ReactElement> = {
   spinner: <Spinner />,
   switch: <Switch aria-label="Appointment reminders" />,
   textarea: <Textarea aria-label="Notes" />,
+  table: (
+    <Table aria-label="Appointments">
+      <TableBody>
+        <TableRow>
+          <TableCell>Review clinic</TableCell>
+        </TableRow>
+      </TableBody>
+    </Table>
+  ),
   "toggle-group": (
     <ToggleGroup aria-label="Text style">
       <ToggleGroupItem value="bold">Bold</ToggleGroupItem>
