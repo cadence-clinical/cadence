@@ -46,6 +46,7 @@ test("no page scrolls sideways at the current viewport", async ({ page }) => {
     "/docs/components/spinner",
     "/docs/components/switch",
     "/docs/components/toggle",
+    "/docs/components/tooltip",
     "/docs/components/textarea",
     "/docs/components/input",
     "/docs/components/label",

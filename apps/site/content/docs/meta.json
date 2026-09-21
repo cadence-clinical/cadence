@@ -21,6 +21,7 @@
     "components/switch",
     "components/textarea",
     "components/toggle",
+    "components/tooltip",
     "components/typeset",
     "---Composites---",
     "components/card"
