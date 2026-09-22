@@ -46,6 +46,7 @@
     "components/calendar",
     "components/data-table",
     "components/form",
-    "components/sidebar"
+    "components/sidebar",
+    "components/toast"
   ]
 }

@@ -67,6 +67,7 @@ const DOCS_PAGES = [
   "/docs/components/toggle-group",
   "/docs/components/tooltip",
   "/docs/components/textarea",
+  "/docs/components/toast",
   "/docs/components/input",
   "/docs/components/item",
   "/docs/components/label",
