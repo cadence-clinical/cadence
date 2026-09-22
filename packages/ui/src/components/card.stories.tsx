@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Pencil } from "lucide-react";
-import { expect, within } from "storybook/test";
+import { expect, waitFor, within } from "storybook/test";
 
 import { Button } from "@/components/cadence/button";
 import {
@@ -89,6 +89,30 @@ const followsDensity =
     if (!header) throw new Error("The title has no header around it.");
     await expect(parseFloat(getComputedStyle(header).paddingLeft)).toBe(expected.padding);
   };
+
+/** The page's colour as <html> resolves it, whatever the canvas around the story paints. */
+function pageColour() {
+  const probe = document.createElement("div");
+  probe.style.backgroundColor = "var(--background)";
+  document.documentElement.append(probe);
+  const colour = getComputedStyle(probe).backgroundColor;
+  probe.remove();
+  return colour;
+}
+
+// Outline buttons, fields and checkboxes fill with the page colour, and inside a card the card is
+// their page. In dark mode the two differ, so otherwise the button is a darker hole in the card.
+export const ControlsTakeTheCardsColour: Story = {
+  globals: { mode: "dark" },
+  play: async ({ canvasElement }) => {
+    const button = within(canvasElement).getByRole("button", { name: "Ask to reschedule" });
+    const card = button.closest("[data-slot=card]");
+    if (!card) throw new Error("The button is not in a card.");
+    const fill = (element: Element) => getComputedStyle(element).backgroundColor;
+    await waitFor(() => expect(fill(button)).toBe(fill(card)));
+    await expect(fill(card)).not.toBe(pageColour());
+  },
+};
 
 export const FollowsCompactDensity: Story = {
   globals: { density: "compact" },

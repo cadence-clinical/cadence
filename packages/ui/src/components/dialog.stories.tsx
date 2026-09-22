@@ -57,6 +57,30 @@ export const OpenAndComfortable: Story = {
   },
 };
 
+/** The page's colour as <html> resolves it, whatever the canvas around the story paints. */
+function pageColour() {
+  const probe = document.createElement("div");
+  probe.style.backgroundColor = "var(--background)";
+  document.documentElement.append(probe);
+  const colour = getComputedStyle(probe).backgroundColor;
+  probe.remove();
+  return colour;
+}
+
+// An outline button fills with the page colour, and inside the dialog the dialog is its page. In
+// dark mode the two differ, so otherwise the button is a darker hole in the dialog.
+export const ControlsTakeTheDialogsColour: Story = {
+  args: { defaultOpen: true },
+  globals: { mode: "dark" },
+  play: async () => {
+    const fill = (element: Element) => getComputedStyle(element).backgroundColor;
+    const dialog = await screen.findByRole("dialog");
+    const keep = within(dialog).getByRole("button", { name: "Keep appointment" });
+    await waitFor(() => expect(fill(keep)).toBe(fill(dialog)));
+    await expect(fill(dialog)).not.toBe(pageColour());
+  },
+};
+
 export const OpensNamedAndDescribed: Story = {
   play: async ({ args, canvasElement }) => {
     await userEvent.click(

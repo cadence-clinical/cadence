@@ -72,6 +72,8 @@ function DialogContent({
         data-slot="dialog-content"
         className={cn(
           "[--dialog-spacing:calc(var(--container-padding)+0.25rem)]",
+          // The controls inside fill with the dialog's colour, not the page's, as in a card.
+          "[--background:var(--popover)]",
           // One column that may shrink: a grid's own column grows to its longest word.
           "fixed top-1/2 left-1/2 z-50 grid max-h-[calc(100dvh-2rem)] w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 grid-cols-[minmax(0,1fr)] gap-(--dialog-spacing) overflow-y-auto rounded-lg border bg-popover p-(--dialog-spacing) text-body text-popover-foreground shadow-lg outline-none sm:max-w-sm",
           // Tailwind sets `scale` as its own property, so that is the property that transitions.

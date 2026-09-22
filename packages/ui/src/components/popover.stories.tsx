@@ -63,6 +63,29 @@ function panel() {
   return element;
 }
 
+/** The page's colour as <html> resolves it, whatever the canvas around the story paints. */
+function pageColour() {
+  const probe = document.createElement("div");
+  probe.style.backgroundColor = "var(--background)";
+  document.documentElement.append(probe);
+  const colour = getComputedStyle(probe).backgroundColor;
+  probe.remove();
+  return colour;
+}
+
+// A checkbox fills with the page colour, and inside the panel the panel is its page. In dark mode
+// the two differ, so otherwise the box is a darker hole in the panel.
+export const ControlsTakeThePanelsColour: Story = {
+  args: { defaultOpen: true },
+  globals: { mode: "dark" },
+  play: async () => {
+    const fill = (element: Element) => getComputedStyle(element).backgroundColor;
+    const box = await waitFor(() => within(panel()).getByRole("checkbox", { name: "Cancelled" }));
+    await waitFor(() => expect(fill(box)).toBe(fill(panel())));
+    await expect(fill(panel())).not.toBe(pageColour());
+  },
+};
+
 export const OpensNamedAndDescribed: Story = {
   play: async ({ args, canvasElement }) => {
     await userEvent.click(within(canvasElement).getByRole("button", { name: "Filters" }));

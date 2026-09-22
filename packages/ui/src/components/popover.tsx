@@ -46,6 +46,8 @@ function PopoverContent({
           data-slot="popover-content"
           className={cn(
             "flex max-h-(--available-height) w-72 max-w-(--available-width) origin-(--transform-origin) flex-col gap-container-sm overflow-y-auto rounded-lg border bg-popover p-container text-body wrap-break-word text-popover-foreground shadow-md",
+            // The controls inside fill with the popover's colour, not the page's, as in a card.
+            "[--background:var(--popover)]",
             // A panel with nothing inside to focus takes focus itself, and shows that it has.
             "outline-none focus-visible:ring-2 focus-visible:ring-ring",
             // Tailwind sets `scale` as its own property, so that is the property that transitions.
