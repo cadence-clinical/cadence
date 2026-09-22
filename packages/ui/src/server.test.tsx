@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 import { createColumnHelper, useTable } from "@tanstack/react-table";
 
 import registry from "../registry.json";
+import { Calendar } from "./calendar";
 import { DataTable, dataTableFeatures } from "./data-table";
 import {
   Alert,
@@ -154,6 +155,7 @@ const RENDERS: Record<string, ReactElement> = {
   spinner: <Spinner />,
   switch: <Switch aria-label="Appointment reminders" />,
   textarea: <Textarea aria-label="Notes" />,
+  calendar: <Calendar mode="single" defaultMonth={new Date(2026, 8, 1)} />,
   "data-table": <ServerDataTable />,
   sidebar: (
     <SidebarProvider>
