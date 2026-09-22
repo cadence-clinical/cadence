@@ -470,7 +470,9 @@ export const WrittenAsInShadcnsGuide: Story = {
     await expect(linksIn(summary).map((link) => link.textContent)).toEqual([
       "Enter a title for the referral.",
     ]);
-    await userEvent.click(linksIn(summary)[0] as HTMLElement);
+    const [link] = linksIn(summary);
+    if (!link) throw new Error("The summary has no link.");
+    await userEvent.click(link);
     await expect(canvas.getByRole("textbox", { name: "Title" })).toHaveFocus();
   },
 };
