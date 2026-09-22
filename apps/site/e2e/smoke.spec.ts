@@ -53,6 +53,7 @@ const DOCS_PAGES = [
   "/docs/components/radio-group",
   "/docs/components/select",
   "/docs/components/separator",
+  "/docs/components/sheet",
   "/docs/components/sidebar",
   "/docs/components/skeleton",
   "/docs/components/slider",

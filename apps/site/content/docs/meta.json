@@ -38,6 +38,7 @@
     "components/field",
     "components/item",
     "components/popover",
+    "components/sheet",
     "components/tabs",
     "components/toggle-group",
     "---Patterns---",
