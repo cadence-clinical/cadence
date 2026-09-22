@@ -7,10 +7,20 @@ import {
   type RowSelectionState,
   type SortingState,
 } from "@tanstack/react-table";
+import { Ellipsis, Pencil, Printer, Trash2 } from "lucide-react";
 import { useState } from "react";
-import { expect, screen, userEvent, waitFor, within } from "storybook/test";
+import { expect, fn, screen, userEvent, waitFor, within } from "storybook/test";
 
 import { Badge } from "@/components/cadence/badge";
+import { Button } from "@/components/cadence/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/cadence/dropdown-menu";
+import { Switch } from "@/components/cadence/switch";
 import {
   DataTable,
   DataTableColumnHeader,
@@ -43,6 +53,9 @@ const APPOINTMENTS: Appointment[] = Array.from({ length: 23 }, (_, index) => ({
   minutes: 15 + (index % 4) * 15,
 }));
 
+const reminders = fn();
+const reschedule = fn();
+
 const helper = createColumnHelper<typeof dataTableFeatures, Appointment>();
 
 const columns = helper.columns([
@@ -68,7 +81,55 @@ const columns = helper.columns([
   }),
 ]);
 
-function AppointmentsTable({ data = APPOINTMENTS }: { data?: Appointment[] }) {
+/**
+ * What a row's actions look like: a menu for the row, and a switch for a setting that applies at
+ * once. Both stop the row's own handlers, so acting on a row never also selects it.
+ */
+const actionsColumn = helper.display({
+  id: "actions",
+  header: () => <span className="sr-only">Actions</span>,
+  meta: { label: "Actions", align: "end" },
+  cell: ({ row }) => (
+    <div className="flex items-center justify-end gap-control-gap">
+      <Switch
+        aria-label={`Send a reminder for ${row.original.clinic}, ${row.original.day}`}
+        defaultChecked={row.index % 2 === 0}
+        onCheckedChange={reminders}
+      />
+      <DropdownMenu>
+        <DropdownMenuTrigger render={<Button variant="ghost" size="sm" iconOnly />}>
+          <Ellipsis aria-hidden />
+          {`Actions for ${row.original.clinic}, ${row.original.day}`}
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem onClick={reschedule}>
+            <Pencil aria-hidden />
+            Reschedule
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <Printer aria-hidden />
+            Print letter
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem variant="destructive">
+            <Trash2 aria-hidden />
+            Cancel appointment
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
+  ),
+});
+
+const withActions = [...columns, actionsColumn];
+
+function AppointmentsTable({
+  data = APPOINTMENTS,
+  actions = false,
+}: {
+  data?: Appointment[];
+  actions?: boolean;
+}) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [columnVisibility, setColumnVisibility] = useState<ColumnVisibilityState>({});
@@ -76,7 +137,7 @@ function AppointmentsTable({ data = APPOINTMENTS }: { data?: Appointment[] }) {
   const table = useTable({
     features: dataTableFeatures,
     data,
-    columns,
+    columns: actions ? withActions : columns,
     getRowId: (row) => row.id,
     state: { sorting, rowSelection, columnVisibility, pagination },
     onSortingChange: setSorting,
@@ -89,7 +150,7 @@ function AppointmentsTable({ data = APPOINTMENTS }: { data?: Appointment[] }) {
       <div className="flex justify-end">
         <DataTableViewOptions table={table} />
       </div>
-      <div className="rounded-md border">
+      <div className="min-w-0 rounded-md border">
         <DataTable table={table} aria-label="Appointments" />
       </div>
       <DataTablePagination table={table} />
@@ -206,6 +267,54 @@ export const Empty: Story = {
     const canvas = within(canvasElement);
     await expect(canvas.getByRole("cell", { name: "Nothing to show." })).toBeVisible();
     await expect(canvas.getByText("Page 1 of 1")).toBeVisible();
+  },
+};
+
+// A row's actions: a switch that applies at once, and a menu for the rest. Acting on a row does
+// not select it.
+export const WithRowActions: Story = {
+  args: { actions: true },
+  play: async ({ canvasElement }) => {
+    reminders.mockClear();
+    reschedule.mockClear();
+    const canvas = within(canvasElement);
+    // The actions column's heading is for a screen reader, and each control names its own row.
+    await expect(canvas.getByRole("columnheader", { name: "Actions" })).toBeVisible();
+    const row = "General clinic, Monday";
+
+    const reminder = canvas.getByRole("switch", { name: `Send a reminder for ${row}` });
+    await userEvent.click(reminder);
+    await expect(reminders).toHaveBeenCalledOnce();
+
+    await userEvent.click(canvas.getByRole("button", { name: `Actions for ${row}` }));
+    await userEvent.click(await screen.findByRole("menuitem", { name: /Reschedule/ }));
+    await expect(reschedule).toHaveBeenCalledOnce();
+
+    // Neither the switch nor the menu selected the row.
+    await expect(canvas.getByText("0 of 23 rows selected")).toBeVisible();
+  },
+};
+
+// The columns fit, so there is no sideways scroll. A sort button used to hang past the last
+// column's padding, which put a scrollbar under every table.
+export const FittingColumnsDoNotScroll: Story = {
+  play: async ({ canvasElement }) => {
+    const box = canvasElement.querySelector("[data-slot=table-container]");
+    if (!(box instanceof HTMLElement)) throw new Error("No table container");
+    await expect(box.scrollWidth).toBe(box.clientWidth);
+
+    // The words of a sortable heading start where a plain heading's do.
+    const canvas = within(canvasElement);
+    const inset = (cell: HTMLElement) => {
+      const text = document.createTreeWalker(cell, NodeFilter.SHOW_TEXT).nextNode();
+      if (!text) throw new Error("The heading has no words");
+      const range = document.createRange();
+      range.selectNodeContents(text);
+      return Math.round(range.getBoundingClientRect().left - cell.getBoundingClientRect().left);
+    };
+    await expect(inset(canvas.getByRole("columnheader", { name: "Clinic" }))).toBe(
+      inset(canvas.getByRole("columnheader", { name: "Day" })),
+    );
   },
 };
 
