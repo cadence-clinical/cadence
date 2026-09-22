@@ -258,6 +258,36 @@
       }
     },
     {
+      "name": "form",
+      "type": "registry:component",
+      "title": "Form",
+      "description": "A group of fields with one error summary. A failed attempt to send lists every problem at the top, each linked to its field, and moves focus there.",
+      "dependencies": ["@base-ui/react"],
+      "registryDependencies": [
+        "@cadence/theme",
+        "@cadence/cn",
+        "@cadence/alert",
+        "@cadence/button",
+        "@cadence/field",
+        "@cadence/spinner"
+      ],
+      "files": [
+        {
+          "path": "src/components/form.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/form.tsx"
+        }
+      ],
+      "docs": "Put a FormErrorSummary first in the Form and a Field around each control: the summary reads each Field's error. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "pattern",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "input",
       "type": "registry:component",
       "title": "Input",
@@ -441,36 +471,6 @@
         }
       ],
       "docs": "Wrap the layout in SidebarProvider, with the Sidebar and a SidebarInset beside it. Mark the page shown with isActive. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
-      "meta": {
-        "level": "pattern",
-        "domain": "general",
-        "grade": {
-          "level": "tested"
-        }
-      }
-    },
-    {
-      "name": "form",
-      "type": "registry:component",
-      "title": "Form",
-      "description": "A group of fields with one error summary. A failed attempt to send lists every problem at the top, each linked to its field, and moves focus there.",
-      "dependencies": ["@base-ui/react"],
-      "registryDependencies": [
-        "@cadence/theme",
-        "@cadence/cn",
-        "@cadence/alert",
-        "@cadence/button",
-        "@cadence/field",
-        "@cadence/spinner"
-      ],
-      "files": [
-        {
-          "path": "src/components/form.tsx",
-          "type": "registry:component",
-          "target": "components/cadence/form.tsx"
-        }
-      ],
-      "docs": "Put a FormErrorSummary first in the Form and a Field around each control: the summary reads each Field's error. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
       "meta": {
         "level": "pattern",
         "domain": "general",
