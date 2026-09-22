@@ -43,6 +43,7 @@
     "components/tabs",
     "components/toggle-group",
     "---Patterns---",
+    "components/calendar",
     "components/data-table",
     "components/form",
     "components/sidebar"
