@@ -26,6 +26,7 @@
     "components/typeset",
     "---Composites---",
     "components/alert",
+    "components/alert-dialog",
     "components/card",
     "components/dialog",
     "components/dropdown-menu",

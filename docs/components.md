@@ -49,7 +49,7 @@ A small group of parts or primitives that works as one unit.
 | Tabs          | Built  | Base UI Tabs                     |                                                                                                    |
 | Alert         | Built  | None                             | The first status surface: fill, border token, icon and text, never colour alone.                   |
 | Dialog        | Built  | Base UI Dialog, Button           | One task over the page, such as editing a record. The sidebar also needs a sheet on a phone.       |
-| Alert dialog  | Agreed | Base UI Alert dialog, Button     | Confirming a destructive action. It must be answered, and a press outside does not close it.       |
+| Alert dialog  | Built  | Base UI Alert dialog, Button     | Confirming a destructive action. It must be answered, and a press outside does not close it.       |
 | Popover       | Built  | Base UI Popover                  | The data table's filters and column settings.                                                      |
 | Dropdown menu | Built  | Base UI Menu                     | Row actions in the data table, and the sidebar's user menu. No submenus.                           |
 | Toggle group  | Built  | Base UI Toggle group, Toggle     | A set of filters or text styles. A view switch must have an answer, so it is Tabs.                 |

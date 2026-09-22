@@ -1,0 +1,104 @@
+---
+title: Alert dialog
+description: A dialog that must be answered. Confirming an action that stops, removes or cannot be undone, with focus on the safe answer.
+---
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+  Button,
+} from "@cadence-clinical/ui";
+
+<GradeBadge component="alert-dialog" />
+
+<ComponentPreview>
+  <AlertDialog>
+    <AlertDialogTrigger render={<Button variant="destructive" />}>
+      Cease medicine
+    </AlertDialogTrigger>
+    <AlertDialogContent>
+      <AlertDialogHeader>
+        <AlertDialogTitle>Cease this medicine?</AlertDialogTitle>
+        <AlertDialogDescription>
+          It will be marked as ceased from today. The record of past doses is kept.
+        </AlertDialogDescription>
+      </AlertDialogHeader>
+      <AlertDialogFooter>
+        <AlertDialogCancel>Keep medicine</AlertDialogCancel>
+        <AlertDialogAction variant="destructive">Cease medicine</AlertDialogAction>
+      </AlertDialogFooter>
+    </AlertDialogContent>
+  </AlertDialog>
+</ComponentPreview>
+
+## Usage
+
+```tsx
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+  Button,
+} from "@cadence-clinical/ui";
+
+<AlertDialog>
+  <AlertDialogTrigger render={<Button variant="destructive" />}>Cease medicine</AlertDialogTrigger>
+  <AlertDialogContent>
+    <AlertDialogHeader>
+      <AlertDialogTitle>Cease this medicine?</AlertDialogTitle>
+      <AlertDialogDescription>
+        It will be marked as ceased from today. The record of past doses is kept.
+      </AlertDialogDescription>
+    </AlertDialogHeader>
+    <AlertDialogFooter>
+      <AlertDialogCancel>Keep medicine</AlertDialogCancel>
+      <AlertDialogAction variant="destructive" onClick={ceaseMedicine}>
+        Cease medicine
+      </AlertDialogAction>
+    </AlertDialogFooter>
+  </AlertDialogContent>
+</AlertDialog>;
+```
+
+Ask the question in `AlertDialogTitle` and say what answering will do in `AlertDialogDescription`. Put `AlertDialogCancel` first in the footer and `AlertDialogAction` second. Both are [Buttons](/docs/components/button) and take `variant` and `size`. `AlertDialogMedia` puts an icon beside the title.
+
+Alert dialog is built on the Base UI [Alert Dialog](https://base-ui.com/react/components/alert-dialog) and accepts all of its props. It follows the shadcn [Alert Dialog](https://ui.shadcn.com/docs/components/alert-dialog) and keeps its part names. It is a [Dialog](/docs/components/dialog) with `role="alertdialog"`, so it looks and moves as a Dialog does. Alert dialog is a [composite](/docs/levels): it uses the Dialog composite and the Button primitive.
+
+## When to use it
+
+Use an alert dialog for a question that must be answered before anything else, such as confirming an action that stops, removes or cannot be undone. For a task over the page that can be left, use a [Dialog](/docs/components/dialog).
+
+## Answering
+
+- **Focus lands on the safe answer.** `AlertDialogCancel` comes first, so it takes focus when the dialog opens, and Enter pressed by reflex does nothing.
+- **A press outside does nothing.** The question has to be answered.
+- **Escape cancels.** It closes the dialog and does nothing else.
+- **`AlertDialogAction` does the thing, then closes the dialog.** Its `onClick` runs first. For an action that may fail and must keep the dialog open until it succeeds, control `open` on `AlertDialog` and close it yourself.
+
+## What Cadence changes
+
+- **The action closes the dialog.** In shadcn's Base UI version `AlertDialogAction` is a plain button, and the dialog is left open unless you close it. Here it closes after `onClick`, as a confirmation is expected to.
+- **No close button in the corner.** The two answers are the only way out, and Escape.
+- **Everything a Dialog changes**: never taller than the screen, a scrim that darkens the page in both modes, a title that wraps, and motion that reduced motion keeps as a fade.
+
+## Props
+
+| Prop                   | On                                       | Type                      | Default                  |
+| ---------------------- | ---------------------------------------- | ------------------------- | ------------------------ |
+| `open`, `onOpenChange` | `AlertDialog`                            |                           |                          |
+| `defaultOpen`          | `AlertDialog`                            | `boolean`                 | `false`                  |
+| `variant`, `size`      | `AlertDialogAction`, `AlertDialogCancel` | As on a Button            | `"primary"`, `"outline"` |
+| `render`               | `AlertDialogTrigger`                     | An element, as in Base UI | A `button`               |

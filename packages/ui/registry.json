@@ -38,6 +38,34 @@
       }
     },
     {
+      "name": "alert-dialog",
+      "type": "registry:component",
+      "title": "Alert dialog",
+      "description": "A dialog that must be answered: confirming an action that stops, removes or cannot be undone. Focus lands on the safe answer.",
+      "dependencies": ["@base-ui/react"],
+      "registryDependencies": [
+        "@cadence/theme",
+        "@cadence/cn",
+        "@cadence/button",
+        "@cadence/dialog"
+      ],
+      "files": [
+        {
+          "path": "src/components/alert-dialog.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/alert-dialog.tsx"
+        }
+      ],
+      "docs": "Put AlertDialogCancel first in the footer, so focus lands on it. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "composite",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "badge",
       "type": "registry:component",
       "title": "Badge",
