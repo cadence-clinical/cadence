@@ -1,0 +1,107 @@
+---
+title: Sheet
+description: A panel from an edge of the screen, for a task beside the page. It holds focus, and scrolls what does not fit.
+---
+
+import {
+  Button,
+  Field,
+  FieldGroup,
+  FieldLabel,
+  Input,
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@cadence-clinical/ui";
+
+<GradeBadge component="sheet" />
+
+<ComponentPreview>
+  <Sheet>
+    <SheetTrigger render={<Button variant="outline" />}>Edit contact details</SheetTrigger>
+    <SheetContent>
+      <SheetHeader>
+        <SheetTitle>Contact details</SheetTitle>
+        <SheetDescription>Changes are saved to the record.</SheetDescription>
+      </SheetHeader>
+      <FieldGroup className="px-container">
+        <Field>
+          <FieldLabel>Phone</FieldLabel>
+          <Input type="tel" defaultValue="0400 000 000" />
+        </Field>
+      </FieldGroup>
+      <SheetFooter>
+        <Button>Save</Button>
+        <SheetClose render={<Button variant="outline" />}>Cancel</SheetClose>
+      </SheetFooter>
+    </SheetContent>
+  </Sheet>
+</ComponentPreview>
+
+## Usage
+
+```tsx
+import {
+  Button,
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@cadence-clinical/ui";
+
+<Sheet>
+  <SheetTrigger render={<Button variant="outline" />}>Edit contact details</SheetTrigger>
+  <SheetContent side="right">
+    <SheetHeader>
+      <SheetTitle>Contact details</SheetTitle>
+      <SheetDescription>Changes are saved to the record.</SheetDescription>
+    </SheetHeader>
+    <div className="px-container">...</div>
+    <SheetFooter>
+      <Button>Save</Button>
+      <SheetClose render={<Button variant="outline" />}>Cancel</SheetClose>
+    </SheetFooter>
+  </SheetContent>
+</Sheet>;
+```
+
+Sheet follows the shadcn [Sheet](https://ui.shadcn.com/docs/components/sheet) and keeps its part names and props, including `side` and `showCloseButton`, so shadcn code works unchanged. It is built on the Base UI [Dialog](https://base-ui.com/react/components/dialog), whose props it accepts, such as `open`, `onOpenChange` and `defaultOpen`.
+
+Give every sheet a `SheetTitle`: it is the sheet's name. `side` sets the edge it comes from: `right`, the default, `left`, `top` or `bottom`. The header and footer have their own padding. Give the content between them `px-container`, so it lines up with them.
+
+Use a sheet for a task beside the page, such as editing a record while its list stays in view. For one task over the page, use a [Dialog](/docs/components/dialog).
+
+## Focus and closing
+
+Opening a sheet moves focus into it, and closing it sends focus back to the trigger. While it is open, Tab stays inside it. Escape closes it, and so does a press on the scrim.
+
+`SheetContent` has a close button in its corner, named "Close". If you turn it off with `showCloseButton={false}`, keep a `SheetClose` in the footer: a touch screen reader needs a control inside the sheet to leave it.
+
+## What Cadence changes
+
+- **What does not fit scrolls inside the sheet**, so its last button can always be reached. shadcn's sheet does not scroll.
+- **The title clears the close button.** A long title wraps short of it, where shadcn's runs under it.
+- **It uses the Dialog's scrim**: the `overlay` token, which darkens the page in both modes, without blur.
+- **It slides in from its edge**, as the [Sidebar](/docs/components/sidebar)'s sheet on a phone does, in 200ms, and closes in 150ms. With reduced motion it appears without moving.
+- **The controls inside fill with the sheet's colour**, not the page's, as in a dialog.
+- **A top or bottom sheet keeps clear of a phone's notch and home bar**, and is never taller than the screen.
+- **Spacing and text follow the [density](/docs/theming#density).**
+
+## Props
+
+| Prop                   | On                           | Type                                     | Default    |
+| ---------------------- | ---------------------------- | ---------------------------------------- | ---------- |
+| `open`, `onOpenChange` | `Sheet`                      |                                          |            |
+| `defaultOpen`          | `Sheet`                      | `boolean`                                | `false`    |
+| `side`                 | `SheetContent`               | `"top" \| "right" \| "bottom" \| "left"` | `"right"`  |
+| `showCloseButton`      | `SheetContent`               | `boolean`                                | `true`     |
+| `render`               | `SheetTrigger`, `SheetClose` | An element, as in Base UI                | A `button` |

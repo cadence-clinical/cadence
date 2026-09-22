@@ -58,7 +58,7 @@ A small group of parts or primitives that works as one unit.
 | Toggle group  | Built  | Base UI Toggle group, Toggle     | A set of filters or text styles. A view switch must have an answer, so it is Tabs.                   |
 | Collapsible   | Built  | Base UI Collapsible              | Shows and hides one section, such as earlier entries or further detail.                              |
 | Empty         | Built  | None                             | What a list or panel shows when it has nothing in it, and what to do next. List and detail needs it. |
-| Sheet         | Agreed | Base UI Dialog, Button           | A panel from the edge of the screen, for a task beside the page rather than over it.                 |
+| Sheet         | Built  | Base UI Dialog, Button           | A panel from the edge of the screen, for a task beside the page rather than over it.                 |
 | Drawer        | Agreed | Base UI Drawer                   | A panel from the bottom of a phone screen that can be swiped away.                                   |
 
 ## 3. Patterns
