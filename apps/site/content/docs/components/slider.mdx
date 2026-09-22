@@ -1,0 +1,74 @@
+---
+title: Slider
+description: Chooses a setting from a range, by pointer or keyboard. For a setting, not a clinical value, which is typed.
+---
+
+import { Field, FieldLabel, Slider } from "@cadence-clinical/ui";
+
+<GradeBadge component="slider" />
+
+<ComponentPreview>
+  <Field className="max-w-xs">
+    <FieldLabel>Text size</FieldLabel>
+    <Slider
+      defaultValue={100}
+      min={80}
+      max={150}
+      step={10}
+      format={{ style: "unit", unit: "percent" }}
+    />
+  </Field>
+</ComponentPreview>
+
+## Usage
+
+```tsx
+import { Field, FieldLabel, Slider } from "@cadence-clinical/ui";
+
+<Field>
+  <FieldLabel>Text size</FieldLabel>
+  <Slider defaultValue={100} min={80} max={150} step={10} />
+</Field>;
+```
+
+Put the slider in a [Field](/docs/components/field), whose label names it. Use a slider for a setting where the position matters more than the exact number, such as a zoom. Type a clinical value in an [Input](/docs/components/input), so it is exact.
+
+Slider is built on the Base UI [Slider](https://base-ui.com/react/components/slider) and accepts all of its props, including `onValueChange`, `step`, `largeStep` and `format`. It follows the shadcn [Slider](https://ui.shadcn.com/docs/components/slider).
+
+## A range
+
+Give an array to choose a range, with one thumb for each value. Name each thumb with `thumbLabels`. The Field's label still names the slider as a whole:
+
+```tsx
+<Field>
+  <FieldLabel>Clinic hours</FieldLabel>
+  <Slider defaultValue={[9, 17]} min={7} max={20} thumbLabels={["Opens", "Closes"]} />
+</Field>
+```
+
+## What Cadence changes
+
+- **The target is as high as a control.** The strip the thumb runs along is `h-control`, so a press beside the thumb moves it, and the thumb's own target reaches the same height. shadcn's thumb is 12px with a 28px target. Here the thumb follows the [density](/docs/theming#density): 16px compact and 20px comfortable.
+- **The whole range can be seen.** shadcn draws the unfilled track in `muted`, about 1.1:1 on the page. Here it is the `input` colour, which the token tests hold at 3:1 on the page, a card and a popover.
+- **A single value has one thumb.** shadcn draws two thumbs unless it is given an array, so `defaultValue={50}` shows a range. Here a number gives one thumb, and an array one per value.
+- **Each thumb of a range can be named**, with `thumbLabels`.
+- **Semantic colours only.** The thumb is the `background` colour with a `primary` border, where shadcn's is white.
+
+## Accessibility
+
+- Each thumb is a range input. The arrow keys move it by `step`, Page Up and Page Down by `largeStep`, and Home and End to either end.
+- Set `format` to give the value in words, such as `{ style: "unit", unit: "percent" }`, which a screen reader reads as "110%".
+- The thumb shows a focus ring.
+
+## Props
+
+| Prop           | Type                         | Default        |
+| -------------- | ---------------------------- | -------------- |
+| `defaultValue` | `number \| number[]`         |                |
+| `value`        | `number \| number[]`         |                |
+| `min`          | `number`                     | `0`            |
+| `max`          | `number`                     | `100`          |
+| `step`         | `number`                     | `1`            |
+| `thumbLabels`  | `string[]`                   |                |
+| `format`       | `Intl.NumberFormatOptions`   |                |
+| `orientation`  | `"horizontal" \| "vertical"` | `"horizontal"` |

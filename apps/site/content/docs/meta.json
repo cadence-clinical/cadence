@@ -19,6 +19,7 @@
     "components/select",
     "components/separator",
     "components/skeleton",
+    "components/slider",
     "components/spinner",
     "components/switch",
     "components/table",
