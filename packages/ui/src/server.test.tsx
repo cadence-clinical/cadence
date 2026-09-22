@@ -2,7 +2,10 @@ import type { ReactElement } from "react";
 import { renderToString } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
+import { createColumnHelper, useTable } from "@tanstack/react-table";
+
 import registry from "../registry.json";
+import { DataTable, dataTableFeatures } from "./data-table";
 import {
   Alert,
   AlertDescription,
@@ -70,6 +73,19 @@ import {
  * One render per component, with the least it needs. This runs without a DOM, so a component
  * that touches `window` or `document` at module scope or during render fails here.
  */
+// The data table has its own entry point and a TanStack table from a hook, which renders on the
+// server like any other hook.
+const helper = createColumnHelper<typeof dataTableFeatures, { clinic: string }>();
+const COLUMNS = helper.columns([helper.accessor("clinic", { header: "Clinic" })]);
+function ServerDataTable() {
+  const table = useTable({
+    features: dataTableFeatures,
+    data: [{ clinic: "Review clinic" }],
+    columns: COLUMNS,
+  });
+  return <DataTable table={table} aria-label="Appointments" />;
+}
+
 const RENDERS: Record<string, ReactElement> = {
   badge: <Badge variant="info">New</Badge>,
   button: <Button>Save observation</Button>,
@@ -94,6 +110,7 @@ const RENDERS: Record<string, ReactElement> = {
   spinner: <Spinner />,
   switch: <Switch aria-label="Appointment reminders" />,
   textarea: <Textarea aria-label="Notes" />,
+  "data-table": <ServerDataTable />,
   "alert-dialog": (
     <AlertDialog>
       <AlertDialogTrigger>Cease medicine</AlertDialogTrigger>

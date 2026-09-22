@@ -30,6 +30,7 @@
     "@cadence-clinical/config": "workspace:*",
     "@playwright/test": "^1.63.0",
     "@tailwindcss/postcss": "catalog:",
+    "@tanstack/react-table": "^9.2.4",
     "@types/mdx": "^2.0.14",
     "@types/node": "catalog:",
     "@types/react": "catalog:",

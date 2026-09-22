@@ -6,7 +6,9 @@ import { defineConfig } from "tsdown";
 const run = promisify(execFile);
 
 export default defineConfig((inline) => ({
-  entry: ["src/index.ts"],
+  // data-table has its own entry point, so that a consumer who never uses it is not made to
+  // install TanStack Table: docs/decisions/0014-headless-libraries.md.
+  entry: ["src/index.ts", "src/data-table.ts"],
   format: "esm",
   dts: true,
   // One output file per source file: consumers tree-shake by import, and Tailwind scans dist
