@@ -8,6 +8,7 @@ import {
   type AccentName,
 } from "./accent";
 import {
+  SIDEBAR_ALIASES,
   baseTokens,
   type ColorTokens,
   type Contrast,
@@ -100,6 +101,11 @@ export function block(selector: string, tokens: ColorTokens, media?: string): st
  * data-accent. Leave the mode or data-contrast off and the operating system preference decides.
  */
 export function generateColorCss(): string {
+  // Declared on :root once. An alias resolves on the element that holds it, so it takes whatever
+  // value its token has there, under any mode, contrast, accent or brand.
+  const aliases = Object.fromEntries(
+    Object.entries(SIDEBAR_ALIASES).map(([name, token]) => [name, `var(--${token})`]),
+  );
   const blocks: string[] = [];
 
   for (const { media, selector, mode, contrast } of CONTEXTS) {
@@ -110,6 +116,7 @@ export function generateColorCss(): string {
       blocks.push(block(`${selector}[data-accent="${accent}"]`, tokens, media));
     }
   }
+  blocks.push(block(":root", aliases));
 
   return blocks.join("\n\n");
 }

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import registry from "../registry.json";
 import base from "./css/base.css?raw";
+import { SIDEBAR_ALIASES } from "./palette";
 import { resolveTokens } from "./resolve";
 import { SHADCN_TOKEN_NAMES, shadcnCssVars } from "./shadcn";
 
@@ -11,6 +12,15 @@ describe("shadcn variables", () => {
     for (const name of SHADCN_TOKEN_NAMES) {
       expect(vars.light[name]).toBe(resolveTokens("light")[name]);
       expect(vars.dark[name]).toBe(resolveTokens("dark")[name]);
+    }
+  });
+
+  // A copied value would pin a consumer's sidebar to the default accent. A reference follows
+  // every accent, brand and mode, as it does in theme.css.
+  it("carry the sidebar aliases as references to their tokens", () => {
+    for (const [name, token] of Object.entries(SIDEBAR_ALIASES)) {
+      expect(shadcnCssVars().light[name]).toBe(`var(--${token})`);
+      expect(shadcnCssVars().dark[name]).toBe(`var(--${token})`);
     }
   });
 
