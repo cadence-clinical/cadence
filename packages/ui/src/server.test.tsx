@@ -6,6 +6,7 @@ import { createColumnHelper, useTable } from "@tanstack/react-table";
 
 import registry from "../registry.json";
 import { Calendar } from "./calendar";
+import { DatePicker } from "./date-picker";
 import { DataTable, dataTableFeatures } from "./data-table";
 import {
   Alert,
@@ -179,6 +180,7 @@ const RENDERS: Record<string, ReactElement> = {
     </ToastProvider>
   ),
   calendar: <Calendar mode="single" defaultMonth={new Date(2026, 8, 1)} />,
+  "date-picker": <DatePicker aria-label="Appointment date" />,
   "data-table": <ServerDataTable />,
   sidebar: (
     <SidebarProvider>

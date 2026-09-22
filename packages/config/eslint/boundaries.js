@@ -62,11 +62,12 @@ const ownEntryPoints = {
     "@/components/cadence/data-table",
     "@tanstack/*",
     "@/components/cadence/calendar",
+    "@/components/cadence/date-picker",
     "react-day-picker",
     "react-day-picker/*",
   ],
   message:
-    "data-table and calendar have their own entry points, src/data-table.ts and src/calendar.ts. Re-exporting either here would make its library compulsory for every consumer: see docs/decisions/0014-headless-libraries.md.",
+    "data-table, calendar and date-picker have their own entry points. Re-exporting one here would make its library compulsory for every consumer: see docs/decisions/0014-headless-libraries.md.",
 };
 
 /** For packages/ui: primitives know nothing about regions, FHIR or clinical components. */
