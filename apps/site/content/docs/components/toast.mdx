@@ -1,0 +1,76 @@
+---
+title: Toast
+description: A short message that something happened, such as a record saved. It is announced, and it goes away, so it is never the only place an error is shown.
+---
+
+<GradeBadge component="toast" />
+
+<ToastPreview />
+
+## Usage
+
+Put a `Toaster` once around the app, and call `toast.add` wherever something happens:
+
+```tsx
+import { toast, Toaster } from "@cadence-clinical/ui";
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return <Toaster>{children}</Toaster>;
+}
+
+toast.add({
+  title: "Letter saved",
+  description: "The referrer's copy is in the outbox.",
+  type: "success",
+});
+```
+
+Toast follows the shadcn [Toast](https://ui.shadcn.com/docs/components/toast) and keeps its exports and props: `Toaster`, `toast`, `createToastManager`, `useToastManager` and the parts, so shadcn code works unchanged. It is built on the Base UI [Toast](https://base-ui.com/react/components/toast), so `toast.add` takes Base UI's options, such as `timeout`, `priority` and `actionProps`.
+
+## Types
+
+`type` is one of `success`, `info`, `warning`, `error` or `loading`. Each has its own mark, the same outlines as an [Alert](/docs/components/alert)'s, so no two types differ by colour alone. `error` uses Cadence's critical colours. Say what happened in the title as well: the mark only repeats it.
+
+## Never the only place
+
+A toast goes away after 5 seconds unless the user is hovering over it or has focus in it. Some users will not see it in time. Show an error where it happened too, such as in a [Field](/docs/components/field)'s error or an Alert beside the form, and keep a record of a result the user needs. To keep a toast until it is closed, pass `timeout: 0`.
+
+For something the user must hear at once, such as a save that failed, pass `priority: "high"`. A screen reader interrupts what it is saying to announce it.
+
+## An action
+
+`actionProps` adds a button, such as "Undo":
+
+```tsx
+toast.add({
+  title: "Letter archived",
+  actionProps: { children: "Undo", onClick: restoreLetter },
+});
+```
+
+## What Cadence changes
+
+- **Each type has its own mark**, the Alert's outlines in the status text colours, which are contrast-tested on the toast. shadcn colours only its error mark, with `destructive`, and draws the others in the text colour.
+- **The words keep their own height.** shadcn makes the toast's content fill the toast, and Base UI measures the content to size the toast, so each measurement resized what it measured. Browsers report that as an error. Here the content keeps its own height.
+- **With reduced motion a toast fades** in and out, and does not slide.
+- **It keeps clear of a phone's home bar**, and its spacing and text follow the [density](/docs/theming#density).
+- **The close button is named "Close"**, and the focus ring is Cadence's.
+
+## Accessibility
+
+- Toasts appear in a region that a screen reader announces politely, when it is next idle. An urgent toast, with `priority: "high"`, is announced at once.
+- F6 moves focus to the toasts from anywhere on the page. Hovering over them or focusing them pauses their timers, so they do not go while being read.
+- Base UI hides the close button from a screen reader until the toasts are reached, so it is not read out with every toast.
+- Escape closes the toast in focus.
+
+## Props
+
+| Prop          | On          | Type                                                       | Default |
+| ------------- | ----------- | ---------------------------------------------------------- | ------- |
+| `timeout`     | `Toaster`   | `number`, in milliseconds. `0` keeps a toast until closed  | `5000`  |
+| `limit`       | `Toaster`   | `number`                                                   | `3`     |
+| `title`       | `toast.add` | `ReactNode`                                                |         |
+| `description` | `toast.add` | `ReactNode`                                                |         |
+| `type`        | `toast.add` | `"success" \| "info" \| "warning" \| "error" \| "loading"` |         |
+| `priority`    | `toast.add` | `"low" \| "high"`                                          | `"low"` |
+| `actionProps` | `toast.add` | A Button's props                                           |         |
