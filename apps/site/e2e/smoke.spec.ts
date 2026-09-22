@@ -46,6 +46,7 @@ const DOCS_PAGES = [
   "/docs/components/data-table",
   "/docs/components/dialog",
   "/docs/components/dropdown-menu",
+  "/docs/components/empty",
   "/docs/components/field",
   "/docs/components/form",
   "/docs/components/popover",
