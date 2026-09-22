@@ -40,6 +40,7 @@ const DOCS_PAGES = [
   "/docs/components/alert-dialog",
   "/docs/components/badge",
   "/docs/components/button",
+  "/docs/components/calendar",
   "/docs/components/card",
   "/docs/components/checkbox",
   "/docs/components/collapsible",
