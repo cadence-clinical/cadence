@@ -1,4 +1,21 @@
 export {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogMedia,
+  AlertDialogPortal,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/cadence/alert-dialog";
+export type {
+  AlertDialogButtonProps,
+  AlertDialogContentProps,
+} from "@/components/cadence/alert-dialog";
+export {
   Alert,
   AlertAction,
   AlertDescription,

@@ -6,6 +6,10 @@ import registry from "../registry.json";
 import {
   Alert,
   AlertDescription,
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogTitle,
+  AlertDialogTrigger,
   AlertTitle,
   Badge,
   Button,
@@ -90,6 +94,14 @@ const RENDERS: Record<string, ReactElement> = {
   spinner: <Spinner />,
   switch: <Switch aria-label="Appointment reminders" />,
   textarea: <Textarea aria-label="Notes" />,
+  "alert-dialog": (
+    <AlertDialog>
+      <AlertDialogTrigger>Cease medicine</AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogTitle>Cease this medicine?</AlertDialogTitle>
+      </AlertDialogContent>
+    </AlertDialog>
+  ),
   table: (
     <Table aria-label="Appointments">
       <TableBody>
