@@ -50,6 +50,12 @@ import {
   SelectTrigger,
   SelectValue,
   Separator,
+  Sidebar,
+  SidebarContent,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
   Spinner,
   Switch,
   Table,
@@ -111,6 +117,21 @@ const RENDERS: Record<string, ReactElement> = {
   switch: <Switch aria-label="Appointment reminders" />,
   textarea: <Textarea aria-label="Notes" />,
   "data-table": <ServerDataTable />,
+  sidebar: (
+    <SidebarProvider>
+      <Sidebar>
+        <SidebarContent>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton isActive render={<a href="/today" />}>
+                Today
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarContent>
+      </Sidebar>
+    </SidebarProvider>
+  ),
   "alert-dialog": (
     <AlertDialog>
       <AlertDialogTrigger>Cease medicine</AlertDialogTrigger>
@@ -213,6 +234,33 @@ describe("every component renders on the server", () => {
     if (!element) throw new Error(`Add a render for "${name}" to RENDERS in server.test.tsx.`);
     // A root such as Select's renders no element of its own, so its parts carry the slot.
     expect(renderToString(element)).toContain(`data-slot="${name}`);
+  });
+});
+
+describe("Sidebar", () => {
+  // The server cannot know the screen's width, so it renders the wide layout, which CSS hides on a
+  // phone until the script takes over.
+  it("renders the wide layout, open, with the page shown marked", () => {
+    const html = renderToString(
+      <SidebarProvider>
+        <Sidebar>
+          <SidebarContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton isActive render={<a href="/today" />}>
+                  Today
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarContent>
+        </Sidebar>
+      </SidebarProvider>,
+    );
+
+    expect(html).toMatch(/data-state="expanded"/);
+    expect(html).toContain('data-slot="sidebar-container"');
+    expect(html).toMatch(/<nav[^>]*data-slot="sidebar-content"/);
+    expect(html).toMatch(/<a[^>]*aria-current="page"[^>]*>Today<\/a>/);
   });
 });
 
