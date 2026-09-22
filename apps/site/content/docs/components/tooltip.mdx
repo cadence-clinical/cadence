@@ -62,7 +62,7 @@ Wrap a toolbar, or the whole app, in `TooltipProvider`. The first tooltip waits 
 
 ## What Cadence changes
 
-- **The first tooltip waits.** The shadcn tooltip opens with no delay. Here Base UI's delay is kept, so a pointer that is only passing over a dense toolbar does not set tooltips off.
+- **The first tooltip waits 50ms.** The shadcn tooltip opens with no delay, and Base UI waits 600ms, which reads as a pause on an icon button whose name is only in its tooltip. 50ms feels immediate, and still keeps a pointer crossing a dense toolbar from setting every tooltip off. Set `delay` on the provider, or on one trigger, to change it.
 - **It opens from the keyboard at once**, with no animation. With a pointer it fades and grows from the side of its trigger in 125ms, and when the user asks for reduced motion it only fades.
 - **The hint wraps** inside its maximum width and is never cut short.
 - **Its text follows the [density](/docs/theming#density).**
@@ -74,9 +74,9 @@ Wrap a toolbar, or the whole app, in `TooltipProvider`. The first tooltip waits 
 
 ## Props
 
-| Prop         | On                | Type                                     | Default    |
-| ------------ | ----------------- | ---------------------------------------- | ---------- |
-| `render`     | `TooltipTrigger`  | The control the tooltip describes        | A `button` |
-| `side`       | `TooltipContent`  | `"top" \| "right" \| "bottom" \| "left"` | `"top"`    |
-| `sideOffset` | `TooltipContent`  | `number`                                 | `6`        |
-| `delay`      | `TooltipProvider` | `number`, in milliseconds                | Base UI's  |
+| Prop         | On                                  | Type                                     | Default    |
+| ------------ | ----------------------------------- | ---------------------------------------- | ---------- |
+| `render`     | `TooltipTrigger`                    | The control the tooltip describes        | A `button` |
+| `side`       | `TooltipContent`                    | `"top" \| "right" \| "bottom" \| "left"` | `"top"`    |
+| `sideOffset` | `TooltipContent`                    | `number`                                 | `6`        |
+| `delay`      | `TooltipProvider`, `TooltipTrigger` | `number`, in milliseconds                | `50`       |

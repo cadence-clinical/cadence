@@ -88,9 +88,9 @@ export const OnTheLeft: Story = onSide("left");
 const interactionOnly = { chromatic: { disableSnapshot: true } };
 
 /**
- * How long a hover is given to open a tooltip. Base UI waits before the first one, and the
- * Storybook addon instruments every step, so a wait here says nothing about how quickly a person
- * sees the hint. What matters is which path Base UI took, which `data-instant` records.
+ * How long a hover is given to open a tooltip. The first one waits 50ms, and the Storybook addon
+ * instruments every step, so most of these stories care about which path Base UI took, which
+ * `data-instant` records, rather than the clock. `OpensQuickly` is the one that watches the clock.
  */
 const OPENS = { timeout: 5000 } as const;
 
@@ -128,6 +128,19 @@ export const OpensOnHoverAfterADelay: Story = {
         screen.queryByText("Print chart", { selector: "[data-slot=tooltip-content]" }),
       ).toBeNull(),
     );
+  },
+};
+
+// The wait is short: 50ms, where Base UI waits 600ms. The bound below is loose, because the
+// Storybook addon instruments every step, and it still fails at Base UI's own delay.
+export const OpensQuickly: Story = {
+  parameters: interactionOnly,
+  play: async ({ canvasElement }) => {
+    const trigger = within(canvasElement).getByRole("button", { name: "Print chart" });
+    const started = performance.now();
+    await userEvent.hover(trigger);
+    await hint("Print chart");
+    await expect(performance.now() - started).toBeLessThan(500);
   },
 };
 
