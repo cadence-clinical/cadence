@@ -40,6 +40,25 @@ SOFTWARE.
 Authors, under the SIL Open Font License, Version 1.1. The font files are not copied into this
 repository. The licence ships inside that package.
 
+## Geist and Geist Mono
+
+The website and Storybook depend on
+[`@fontsource-variable/geist`](https://fontsource.org/fonts/geist) and
+[`@fontsource-variable/geist-mono`](https://fontsource.org/fonts/geist-mono), which package
+[Geist](https://github.com/vercel/geist-font), Copyright 2024 The Geist Project Authors, under the
+SIL Open Font License, Version 1.1. They are used by the example brands the site and Storybook can
+switch to. No published package depends on them. The font files are not copied into this
+repository. The licence ships inside those packages.
+
+## Work Sans
+
+The website and Storybook depend on
+[`@fontsource-variable/work-sans`](https://fontsource.org/fonts/work-sans), which packages
+[Work Sans](https://github.com/weiweihuanghuang/Work-Sans), Copyright 2019 The Work Sans Project
+Authors, under the SIL Open Font License, Version 1.1. It is used by an example brand the site and
+Storybook can switch to. No published package depends on it. The font files are not copied into
+this repository. The licence ships inside that package.
+
 ## Agent skills
 
 The `technical-writing` and `human-writing` skills under `.claude/skills` are adapted from
