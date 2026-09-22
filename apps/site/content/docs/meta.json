@@ -17,6 +17,7 @@
     "components/radio-group",
     "components/select",
     "components/separator",
+    "components/skeleton",
     "components/spinner",
     "components/switch",
     "components/table",

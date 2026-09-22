@@ -52,6 +52,7 @@ const DOCS_PAGES = [
   "/docs/components/select",
   "/docs/components/separator",
   "/docs/components/sidebar",
+  "/docs/components/skeleton",
   "/docs/components/spinner",
   "/docs/components/switch",
   "/docs/components/table",
