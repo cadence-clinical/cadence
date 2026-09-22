@@ -2,6 +2,20 @@
 @import "@cadence-clinical/tokens/theme.css";
 @import "@cadence-clinical/tokens/fonts.css";
 @import "@cadence-clinical/tokens/typeset.css";
+/* Example brands, chosen from the Theme toolbar. After theme.css, so a brand wins over an accent. */
+@import "@cadence-clinical/tokens/brands.css";
+@import "@fontsource-variable/geist/wght.css";
+@import "@fontsource-variable/geist-mono/wght.css";
+@import "@fontsource-variable/work-sans/wght.css";
+
+/*
+ * Stories are shown on a card, as the docs show their previews: white in light mode, the card's
+ * grey in dark. A brand can give the page its own colour, and fields and outline buttons fill with
+ * the page colour, so the card stands in for the page here, as it does inside a Card.
+ */
+body {
+  --background: var(--card);
+}
 
 /* Stories render from source, so Tailwind scans the packages' source, not their dist. */
 @source "../../../packages/*/src/**/*.{ts,tsx}";

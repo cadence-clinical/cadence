@@ -18,6 +18,8 @@
     "@cadence-clinical/core": "workspace:*",
     "@cadence-clinical/tokens": "workspace:*",
     "@cadence-clinical/ui": "workspace:*",
+    "@fontsource-variable/geist": "^5.3.0",
+    "@fontsource-variable/geist-mono": "^5.3.0",
     "fumadocs-core": "^16.15.10",
     "fumadocs-mdx": "^15.4.0",
     "fumadocs-ui": "npm:@fumadocs/base-ui@^16.15.10",
@@ -28,6 +30,7 @@
   },
   "devDependencies": {
     "@cadence-clinical/config": "workspace:*",
+    "@fontsource-variable/work-sans": "^5.3.0",
     "@playwright/test": "^1.63.0",
     "@tailwindcss/postcss": "catalog:",
     "@tanstack/react-table": "^9.2.4",

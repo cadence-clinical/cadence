@@ -122,7 +122,7 @@ export function DataTablePreview() {
     onPaginationChange: setPagination,
   });
   return (
-    <div className="not-prose my-6 grid gap-3 rounded-lg border bg-background p-4">
+    <div className="not-prose preview-surface my-6 grid gap-3 rounded-lg border p-4">
       <div className="flex justify-end">
         <DataTableViewOptions table={table} />
       </div>

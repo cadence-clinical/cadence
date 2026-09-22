@@ -1,3 +1,4 @@
+import { BRANDS } from "@cadence-clinical/tokens";
 import type { Decorator, Preview } from "@storybook/react-vite";
 import { useLayoutEffect } from "react";
 
@@ -5,7 +6,10 @@ import "./preview.css";
 
 const ACCENTS = ["teal", "blue", "indigo", "violet", "plum", "slate"];
 
-type ThemeGlobals = Partial<Record<"mode" | "contrast" | "density" | "accent", string>>;
+/** Cadence's own look, with no brand applied. */
+const NO_BRAND = "cadence";
+
+type ThemeGlobals = Partial<Record<"mode" | "contrast" | "density" | "accent" | "brand", string>>;
 
 /** Storybook types every global as `any`. Only a string is a theme value. */
 const text = (value: unknown): string | undefined =>
@@ -19,13 +23,20 @@ const text = (value: unknown): string | undefined =>
  * A passive effect is flushed in time under Vitest but not in the real Storybook runtime, where
  * a story asserting the 44px comfortable target measured the 32px compact button instead.
  */
-function ThemeSync({ mode, contrast, density, accent }: ThemeGlobals) {
+function ThemeSync({ mode, contrast, density, accent, brand }: ThemeGlobals) {
   useLayoutEffect(() => {
-    for (const [name, value] of Object.entries({ mode, contrast, density, accent })) {
+    const chosen = brand === NO_BRAND ? undefined : brand;
+    for (const [name, value] of Object.entries({
+      mode,
+      contrast,
+      density,
+      accent,
+      brand: chosen,
+    })) {
       if (value === undefined) document.documentElement.removeAttribute(`data-${name}`);
       else document.documentElement.setAttribute(`data-${name}`, value);
     }
-  }, [mode, contrast, density, accent]);
+  }, [mode, contrast, density, accent, brand]);
 
   return null;
 }
@@ -39,6 +50,7 @@ const withTheme: Decorator = (Story, context) => {
         contrast={text(globals.contrast)}
         density={text(globals.density)}
         accent={text(globals.accent)}
+        brand={text(globals.brand)}
       />
       <Story />
     </>
@@ -74,12 +86,26 @@ const preview: Preview = {
       description: "Accent",
       toolbar: { title: "Accent", icon: "paintbrush", items: ACCENTS, dynamicTitle: true },
     },
+    // A brand sets its own accent, surfaces and fonts, so it takes precedence over Accent.
+    brand: {
+      description: "Theme: an example brand, with its colours and fonts",
+      toolbar: {
+        title: "Theme",
+        icon: "grid",
+        items: [
+          { value: NO_BRAND, title: "Cadence" },
+          ...Object.entries(BRANDS).map(([value, brand]) => ({ value, title: brand.label })),
+        ],
+        dynamicTitle: true,
+      },
+    },
   },
   initialGlobals: {
     mode: "light",
     contrast: "standard",
     density: "compact",
     accent: "teal",
+    brand: NO_BRAND,
   },
   parameters: {
     layout: "centered",

@@ -3,6 +3,11 @@
 @import "fumadocs-ui/css/preset.css";
 @import "@cadence-clinical/ui/styles.css";
 @import "@cadence-clinical/ui/typeset.css";
+/* Example brands, chosen with the theme picker. After the theme, so a brand wins over an accent. */
+@import "@cadence-clinical/tokens/brands.css";
+@import "@fontsource-variable/geist/wght.css";
+@import "@fontsource-variable/geist-mono/wght.css";
+@import "@fontsource-variable/work-sans/wght.css";
 
 /*
  * The docs chrome runs on Cadence tokens, so the site is the first consumer of the theme.
@@ -33,6 +38,16 @@
   --color-fd-accent: var(--accent);
   --color-fd-accent-foreground: var(--accent-foreground);
   --color-fd-ring: var(--ring);
+}
+
+/*
+ * A live example is shown on a card: white in light mode, the card's grey in dark. A brand can
+ * give the page its own colour, and fields and outline buttons fill with the page colour, so the
+ * card stands in for the page inside the frame, as it does inside a Card.
+ */
+@utility preview-surface {
+  --background: var(--card);
+  background-color: var(--card);
 }
 
 html {
