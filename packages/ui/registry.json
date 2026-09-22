@@ -112,6 +112,29 @@
       }
     },
     {
+      "name": "calendar",
+      "type": "registry:component",
+      "title": "Calendar",
+      "description": "A month of days to choose from, on react-day-picker. Each day is as tall as a control, and today and unavailable days are marked by more than colour.",
+      "dependencies": ["react-day-picker@^10.0.1", "lucide-react"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn", "@cadence/button"],
+      "files": [
+        {
+          "path": "src/components/calendar.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/calendar.tsx"
+        }
+      ],
+      "docs": "Pass a locale from react-day-picker/locale, such as enAU, for the week to start on the right day. Cadence grades what it renders, not react-day-picker. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "pattern",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "card",
       "type": "registry:component",
       "title": "Card",
