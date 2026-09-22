@@ -30,6 +30,9 @@ function Card({ className, render, size = "md", ...props }: CardProps) {
       {
         className: cn(
           "group/card flex flex-col gap-(--card-spacing) rounded-lg border bg-card py-(--card-spacing) text-body wrap-break-word text-card-foreground",
+          // Fields, checkboxes and outline buttons fill with the page colour. Inside a card the
+          // card is their page, so they match it when a brand gives the page a colour of its own.
+          "[--background:var(--card)]",
           // Spacing and text follow the density set on <html>, like the controls inside the card.
           "[--card-spacing:var(--container-padding)] data-[size=sm]:[--card-spacing:var(--container-padding-sm)]",
           "has-data-[slot=card-footer]:pb-0",
