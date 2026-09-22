@@ -86,6 +86,20 @@ export const PressesWithPointerAndKeyboard: Story = {
   },
 };
 
+// While the pointer is down, the toggle presses in slightly, as a Button does, and springs back.
+// A synthetic press does not make an element `:active`, so the press itself cannot be seen here:
+// the story checks that the rule is there and that the transform is what transitions.
+export const PressesInUnderThePointer: Story = {
+  parameters: { chromatic: { disableSnapshot: true } },
+  play: async ({ canvasElement }) => {
+    const toggle = within(canvasElement).getByRole("button", { name: "Show ceased" });
+    await expect(toggle.classList.contains("active:scale-[0.97]")).toBe(true);
+    await expect(getComputedStyle(toggle).transitionProperty.split(", ")).toContain("transform");
+    await expect(getComputedStyle(toggle).transitionDuration).toBe("0.15s");
+    await expect(getComputedStyle(toggle).scale).toBe("none");
+  },
+};
+
 // The pressed fill is too close to the page to tell the states apart, so pressed also gains a
 // boundary. The state never rests on colour.
 export const PressedGainsABoundary: Story = {

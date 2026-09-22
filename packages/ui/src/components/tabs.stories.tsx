@@ -110,14 +110,35 @@ export const TheViewShowsItsFocus: Story = {
   },
 };
 
-// The tab that is shown differs from the rest by more than its colour.
+/** The mark of the shown tab, once Base UI has measured the tab and shown it. */
+async function indicator(canvasElement: HTMLElement) {
+  const mark = canvasElement.querySelector("[data-slot=tabs-indicator]");
+  if (!(mark instanceof HTMLElement)) throw new Error("No indicator");
+  await waitFor(() => expect(mark).not.toHaveAttribute("hidden"));
+  return mark;
+}
+
+/** Whether a box sits where a tab is, within a pixel. */
+function covers(box: DOMRect, tab: DOMRect) {
+  return Math.abs(box.left - tab.left) <= 1 && Math.abs(box.width - tab.width) <= 1;
+}
+
+// The tab that is shown differs from the rest by more than its colour: its mark has a boundary
+// as well as a fill. The mark is the indicator, which takes over from the tab's own once shown.
 export const TheShownTabIsMarkedByShape: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const shown = getComputedStyle(canvas.getByRole("tab", { name: "Appointments" }));
-    const other = getComputedStyle(canvas.getByRole("tab", { name: "Letters" }));
-    await expect(shown.backgroundColor).not.toBe(other.backgroundColor);
-    await expect(shown.borderTopColor).not.toBe(other.borderTopColor);
+    const mark = await indicator(canvasElement);
+    const shown = canvas.getByRole("tab", { name: "Appointments" });
+    await expect(covers(mark.getBoundingClientRect(), shown.getBoundingClientRect())).toBe(true);
+
+    const style = getComputedStyle(mark);
+    const list = getComputedStyle(canvas.getByRole("tablist"));
+    await expect(style.backgroundColor).not.toBe(list.backgroundColor);
+    await expect(style.borderTopColor).not.toBe(style.backgroundColor);
+    await expect(style.borderTopWidth).toBe("1px");
+    // The tab's own mark has given way, so the two are not drawn twice.
+    await expect(getComputedStyle(shown).backgroundColor).toBe("rgba(0, 0, 0, 0)");
   },
 };
 
@@ -125,10 +146,56 @@ export const TheShownLineTabCarriesARule: Story = {
   ...Line,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const rule = (name: string) =>
-      getComputedStyle(canvas.getByRole("tab", { name }), "::after").opacity;
-    await expect(rule("Appointments")).toBe("1");
-    await expect(rule("Letters")).toBe("0");
+    const mark = await indicator(canvasElement);
+    const shown = canvas.getByRole("tab", { name: "Appointments" }).getBoundingClientRect();
+    const rule = mark.getBoundingClientRect();
+    await expect(covers(rule, shown)).toBe(true);
+    await expect(rule.height).toBe(2);
+    await expect(Math.abs(rule.bottom - shown.bottom)).toBeLessThanOrEqual(2);
+    // The tab's own rule has given way to the indicator.
+    await expect(
+      getComputedStyle(canvas.getByRole("tab", { name: "Appointments" }), "::after").opacity,
+    ).toBe("0");
+  },
+};
+
+// Chosen with the pointer, the mark slides to the new tab.
+export const TheMarkSlidesToTheTabChosenWithThePointer: Story = {
+  parameters: { chromatic: { disableSnapshot: true } },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const mark = await indicator(canvasElement);
+    await expect(getComputedStyle(mark).transitionProperty.split(", ")).toEqual([
+      "translate",
+      "width",
+      "height",
+    ]);
+    await expect(getComputedStyle(mark).transitionDuration).toBe("0.15s");
+
+    const contacts = canvas.getByRole("tab", { name: "Contacts" });
+    await userEvent.click(contacts);
+    await waitFor(() =>
+      expect(covers(mark.getBoundingClientRect(), contacts.getBoundingClientRect())).toBe(true),
+    );
+  },
+};
+
+// Chosen from the keyboard, the mark is simply there. The change is what matters, not the trip.
+export const TheMarkIsSimplyThereFromTheKeyboard: Story = {
+  parameters: { chromatic: { disableSnapshot: true } },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const mark = await indicator(canvasElement);
+    await userEvent.tab();
+    await userEvent.keyboard("{ArrowRight}");
+    const letters = canvas.getByRole("tab", { name: "Letters" });
+    await waitFor(() => expect(letters).toHaveFocus());
+    await expect(getComputedStyle(mark).transitionProperty).toBe("none");
+
+    await userEvent.keyboard("{Enter}");
+    await waitFor(() =>
+      expect(covers(mark.getBoundingClientRect(), letters.getBoundingClientRect())).toBe(true),
+    );
   },
 };
 
