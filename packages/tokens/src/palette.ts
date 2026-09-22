@@ -52,6 +52,8 @@ export const neutral = {
     // The scrim behind a dialog. It darkens the page in both modes: a tint of the foreground
     // would lighten a dark page and make the page behind look more active, not less.
     overlay: "oklch(0 0 0 / 0.4)",
+    // The sidebar's surface: a step off the page, so the page reads as the place to work.
+    sidebar: "oklch(0.985 0.002 255)",
   },
   dark: {
     background: "oklch(0.17 0.01 255)",
@@ -69,6 +71,7 @@ export const neutral = {
     border: "oklch(0.3 0.012 255)",
     input: "oklch(0.55 0.012 255)",
     overlay: "oklch(0 0 0 / 0.6)",
+    sidebar: "oklch(0.2 0.011 255)",
   },
 } satisfies Record<Mode, ColorTokens>;
 
@@ -191,6 +194,21 @@ export type Status = (typeof STATUSES)[number];
 export type BaseTokenName = keyof (typeof neutral)[Mode] | keyof (typeof status)[Mode];
 /** A token an accent supplies. */
 export type AccentTokenName = "primary" | "primary-foreground" | "primary-text" | "ring";
+/**
+ * shadcn's sidebar tokens that are not a surface of their own. Each is a CSS alias of the token it
+ * shadows, so it follows every mode, contrast level, accent and brand without a value of its own,
+ * and the contrast tests cover it through that token.
+ */
+export const SIDEBAR_ALIASES = {
+  "sidebar-foreground": "foreground",
+  "sidebar-primary": "primary",
+  "sidebar-primary-foreground": "primary-foreground",
+  "sidebar-accent": "accent",
+  "sidebar-accent-foreground": "accent-foreground",
+  "sidebar-border": "border",
+  "sidebar-ring": "ring",
+} as const satisfies Record<`sidebar-${string}`, TokenName>;
+
 /** shadcn's names for the critical status, so a stock shadcn component matches Cadence. */
 export type AliasTokenName = "destructive" | "destructive-foreground";
 /** Every colour token theme.css declares. */

@@ -47,6 +47,15 @@ export const REQUIRED_PAIRINGS: readonly Pairing[] = [
   // A tab's focus ring sits on the muted list, as a read-only field's does on its own fill.
   { foreground: "ring", background: "muted", kind: "boundary" },
   { foreground: "primary", background: "background", kind: "boundary" },
+  // The sidebar: its items, its group labels, a field in it, and the focus ring on it.
+  { foreground: "foreground", background: "sidebar", kind: "text" },
+  { foreground: "muted-foreground", background: "sidebar", kind: "text" },
+  { foreground: "input", background: "sidebar", kind: "boundary" },
+  { foreground: "ring", background: "sidebar", kind: "boundary" },
+  // The shown item is filled with the accent surface and marked by a bar in the accent's text
+  // colour, so it is marked by shape as well as fill. The focus ring touches that fill too.
+  { foreground: "primary-text", background: "accent", kind: "boundary" },
+  { foreground: "ring", background: "accent", kind: "boundary" },
   ...STATUSES.flatMap((status): Pairing[] => [
     { foreground: `${status}-foreground`, background: status, kind: "text" },
     { foreground: `${status}-text`, background: "background", kind: "text" },
