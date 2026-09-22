@@ -254,6 +254,21 @@ export {
 export type { TabsListProps } from "@/components/cadence/tabs";
 export { Textarea } from "@/components/cadence/textarea";
 export type { TextareaProps } from "@/components/cadence/textarea";
+export {
+  createToastManager,
+  toast,
+  Toast,
+  ToastAction,
+  ToastClose,
+  ToastContent,
+  ToastDescription,
+  Toaster,
+  ToastPortal,
+  ToastProvider,
+  ToastTitle,
+  ToastViewport,
+  useToastManager,
+} from "@/components/cadence/toast";
 export { Toggle, toggleVariants } from "@/components/cadence/toggle";
 export { ToggleGroup, ToggleGroupItem } from "@/components/cadence/toggle-group";
 export type { ToggleGroupOptions, ToggleGroupProps } from "@/components/cadence/toggle-group";

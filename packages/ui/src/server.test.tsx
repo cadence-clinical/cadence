@@ -90,6 +90,8 @@ import {
   TabsList,
   TabsTrigger,
   Textarea,
+  ToastProvider,
+  ToastViewport,
   Toggle,
   ToggleGroup,
   ToggleGroupItem,
@@ -155,6 +157,12 @@ const RENDERS: Record<string, ReactElement> = {
   spinner: <Spinner />,
   switch: <Switch aria-label="Appointment reminders" />,
   textarea: <Textarea aria-label="Notes" />,
+  // The Toaster renders its toasts through a portal, which the server does not reach.
+  toast: (
+    <ToastProvider>
+      <ToastViewport />
+    </ToastProvider>
+  ),
   calendar: <Calendar mode="single" defaultMonth={new Date(2026, 8, 1)} />,
   "data-table": <ServerDataTable />,
   sidebar: (
