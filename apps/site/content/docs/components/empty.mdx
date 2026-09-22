@@ -1,0 +1,79 @@
+---
+title: Empty
+description: What a list or a panel shows when it has nothing in it, and what to do next.
+---
+
+import {
+  Button,
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@cadence-clinical/ui";
+
+<GradeBadge component="empty" />
+
+<ComponentPreview>
+  <Empty className="border">
+    <EmptyHeader>
+      <EmptyTitle>No appointments today</EmptyTitle>
+      <EmptyDescription>Appointments booked for today appear here.</EmptyDescription>
+    </EmptyHeader>
+    <EmptyContent>
+      <Button>Book an appointment</Button>
+    </EmptyContent>
+  </Empty>
+</ComponentPreview>
+
+## Usage
+
+```tsx
+import {
+  Button,
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@cadence-clinical/ui";
+import { CalendarX2 } from "lucide-react";
+
+<Empty>
+  <EmptyHeader>
+    <EmptyMedia variant="icon">
+      <CalendarX2 />
+    </EmptyMedia>
+    <EmptyTitle>No appointments today</EmptyTitle>
+    <EmptyDescription>Appointments booked for today appear here.</EmptyDescription>
+  </EmptyHeader>
+  <EmptyContent>
+    <Button>Book an appointment</Button>
+  </EmptyContent>
+</Empty>;
+```
+
+Empty follows the shadcn [Empty](https://ui.shadcn.com/docs/components/empty) and keeps its part names and props, so shadcn code works unchanged. Add `border` to `Empty` for its dashed outline. `EmptyMedia` with `variant="icon"` sets an icon on a small tile.
+
+Where the panel has a heading, render the title as one, such as `<EmptyTitle render={<h2 />}>`, so a screen reader finds the panel's state in the page's outline.
+
+## Say what is empty
+
+Say what the list holds and that it holds nothing, not what that means. An empty list is not a finding. "No allergies recorded" says nothing has been recorded. It does not say the person has none, and the words must not read as if it did.
+
+When a search or a filter empties a list, say how many results there are in a status that is already on the page, such as a count above the list. A screen reader does not always announce a status that arrives with its words already in it.
+
+## What Cadence changes
+
+- **Spacing, text and the icon tile follow the [density](/docs/theming#density).** The padding is twice the container padding: 24px compact, as in shadcn, and 32px comfortable. The title is title size.
+- **A link in the description shows a focus ring**, and turns to the text colour on hover.
+- **`EmptyTitle` takes `render`**, so it can be a heading.
+
+## Props
+
+| Prop      | On           | Type                      | Default     |
+| --------- | ------------ | ------------------------- | ----------- |
+| `variant` | `EmptyMedia` | `"default" \| "icon"`     | `"default"` |
+| `render`  | `EmptyTitle` | An element, as in Base UI | A `div`     |

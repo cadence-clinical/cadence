@@ -34,6 +34,7 @@
     "components/collapsible",
     "components/dialog",
     "components/dropdown-menu",
+    "components/empty",
     "components/field",
     "components/item",
     "components/popover",
