@@ -94,6 +94,34 @@ export const BRANDS = {
       sans: '"Work Sans Variable", "Work Sans", ui-sans-serif, system-ui, sans-serif',
     },
   },
+  // Plum on a white page, with warm greys and Cadence's typeface. Its source palette's reds and
+  // orange sit within 30° of the critical hue, so none of them is used, even as a surface.
+  mulberry: {
+    label: "Mulberry",
+    accent: "#881e5d",
+    light: {
+      background: "#ffffff",
+      foreground: "#353535",
+      card: "#ffffff",
+      "card-foreground": "#353535",
+      popover: "#ffffff",
+      "popover-foreground": "#353535",
+      primary: "#881e5d",
+      "primary-foreground": "#ffffff",
+      "primary-text": "#8e0b5a",
+      secondary: "#f2f2f2",
+      "secondary-foreground": "#353535",
+      muted: "#f2f2f2",
+      "muted-foreground": "#4f4f4f",
+      accent: "#f8f5f5",
+      "accent-foreground": "#353535",
+      border: "#e1e1e1",
+      // A control's edge must reach 3:1 on the page and on a card. The border's #e1e1e1 reaches
+      // 1.3:1, so fields take a darker grey of their own.
+      input: "#8a8a8a",
+      ring: "#881e5d",
+    },
+  },
 } as const satisfies Record<string, Brand>;
 
 /** The name of an example brand, as set in `data-brand`. */

@@ -140,6 +140,26 @@ test("the theme picker applies a brand's colours and fonts, and remembers it", a
   await expect.poll(() => look(page)).toEqual(cadence);
 });
 
+// Choosing a theme leaves the menu open, so the themes can be compared one after another.
+test("every theme in the picker applies", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "light" });
+  await page.goto("/docs");
+  await openThemePicker(page);
+  for (const [label, brand] of [
+    ["Midnight", "midnight"],
+    ["Lagoon", "lagoon"],
+    ["Cobalt", "cobalt"],
+    ["Mulberry", "mulberry"],
+  ] as const) {
+    await page.getByRole("menuitemradio", { name: label }).click();
+    await expect.poll(() => look(page)).toMatchObject({ brand });
+    await expect(page.getByRole("menuitemradio", { name: label })).toHaveAttribute(
+      "aria-checked",
+      "true",
+    );
+  }
+});
+
 test("a brand that names no fonts keeps Cadence's", async ({ page }) => {
   await page.emulateMedia({ colorScheme: "light" });
   await page.goto("/docs");
