@@ -1,0 +1,61 @@
+---
+title: Collapsible
+description: One section that opens and closes, such as earlier entries. The trigger says whether it is open.
+---
+
+import { Button, Collapsible, CollapsibleContent, CollapsibleTrigger } from "@cadence-clinical/ui";
+
+<GradeBadge component="collapsible" />
+
+<ComponentPreview>
+  <Collapsible className="flex w-full max-w-sm flex-col gap-2">
+    <CollapsibleTrigger render={<Button variant="ghost" size="sm" className="self-start" />}>
+      Earlier entries
+    </CollapsibleTrigger>
+    <CollapsibleContent>
+      <ul className="flex flex-col gap-2 text-body">
+        <li className="rounded-md border p-container-sm">Letter sent to the referrer.</li>
+        <li className="rounded-md border p-container-sm">
+          Booked for the Review clinic in six weeks.
+        </li>
+      </ul>
+    </CollapsibleContent>
+  </Collapsible>
+</ComponentPreview>
+
+## Usage
+
+```tsx
+import { Button, Collapsible, CollapsibleContent, CollapsibleTrigger } from "@cadence-clinical/ui";
+import { ChevronDown } from "lucide-react";
+
+<Collapsible>
+  <CollapsibleTrigger render={<Button variant="ghost" size="sm" />}>
+    Earlier entries
+    <ChevronDown data-icon="inline-end" className="in-data-[panel-open]:rotate-180" />
+  </CollapsibleTrigger>
+  <CollapsibleContent>...</CollapsibleContent>
+</Collapsible>;
+```
+
+Collapsible follows the shadcn [Collapsible](https://ui.shadcn.com/docs/components/collapsible) and keeps its part names and props, so shadcn code works unchanged. It is built on the Base UI [Collapsible](https://base-ui.com/react/components/collapsible), whose props it accepts, such as `open`, `onOpenChange` and `defaultOpen`.
+
+Render the trigger as a [Button](/docs/components/button) through `render`. While the section is open the trigger carries `data-panel-open`, so an icon inside it can turn with `in-data-[panel-open]:rotate-180`.
+
+## Found by the browser
+
+A closed section is taken out of the page, so the browser's find does not reach its words. Set `hiddenUntilFound` on `CollapsibleContent` to keep it in the page, hidden, so find can reach its words and open it. A browser that does not support `hidden="until-found"` keeps the section hidden from find, as if it were not set.
+
+```tsx
+<CollapsibleContent hiddenUntilFound>...</CollapsibleContent>
+```
+
+## What Cadence changes
+
+- **The section grows to its height as it opens**, and shrinks as it closes, in 150ms. shadcn's opens at once. With reduced motion it opens at once here too.
+
+## Accessibility
+
+- The trigger says whether the section is open and names the section it controls.
+- Enter and Space open and close it.
+- A disabled Collapsible keeps its trigger focusable and says it is disabled, so it can still be found with the keyboard.
