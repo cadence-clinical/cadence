@@ -130,7 +130,9 @@ function DataTable<TData extends RowData>({
                 colSpan={header.colSpan}
                 aria-sort={ariaSort(header.column.getIsSorted())}
                 data-align={header.column.columnDef.meta?.align}
-                className="data-[align=end]:text-end"
+                // A sort button fills its cell and carries the cell's padding, so that its words
+                // line up with a plain heading's and nothing hangs over the table's edge.
+                className="has-data-[slot=data-table-sort]:p-0 data-[align=end]:text-end"
               >
                 {header.isPlaceholder ? null : <table.FlexRender header={header} />}
               </TableHead>
@@ -190,13 +192,20 @@ function DataTableColumnHeader<TData extends RowData, TValue>({
 }: DataTableColumnHeaderProps<TData, TValue>) {
   if (!column.getCanSort()) return <span className={className}>{title}</span>;
   const sorted = column.getIsSorted();
+  const toEnd = column.columnDef.meta?.align === "end";
   return (
     <Button
       type="button"
       variant="ghost"
       size="sm"
-      // Sits where the words would, so sortable and plain headings line up.
-      className={cn("-mx-control-x h-auto min-h-control-sm py-1 text-start font-medium", className)}
+      data-slot="data-table-sort"
+      className={cn(
+        // It fills the cell, so its words sit where a plain heading's do and it adds no width.
+        // No border: a Button's transparent one would put its words a pixel further in.
+        "h-auto min-h-control-sm w-full rounded-none border-0 px-container-sm py-1 font-medium",
+        toEnd ? "justify-end text-end" : "justify-start text-start",
+        className,
+      )}
       onClick={() => {
         column.toggleSorting(sorted === "asc");
       }}

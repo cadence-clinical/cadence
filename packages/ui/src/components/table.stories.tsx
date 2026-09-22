@@ -196,6 +196,48 @@ export const AWideTableScrollsInItsOwnBox: Story = {
   },
 };
 
+// A wide table inside a narrow grid scrolls inside its own box instead of pushing the grid wider.
+// A grid track grows to its content's widest possible width unless the item may shrink, which is
+// why the box carries min-w-0.
+export const AWideTableDoesNotStretchItsParent: Story = {
+  render: () => (
+    <div className="grid w-64 gap-2">
+      <p className="text-body">Above the table</p>
+      <Table aria-label="Appointments by clinic">
+        <TableHeader>
+          <TableRow>
+            {Array.from({ length: 10 }, (_, index) => (
+              <TableHead key={index} className="min-w-24">
+                Column {index + 1}
+              </TableHead>
+            ))}
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow>
+            {Array.from({ length: 10 }, (_, index) => (
+              <TableCell key={index}>{index + 1}</TableCell>
+            ))}
+          </TableRow>
+        </TableBody>
+      </Table>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const grid = canvasElement.querySelector(".grid");
+    const box = canvasElement.querySelector("[data-slot=table-container]");
+    if (!(grid instanceof HTMLElement) || !(box instanceof HTMLElement)) {
+      throw new Error("No grid or table container");
+    }
+    // The grid is the width it was asked for, and nothing sticks out of it.
+    await expect(Math.round(grid.getBoundingClientRect().width)).toBe(256);
+    await expect(grid.scrollWidth).toBeLessThanOrEqual(grid.clientWidth);
+    await expect(Math.round(box.getBoundingClientRect().width)).toBeLessThanOrEqual(256);
+    // The table itself is wider, so the box scrolls.
+    await expect(box.scrollWidth).toBeGreaterThan(box.clientWidth);
+  },
+};
+
 function rowHeight(canvasElement: HTMLElement) {
   const row = within(canvasElement).getAllByRole("row")[1];
   return Math.round(row?.getBoundingClientRect().height ?? 0);

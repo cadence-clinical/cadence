@@ -92,6 +92,46 @@ Cadence renders what the table says and never decides it. Sort, filter and page 
 
 Set `meta: { align: "end" }` on a column of numbers, and its heading and cells align to the end.
 
+## A column of actions
+
+A row's actions go in a `display` column at the end. Give each control a name that says which row it acts on, so a screen reader hears "Reschedule General clinic, Monday" and not "Reschedule" eleven times. A [Switch](/docs/components/switch) suits a setting that applies at once, and a [Dropdown menu](/docs/components/dropdown-menu) holds the rest.
+
+```tsx
+helper.display({
+  id: "actions",
+  header: () => <span className="sr-only">Actions</span>,
+  meta: { label: "Actions", align: "end" },
+  cell: ({ row }) => (
+    <div className="flex items-center justify-end gap-control-gap">
+      <Switch
+        aria-label={`Send a reminder for ${row.original.clinic}`}
+        checked={row.original.reminder}
+        onCheckedChange={(checked) => setReminder(row.original.id, checked)}
+      />
+      <DropdownMenu>
+        <DropdownMenuTrigger render={<Button variant="ghost" size="sm" iconOnly />}>
+          <Ellipsis aria-hidden />
+          {`Actions for ${row.original.clinic}`}
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem onClick={() => reschedule(row.original.id)}>
+            Reschedule
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem variant="destructive" onClick={() => cancel(row.original.id)}>
+            Cancel appointment
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
+  ),
+});
+```
+
+The heading is `sr-only`, because a column of controls needs no visible heading but a screen reader still reads one. `meta.label` names the column in the column menu. Acting on a row does not select it: only the selection checkbox does that.
+
+Ask before an action that cannot be undone, in an [Alert dialog](/docs/components/alert-dialog).
+
 ## What Cadence changes
 
 shadcn's data table is a guide to copy, not a component. Here the parts are published and graded, and the differences are:
