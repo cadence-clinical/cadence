@@ -60,6 +60,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
+  Skeleton,
   Spinner,
   Switch,
   Table,
@@ -117,6 +118,7 @@ const RENDERS: Record<string, ReactElement> = {
     </Select>
   ),
   separator: <Separator />,
+  skeleton: <Skeleton className="h-4 w-40" />,
   spinner: <Spinner />,
   switch: <Switch aria-label="Appointment reminders" />,
   textarea: <Textarea aria-label="Notes" />,
