@@ -36,6 +36,7 @@
     "components/tabs",
     "components/toggle-group",
     "---Patterns---",
-    "components/data-table"
+    "components/data-table",
+    "components/sidebar"
   ]
 }

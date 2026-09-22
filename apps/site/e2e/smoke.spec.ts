@@ -50,6 +50,7 @@ const DOCS_PAGES = [
   "/docs/components/radio-group",
   "/docs/components/select",
   "/docs/components/separator",
+  "/docs/components/sidebar",
   "/docs/components/spinner",
   "/docs/components/switch",
   "/docs/components/table",
@@ -122,4 +123,22 @@ test("the registry serves its index and each item it lists", async ({ request })
   }
 
   expect((await request.get("/r/not-a-component.json")).status()).toBe(404);
+});
+
+// The sidebar is fixed to the window. Its live example contains layout, so the sidebar is placed
+// against the frame instead and cannot cover the docs page.
+test("the sidebar example stays inside its frame", async ({ page, isMobile }) => {
+  test.skip(isMobile, "On a phone the sidebar is a sheet, opened by its trigger.");
+  await page.goto("/docs/components/sidebar");
+  const frame = page.locator("[data-slot=sidebar-wrapper]").locator("..");
+  const sidebar = frame.locator("[data-slot=sidebar-container]");
+  const inFrame = await frame.boundingBox();
+  const inSidebar = await sidebar.boundingBox();
+  if (!inFrame || !inSidebar) throw new Error("The example did not render.");
+  expect(inSidebar.y).toBeGreaterThanOrEqual(inFrame.y);
+  expect(inSidebar.y + inSidebar.height).toBeLessThanOrEqual(inFrame.y + inFrame.height);
+  expect(inSidebar.x).toBeGreaterThanOrEqual(inFrame.x);
+
+  await frame.getByRole("button", { name: "Toggle sidebar" }).click();
+  await expect(frame.locator("[data-slot=sidebar]")).toHaveAttribute("data-state", "collapsed");
 });
