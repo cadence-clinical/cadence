@@ -140,6 +140,7 @@ export {
 export {
   Tabs,
   TabsContent,
+  TabsIndicator,
   TabsList,
   tabsListVariants,
   TabsTrigger,

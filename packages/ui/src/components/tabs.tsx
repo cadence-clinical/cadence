@@ -21,7 +21,8 @@ function Tabs({ className, orientation = "horizontal", ...props }: TabsPrimitive
 
 const tabsListVariants = cva(
   [
-    "group/tabs-list inline-flex w-fit max-w-full items-stretch text-muted-foreground",
+    // `relative`, so the indicator that slides between tabs is placed against the list.
+    "group/tabs-list relative inline-flex w-fit max-w-full items-stretch text-muted-foreground",
     // Tabs that do not fit wrap onto another row. They are never clipped or scrolled out of view.
     "group-data-[orientation=horizontal]/tabs:flex-wrap",
     "group-data-[orientation=vertical]/tabs:h-fit group-data-[orientation=vertical]/tabs:flex-col",
@@ -44,13 +45,48 @@ const tabsListVariants = cva(
 /** The Base UI Tabs List's props, plus `variant`. */
 type TabsListProps = TabsPrimitive.List.Props & VariantProps<typeof tabsListVariants>;
 
-/** The row of tabs. `default` is a segmented control, and `line` underlines the tab that is shown. */
-function TabsList({ className, variant = "default", ...props }: TabsListProps) {
+/**
+ * The row of tabs. `default` is a segmented control, and `line` underlines the tab that is shown.
+ * The mark of the shown tab slides to the tab chosen with the pointer.
+ */
+function TabsList({ className, variant = "default", children, ...props }: TabsListProps) {
   return (
     <TabsPrimitive.List
       data-slot="tabs-list"
       data-variant={variant}
       className={cn(tabsListVariants({ variant }), className)}
+      {...props}
+    >
+      <TabsIndicator />
+      {children}
+    </TabsPrimitive.List>
+  );
+}
+
+/**
+ * The mark of the shown tab, which slides to the tab chosen with the pointer. Chosen from the
+ * keyboard, or with reduced motion, it is simply there: the change is what matters, not the trip.
+ *
+ * Base UI hides it until it has measured the tab, and on the server it is hidden. Until then the
+ * shown tab draws its own mark, and once the indicator is shown the tab's own mark gives way.
+ */
+function TabsIndicator({ className, ...props }: TabsPrimitive.Indicator.Props) {
+  return (
+    <TabsPrimitive.Indicator
+      data-slot="tabs-indicator"
+      className={cn(
+        "pointer-events-none absolute top-0 left-0 z-0",
+        "translate-x-(--active-tab-left) translate-y-(--active-tab-top)",
+        // Movement is a transform. The size changes too, on an empty box that nothing flows
+        // around, so it costs no layout elsewhere.
+        "transition-[translate,width,height] duration-150 ease-out-strong",
+        "group-has-[:focus-visible]/tabs-list:transition-none motion-reduce:transition-none",
+        "group-data-[variant=default]/tabs-list:h-(--active-tab-height) group-data-[variant=default]/tabs-list:w-(--active-tab-width) group-data-[variant=default]/tabs-list:rounded-md group-data-[variant=default]/tabs-list:border group-data-[variant=default]/tabs-list:border-input group-data-[variant=default]/tabs-list:bg-background",
+        "group-data-[variant=line]/tabs-list:bg-primary-text",
+        "group-data-[variant=line]/tabs-list:group-data-[orientation=horizontal]/tabs:top-auto group-data-[variant=line]/tabs-list:group-data-[orientation=horizontal]/tabs:-bottom-px group-data-[variant=line]/tabs-list:group-data-[orientation=horizontal]/tabs:h-0.5 group-data-[variant=line]/tabs-list:group-data-[orientation=horizontal]/tabs:w-(--active-tab-width) group-data-[variant=line]/tabs-list:group-data-[orientation=horizontal]/tabs:translate-y-0",
+        "group-data-[variant=line]/tabs-list:group-data-[orientation=vertical]/tabs:-right-px group-data-[variant=line]/tabs-list:group-data-[orientation=vertical]/tabs:left-auto group-data-[variant=line]/tabs-list:group-data-[orientation=vertical]/tabs:h-(--active-tab-height) group-data-[variant=line]/tabs-list:group-data-[orientation=vertical]/tabs:w-0.5 group-data-[variant=line]/tabs-list:group-data-[orientation=vertical]/tabs:translate-x-0",
+        className,
+      )}
       {...props}
     />
   );
@@ -79,6 +115,9 @@ function TabsTrigger({ className, ...props }: TabsPrimitive.Tab.Props) {
         // A target as high as a control, centred on the tab: 44px when the density is comfortable.
         "before:absolute before:top-1/2 before:left-0 before:h-control before:w-full before:-translate-y-1/2",
         "group-data-[variant=default]/tabs-list:data-active:border-input group-data-[variant=default]/tabs-list:data-active:bg-background",
+        // Once the indicator is shown, it is the mark, and the tab's own gives way to it.
+        "group-has-[[data-slot=tabs-indicator]:not([hidden])]/tabs-list:data-active:border-transparent group-has-[[data-slot=tabs-indicator]:not([hidden])]/tabs-list:data-active:bg-transparent",
+        "group-has-[[data-slot=tabs-indicator]:not([hidden])]/tabs-list:data-active:after:opacity-0",
         // The rule sits on the list's own border, so the two read as one line with a heavier part.
         // It is the mark of the shown tab, so it takes the token whose contrast is asserted on
         // the page and on a card.
@@ -110,5 +149,5 @@ function TabsContent({ className, ...props }: TabsPrimitive.Panel.Props) {
   );
 }
 
-export { Tabs, TabsContent, TabsList, tabsListVariants, TabsTrigger };
+export { Tabs, TabsContent, TabsIndicator, TabsList, tabsListVariants, TabsTrigger };
 export type { TabsListProps };

@@ -9,7 +9,9 @@ const toggleVariants = cva(
   [
     "inline-flex shrink-0 items-center justify-center rounded-md border border-transparent",
     "font-medium whitespace-nowrap text-foreground select-none",
-    "transition-[background-color,border-color,box-shadow] duration-150 ease-out-strong motion-reduce:transition-none",
+    // Press feedback is the same as a Button's: a slight press in, fast, and none with reduced motion.
+    "transition-[background-color,border-color,box-shadow,transform] duration-150 ease-out-strong",
+    "active:scale-[0.97] motion-reduce:transition-none motion-reduce:active:scale-100",
     "outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
     "hover:bg-muted data-disabled:pointer-events-none data-disabled:opacity-50",
     // Pressed is a fill and a boundary. The fill alone is too close to the page to tell the two
