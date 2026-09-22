@@ -68,7 +68,7 @@ Set `orientation="vertical"` on `Tabs` to stack the tabs beside the view.
 - **The view shows its focus.** A view takes focus after its tab, so that a keyboard reaches a view with nothing of its own to focus. shadcn removes the outline from it. Here it gets the focus ring.
 - **The shown tab is marked by shape as well as colour:** a bordered fill in the `default` list and a rule in the `line` list. The rule uses the `primary-text` token, whose contrast is asserted on the page and on a card.
 - **Height, padding and text follow the [density](/docs/theming#density).** When the density is comfortable, each tab's target is 44px high.
-- **Nothing animates.** Tabs are changed often and from the keyboard, where an animation only delays.
+- **The mark slides to the tab chosen with the pointer**, over 150ms. Chosen from the keyboard, or with reduced motion, it is simply there: the change is what matters, not the trip. The mark is a `TabsIndicator`, which `TabsList` renders for you. On the server-rendered page the shown tab draws its own mark until the indicator has measured it.
 - **The focus ring is never faded.**
 
 ## Accessibility
