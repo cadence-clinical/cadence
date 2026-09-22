@@ -28,6 +28,10 @@ import {
   DialogContent,
   DialogTitle,
   DialogTrigger,
+  Drawer,
+  DrawerContent,
+  DrawerTitle,
+  DrawerTrigger,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -206,6 +210,14 @@ const RENDERS: Record<string, ReactElement> = {
         <EmptyTitle>No appointments today</EmptyTitle>
       </EmptyHeader>
     </Empty>
+  ),
+  drawer: (
+    <Drawer>
+      <DrawerTrigger>Edit contact details</DrawerTrigger>
+      <DrawerContent>
+        <DrawerTitle>Contact details</DrawerTitle>
+      </DrawerContent>
+    </Drawer>
   ),
   "dropdown-menu": (
     <DropdownMenu>

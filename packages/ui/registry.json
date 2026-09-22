@@ -235,6 +235,29 @@
       }
     },
     {
+      "name": "drawer",
+      "type": "registry:component",
+      "title": "Drawer",
+      "description": "A panel from an edge of the screen that can be swiped away, most often from the bottom of a phone. What does not fit scrolls inside it.",
+      "dependencies": ["@base-ui/react"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/drawer.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/drawer.tsx"
+        }
+      ],
+      "docs": "Give every drawer a DrawerTitle, and keep a DrawerClose in it: a screen reader on a touch screen cannot swipe. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "composite",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "dropdown-menu",
       "type": "registry:component",
       "title": "Dropdown menu",
