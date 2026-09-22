@@ -3,6 +3,7 @@ import defaultMdxComponents from "fumadocs-ui/mdx";
 import type { MDXComponents } from "mdx/types";
 
 import { AppShellPreview } from "./app-shell-preview";
+import { Callout } from "./callout";
 import { ComponentPreview } from "./component-preview";
 import { DataTablePreview } from "./data-table-preview";
 import { FormPreview } from "./form-preview";
@@ -16,6 +17,7 @@ export function getMDXComponents(components?: MDXComponents) {
     ...defaultMdxComponents,
     AppShellPreview,
     Button,
+    Callout,
     ComponentPreview,
     GradeBadge,
     TypesetPreview,

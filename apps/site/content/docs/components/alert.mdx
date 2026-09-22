@@ -79,6 +79,28 @@ Pass `icon` to replace a variant's icon. A status variant always has one, and st
 </Alert>
 ```
 
+## A quieter alert
+
+`emphasis="edge"` keeps the fill, the icon and the words, and turns the outline into a bar down the leading edge. Use it for a note beside what it is about, such as this one, rather than for something that has just happened:
+
+<ComponentPreview>
+  <Alert variant="warning" emphasis="edge" role="note" className="max-w-md">
+    <AlertTitle>Provisional</AlertTitle>
+    <AlertDescription>The grading matrix is still being designed.</AlertDescription>
+  </Alert>
+</ComponentPreview>
+
+```tsx
+<Alert variant="warning" emphasis="edge" role="note">
+  <AlertTitle>Provisional</AlertTitle>
+  <AlertDescription>The grading matrix is still being designed.</AlertDescription>
+</Alert>
+```
+
+The bar is the status's own border token, so the status is still marked by more than its fill. Without a status, the bar is the page's rule on the muted fill.
+
+Every callout on this site is one of these, so the documentation is built from what it documents.
+
 ## When it is announced
 
 An alert that appears in response to something is announced by a screen reader. `critical` and `warning` have `role="alert"`, which interrupts. The other variants have `role="status"`, which waits until the screen reader is idle. For a short message that goes away on its own, such as a record saved, use a [Toast](/docs/components/toast). An alert stays where it is.
@@ -100,12 +122,14 @@ Those roles are for a message that appears. A message that is on the page from t
 - **The role follows the urgency.** shadcn gives every alert `role="alert"`.
 - **The action has its own column.** shadcn positions it over the corner and reserves a fixed 72px for it, which a wider button overruns. Here it takes the width it needs, and drops under the words when the alert is narrower than 24rem. The alert measures itself and not the screen, so this holds in a side panel.
 - **Padding and text follow the [density](/docs/theming#density)**, and long words wrap.
+- **A quieter emphasis**, for a note on a page rather than something that has just happened. shadcn has one weight of alert.
 
 ## Props
 
 | Prop        | On      | Type                                                          | Default                           |
 | ----------- | ------- | ------------------------------------------------------------- | --------------------------------- |
 | `variant`   | `Alert` | `"default" \| "critical" \| "warning" \| "success" \| "info"` | `"default"`                       |
+| `emphasis`  | `Alert` | `"outlined" \| "edge"`                                        | `"outlined"`                      |
 | `icon`      | `Alert` | An element                                                    | The variant's icon                |
 | `iconLabel` | `Alert` | `string`                                                      | The variant's name                |
 | `role`      | `Alert` | `string`                                                      | `"alert"` or `"status"`, as above |
