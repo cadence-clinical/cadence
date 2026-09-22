@@ -1,9 +1,9 @@
 ---
 title: Theming
-description: Set the colour mode, contrast, density, accent and font, and add your own brand accent.
+description: Set the colour mode, contrast, density, accent and font, and add your own brand.
 ---
 
-You theme Cadence with four attributes on the `<html>` element and two CSS variables. Status colours are not themeable.
+You theme Cadence with attributes on the `<html>` element and two CSS variables, or all at once with a brand. Status colours are not themeable.
 
 ```html
 <html data-mode="dark" data-contrast="more" data-density="comfortable" data-accent="indigo"></html>
@@ -11,12 +11,13 @@ You theme Cadence with four attributes on the `<html>` element and two CSS varia
 
 ## Attributes
 
-| Attribute       | Values                                              | When it is not set                                     |
-| --------------- | --------------------------------------------------- | ------------------------------------------------------ |
-| `data-mode`     | `light`, `dark`                                     | Follows the operating system's `prefers-color-scheme`. |
-| `data-contrast` | `standard`, `more`                                  | Follows the operating system's `prefers-contrast`.     |
-| `data-density`  | `compact`, `comfortable`                            | Compact, or comfortable on a touch device.             |
-| `data-accent`   | `teal`, `blue`, `indigo`, `violet`, `plum`, `slate` | `teal`                                                 |
+| Attribute       | Values                                                        | When it is not set                                     |
+| --------------- | ------------------------------------------------------------- | ------------------------------------------------------ |
+| `data-mode`     | `light`, `dark`                                               | Follows the operating system's `prefers-color-scheme`. |
+| `data-contrast` | `standard`, `more`                                            | Follows the operating system's `prefers-contrast`.     |
+| `data-density`  | `compact`, `comfortable`                                      | Compact, or comfortable on a touch device.             |
+| `data-accent`   | `teal`, `blue`, `indigo`, `violet`, `plum`, `slate`           | `teal`                                                 |
+| `data-brand`    | The name of a [brand](#add-your-own-brand) you have generated | No brand. A brand takes precedence over `data-accent`. |
 
 Set the attributes on `<html>` only. Cadence does not support a differently themed subtree.
 
@@ -110,3 +111,50 @@ Import the generated file after the Cadence styles, and set `data-accent="brand"
 Cadence rejects an accent whose hue is within 30° of critical red, warning amber or success green in OKLCH. On a clinical screen, a brand colour in those ranges can be read as a status. If your brand is red, amber or green, use `slate` or another curated accent, and keep the brand colour in your logo.
 
 Greys are exempt from the hue check because a grey cannot be mistaken for a status.
+
+## Add your own brand
+
+A brand is a preset for the whole page: an accent, the surfaces and text of light mode, and fonts. Set it with `data-brand` on `<html>`.
+
+To see one, choose **Theme** beside the light and dark switch on this site, or in the Storybook toolbar. Live examples sit on a card, so a brand's page colour shows around them.
+
+- **Midnight** sets a grey page, navy text and buttons, a blue focus ring, and Geist.
+- **Lagoon** keeps a white page and Cadence's typeface. It sets teal text, blue buttons, a purple focus ring, and pale purple and green surfaces.
+- **Cobalt** keeps a white page. It sets navy text, bright blue buttons and links, light grey surfaces, and Work Sans.
+
+### What a brand can set
+
+```ts title="scripts/build-brand.ts"
+import { writeFile } from "node:fs/promises";
+import { generateBrandCss, type Brand } from "@cadence-clinical/tokens";
+
+const brand: Brand = {
+  label: "Our health service",
+  accent: "#25215d",
+  light: {
+    background: "#f4f3f5",
+    foreground: "#25215d",
+    card: "#ffffff",
+    input: "#85879b",
+    ring: "#005ca9",
+  },
+  font: { sans: '"Geist Variable", system-ui, sans-serif' },
+};
+
+await writeFile("app/brand.css", generateBrandCss("ours", brand));
+```
+
+Import the generated file after the Cadence styles, and set `data-brand="ours"` on `<html>`. A brand names its fonts. Load them yourself.
+
+- `accent` is one brand colour, which Cadence solves as it does for [your own accent](#add-your-own-accent).
+- `light` sets surfaces, their text, borders and the accent's colours, for light mode at standard contrast. A token you leave out keeps Cadence's value.
+- `font` sets `--cadence-font-sans` and `--cadence-font-mono`.
+
+`background` is the page, and fields, checkboxes and outline buttons fill with it. Inside a card, a dialog or a popover they fill with that surface's colour instead, so a brand with a grey page still has white fields on its cards.
+
+### What a brand cannot change
+
+- **Status colours.** Critical, warning, success and info look the same in every brand, so a clinician reads them the same way wherever they work.
+- **Dark mode and more contrast.** In those modes the page keeps Cadence's surfaces, with the brand's accent solved for them. A brand cannot make an accessibility setting harder to read.
+
+`generateBrandCss` checks every pairing a component relies on, in both modes and at both contrast levels, and throws when one falls short. A common failure is the `input` token: it draws the edge of a form field, which needs 3:1 against the page and a card. A decorative `border` colour is usually too pale for it.

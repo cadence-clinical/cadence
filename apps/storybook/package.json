@@ -21,6 +21,9 @@
   },
   "devDependencies": {
     "@cadence-clinical/config": "workspace:*",
+    "@fontsource-variable/geist": "^5.3.0",
+    "@fontsource-variable/geist-mono": "^5.3.0",
+    "@fontsource-variable/work-sans": "^5.3.0",
     "@storybook/addon-a11y": "^10.6.0",
     "@storybook/addon-docs": "^10.6.0",
     "@storybook/addon-vitest": "^10.6.0",

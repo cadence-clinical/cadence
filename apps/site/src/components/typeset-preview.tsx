@@ -1,7 +1,7 @@
 /** A live sample of Typeset for the docs. The content is synthetic. */
 export function TypesetPreview({ preset }: { preset?: "compact" | "reading" }) {
   return (
-    <div className="not-prose my-6 rounded-lg border bg-background p-6">
+    <div className="not-prose preview-surface my-6 rounded-lg border p-6">
       <article className={preset ? `typeset typeset-${preset}` : "typeset"}>
         <h2>Preparing for your clinic visit</h2>
         <p>
