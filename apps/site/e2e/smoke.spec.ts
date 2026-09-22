@@ -30,44 +30,64 @@ test("the Typeset page styles its live sample", async ({ page }) => {
   expect(marker).toBe("decimal");
 });
 
+/** Every page of the site. A new docs page is added here, so each test below covers it. */
+const DOCS_PAGES = [
+  "/",
+  "/docs",
+  "/docs/theming",
+  "/docs/levels",
+  "/docs/components/alert",
+  "/docs/components/alert-dialog",
+  "/docs/components/badge",
+  "/docs/components/button",
+  "/docs/components/card",
+  "/docs/components/checkbox",
+  "/docs/components/data-table",
+  "/docs/components/dialog",
+  "/docs/components/dropdown-menu",
+  "/docs/components/field",
+  "/docs/components/popover",
+  "/docs/components/radio-group",
+  "/docs/components/select",
+  "/docs/components/separator",
+  "/docs/components/spinner",
+  "/docs/components/switch",
+  "/docs/components/table",
+  "/docs/components/tabs",
+  "/docs/components/toggle",
+  "/docs/components/toggle-group",
+  "/docs/components/tooltip",
+  "/docs/components/textarea",
+  "/docs/components/input",
+  "/docs/components/item",
+  "/docs/components/label",
+  "/docs/components/typeset",
+];
+
 test("no page scrolls sideways at the current viewport", async ({ page }) => {
-  for (const path of [
-    "/",
-    "/docs",
-    "/docs/theming",
-    "/docs/levels",
-    "/docs/components/alert",
-    "/docs/components/alert-dialog",
-    "/docs/components/badge",
-    "/docs/components/button",
-    "/docs/components/card",
-    "/docs/components/checkbox",
-    "/docs/components/data-table",
-    "/docs/components/dialog",
-    "/docs/components/dropdown-menu",
-    "/docs/components/field",
-    "/docs/components/popover",
-    "/docs/components/radio-group",
-    "/docs/components/select",
-    "/docs/components/separator",
-    "/docs/components/spinner",
-    "/docs/components/switch",
-    "/docs/components/table",
-    "/docs/components/tabs",
-    "/docs/components/toggle",
-    "/docs/components/toggle-group",
-    "/docs/components/tooltip",
-    "/docs/components/textarea",
-    "/docs/components/input",
-    "/docs/components/item",
-    "/docs/components/label",
-    "/docs/components/typeset",
-  ]) {
+  for (const path of DOCS_PAGES) {
     await page.goto(path);
     const overflow = await page.evaluate(
       () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
     );
     expect(overflow, `${path} overflows horizontally`).toBeLessThanOrEqual(0);
+  }
+});
+
+// Decision records are for contributors and live in the repository. A public page gives the reason
+// in a sentence instead of sending a reader to an internal record.
+test("no page links to or names an internal decision record", async ({ page }) => {
+  for (const path of DOCS_PAGES) {
+    await page.goto(path);
+    const internal = await page.evaluate(() => {
+      const links = [...document.querySelectorAll("a[href]")]
+        .map((a) => a.getAttribute("href") ?? "")
+        .filter((href) => href.includes("docs/decisions"));
+      const named = /\bdecision\s+0\d{3}\b|\bADR\s*0?\d{3,4}\b/i.exec(document.body.innerText)?.[0];
+      return { links, named: named ?? null };
+    });
+    expect(internal.links, `${path} links to a decision record`).toEqual([]);
+    expect(internal.named, `${path} names a decision record`).toBeNull();
   }
 });
 
