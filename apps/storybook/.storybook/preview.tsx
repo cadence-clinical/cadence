@@ -8,6 +8,11 @@ const ACCENTS = ["teal", "blue", "indigo", "violet", "plum", "slate"];
 
 /** Cadence's own look, with no brand applied. */
 const NO_BRAND = "cadence";
+/**
+ * No density set, so it follows the device: compact with a mouse, the touch default on a touch
+ * screen. Storybook on a desktop shows compact for it.
+ */
+const AUTOMATIC = "automatic";
 
 type ThemeGlobals = Partial<Record<"mode" | "contrast" | "density" | "accent" | "brand", string>>;
 
@@ -26,10 +31,11 @@ const text = (value: unknown): string | undefined =>
 function ThemeSync({ mode, contrast, density, accent, brand }: ThemeGlobals) {
   useLayoutEffect(() => {
     const chosen = brand === NO_BRAND ? undefined : brand;
+    const setDensity = density === AUTOMATIC ? undefined : density;
     for (const [name, value] of Object.entries({
       mode,
       contrast,
-      density,
+      density: setDensity,
       accent,
       brand: chosen,
     })) {
@@ -78,7 +84,11 @@ const preview: Preview = {
       toolbar: {
         title: "Density",
         icon: "component",
-        items: ["compact", "comfortable"],
+        items: [
+          { value: AUTOMATIC, title: "Automatic" },
+          { value: "compact", title: "Compact" },
+          { value: "comfortable", title: "Comfortable" },
+        ],
         dynamicTitle: true,
       },
     },

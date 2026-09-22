@@ -196,10 +196,10 @@ test("a live example sits on a card, so its field is white on a brand's grey pag
   expect((await look(page)).page).toBe("rgb(244, 243, 245)");
 });
 
-test("the theme picker is drawn like the light and dark switch beside it", async ({ page }) => {
+test("the theme and density pickers are drawn like the light and dark switch", async ({ page }) => {
   await page.goto("/docs");
-  const trigger = page.getByRole("button", { name: /^Theme: / });
-  if (!(await trigger.isVisible())) {
+  const theme = page.getByRole("button", { name: /^Theme: / });
+  if (!(await theme.isVisible())) {
     await page.getByRole("button", { name: "Open Sidebar" }).click();
   }
   const drawn = (element: Element) => {
@@ -210,8 +210,9 @@ test("the theme picker is drawn like the light and dark switch beside it", async
       height: element.getBoundingClientRect().height,
     };
   };
-  const toggle = page.locator("[data-theme-toggle]:visible").first();
-  expect(await trigger.evaluate(drawn)).toEqual(await toggle.evaluate(drawn));
+  const toggle = await page.locator("[data-theme-toggle]:visible").first().evaluate(drawn);
+  expect(await theme.evaluate(drawn)).toEqual(toggle);
+  expect(await page.getByRole("button", { name: /^Density: / }).evaluate(drawn)).toEqual(toggle);
 });
 
 // A touch screen that sets no density gets the touch default, 40px controls, and comfortable is
@@ -231,4 +232,49 @@ test("a touch screen gets the touch default, and comfortable when it asks", asyn
     document.documentElement.setAttribute("data-density", "comfortable");
   });
   expect(await controlHeight()).toBe("2.75rem");
+});
+
+/** The control height the page resolves, which is what the density sets. */
+function controlHeight(page: Page) {
+  return page.evaluate(() =>
+    getComputedStyle(document.documentElement).getPropertyValue("--control-height").trim(),
+  );
+}
+
+// The density picker sets data-density and remembers it. Automatic takes it off, so the density
+// follows the device again: compact with a mouse, the touch default on the emulated phone.
+test("the density picker sets the density, remembers it, and gives it back to the device", async ({
+  page,
+  isMobile,
+}) => {
+  await page.goto("/docs/components/button");
+  const automatic = isMobile ? "2.5rem" : "2rem";
+  expect(await controlHeight(page)).toBe(automatic);
+
+  const trigger = page.getByRole("button", { name: /^Density: / });
+  if (!(await trigger.isVisible())) {
+    await page.getByRole("button", { name: "Open Sidebar" }).click();
+  }
+  await expect(trigger).toHaveAccessibleName("Density: Automatic");
+  await trigger.click();
+  await page.getByRole("menuitemradio", { name: "Comfortable" }).click();
+  await expect.poll(() => controlHeight(page)).toBe("2.75rem");
+  await expect(trigger).toHaveAccessibleName("Density: Comfortable");
+
+  // A reload applies it before React runs, from the script in the page's head.
+  await page.reload();
+  expect(await page.evaluate(() => document.documentElement.getAttribute("data-density"))).toBe(
+    "comfortable",
+  );
+
+  const again = page.getByRole("button", { name: /^Density: / });
+  if (!(await again.isVisible())) {
+    await page.getByRole("button", { name: "Open Sidebar" }).click();
+  }
+  await again.click();
+  await page.getByRole("menuitemradio", { name: "Automatic" }).click();
+  await expect.poll(() => controlHeight(page)).toBe(automatic);
+  expect(
+    await page.evaluate(() => document.documentElement.getAttribute("data-density")),
+  ).toBeNull();
 });

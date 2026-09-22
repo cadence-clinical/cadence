@@ -1,7 +1,7 @@
 import { RootProvider } from "fumadocs-ui/provider/next";
 import type { Metadata } from "next";
 
-import { BRAND_SCRIPT } from "@/lib/brand";
+import { PREFERENCE_SCRIPT } from "@/lib/preferences";
 import { appName, siteDescription, siteUrl } from "@/lib/shared";
 
 import "./global.css";
@@ -18,9 +18,9 @@ export default function Layout({ children }: LayoutProps<"/">) {
     // type the way a consumer does.
     <html lang="en-AU" suppressHydrationWarning>
       <head>
-        {/* Applies a remembered theme before the first paint: a fixed string built from the brand
-            names, with no user input in it. See src/lib/brand.ts. */}
-        <script dangerouslySetInnerHTML={{ __html: BRAND_SCRIPT }} />
+        {/* Applies a remembered theme and density before the first paint: a fixed string built
+            from the values each may take, with no user input in it. See src/lib/preferences.ts. */}
+        <script dangerouslySetInnerHTML={{ __html: PREFERENCE_SCRIPT }} />
       </head>
       <body className="flex min-h-screen flex-col">
         <RootProvider>{children}</RootProvider>

@@ -1,6 +1,6 @@
 import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared";
 
-import { ThemeControls } from "@/components/brand-picker";
+import { ThemeControls } from "@/components/theme-controls";
 
 import { appName, gitConfig } from "./shared";
 
