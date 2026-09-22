@@ -130,6 +130,9 @@ interface FormProblem {
 
 const NO_PROBLEMS: readonly FormProblem[] = [];
 const FIELD = '[data-slot="field"]';
+// shadcn's forms guide writes `data-invalid={fieldState.invalid}`, which React renders as
+// "false" on a field that is right.
+const INVALID_FIELD = `${FIELD}[data-invalid]:not([data-invalid="false"])`;
 const FOCUSABLE = 'input:not([type="hidden"]), select, textarea, button, [tabindex]';
 
 function textOf(element: Element): string {
@@ -139,7 +142,7 @@ function textOf(element: Element): string {
 /** Reads the Fields that are wrong from the form, in the order they appear in it. */
 function problemsIn(form: HTMLElement): FormProblem[] {
   const problems: FormProblem[] = [];
-  for (const field of form.querySelectorAll<HTMLElement>(`${FIELD}[data-invalid]`)) {
+  for (const field of form.querySelectorAll<HTMLElement>(INVALID_FIELD)) {
     // An option of a set is a Field inside the set's Field, and the set's Field owns the error.
     if (field.parentElement?.closest(FIELD)) continue;
     const ownedByField = (element: Element) => element.closest(FIELD) === field;

@@ -96,6 +96,29 @@ A `FieldError` with no message of its own shows the error for its Field's `name`
 
 A form library such as React Hook Form checks the values itself. Mark each Field `invalid` and pass the library's messages to `FieldError`, as the [Field](/docs/components/field#show-an-error) page shows. The summary reads each Field's error the same way, whichever produced it.
 
+## From shadcn
+
+shadcn's Base UI styles have no Form. Its [forms guide](https://ui.shadcn.com/docs/forms) writes a plain `form`, with `data-invalid` on each Field, `aria-invalid` on each control and a `FieldError` rendered while the value is wrong. That code works unchanged inside a Form: replace `form` with `Form` and add a `FormErrorSummary`.
+
+```tsx
+<Form onSubmit={form.handleSubmit(onSubmit)}>
+  <FormErrorSummary />
+  <Controller
+    name="title"
+    control={form.control}
+    render={({ field, fieldState }) => (
+      <Field data-invalid={fieldState.invalid}>
+        <FieldLabel htmlFor={field.name}>Title</FieldLabel>
+        <Input {...field} id={field.name} aria-invalid={fieldState.invalid} />
+        {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+      </Field>
+    )}
+  />
+</Form>
+```
+
+shadcn's older Radix styles have a `Form` that is React Hook Form's `FormProvider` and renders no element, used as `<Form {...form}><form>`. Cadence's `Form` is the `form` element itself, so pass the library's handler to its `onSubmit` instead.
+
 ## Sending the form
 
 `FormSubmit` is a submit [Button](/docs/components/button). While the form's `action` runs, it is disabled, shows a spinner and says `pendingLabel` if you give one, so the same record cannot be sent twice. It reads that from React's `useFormStatus`. When you send the form from `onFormSubmit`, set `pending` yourself, as in the example above.
