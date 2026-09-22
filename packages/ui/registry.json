@@ -158,6 +158,29 @@
       }
     },
     {
+      "name": "collapsible",
+      "type": "registry:component",
+      "title": "Collapsible",
+      "description": "One section that opens and closes. The trigger says whether it is open, and the section grows to its height in 150ms, without motion under reduced motion.",
+      "dependencies": ["@base-ui/react"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/collapsible.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/collapsible.tsx"
+        }
+      ],
+      "docs": "Render CollapsibleTrigger as a Button. Set hiddenUntilFound on CollapsibleContent so the browser's find can open it. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "composite",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "data-table",
       "type": "registry:component",
       "title": "Data table",

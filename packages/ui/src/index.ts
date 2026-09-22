@@ -40,6 +40,16 @@ export type { CardPartProps, CardProps } from "@/components/cadence/card";
 export { Checkbox } from "@/components/cadence/checkbox";
 export type { CheckboxProps } from "@/components/cadence/checkbox";
 export {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/cadence/collapsible";
+export type {
+  CollapsibleContentProps,
+  CollapsibleProps,
+  CollapsibleTriggerProps,
+} from "@/components/cadence/collapsible";
+export {
   Dialog,
   DialogClose,
   DialogContent,
