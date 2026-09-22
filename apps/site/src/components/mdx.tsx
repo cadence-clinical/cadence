@@ -5,6 +5,7 @@ import type { MDXComponents } from "mdx/types";
 import { AppShellPreview } from "./app-shell-preview";
 import { ComponentPreview } from "./component-preview";
 import { DataTablePreview } from "./data-table-preview";
+import { DatePickerPreview } from "./date-picker-preview";
 import { FormPreview } from "./form-preview";
 import { GradeBadge } from "./grade-badge";
 import { ListDetailPreview } from "./list-detail-preview";
@@ -22,6 +23,7 @@ export function getMDXComponents(components?: MDXComponents) {
     ListDetailPreview,
     TypesetPreview,
     DataTablePreview,
+    DatePickerPreview,
     FormPreview,
     SidebarPreview,
     ToastPreview,
