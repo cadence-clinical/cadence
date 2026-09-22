@@ -37,9 +37,10 @@ export const BRANDS = {
       mono: '"Geist Mono Variable", "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace',
     },
   },
-  // Blue, purple and green on a white page, with Cadence's typeface. A bright green, #96b112,
-  // reaches 2.4:1 on white, too little for text or a boundary, so the green appears only as the
-  // pale tint of a highlighted or pressed control.
+  // Blue, purple and green on a white page. A bright green, #96b112, reaches 2.4:1 on white, too
+  // little for text or a boundary, so the green appears only as the pale tint of a highlighted or
+  // pressed control. The source typeface is commercial, so Figtree, an open geometric sans, stands
+  // in for it.
   lagoon: {
     label: "Lagoon",
     accent: "#287f8a",
@@ -63,6 +64,9 @@ export const BRANDS = {
       border: "#dddddd",
       input: "#828282",
       ring: "#8a4098",
+    },
+    font: {
+      sans: '"Figtree Variable", "Figtree", ui-sans-serif, system-ui, sans-serif',
     },
   },
   // Bright blue and navy on a white page, with Work Sans. Its source palette also had a red, a gold
@@ -94,8 +98,9 @@ export const BRANDS = {
       sans: '"Work Sans Variable", "Work Sans", ui-sans-serif, system-ui, sans-serif',
     },
   },
-  // Plum on a white page, with warm greys and Cadence's typeface. Its source palette's reds and
-  // orange sit within 30° of the critical hue, so none of them is used, even as a surface.
+  // Plum on a white page, with warm greys. Its source palette's reds and orange sit within 30° of
+  // the critical hue, so none of them is used, even as a surface. The source typeface is
+  // commercial, so Source Sans 3, an open humanist sans, stands in for it.
   mulberry: {
     label: "Mulberry",
     accent: "#881e5d",
@@ -120,6 +125,9 @@ export const BRANDS = {
       // 1.3:1, so fields take a darker grey of their own.
       input: "#8a8a8a",
       ring: "#881e5d",
+    },
+    font: {
+      sans: '"Source Sans 3 Variable", "Source Sans 3", ui-sans-serif, system-ui, sans-serif',
     },
   },
 } as const satisfies Record<string, Brand>;

@@ -59,6 +59,24 @@ Authors, under the SIL Open Font License, Version 1.1. It is used by an example 
 Storybook can switch to. No published package depends on it. The font files are not copied into
 this repository. The licence ships inside that package.
 
+## Figtree
+
+The website and Storybook depend on
+[`@fontsource-variable/figtree`](https://fontsource.org/fonts/figtree), which packages
+[Figtree](https://github.com/erikdkennedy/figtree), Copyright 2022 The Figtree Project Authors,
+under the SIL Open Font License, Version 1.1. It is used by an example brand the site and Storybook
+can switch to. No published package depends on it. The font files are not copied into this
+repository. The licence ships inside that package.
+
+## Source Sans 3
+
+The website and Storybook depend on
+[`@fontsource-variable/source-sans-3`](https://fontsource.org/fonts/source-sans-3), which packages
+[Source Sans 3](https://github.com/adobe-fonts/source-sans), Copyright 2010-2024 Adobe, with
+Reserved Font Name 'Source', under the SIL Open Font License, Version 1.1. It is used by an example
+brand the site and Storybook can switch to. No published package depends on it. The font files are
+not copied into this repository. The licence ships inside that package.
+
 ## Agent skills
 
 The `technical-writing` and `human-writing` skills under `.claude/skills` are adapted from
