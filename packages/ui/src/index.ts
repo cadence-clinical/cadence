@@ -116,6 +116,8 @@ export type {
 } from "@/components/cadence/item";
 export { Label } from "@/components/cadence/label";
 export type { LabelProps } from "@/components/cadence/label";
+export { Marker, MarkerContent, MarkerIcon, markerVariants } from "@/components/cadence/marker";
+export type { MarkerProps } from "@/components/cadence/marker";
 export {
   Popover,
   PopoverContent,

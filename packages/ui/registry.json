@@ -357,6 +357,29 @@
       }
     },
     {
+      "name": "marker",
+      "type": "registry:component",
+      "title": "Marker",
+      "description": "A line of muted text that marks a place in a list or a page, plain, between two rules or over one. A long label wraps between its rules.",
+      "dependencies": ["@base-ui/react", "class-variance-authority"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/marker.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/marker.tsx"
+        }
+      ],
+      "docs": "Where a Marker heads what follows, render it as a heading. In a list, render it as an li. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "primitive",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "popover",
       "type": "registry:component",
       "title": "Popover",
