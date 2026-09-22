@@ -21,6 +21,9 @@ import {
   CardHeader,
   CardTitle,
   Checkbox,
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
   Dialog,
   DialogContent,
   DialogTitle,
@@ -104,6 +107,12 @@ const RENDERS: Record<string, ReactElement> = {
   badge: <Badge variant="info">New</Badge>,
   button: <Button>Save observation</Button>,
   checkbox: <Checkbox aria-label="Interpreter needed" />,
+  collapsible: (
+    <Collapsible defaultOpen>
+      <CollapsibleTrigger>Earlier entries</CollapsibleTrigger>
+      <CollapsibleContent>Letter sent to the referrer.</CollapsibleContent>
+    </Collapsible>
+  ),
   input: <Input aria-label="Family name" />,
   "radio-group": (
     <RadioGroup aria-label="Contact by" defaultValue="phone">
