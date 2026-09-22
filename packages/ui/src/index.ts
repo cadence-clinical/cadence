@@ -63,6 +63,20 @@ export {
 } from "@/components/cadence/dialog";
 export type { DialogContentProps, DialogFooterProps } from "@/components/cadence/dialog";
 export {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerPortal,
+  DrawerSwipeHandle,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/cadence/drawer";
+export type { DrawerProps } from "@/components/cadence/drawer";
+export {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
