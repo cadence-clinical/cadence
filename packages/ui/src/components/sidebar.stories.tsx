@@ -454,11 +454,15 @@ export const OnAPhoneItIsASheet: Story = {
     const sheet = await screen.findByRole("dialog", { name: "Sidebar" });
     await expect(trigger).toHaveAttribute("aria-expanded", "true");
     await expect(within(sheet).getByRole("link", { name: "Today" })).toBeVisible();
-    await waitFor(() => expect(sheet.contains(document.activeElement)).toBe(true));
+    // The sheet slides in and out, and Base UI keeps it until the slide ends, which a slow WebKit
+    // run takes well over a second to finish. Wait for the state, not for a clock.
+    await waitFor(() => expect(sheet.contains(document.activeElement)).toBe(true), {
+      timeout: 5000,
+    });
 
     await userEvent.keyboard("{Escape}");
-    await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
-    await waitFor(() => expect(trigger).toHaveFocus());
+    await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull(), { timeout: 5000 });
+    await waitFor(() => expect(trigger).toHaveFocus(), { timeout: 5000 });
     await expect(trigger).toHaveAttribute("aria-expanded", "false");
   },
 };
