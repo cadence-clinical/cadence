@@ -176,6 +176,8 @@ export type {
   SidebarProviderProps,
   SidebarTriggerProps,
 } from "@/components/cadence/sidebar";
+export { Skeleton } from "@/components/cadence/skeleton";
+export type { SkeletonProps } from "@/components/cadence/skeleton";
 export { Spinner } from "@/components/cadence/spinner";
 export type { SpinnerProps } from "@/components/cadence/spinner";
 export { Switch } from "@/components/cadence/switch";

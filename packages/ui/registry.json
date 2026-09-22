@@ -480,6 +480,28 @@
       }
     },
     {
+      "name": "skeleton",
+      "type": "registry:component",
+      "title": "Skeleton",
+      "description": "Holds the place of content that is loading, in the shape it will take. It shows on every surface in every brand and mode, and is hidden from assistive technology.",
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/skeleton.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/skeleton.tsx"
+        }
+      ],
+      "docs": "Mark the region that is loading aria-busy, and say in words what is loading. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "primitive",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "spinner",
       "type": "registry:component",
       "title": "Spinner",
