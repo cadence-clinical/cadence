@@ -43,7 +43,8 @@ export function resolveTokens(
   };
 }
 
-interface Context {
+/** One way a mode and contrast level can come about, and the selector that states it. */
+export interface Context {
   media?: string;
   selector: string;
   mode: Mode;
@@ -65,7 +66,7 @@ const OS_MORE = "(prefers-contrast: more)";
  * conditions is more specific than the contexts for either condition alone, so it wins when both
  * apply, and within a context the accent rule is one attribute more specific than the base rule.
  */
-const CONTEXTS: readonly Context[] = [
+export const CONTEXTS: readonly Context[] = [
   { selector: ":root", mode: "light", contrast: "standard" },
   { selector: `:root${DARK}`, mode: "dark", contrast: "standard" },
   { media: OS_DARK, selector: `:root${MODE_UNSET}`, mode: "dark", contrast: "standard" },
@@ -82,7 +83,8 @@ const CONTEXTS: readonly Context[] = [
   },
 ];
 
-function block(selector: string, tokens: ColorTokens, media?: string): string {
+/** One rule: the selector, inside its media query if it has one, setting each token. */
+export function block(selector: string, tokens: ColorTokens, media?: string): string {
   const indent = media ? "    " : "  ";
   const body = Object.entries(tokens)
     .map(([name, value]) => `${indent}--${name}: ${value};`)
