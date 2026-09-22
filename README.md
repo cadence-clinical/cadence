@@ -73,7 +73,7 @@ Import the styles after Tailwind CSS v4:
 @import "@cadence-clinical/ui/styles.css";
 ```
 
-Use a component. The button is 32px high on a workstation and 44px on a touch device, from the same code:
+Use a component. The button is 32px high on a workstation, 40px on a touch device and 44px when the density is comfortable, from the same code:
 
 ```tsx
 import { Button } from "@cadence-clinical/ui";
