@@ -7,6 +7,7 @@ import { ComponentPreview } from "./component-preview";
 import { DataTablePreview } from "./data-table-preview";
 import { FormPreview } from "./form-preview";
 import { GradeBadge } from "./grade-badge";
+import { ListDetailPreview } from "./list-detail-preview";
 import { SidebarPreview } from "./sidebar-preview";
 import { ToastPreview } from "./toast-preview";
 import { TypesetPreview } from "./typeset-preview";
@@ -18,6 +19,7 @@ export function getMDXComponents(components?: MDXComponents) {
     Button,
     ComponentPreview,
     GradeBadge,
+    ListDetailPreview,
     TypesetPreview,
     DataTablePreview,
     FormPreview,

@@ -1,0 +1,59 @@
+---
+title: List and detail
+description: A list beside the record chosen from it. Side by side on a larger screen, one at a time on a phone.
+---
+
+<GradeBadge component="list-detail" />
+
+<ListDetailPreview />
+
+## Usage
+
+```tsx
+import { ListDetail, ListDetailBack, ListDetailDetail, ListDetailList } from "@cadence-clinical/ui";
+
+function Referrals() {
+  const [openId, setOpenId] = useState<string | null>(null);
+  return (
+    <ListDetail open={openId !== null} onBack={() => setOpenId(null)}>
+      <ListDetailList aria-label="Referrals">...</ListDetailList>
+      <ListDetailDetail aria-label="Referral">
+        <ListDetailBack>All referrals</ListDetailBack>
+        ...
+      </ListDetailDetail>
+    </ListDetail>
+  );
+}
+```
+
+Most clinical work is a list beside the record chosen from it: referrals, results, appointments. List and detail is the [layout](/docs/levels) for it. It holds no content of its own: the list, the record and how a record is chosen are yours.
+
+shadcn has no component for this. Put the list's rows in [Items](/docs/components/item), and show an [Empty](/docs/components/empty) where no record is open.
+
+## The parts
+
+- **`ListDetail`** holds the two. Set `open` while a record is shown, and clear the record in `onBack`.
+- **`ListDetailList`** is the list, a `section`. Name it with `aria-label`, so it is a region a screen reader can move to.
+- **`ListDetailDetail`** is the record, a `section` too. Name it as well.
+- **`ListDetailBack`** is a Button that brings the list back on a phone. It is not shown from `md` up, where the list is in view. Name it by the list, such as "All referrals".
+
+Mark the row of the open record with `aria-current="true"`, so a screen reader says which one is open.
+
+## Side by side, and one at a time
+
+From the `md` breakpoint up, the list and the record sit side by side, and each scrolls on its own. The list is between 16rem and 22rem wide, and the record takes the rest. Inside an [Application shell](/docs/components/app-shell), the layout fills the height under the header. Elsewhere, set its height with `className`.
+
+On a phone, one shows at a time. While `open`, the record takes the list's place and focus moves to it. `ListDetailBack` brings the list back, with focus on the row that had it.
+
+## Accessibility
+
+- Named with `aria-label`, each part is a region a screen reader can move to.
+- On a phone, focus follows the part that is shown, so a screen reader starts reading the record when it opens, and returns to the list where it left it.
+- A part that is not shown is hidden from assistive technology as well as from sight.
+
+## Props
+
+| Prop     | On           | Type         | Default |
+| -------- | ------------ | ------------ | ------- |
+| `open`   | `ListDetail` | `boolean`    | `false` |
+| `onBack` | `ListDetail` | `() => void` |         |
