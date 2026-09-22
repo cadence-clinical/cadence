@@ -42,6 +42,7 @@ const DOCS_PAGES = [
   "/docs/components/button",
   "/docs/components/card",
   "/docs/components/checkbox",
+  "/docs/components/collapsible",
   "/docs/components/data-table",
   "/docs/components/dialog",
   "/docs/components/dropdown-menu",
