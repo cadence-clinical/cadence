@@ -419,6 +419,37 @@
       }
     },
     {
+      "name": "sidebar",
+      "type": "registry:component",
+      "title": "Sidebar",
+      "description": "Collapsible application navigation. Its items follow the density, the shown item is marked by shape as well as fill, and on a phone it is a sheet over the page.",
+      "dependencies": ["@base-ui/react", "class-variance-authority", "lucide-react"],
+      "registryDependencies": [
+        "@cadence/theme",
+        "@cadence/cn",
+        "@cadence/button",
+        "@cadence/dialog",
+        "@cadence/input",
+        "@cadence/separator",
+        "@cadence/tooltip"
+      ],
+      "files": [
+        {
+          "path": "src/components/sidebar.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/sidebar.tsx"
+        }
+      ],
+      "docs": "Wrap the layout in SidebarProvider, with the Sidebar and a SidebarInset beside it. Mark the page shown with isActive. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "pattern",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "spinner",
       "type": "registry:component",
       "title": "Spinner",

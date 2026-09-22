@@ -140,6 +140,40 @@ export {
 export type { SelectContentProps, SelectTriggerProps } from "@/components/cadence/select";
 export { Separator } from "@/components/cadence/separator";
 export type { SeparatorProps } from "@/components/cadence/separator";
+export {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupAction,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarInput,
+  SidebarInset,
+  SidebarMenu,
+  SidebarMenuAction,
+  SidebarMenuBadge,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
+  SidebarProvider,
+  SidebarRail,
+  SidebarSeparator,
+  SidebarTrigger,
+  sidebarMenuButtonVariants,
+  useSidebar,
+} from "@/components/cadence/sidebar";
+export type {
+  SidebarMenuActionProps,
+  SidebarMenuButtonProps,
+  SidebarMenuSubButtonProps,
+  SidebarProps,
+  SidebarProviderProps,
+  SidebarTriggerProps,
+} from "@/components/cadence/sidebar";
 export { Spinner } from "@/components/cadence/spinner";
 export type { SpinnerProps } from "@/components/cadence/spinner";
 export { Switch } from "@/components/cadence/switch";
