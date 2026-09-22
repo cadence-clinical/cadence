@@ -19,6 +19,6 @@ supersedes an earlier one.
 | [0011](0011-registry.md)                | The registry: authored with aliases, served by the website       | Accepted                              |
 | [0012](0012-typography.md)              | Typography: no Text component, and Typeset for long-form content | Accepted                              |
 | [0013](0013-component-levels.md)        | Component levels: built from the bottom up                       | Accepted, initial components proposed |
-| [0014](0014-headless-libraries.md)      | How a pattern depends on a headless library                      | Proposed                              |
+| [0014](0014-headless-libraries.md)      | How a pattern depends on a headless library                      | Accepted                              |
 
 To add a record, copy the structure of an existing one, take the next number and add a row here.

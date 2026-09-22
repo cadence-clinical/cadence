@@ -1,6 +1,6 @@
 # 0014. How a pattern depends on a headless library
 
-- Status: Proposed. The maintainer has not decided. Nothing here is built.
+- Status: Accepted, 2026-09-22.
 - Date: 2026-09-22
 - Builds on: [0005](0005-distribution.md) for the two channels, [0011](0011-registry.md) for the manifest and [0013](0013-component-levels.md), which says a pattern "may pair with a headless library".
 
@@ -21,7 +21,7 @@ Two facts limit the options:
 2. **An optional peer dependency and its own entry point.** The data table is exported from `@cadence-clinical/ui/data-table` and not from the barrel. `@tanstack/react-table` is a `peerDependency` marked optional. A consumer who imports the entry point installs TanStack, and one who does not is not asked to. The registry item lists it under `dependencies`, so the shadcn CLI installs it.
 3. **The registry only**, as shadcn does: its data table is a guide, not a component. This contradicts 0005, and a copied data table carries no grade once edited, which is most of what Cadence offers a clinical team.
 
-## Proposed decision
+## Decision
 
 1. **A component that needs a library most consumers will not use gets its own entry point and an optional peer dependency** (option 2). "Most consumers" is a judgement made once per library and recorded in [docs/components.md](../components.md).
 2. **The consumer owns the headless instance.** For the data table, the consumer calls `useReactTable` and passes the table to Cadence, as in shadcn's guide. Cadence renders it and supplies the parts around it: a sortable column header, the selection column, paging and the column menu. Cadence does not wrap TanStack's API. Clinical lists are sorted and paged on the server as often as in the browser, and a wrapper would have to re-expose all of that.
