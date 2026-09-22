@@ -262,6 +262,36 @@
       }
     },
     {
+      "name": "date-picker",
+      "type": "registry:component",
+      "title": "Date picker",
+      "description": "A date that can be typed or chosen from a calendar, with a time where one is wanted. What is typed is read in the locale's order, and a date that does not exist is marked wrong.",
+      "dependencies": ["react-day-picker@^10.0.1", "lucide-react"],
+      "registryDependencies": [
+        "@cadence/theme",
+        "@cadence/cn",
+        "@cadence/button",
+        "@cadence/calendar",
+        "@cadence/input",
+        "@cadence/popover"
+      ],
+      "files": [
+        {
+          "path": "src/components/date-picker.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/date-picker.tsx"
+        }
+      ],
+      "docs": "Put it in a Field, whose label names it, and pass a locale from react-day-picker/locale. mode asks for a date, a date and a time, or a time. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "pattern",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "dialog",
       "type": "registry:component",
       "title": "Dialog",

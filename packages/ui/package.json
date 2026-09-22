@@ -28,6 +28,10 @@
       "types": "./dist/calendar.d.mts",
       "default": "./dist/calendar.mjs"
     },
+    "./date-picker": {
+      "types": "./dist/date-picker.d.mts",
+      "default": "./dist/date-picker.mjs"
+    },
     "./styles.css": "./dist/styles.css",
     "./typeset.css": "./dist/typeset.css",
     "./meta.json": "./dist/meta.json",

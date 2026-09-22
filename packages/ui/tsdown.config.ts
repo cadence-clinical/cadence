@@ -9,7 +9,7 @@ export default defineConfig((inline) => ({
   // data-table and calendar have their own entry points, so that a consumer who never uses them
   // is not made to install TanStack Table or react-day-picker:
   // docs/decisions/0014-headless-libraries.md.
-  entry: ["src/index.ts", "src/data-table.ts", "src/calendar.ts"],
+  entry: ["src/index.ts", "src/data-table.ts", "src/calendar.ts", "src/date-picker.ts"],
   format: "esm",
   dts: true,
   // One output file per source file: consumers tree-shake by import, and Tailwind scans dist
