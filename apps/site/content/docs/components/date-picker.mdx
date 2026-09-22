@@ -1,0 +1,87 @@
+---
+title: Date picker
+description: A date that can be typed or chosen from a calendar, with a time where one is wanted. What is typed is read in the locale's order.
+---
+
+<GradeBadge component="date-picker" />
+
+<DatePickerPreview />
+
+## Usage
+
+```tsx
+import { Field, FieldLabel } from "@cadence-clinical/ui";
+import { DatePicker } from "@cadence-clinical/ui/date-picker";
+import { enAU } from "react-day-picker/locale";
+
+<Field>
+  <FieldLabel>Appointment date</FieldLabel>
+  <DatePicker locale={enAU} onValueChange={setAppointment} />
+</Field>;
+```
+
+Date picker follows shadcn's [date picker with an input](https://ui.shadcn.com/docs/components/base/date-picker): a field you can type into, with a button that opens a [Calendar](/docs/components/calendar) in a [Popover](/docs/components/popover). shadcn documents it as a composition; Cadence ships it as one component, because the typing, the calendar and the value have to agree.
+
+Put it in a [Field](/docs/components/field), whose label names it. It renders the Calendar, so it comes from the same entry point rules:
+
+```bash
+pnpm add react-day-picker
+```
+
+From the registry, `shadcn add @cadence/date-picker` installs react-day-picker with it.
+
+## A date, a time, or both
+
+`mode` sets what it asks for:
+
+- `date`, the default: the field and the calendar.
+- `datetime`: the same, with a time field beside it. The two make one value.
+- `time`: the time field on its own.
+
+```tsx
+<DatePicker mode="datetime" locale={enAU} onValueChange={setAppointment} />
+```
+
+`onValueChange` receives a `Date`, or `undefined` while there is no whole value: nothing typed, something that is not a date, or a date and time with the time still empty. `step` sets how fine the time is, in seconds; `60` is to the minute.
+
+With `name`, the value is sent with a form: `yyyy-mm-dd`, `yyyy-mm-ddThh:mm`, or `hh:mm` by mode.
+
+## What is typed
+
+A typed date is read in the order the locale writes dates in, so with `enAU` `3/4/2026` is 3 April, and with `enUS` it is 4 March. The field's placeholder shows that order, such as `dd/mm/yyyy`. The month in words is read too, such as `3 April 2026` or `3 Apr 2026`, and so is `2026-04-03`.
+
+Three rules make a typed date safe to trust:
+
+- **A date that does not exist is wrong.** `31/2/2026` marks the field and gives no value, where `new Date()` would quietly make it 3 March.
+- **The year is written in full.** `3/4/26` is not read as 2026 or 1926: a guessed year is a wrong date of birth waiting to happen.
+- **The value shown back is unambiguous.** A chosen date is written into the field with the month in words, such as `03 Apr 2026`.
+
+The field is marked `aria-invalid` while what is typed is not a date. In a Field, add the words with a `FieldError`, and use the `invalid` prop when a form library owns the errors.
+
+## What Cadence changes
+
+- **One component, not a composition.** shadcn's example keeps the text, the month shown and the chosen date in the page's own state. Here they are held together, so typing moves the calendar and choosing fills the field.
+- **Typed dates are read in the locale's order**, not `new Date(text)`, which reads every `3/4/2026` as 4 March.
+- **A date that does not exist is refused**, rather than rolled into the next month.
+- **The calendar's popover is named**, so a screen reader says what the dialog is.
+- **The time field hides the browser's own picker icon**, as shadcn's time example does, and keeps the field's own height and density.
+
+## Accessibility
+
+- In a Field, the label names the date field. The time field is named "Time", and the button that opens the calendar is named "Choose a date". `dateLabel`, `timeLabel` and `calendarLabel` change those words.
+- Down from the date field opens the calendar, as in shadcn's example. Escape closes it, and focus returns to the field.
+- The value is announced as it is typed, because the field holds the text the user wrote until it is read.
+
+## Props
+
+| Prop            | Type                                       | Default       |
+| --------------- | ------------------------------------------ | ------------- |
+| `mode`          | `"date" \| "datetime" \| "time"`           | `"date"`      |
+| `value`         | `Date`                                     |               |
+| `defaultValue`  | `Date`                                     |               |
+| `onValueChange` | `(value: Date \| undefined) => void`       |               |
+| `locale`        | A locale from `react-day-picker/locale`    | The browser's |
+| `step`          | `number`, in seconds                       | `60`          |
+| `name`          | `string`                                   |               |
+| `invalid`       | `boolean`                                  |               |
+| `calendarProps` | The Calendar's props, less its value props |               |
