@@ -32,7 +32,7 @@
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react": "^6.1.0",
     "@vitest/browser-playwright": "catalog:",
-    "chromatic": "^18.9.0",
+    "chromatic": "^18.8.0",
     "eslint": "catalog:",
     "eslint-plugin-storybook": "^10.6.0",
     "playwright": "catalog:",

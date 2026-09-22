@@ -58,8 +58,9 @@ Run `pnpm check` and `pnpm test:browser` before you say a change is done.
   `tested` looks or behaves, lower it to `tested` and say so in the pull request.
 - **Synthetic data only.** No patient information anywhere.
 - **Dependency pins are deliberate** (TypeScript 6.0, ESLint 9, Vitest 4). The reasons are in
-  `pnpm-workspace.yaml`. Keep pnpm's minimum release age on: widen a version range instead of
-  adding an exclusion.
+  `pnpm-workspace.yaml`. Keep pnpm's minimum release age on, at seven days: widen a version range
+  instead of adding an exclusion. pnpm checks the lockfile too, so a fresh release cannot arrive
+  through a committed lockfile either.
 
 ## Adding a component
 
