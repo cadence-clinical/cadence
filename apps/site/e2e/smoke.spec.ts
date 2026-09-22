@@ -72,6 +72,7 @@ const DOCS_PAGES = [
   "/docs/components/input",
   "/docs/components/item",
   "/docs/components/label",
+  "/docs/components/list-detail",
   "/docs/components/marker",
   "/docs/components/typeset",
 ];

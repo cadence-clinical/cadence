@@ -78,10 +78,10 @@ A discrete section of an interface with behaviour of its own.
 
 Places patterns in the frame of a page.
 
-| Component         | Status | Built on                | Why                                                                               |
-| ----------------- | ------ | ----------------------- | --------------------------------------------------------------------------------- |
-| Application shell | Built  | Sidebar, Separator      | shadcn's `sidebar-16`: a sidebar, a sticky header and an inset content area.      |
-| List and detail   | Agreed | Application shell, Item | A list beside the record it selects, which is how most clinical work is laid out. |
+| Component         | Status | Built on                        | Why                                                                               |
+| ----------------- | ------ | ------------------------------- | --------------------------------------------------------------------------------- |
+| Application shell | Built  | Sidebar, Separator              | shadcn's `sidebar-16`: a sidebar, a sticky header and an inset content area.      |
+| List and detail   | Built  | Button, in an Application shell | A list beside the record it selects, which is how most clinical work is laid out. |
 
 ## 5. Screens
 
