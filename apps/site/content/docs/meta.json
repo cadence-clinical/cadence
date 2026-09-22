@@ -37,6 +37,7 @@
     "components/toggle-group",
     "---Patterns---",
     "components/data-table",
+    "components/form",
     "components/sidebar"
   ]
 }
