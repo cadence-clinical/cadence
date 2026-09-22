@@ -36,7 +36,7 @@ One control or one element. Built first, in this order, because the composites n
 | Tooltip     | Built    | Tooltip           | The collapsed sidebar needs it to name its icons.                                             |
 | Spinner     | Built    | None              | A pending Button composes it. shadcn has no `isLoading` prop.                                 |
 | Skeleton    | Built    | None              | Holds the shape of content while it loads, so the page does not jump when it arrives.         |
-| Marker      | Agreed   | None              | A line of small text, plain or between two rules, such as a date between the items of a list. |
+| Marker      | Built    | None              | A line of small text, plain or between two rules, such as a date between the items of a list. |
 | Slider      | Agreed   | Slider            | A setting chosen from a range. Not for a clinical value, which is typed exactly.              |
 | Section     | Deferred | None              | A layout primitive. Skipped for now, and revisited with the layouts if one of them needs it.  |
 

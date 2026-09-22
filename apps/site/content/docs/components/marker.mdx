@@ -1,0 +1,78 @@
+---
+title: Marker
+description: A line of muted text that marks a place in a list or a page, plain, between two rules or over one.
+---
+
+import { Marker, MarkerContent, MarkerIcon } from "@cadence-clinical/ui";
+
+<GradeBadge component="marker" />
+
+<ComponentPreview>
+  <div className="flex w-full max-w-sm flex-col gap-3 text-body">
+    <Marker variant="separator">
+      <MarkerContent>Today</MarkerContent>
+    </Marker>
+    <p>Seen in the Review clinic.</p>
+    <Marker variant="separator">
+      <MarkerContent>Yesterday</MarkerContent>
+    </Marker>
+    <p>Letter sent to the referrer.</p>
+  </div>
+</ComponentPreview>
+
+## Usage
+
+```tsx
+import { Marker, MarkerContent, MarkerIcon } from "@cadence-clinical/ui";
+import { Clock } from "lucide-react";
+
+<Marker>
+  <MarkerIcon>
+    <Clock />
+  </MarkerIcon>
+  <MarkerContent>Last updated at 09:40</MarkerContent>
+</Marker>;
+```
+
+`variant` sets how the marker is drawn:
+
+- `default` is the words alone, with an optional icon.
+- `separator` draws a rule on each side of the words, such as the day between two days of entries.
+- `border` draws a rule under the words, above the section it marks.
+
+Marker follows the shadcn [Marker](https://ui.shadcn.com/docs/components/marker) and keeps its part names. Its root takes Base UI's `render` prop.
+
+## The element it is
+
+A Marker is a `div`. Render it as the element its place calls for:
+
+- Where it heads the entries that follow it, render it as a heading, such as `render={<h3 />}`. A screen reader can then move from one day to the next.
+- Between the items of a list, render it as an `li`, because a list holds only items.
+- To make the whole marker a link, render it as an `a`. It is underlined, and shows a focus ring.
+
+```tsx
+<Marker variant="separator" render={<h3 />}>
+  <MarkerContent>Today</MarkerContent>
+</Marker>
+```
+
+A link inside `MarkerContent` is underlined and shows a focus ring too.
+
+## What Cadence changes
+
+- **A long label wraps between its rules.** shadcn keeps the words on one line, so on a phone a long label runs off the screen and the rules shrink to nothing. Here the words wrap and each rule keeps at least 16px.
+- **Text and icon follow the [density](/docs/theming#density).**
+- **A link has Cadence's focus ring**, the same as a [Button](/docs/components/button)'s.
+
+## Accessibility
+
+- The icon is hidden from assistive technology. The words carry the meaning.
+- The rules are drawn by CSS and are not announced. A Marker is not a separator to a screen reader, because a separator's words would not be read.
+- The words are `muted-foreground`, which meets 4.5:1 on the page, a card and a muted surface, in every brand and mode.
+
+## Props
+
+| Prop      | On       | Type                                   | Default     |
+| --------- | -------- | -------------------------------------- | ----------- |
+| `variant` | `Marker` | `"default" \| "separator" \| "border"` | `"default"` |
+| `render`  | `Marker` | An element, as in Base UI              | A `div`     |
