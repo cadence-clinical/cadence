@@ -2,6 +2,12 @@ packages:
   - apps/*
   - packages/*
 
+# A version published less than seven days ago is not installed. A package that is compromised is
+# usually caught within days, and nothing here is urgent enough to take a release on its first day.
+# When a fresh release blocks an install, widen the version range so pnpm can pick an older one.
+# Do not add an exclusion: docs/decisions/0008-platform-and-toolchain.md.
+minimumReleaseAge: 10080
+
 # Dependencies allowed to run install scripts. Everything else is blocked by pnpm.
 allowBuilds:
   esbuild: true
@@ -17,7 +23,7 @@ catalog:
   react-dom: ^19.3.0
   "@types/react": ^19.3.0
   "@types/react-dom": ^19.3.0
-  "@types/node": ^24.13.5
+  "@types/node": ^24.13.0
   tailwindcss: ^4.3.3
   "@tailwindcss/postcss": ^4.3.3
   "@tailwindcss/vite": ^4.3.3
