@@ -42,6 +42,8 @@ import {
   ItemContent,
   ItemTitle,
   Label,
+  Marker,
+  MarkerContent,
   Popover,
   PopoverContent,
   PopoverTitle,
@@ -232,6 +234,11 @@ const RENDERS: Record<string, ReactElement> = {
     </Item>
   ),
   label: <Label htmlFor="family-name">Family name</Label>,
+  marker: (
+    <Marker variant="separator">
+      <MarkerContent>Today</MarkerContent>
+    </Marker>
+  ),
   card: (
     <Card>
       <CardHeader>
