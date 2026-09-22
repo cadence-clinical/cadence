@@ -83,7 +83,7 @@ Put the safe choice first in the footer. It is then the control that takes focus
 
 ## Closing
 
-Escape closes a dialog, and so does a press outside it. Where a stray press would lose work, or for a choice that must be made, set `disablePointerDismissal` on `Dialog`. Escape still closes it.
+Escape closes a dialog, and so does a press outside it. Where a stray press would lose work, set `disablePointerDismissal` on `Dialog`. Escape still closes it. For a question that must be answered, such as confirming a destructive action, use an [Alert dialog](/docs/components/alert-dialog).
 
 `DialogContent` has a close button in its corner. It shows an icon and is named "Close". If you turn it off with `showCloseButton={false}`, keep a `DialogClose` in the footer: a touch screen reader needs a control inside the dialog to leave it. `showCloseButton` on `DialogFooter` adds a "Close" button, for a dialog that only informs.
 
