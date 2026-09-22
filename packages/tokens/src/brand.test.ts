@@ -88,6 +88,8 @@ describe("generateBrandCss", () => {
   });
 
   it("leaves Cadence's fonts alone for a brand that names none", () => {
-    expect(generateBrandCss("lagoon", BRANDS.lagoon)).not.toContain("--cadence-font");
+    expect(generateBrandCss("plain", { label: "Plain", accent: "#287f8a" })).not.toContain(
+      "--cadence-font",
+    );
   });
 });

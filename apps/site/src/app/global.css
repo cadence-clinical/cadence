@@ -8,6 +8,8 @@
 @import "@fontsource-variable/geist/wght.css";
 @import "@fontsource-variable/geist-mono/wght.css";
 @import "@fontsource-variable/work-sans/wght.css";
+@import "@fontsource-variable/figtree/wght.css";
+@import "@fontsource-variable/source-sans-3/wght.css";
 
 /*
  * The docs chrome runs on Cadence tokens, so the site is the first consumer of the theme.

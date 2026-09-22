@@ -160,27 +160,26 @@ test("every theme in the picker applies", async ({ page }) => {
   }
 });
 
-test("a brand that names no fonts keeps Cadence's", async ({ page }) => {
+// Each theme's typeface is loaded, not only named. `load` resolves with the faces it found, so an
+// empty list means the page never declared the face.
+test("each theme's font is loaded, not only named", async ({ page }) => {
   await page.emulateMedia({ colorScheme: "light" });
   await page.goto("/docs");
   await openThemePicker(page);
-  await page.getByRole("menuitemradio", { name: "Lagoon" }).click();
-  await expect.poll(() => look(page)).toMatchObject({ brand: "lagoon" });
-  expect((await look(page)).font).toMatch(/^"Public Sans Variable"/);
-});
-
-test("a brand's font is loaded, not only named", async ({ page }) => {
-  await page.emulateMedia({ colorScheme: "light" });
-  await page.goto("/docs");
-  await openThemePicker(page);
-  await page.getByRole("menuitemradio", { name: "Cobalt" }).click();
-  await expect.poll(() => look(page)).toMatchObject({ brand: "cobalt" });
-  expect((await look(page)).font).toMatch(/^"Work Sans Variable"/);
-  // `load` resolves with the faces it found, so an empty list means the page never declared it.
-  const faces = await page.evaluate(
-    async () => (await document.fonts.load('16px "Work Sans Variable"')).length,
-  );
-  expect(faces).toBeGreaterThan(0);
+  for (const [label, brand, family] of [
+    ["Lagoon", "lagoon", "Figtree Variable"],
+    ["Cobalt", "cobalt", "Work Sans Variable"],
+    ["Mulberry", "mulberry", "Source Sans 3 Variable"],
+  ] as const) {
+    await page.getByRole("menuitemradio", { name: label }).click();
+    await expect.poll(() => look(page)).toMatchObject({ brand });
+    expect((await look(page)).font).toMatch(new RegExp(`^"${family}"`));
+    const faces = await page.evaluate(
+      async (name) => (await document.fonts.load(`16px "${name}"`)).length,
+      family,
+    );
+    expect(faces).toBeGreaterThan(0);
+  }
 });
 
 test("a live example sits on a card, so its field is white on a brand's grey page", async ({
