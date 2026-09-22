@@ -4,6 +4,7 @@ import type { MDXComponents } from "mdx/types";
 
 import { ComponentPreview } from "./component-preview";
 import { DataTablePreview } from "./data-table-preview";
+import { FormPreview } from "./form-preview";
 import { GradeBadge } from "./grade-badge";
 import { SidebarPreview } from "./sidebar-preview";
 import { TypesetPreview } from "./typeset-preview";
@@ -16,6 +17,7 @@ export function getMDXComponents(components?: MDXComponents) {
     GradeBadge,
     TypesetPreview,
     DataTablePreview,
+    FormPreview,
     SidebarPreview,
     ...components,
   } satisfies MDXComponents;
