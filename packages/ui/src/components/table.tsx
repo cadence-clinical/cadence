@@ -26,7 +26,9 @@ function Table({
       role={named ? "region" : undefined}
       aria-label={ariaLabel}
       aria-labelledby={ariaLabelledBy}
-      className="relative w-full overflow-x-auto rounded-md outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      // min-w-0: as a grid or flex item this box would otherwise grow to the table's widest
+      // possible width and push its parent past the screen, instead of scrolling inside itself.
+      className="relative w-full min-w-0 overflow-x-auto rounded-md outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
     >
       <table
         data-slot="table"

@@ -91,7 +91,7 @@ Table is the native `table` elements with Cadence's styles, and each part accept
 
 A cell wraps between words, so a narrow table grows taller and not wider. **A word is never broken in the middle**, because a name split across lines can be misread. A value with nowhere to break is kept whole.
 
-A table that is still wider than its place scrolls sideways inside its own box, and the page does not. That box takes focus, so a keyboard can scroll it, and it shows the focus ring when it does. When the table has an `aria-label` or `aria-labelledby`, the box is a region with the same name, which a screen reader can move to.
+A table that is still wider than its place scrolls sideways inside its own box, and the page does not. If you wrap the table in your own element, such as one that draws a border around it, give that element `min-w-0`: inside a grid or a flex layout an element grows to its content's widest possible width unless it is allowed to shrink, and the table would push the page wider instead of scrolling. That box takes focus, so a keyboard can scroll it, and it shows the focus ring when it does. When the table has an `aria-label` or `aria-labelledby`, the box is a region with the same name, which a screen reader can move to.
 
 ## A chosen row
 

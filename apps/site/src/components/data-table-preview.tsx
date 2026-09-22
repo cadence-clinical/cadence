@@ -1,6 +1,15 @@
 "use client";
 
-import { Badge } from "@cadence-clinical/ui";
+import {
+  Badge,
+  Button,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+  Switch,
+} from "@cadence-clinical/ui";
 import {
   DataTable,
   DataTableColumnHeader,
@@ -17,6 +26,7 @@ import {
   type RowSelectionState,
   type SortingState,
 } from "@tanstack/react-table";
+import { Ellipsis, Pencil, Printer, Trash2 } from "lucide-react";
 import { useState } from "react";
 
 // All content is synthetic.
@@ -58,6 +68,40 @@ const columns = helper.columns([
     header: ({ column }) => <DataTableColumnHeader column={column} title="Minutes" />,
     meta: { label: "Minutes", align: "end" },
   }),
+  helper.display({
+    id: "actions",
+    header: () => <span className="sr-only">Actions</span>,
+    meta: { label: "Actions", align: "end" },
+    cell: ({ row }) => (
+      <div className="flex items-center justify-end gap-control-gap">
+        <Switch
+          aria-label={`Send a reminder for ${row.original.clinic}, ${row.original.day}`}
+          defaultChecked={row.index % 2 === 0}
+        />
+        <DropdownMenu>
+          <DropdownMenuTrigger render={<Button variant="ghost" size="sm" iconOnly />}>
+            <Ellipsis aria-hidden />
+            {`Actions for ${row.original.clinic}, ${row.original.day}`}
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem>
+              <Pencil aria-hidden />
+              Reschedule
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Printer aria-hidden />
+              Print letter
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem variant="destructive">
+              <Trash2 aria-hidden />
+              Cancel appointment
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    ),
+  }),
 ]);
 
 /** A live data table for the docs. Its state lives here, as it would in an app. */
@@ -82,7 +126,7 @@ export function DataTablePreview() {
       <div className="flex justify-end">
         <DataTableViewOptions table={table} />
       </div>
-      <div className="rounded-md border">
+      <div className="min-w-0 rounded-md border">
         <DataTable table={table} aria-label="Appointments" />
       </div>
       <DataTablePagination table={table} pageSizes={[5, 10]} />
