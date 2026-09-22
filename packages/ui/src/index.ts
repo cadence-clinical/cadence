@@ -157,6 +157,13 @@ export type {
 } from "@/components/cadence/item";
 export { Label } from "@/components/cadence/label";
 export type { LabelProps } from "@/components/cadence/label";
+export {
+  ListDetail,
+  ListDetailBack,
+  ListDetailDetail,
+  ListDetailList,
+} from "@/components/cadence/list-detail";
+export type { ListDetailProps } from "@/components/cadence/list-detail";
 export { Marker, MarkerContent, MarkerIcon, markerVariants } from "@/components/cadence/marker";
 export type { MarkerProps } from "@/components/cadence/marker";
 export {

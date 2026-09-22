@@ -57,6 +57,9 @@ import {
   ItemContent,
   ItemTitle,
   Label,
+  ListDetail,
+  ListDetailDetail,
+  ListDetailList,
   Marker,
   MarkerContent,
   Popover,
@@ -301,6 +304,12 @@ const RENDERS: Record<string, ReactElement> = {
     </Item>
   ),
   label: <Label htmlFor="family-name">Family name</Label>,
+  "list-detail": (
+    <ListDetail>
+      <ListDetailList aria-label="Referrals">Referral R1003</ListDetailList>
+      <ListDetailDetail aria-label="Referral">No referral open</ListDetailDetail>
+    </ListDetail>
+  ),
   marker: (
     <Marker variant="separator">
       <MarkerContent>Today</MarkerContent>
