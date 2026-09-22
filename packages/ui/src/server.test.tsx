@@ -15,6 +15,10 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
   AlertTitle,
+  AppShell,
+  AppShellBody,
+  AppShellContent,
+  AppShellHeader,
   Badge,
   Button,
   Card,
@@ -118,6 +122,14 @@ function ServerDataTable() {
 }
 
 const RENDERS: Record<string, ReactElement> = {
+  "app-shell": (
+    <AppShell>
+      <AppShellHeader>Cadence Clinic</AppShellHeader>
+      <AppShellBody>
+        <AppShellContent>Today</AppShellContent>
+      </AppShellBody>
+    </AppShell>
+  ),
   badge: <Badge variant="info">New</Badge>,
   button: <Button>Save observation</Button>,
   checkbox: <Checkbox aria-label="Interpreter needed" />,

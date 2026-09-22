@@ -66,6 +66,33 @@
       }
     },
     {
+      "name": "app-shell",
+      "type": "registry:component",
+      "title": "Application shell",
+      "description": "The frame of an application, as shadcn's sidebar-16 lays it out: a header across the top, and a sidebar beside the content below it. It starts with a link that skips to the content.",
+      "registryDependencies": [
+        "@cadence/theme",
+        "@cadence/cn",
+        "@cadence/separator",
+        "@cadence/sidebar"
+      ],
+      "files": [
+        {
+          "path": "src/components/app-shell.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/app-shell.tsx"
+        }
+      ],
+      "docs": "Put AppShellHeader first, then AppShellBody holding AppShellSidebar and AppShellContent. The header's first button opens the sidebar. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "layout",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "badge",
       "type": "registry:component",
       "title": "Badge",
