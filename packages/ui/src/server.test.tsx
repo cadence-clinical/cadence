@@ -62,6 +62,10 @@ import {
   SelectTrigger,
   SelectValue,
   Separator,
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
   Sidebar,
   SidebarContent,
   SidebarMenu,
@@ -133,6 +137,14 @@ const RENDERS: Record<string, ReactElement> = {
     </Select>
   ),
   separator: <Separator />,
+  sheet: (
+    <Sheet>
+      <SheetTrigger>Edit contact details</SheetTrigger>
+      <SheetContent>
+        <SheetTitle>Contact details</SheetTitle>
+      </SheetContent>
+    </Sheet>
+  ),
   skeleton: <Skeleton className="h-4 w-40" />,
   slider: <Slider aria-label="Text size" defaultValue={100} min={80} max={150} />,
   spinner: <Spinner />,
