@@ -72,7 +72,8 @@ function wrapText(children: ReactNode): ReactNode {
 
 /**
  * Triggers an action. Height, padding, text and icon follow the density set on <html>, so the
- * same button is 32px on a workstation and 44px on a touch device.
+ * same button is 32px on a workstation, 40px on a touch device, and 44px when the density is
+ * comfortable.
  *
  * An icon beside the label carries `data-icon="inline-start"` or `data-icon="inline-end"` and no
  * size class: the button sizes and spaces it.

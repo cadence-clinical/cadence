@@ -213,3 +213,22 @@ test("the theme picker is drawn like the light and dark switch beside it", async
   const toggle = page.locator("[data-theme-toggle]:visible").first();
   expect(await trigger.evaluate(drawn)).toEqual(await toggle.evaluate(drawn));
 });
+
+// A touch screen that sets no density gets the touch default, 40px controls, and comfortable is
+// still there for anyone who sets it. The phone project emulates a touch screen.
+test("a touch screen gets the touch default, and comfortable when it asks", async ({
+  page,
+  isMobile,
+}) => {
+  await page.goto("/docs/components/button");
+  const controlHeight = () =>
+    page.evaluate(() =>
+      getComputedStyle(document.documentElement).getPropertyValue("--control-height").trim(),
+    );
+  expect(await controlHeight()).toBe(isMobile ? "2.5rem" : "2rem");
+
+  await page.evaluate(() => {
+    document.documentElement.setAttribute("data-density", "comfortable");
+  });
+  expect(await controlHeight()).toBe("2.75rem");
+});
