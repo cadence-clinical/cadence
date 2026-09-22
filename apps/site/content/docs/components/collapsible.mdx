@@ -4,6 +4,7 @@ description: One section that opens and closes, such as earlier entries. The tri
 ---
 
 import { Button, Collapsible, CollapsibleContent, CollapsibleTrigger } from "@cadence-clinical/ui";
+import { ChevronDown } from "lucide-react";
 
 <GradeBadge component="collapsible" />
 
@@ -11,6 +12,10 @@ import { Button, Collapsible, CollapsibleContent, CollapsibleTrigger } from "@ca
   <Collapsible className="flex w-full max-w-sm flex-col gap-2">
     <CollapsibleTrigger render={<Button variant="ghost" size="sm" className="self-start" />}>
       Earlier entries
+      <ChevronDown
+        data-icon="inline-end"
+        className="transition-[rotate] duration-150 ease-out-strong in-data-[panel-open]:rotate-180 motion-reduce:transition-none"
+      />
     </CollapsibleTrigger>
     <CollapsibleContent>
       <ul className="flex flex-col gap-2 text-body">
@@ -32,7 +37,10 @@ import { ChevronDown } from "lucide-react";
 <Collapsible>
   <CollapsibleTrigger render={<Button variant="ghost" size="sm" />}>
     Earlier entries
-    <ChevronDown data-icon="inline-end" className="in-data-[panel-open]:rotate-180" />
+    <ChevronDown
+      data-icon="inline-end"
+      className="transition-[rotate] duration-150 ease-out-strong in-data-[panel-open]:rotate-180"
+    />
   </CollapsibleTrigger>
   <CollapsibleContent>...</CollapsibleContent>
 </Collapsible>;
@@ -40,7 +48,7 @@ import { ChevronDown } from "lucide-react";
 
 Collapsible follows the shadcn [Collapsible](https://ui.shadcn.com/docs/components/collapsible) and keeps its part names and props, so shadcn code works unchanged. It is built on the Base UI [Collapsible](https://base-ui.com/react/components/collapsible), whose props it accepts, such as `open`, `onOpenChange` and `defaultOpen`.
 
-Render the trigger as a [Button](/docs/components/button) through `render`. While the section is open the trigger carries `data-panel-open`, so an icon inside it can turn with `in-data-[panel-open]:rotate-180`.
+Render the trigger as a [Button](/docs/components/button) through `render`, and give it a chevron: the example above turns one. While the section is open the trigger carries `data-panel-open`, so an icon inside it turns with `in-data-[panel-open]:rotate-180`.
 
 ## Found by the browser
 
