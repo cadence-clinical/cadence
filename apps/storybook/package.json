@@ -26,6 +26,7 @@
     "@storybook/addon-vitest": "^10.6.0",
     "@storybook/react-vite": "^10.6.0",
     "@tailwindcss/vite": "catalog:",
+    "@tanstack/react-table": "^9.2.4",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",

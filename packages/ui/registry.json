@@ -158,6 +158,37 @@
       }
     },
     {
+      "name": "data-table",
+      "type": "registry:component",
+      "title": "Data table",
+      "description": "Renders a TanStack table: sorting, selection, paging and column visibility, with the state in words as well as marks.",
+      "dependencies": ["@tanstack/react-table", "@base-ui/react", "lucide-react"],
+      "registryDependencies": [
+        "@cadence/theme",
+        "@cadence/cn",
+        "@cadence/button",
+        "@cadence/checkbox",
+        "@cadence/dropdown-menu",
+        "@cadence/select",
+        "@cadence/table"
+      ],
+      "files": [
+        {
+          "path": "src/components/data-table.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/data-table.tsx"
+        }
+      ],
+      "docs": "Pass dataTableFeatures to useTable, and name the table with aria-label. Cadence grades what it renders, not TanStack Table. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "pattern",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "dialog",
       "type": "registry:component",
       "title": "Dialog",

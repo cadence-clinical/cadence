@@ -44,15 +44,30 @@ const componentPackage = (patterns) => [
   { files: ["**/*.test.{ts,tsx}"], ...restrict(patterns) },
 ];
 
-/** For packages/ui: primitives know nothing about regions, FHIR or clinical components. */
-export const uiBoundaries = componentPackage([
+const uiRules = [
   regionRule,
   fhirRule,
   {
     group: ["@cadence-clinical/clinical", "@cadence-clinical/clinical/*"],
     message: "Primitives must not depend on clinical components.",
   },
-]);
+];
+
+/**
+ * A component with its own entry point has a library most consumers will not use. The barrel
+ * must not re-export it, or that library becomes compulsory: docs/decisions/0014-headless-libraries.md.
+ */
+const ownEntryPoints = {
+  group: ["@/components/cadence/data-table", "@tanstack/*"],
+  message:
+    "data-table has its own entry point, src/data-table.ts. Re-exporting it here would make TanStack Table compulsory for every consumer: see docs/decisions/0014-headless-libraries.md.",
+};
+
+/** For packages/ui: primitives know nothing about regions, FHIR or clinical components. */
+export const uiBoundaries = [
+  ...componentPackage(uiRules),
+  { files: ["src/index.ts"], ...restrict([...uiRules, aliasRule, ownEntryPoints]) },
+];
 
 /** For packages/clinical: clinical components are render-only and region-agnostic. */
 export const clinicalBoundaries = componentPackage([regionRule, fhirRule]);
