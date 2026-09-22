@@ -31,7 +31,8 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   play: async ({ canvasElement }) => {
-    const slider = within(canvasElement).getByRole("slider", { name: "Text size" });
+    // Base UI mounts the range input after the slider renders.
+    const slider = await within(canvasElement).findByRole("slider", { name: "Text size" });
     await expect(slider).toHaveAttribute("aria-valuetext", "100%");
     await expect(slider).toHaveAccessibleDescription(
       "How large the text on the chart is, on this screen only.",
@@ -42,7 +43,8 @@ export const Default: Story = {
 // The arrow keys move it by a step, and Home and End to either end.
 export const ByKeyboard: Story = {
   play: async ({ args, canvasElement }) => {
-    const slider = within(canvasElement).getByRole("slider", { name: "Text size" });
+    // Base UI mounts the range input after the slider renders.
+    const slider = await within(canvasElement).findByRole("slider", { name: "Text size" });
     await userEvent.tab();
     await expect(slider).toHaveFocus();
     await userEvent.keyboard("{ArrowRight}");
@@ -58,6 +60,7 @@ export const ByKeyboard: Story = {
 // Focus is on the input inside the thumb, and the thumb shows the ring.
 export const ShowsFocus: Story = {
   play: async ({ canvasElement }) => {
+    await within(canvasElement).findByRole("slider", { name: "Text size" });
     await userEvent.tab();
     const thumb = canvasElement.querySelector("[data-slot=slider-thumb]");
     if (!thumb) throw new Error("No thumb rendered.");
@@ -76,7 +79,7 @@ export const ARange: Story = {
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const opens = canvas.getByRole("slider", { name: "Opens" });
+    const opens = await canvas.findByRole("slider", { name: "Opens" });
     const closes = canvas.getByRole("slider", { name: "Closes" });
     await expect(opens).toHaveAttribute("aria-valuenow", "9");
     await expect(closes).toHaveAttribute("aria-valuenow", "17");
@@ -111,7 +114,8 @@ export const FollowsComfortableDensity: Story = {
 export const Disabled: Story = {
   args: { disabled: true },
   play: async ({ canvasElement }) => {
-    const slider = within(canvasElement).getByRole("slider", { name: "Text size" });
+    // Base UI mounts the range input after the slider renders.
+    const slider = await within(canvasElement).findByRole("slider", { name: "Text size" });
     await expect(slider).toBeDisabled();
     await userEvent.tab();
     await expect(slider).not.toHaveFocus();
@@ -127,7 +131,8 @@ export const Vertical: Story = {
     </Field>
   ),
   play: async ({ canvasElement }) => {
-    const slider = within(canvasElement).getByRole("slider", { name: "Text size" });
+    // Base UI mounts the range input after the slider renders.
+    const slider = await within(canvasElement).findByRole("slider", { name: "Text size" });
     await expect(slider).toHaveAttribute("aria-orientation", "vertical");
     await userEvent.tab();
     await userEvent.keyboard("{ArrowUp}");
