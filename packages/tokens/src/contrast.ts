@@ -38,9 +38,11 @@ export const REQUIRED_PAIRINGS: readonly Pairing[] = [
   { foreground: "primary-text", background: "background", kind: "text" },
   { foreground: "primary-text", background: "card", kind: "text" },
   { foreground: "input", background: "background", kind: "boundary" },
-  // Controls also sit on cards.
+  // Controls also sit on cards, and in dialogs and popovers.
   { foreground: "input", background: "card", kind: "boundary" },
+  { foreground: "input", background: "popover", kind: "boundary" },
   { foreground: "ring", background: "card", kind: "boundary" },
+  { foreground: "ring", background: "popover", kind: "boundary" },
   { foreground: "ring", background: "background", kind: "boundary" },
   // A tab's focus ring sits on the muted list, as a read-only field's does on its own fill.
   { foreground: "ring", background: "muted", kind: "boundary" },
