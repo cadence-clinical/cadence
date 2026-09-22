@@ -99,11 +99,10 @@ Dropdown menu is built on the Base UI [Menu](https://base-ui.com/react/component
 </DropdownMenuGroup>
 ```
 
-## Labels, shortcuts and submenus
+## Labels and shortcuts
 
 - `DropdownMenuLabel` inside a `DropdownMenuGroup` or a `DropdownMenuRadioGroup` names that set for a screen reader. On its own it is words above the items and names nothing.
 - `DropdownMenuShortcut` shows the keys that do what the item does, at the end of the item. It is a hint: handling the keys is up to you.
-- `DropdownMenuSub`, `DropdownMenuSubTrigger` and `DropdownMenuSubContent` open a menu from an item. The item carries a chevron, so it does not look like an action.
 - `inset` on an item or a label lines it up with items that have an icon.
 
 ## A destructive item
@@ -111,6 +110,8 @@ Dropdown menu is built on the Base UI [Menu](https://base-ui.com/react/component
 `variant="destructive"` sets an item in the critical colour. The colour adds to the words and never stands in for them: the item says what it does. For an action that cannot be undone, ask first in a [Dialog](/docs/components/dialog).
 
 ## What Cadence changes
+
+- **No submenus.** shadcn's `DropdownMenuSub` parts are left out. A submenu hides actions a level deeper, and inside one Base UI's focus guards fail an accessibility check in Safari. Put the actions in the menu, or in a second menu.
 
 - **An item is as high as a control**, so it is a 44px target when the [density](/docs/theming#density) is comfortable. The shadcn item is about 28px.
 - **A long item wraps**, and the menu is never wider or taller than the room it has. The shadcn menu is the width of its trigger with a small minimum, and hides what overflows sideways.
