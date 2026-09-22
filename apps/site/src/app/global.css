@@ -78,3 +78,12 @@ html > body[data-scroll-locked] {
   font-weight: 500;
   color: var(--foreground);
 }
+
+/*
+ * A group's panel hides what overflows it, so that it can fold, which cut the focus ring off the
+ * items inside it. The ring is drawn just inside each item instead, where nothing can clip it.
+ */
+#nd-sidebar a[data-active]:focus-visible,
+#nd-sidebar button[aria-expanded]:not([aria-haspopup]):focus-visible {
+  outline-offset: -2px;
+}
