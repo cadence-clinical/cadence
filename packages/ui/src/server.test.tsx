@@ -33,6 +33,10 @@ import {
   FieldDescription,
   FieldError,
   FieldLabel,
+  Form,
+  FormActions,
+  FormErrorSummary,
+  FormSubmit,
   Input,
   Item,
   ItemContent,
@@ -131,6 +135,18 @@ const RENDERS: Record<string, ReactElement> = {
         </SidebarContent>
       </Sidebar>
     </SidebarProvider>
+  ),
+  form: (
+    <Form>
+      <FormErrorSummary />
+      <Field name="given">
+        <FieldLabel>Given name</FieldLabel>
+        <Input required />
+      </Field>
+      <FormActions>
+        <FormSubmit>Save</FormSubmit>
+      </FormActions>
+    </Form>
   ),
   "alert-dialog": (
     <AlertDialog>
@@ -261,6 +277,28 @@ describe("Sidebar", () => {
     expect(html).toContain('data-slot="sidebar-container"');
     expect(html).toMatch(/<nav[^>]*data-slot="sidebar-content"/);
     expect(html).toMatch(/<a[^>]*aria-current="page"[^>]*>Today<\/a>/);
+  });
+});
+
+describe("Form", () => {
+  // The summary is read from the page after it renders, so the server sends a form without one,
+  // even when it is given errors.
+  it("renders a form that sends itself, with no summary before it is sent", () => {
+    const html = renderToString(
+      <Form errors={{ given: "Enter a given name." }}>
+        <FormErrorSummary />
+        <Field name="given">
+          <FieldLabel>Given name</FieldLabel>
+          <Input />
+          <FieldError />
+        </Field>
+        <FormSubmit>Save</FormSubmit>
+      </Form>,
+    );
+
+    expect(html).toMatch(/<form[^>]*data-slot="form"/);
+    expect(html).not.toContain("form-error-summary");
+    expect(html).toMatch(/<button[^>]*type="submit"[^>]*>Save<\/button>/);
   });
 });
 

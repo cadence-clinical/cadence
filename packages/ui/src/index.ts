@@ -91,6 +91,8 @@ export type {
   FieldLegendProps,
   FieldProps,
 } from "@/components/cadence/field";
+export { Form, FormActions, FormErrorSummary, FormSubmit } from "@/components/cadence/form";
+export type { FormErrorSummaryProps, FormProps, FormSubmitProps } from "@/components/cadence/form";
 export { Input } from "@/components/cadence/input";
 export type { InputProps } from "@/components/cadence/input";
 export {
