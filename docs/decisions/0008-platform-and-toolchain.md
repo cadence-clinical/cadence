@@ -31,8 +31,12 @@ up. Each pin has a comment in `pnpm-workspace.yaml` and an ignore rule in Depend
 | ESLint     | 9         | eslint-plugin-jsx-a11y supports ESLint 9 only, and accessibility linting is required |
 | Vitest     | 4         | @storybook/addon-vitest supports Vitest 3 and 4 only                                 |
 
-pnpm's minimum release age stays on. When a fresh release blocks an install, widen the version
-range so pnpm can pick an older release. Do not add an exclusion.
+pnpm's minimum release age stays on, at seven days (`minimumReleaseAge: 10080` in
+`pnpm-workspace.yaml`). A package that is compromised is usually found within days, and nothing
+here is urgent enough to take a release on its first day. pnpm applies it when it resolves and
+again to the committed lockfile, so a fresh release cannot arrive through a lockfile someone else
+resolved. When a fresh release blocks an install, widen the version range so pnpm can pick an
+older release. Do not add an exclusion.
 
 ## Data
 

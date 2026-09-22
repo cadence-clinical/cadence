@@ -130,7 +130,7 @@ A rule a tool can enforce is enforced by the tool. This file records the rest, a
 - **A new runtime dependency in a published package is justified in the pull request**: size, maintenance, licence and what the platform already offers. MIT, Apache-2.0, BSD and ISC only, and the SIL Open Font License for a font. `review`
 - **React is a peer dependency.** Shared versions live in the pnpm catalog. `review`
 - **Pins are deliberate and documented** in `pnpm-workspace.yaml`. Dependabot is told about each one. `review`
-- **pnpm's minimum release age stays on.** Widen a version range before adding an exclusion. Install scripts run only for allow-listed packages. `review`
+- **pnpm's minimum release age stays on, at seven days.** Widen a version range before adding an exclusion. Install scripts run only for allow-listed packages. `lint` (pnpm refuses the install)
 - **A third-party action's inputs come from its `action.yml`**, never from memory, and actions are pinned by commit. `review`
 
 ## 11. Naming and files
