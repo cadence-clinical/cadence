@@ -44,10 +44,12 @@ export const InAPendingButton: Story = {
   },
 };
 
+// The layout width, not the bounding box: the box of a turning element grows with its angle, so it
+// measured 20.5px in a slow WebKit run that caught the spinner mid-turn.
 export const FollowsDensity: Story = {
   globals: { density: "comfortable" },
   play: async ({ canvasElement }) => {
     const spinner = within(canvasElement).getByRole("status", { name: "Loading" });
-    await expect(spinner.getBoundingClientRect().width).toBe(20);
+    await expect(getComputedStyle(spinner).width).toBe("20px");
   },
 };
