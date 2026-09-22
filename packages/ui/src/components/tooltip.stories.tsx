@@ -83,9 +83,28 @@ export const Below: Story = onSide("bottom");
 export const OnTheLeft: Story = onSide("left");
 
 // These three end with the tooltip closed, so there is nothing for a snapshot to show, and they
-// depend on real focus and timing that Chromatic's capture browser does not give. The component
-// tests in CI run them in Chromium and WebKit.
+// depend on real focus that Chromatic's capture browser does not give. The component tests in CI
+// run them in Chromium and WebKit.
 const interactionOnly = { chromatic: { disableSnapshot: true } };
+
+/**
+ * How long a hover is given to open a tooltip. Base UI waits before the first one, and the
+ * Storybook addon instruments every step, so a wait here says nothing about how quickly a person
+ * sees the hint. What matters is which path Base UI took, which `data-instant` records.
+ */
+const OPENS = { timeout: 5000 } as const;
+
+/**
+ * The hint itself, once it is on screen: not the trigger's hidden text, which says the same
+ * words. A hint fades in, and a fading element does not count as visible, so this waits for the
+ * fade as well as the mount.
+ */
+const hint = (text: string) =>
+  waitFor(async () => {
+    const shown = screen.getByText(text, { selector: "[data-slot=tooltip-content]" });
+    await expect(shown).toBeVisible();
+    return shown;
+  }, OPENS);
 
 // The trigger keeps its own name. The tooltip is a hint for someone who can hover or focus, and it
 // is never announced, so the name cannot come from it.
@@ -93,19 +112,15 @@ export const OpensOnHoverAfterADelay: Story = {
   parameters: interactionOnly,
   play: async ({ canvasElement }) => {
     const trigger = within(canvasElement).getByRole("button", { name: "Print chart" });
-
-    await userEvent.hover(trigger);
-    // It waits first, so a pointer that is only passing does not set it off.
+    // Nothing is shown until the pointer arrives, so a pointer only passing by sets nothing off.
     await expect(
       screen.queryByText("Print chart", { selector: "[data-slot=tooltip-content]" }),
     ).toBeNull();
-    await waitFor(
-      () =>
-        expect(
-          screen.getByText("Print chart", { selector: "[data-slot=tooltip-content]" }),
-        ).toBeVisible(),
-      { timeout: 3000 },
-    );
+
+    await userEvent.hover(trigger);
+    // It waited: Base UI marks a hint that opened at once, and this one is not marked.
+    const shown = await hint("Print chart");
+    await expect(shown).not.toHaveAttribute("data-instant");
 
     await userEvent.unhover(trigger);
     await waitFor(() =>
@@ -176,12 +191,12 @@ export const TheNextOneOpensAtOnce: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.hover(canvas.getByRole("button", { name: "Print chart" }));
-    await waitFor(() => expect(screen.getByText("Print")).toBeVisible(), { timeout: 3000 });
+    await hint("Print");
 
+    // The pointer moves to the next trigger without leaving the group, so Base UI opens the next
+    // hint at once. It is marked, which is the claim: a clock here would only measure Storybook.
     await userEvent.hover(canvas.getByRole("button", { name: "Edit chart" }));
-    // Well inside the delay the first one waited, and marked as instant.
-    const next = await screen.findByText("Edit", undefined, { timeout: 500 });
-    await expect(next).toHaveAttribute("data-instant");
+    await expect(await hint("Edit")).toHaveAttribute("data-instant");
     await userEvent.unhover(canvas.getByRole("button", { name: "Edit chart" }));
   },
 };
