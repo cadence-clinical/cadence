@@ -60,3 +60,21 @@ html > body[data-scroll-locked] {
   margin-right: 0px !important;
   --removed-body-scroll-bar-size: 0px !important;
 }
+
+/*
+ * The docs navigation lists every component, so it is compact: 13px items at half of Fumadocs'
+ * padding, which fits a level on one screen. Each heading folds, and the level being read opens
+ * itself. The search button is left alone: it has a popup, and the items do not.
+ */
+#nd-sidebar a[data-active],
+#nd-sidebar button[aria-expanded]:not([aria-haspopup]) {
+  padding-block: 0.1875rem;
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+}
+
+/* The headings stay a step above their items, and the gap before each one is smaller. */
+#nd-sidebar button[aria-expanded]:not([aria-haspopup]) {
+  font-weight: 500;
+  color: var(--foreground);
+}
