@@ -165,6 +165,19 @@ export type { SelectContentProps, SelectTriggerProps } from "@/components/cadenc
 export { Separator } from "@/components/cadence/separator";
 export type { SeparatorProps } from "@/components/cadence/separator";
 export {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetOverlay,
+  SheetPortal,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/cadence/sheet";
+export type { SheetContentProps } from "@/components/cadence/sheet";
+export {
   Sidebar,
   SidebarContent,
   SidebarFooter,

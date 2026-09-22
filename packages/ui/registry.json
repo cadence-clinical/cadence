@@ -518,6 +518,34 @@
       }
     },
     {
+      "name": "sheet",
+      "type": "registry:component",
+      "title": "Sheet",
+      "description": "A panel from an edge of the screen, for a task beside the page. It slides in from its edge, scrolls what does not fit, and its title clears the close button.",
+      "dependencies": ["@base-ui/react", "lucide-react"],
+      "registryDependencies": [
+        "@cadence/theme",
+        "@cadence/cn",
+        "@cadence/button",
+        "@cadence/dialog"
+      ],
+      "files": [
+        {
+          "path": "src/components/sheet.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/sheet.tsx"
+        }
+      ],
+      "docs": "Give every sheet a SheetTitle. Render SheetTrigger and SheetClose as a Button through render. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "composite",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "sidebar",
       "type": "registry:component",
       "title": "Sidebar",
