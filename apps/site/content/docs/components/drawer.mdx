@@ -1,0 +1,98 @@
+---
+title: Drawer
+description: A panel from an edge of the screen that can be swiped away, most often from the bottom of a phone.
+---
+
+import {
+  Button,
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@cadence-clinical/ui";
+
+<GradeBadge component="drawer" />
+
+<ComponentPreview>
+  <Drawer showSwipeHandle>
+    <DrawerTrigger render={<Button variant="outline" />}>Show appointment</DrawerTrigger>
+    <DrawerContent>
+      <DrawerHeader>
+        <DrawerTitle>Review clinic</DrawerTitle>
+        <DrawerDescription>Thursday at 09:30, room 4.</DrawerDescription>
+      </DrawerHeader>
+      <DrawerFooter className="pt-container">
+        <Button>Check in</Button>
+        <DrawerClose render={<Button variant="outline" />}>Close</DrawerClose>
+      </DrawerFooter>
+    </DrawerContent>
+  </Drawer>
+</ComponentPreview>
+
+## Usage
+
+```tsx
+import {
+  Button,
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@cadence-clinical/ui";
+
+<Drawer showSwipeHandle>
+  <DrawerTrigger render={<Button variant="outline" />}>Show appointment</DrawerTrigger>
+  <DrawerContent>
+    <DrawerHeader>
+      <DrawerTitle>Review clinic</DrawerTitle>
+      <DrawerDescription>Thursday at 09:30, room 4.</DrawerDescription>
+    </DrawerHeader>
+    <div className="p-container">...</div>
+    <DrawerFooter>
+      <Button>Check in</Button>
+      <DrawerClose render={<Button variant="outline" />}>Close</DrawerClose>
+    </DrawerFooter>
+  </DrawerContent>
+</Drawer>;
+```
+
+Drawer follows the shadcn [Drawer](https://ui.shadcn.com/docs/components/drawer) and keeps its part names and props, including `showSwipeHandle`, `swipeDirection` and `snapPoints`, so shadcn code works unchanged. It is built on the Base UI [Drawer](https://base-ui.com/react/components/drawer), whose props it accepts, such as `open`, `onOpenChange` and `defaultOpen`.
+
+Give every drawer a `DrawerTitle`: it is the drawer's name. `swipeDirection` sets the edge it comes from and the way it is swiped away: `down`, the default, `up`, `left` or `right`. Give the content between the header and the footer `p-container`, so it lines up with them.
+
+Use a drawer on a phone, where a panel from the bottom is in reach of a thumb. For a task beside the page on a larger screen, use a [Sheet](/docs/components/sheet).
+
+## Closing
+
+A drawer closes when it is swiped away, when the scrim is pressed and when Escape is pressed. Keep a `DrawerClose` in every drawer as well: a screen reader on a touch screen cannot swipe, and a drawer has no close button of its own.
+
+Opening a drawer moves focus into it, and closing it sends focus back to the trigger.
+
+## What Cadence changes
+
+- **What does not fit scrolls inside the drawer**, so its last button can always be reached. shadcn's drawer cuts it off.
+- **It uses the Dialog's scrim**: the `overlay` token, which darkens the page in both modes, without blur.
+- **The handle can be seen.** It is the `input` colour, held at 3:1 on the drawer, where shadcn's `muted` handle is faint.
+- **With reduced motion it does not slide.** It still follows a finger while it is swiped, because the user is moving it.
+- **The controls inside fill with the drawer's colour**, not the page's, as in a dialog.
+- **A bottom drawer keeps clear of a phone's home bar.**
+- **Spacing and text follow the [density](/docs/theming#density).**
+
+## Props
+
+| Prop                   | On                             | Type                                  | Default    |
+| ---------------------- | ------------------------------ | ------------------------------------- | ---------- |
+| `open`, `onOpenChange` | `Drawer`                       |                                       |            |
+| `defaultOpen`          | `Drawer`                       | `boolean`                             | `false`    |
+| `swipeDirection`       | `Drawer`                       | `"down" \| "up" \| "left" \| "right"` | `"down"`   |
+| `showSwipeHandle`      | `Drawer`                       | `boolean`                             | `false`    |
+| `snapPoints`           | `Drawer`                       | As in Base UI                         |            |
+| `render`               | `DrawerTrigger`, `DrawerClose` | An element, as in Base UI             | A `button` |

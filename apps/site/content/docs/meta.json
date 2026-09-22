@@ -33,6 +33,7 @@
     "components/card",
     "components/collapsible",
     "components/dialog",
+    "components/drawer",
     "components/dropdown-menu",
     "components/empty",
     "components/field",
