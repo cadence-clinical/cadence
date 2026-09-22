@@ -424,6 +424,57 @@ export const WithAFormLibrary: Story = {
   },
 };
 
+/**
+ * Written as shadcn's forms guide writes a form with React Hook Form: the form library checks
+ * the values in `onSubmit`, each Field carries `data-invalid`, each control `aria-invalid`, and
+ * the error is rendered only while the value is wrong.
+ */
+function ShadcnGuideForm() {
+  const [errors, setErrors] = useState<{ title?: { message: string } }>({});
+  const invalid = errors.title !== undefined;
+  return (
+    <Form
+      className="max-w-md"
+      onSubmit={(event) => {
+        event.preventDefault();
+        const title = new FormData(event.currentTarget).get("title");
+        setErrors(title ? {} : { title: { message: "Enter a title for the referral." } });
+      }}
+    >
+      <FormErrorSummary />
+      <Field data-invalid={invalid}>
+        <FieldLabel htmlFor="title">Title</FieldLabel>
+        <Input id="title" name="title" aria-invalid={invalid} />
+        {invalid && <FieldError errors={[errors.title]} />}
+      </Field>
+      <Field data-invalid={false}>
+        <FieldLabel htmlFor="clinic">Clinic</FieldLabel>
+        <Input id="clinic" name="clinic" aria-invalid={false} defaultValue="Review clinic" />
+      </Field>
+      <FormActions>
+        <FormSubmit>Send referral</FormSubmit>
+      </FormActions>
+    </Form>
+  );
+}
+
+// shadcn's code works unchanged inside a Form. A field marked `data-invalid="false"` is right,
+// so the summary leaves it out.
+export const WrittenAsInShadcnsGuide: Story = {
+  render: () => <ShadcnGuideForm />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole("button", { name: "Send referral" }));
+    const summary = await canvas.findByRole("group", { name: "There is a problem" });
+    await waitFor(() => expect(summary).toHaveFocus());
+    await expect(linksIn(summary).map((link) => link.textContent)).toEqual([
+      "Enter a title for the referral.",
+    ]);
+    await userEvent.click(linksIn(summary)[0] as HTMLElement);
+    await expect(canvas.getByRole("textbox", { name: "Title" })).toHaveFocus();
+  },
+};
+
 // A pending button is disabled and still focusable, and says what is happening.
 export const Pending: Story = {
   render: (args: FormProps) => (
