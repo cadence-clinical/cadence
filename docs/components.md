@@ -58,11 +58,11 @@ A small group of parts or primitives that works as one unit.
 
 A discrete section of an interface with behaviour of its own.
 
-| Component  | Status | Built on                                              | Why                                       |
-| ---------- | ------ | ----------------------------------------------------- | ----------------------------------------- |
-| Data table | Agreed | TanStack Table, Checkbox, Button, Select, Input, Menu | Sorting, filtering, selection and paging. |
-| Sidebar    | Agreed | Button, Separator, Tooltip, Dialog, Input             | Collapsible application navigation.       |
-| Form       | Agreed | Field, Button, Alert                                  | A group of fields with one error summary. |
+| Component  | Status | Built on                                                         | Why                                                                                   |
+| ---------- | ------ | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| Data table | Built  | TanStack Table 9, Table, Checkbox, Button, Select, Dropdown menu | Sorting, selection, paging and column visibility. Its own entry point: decision 0014. |
+| Sidebar    | Agreed | Button, Separator, Tooltip, Dialog, Input                        | Collapsible application navigation.                                                   |
+| Form       | Agreed | Field, Button, Alert                                             | A group of fields with one error summary.                                             |
 
 ## 4. Layouts
 

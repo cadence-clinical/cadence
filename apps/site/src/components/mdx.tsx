@@ -3,6 +3,7 @@ import defaultMdxComponents from "fumadocs-ui/mdx";
 import type { MDXComponents } from "mdx/types";
 
 import { ComponentPreview } from "./component-preview";
+import { DataTablePreview } from "./data-table-preview";
 import { GradeBadge } from "./grade-badge";
 import { TypesetPreview } from "./typeset-preview";
 
@@ -13,6 +14,7 @@ export function getMDXComponents(components?: MDXComponents) {
     ComponentPreview,
     GradeBadge,
     TypesetPreview,
+    DataTablePreview,
     ...components,
   } satisfies MDXComponents;
 }

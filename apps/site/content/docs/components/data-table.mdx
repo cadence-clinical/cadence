@@ -1,0 +1,115 @@
+---
+title: Data table
+description: Renders a TanStack table. Sorting, selection, paging and column visibility, with the state in words as well as marks.
+---
+
+<GradeBadge component="data-table" />
+
+<DataTablePreview />
+
+## Install
+
+The data table needs [TanStack Table](https://tanstack.com/table) 9, which most consumers of Cadence will never use. So it has its own entry point, and TanStack Table is an optional peer dependency: install it only if you use the data table.
+
+```bash
+pnpm add @tanstack/react-table
+```
+
+```tsx
+import { DataTable, dataTableFeatures } from "@cadence-clinical/ui/data-table";
+```
+
+From the registry, `shadcn add @cadence/data-table` installs TanStack Table with it.
+
+## Usage
+
+You own the table. Build it with `useTable` and Cadence's `dataTableFeatures`, keep its state where you keep the rest of your state, and pass the table to the parts:
+
+```tsx
+"use client";
+
+import { createColumnHelper, useTable, type SortingState } from "@tanstack/react-table";
+import {
+  DataTable,
+  DataTableColumnHeader,
+  dataTableFeatures,
+  DataTablePagination,
+  DataTableViewOptions,
+  selectionColumn,
+} from "@cadence-clinical/ui/data-table";
+
+interface Appointment {
+  id: string;
+  clinic: string;
+  minutes: number;
+}
+
+const helper = createColumnHelper<typeof dataTableFeatures, Appointment>();
+
+const columns = helper.columns([
+  selectionColumn<Appointment>({ rowLabel: (row) => row.clinic }),
+  helper.accessor("clinic", {
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Clinic" />,
+    meta: { label: "Clinic" },
+  }),
+  helper.accessor("minutes", {
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Minutes" />,
+    meta: { label: "Minutes", align: "end" },
+  }),
+]);
+
+export function Appointments({ data }: { data: Appointment[] }) {
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const table = useTable({
+    features: dataTableFeatures,
+    data,
+    columns,
+    getRowId: (row) => row.id,
+    state: { sorting },
+    onSortingChange: setSorting,
+  });
+  return (
+    <>
+      <DataTableViewOptions table={table} />
+      <DataTable table={table} aria-label="Appointments" />
+      <DataTablePagination table={table} />
+    </>
+  );
+}
+```
+
+`dataTableFeatures` registers sorting, filtering, selection, paging and column visibility. TanStack Table 9 leaves out any feature that is not registered, so pass it as `features`, and use `typeof dataTableFeatures` as the first type argument of `createColumnHelper`, `ColumnDef` and the rest.
+
+Cadence renders what the table says and never decides it. Sort, filter and page on the server if that is where the rows are, and give the table the results: the parts read the table's state, not the rows.
+
+## The parts
+
+- **`DataTable`** renders the table. Name it with `aria-label`. A sorted column's heading carries `aria-sort`, a chosen row is marked as selected, and a table with no rows says `emptyMessage` in its one row.
+- **`DataTableColumnHeader`** is a heading that sorts its column when pressed: ascending, then descending. A column that cannot be sorted is words only.
+- **`selectionColumn()`** is a column of checkboxes. The heading's checkbox selects every row on the page and is half-checked while only some are. Each row's checkbox is named: give `rowLabel` for a name better than the row's number.
+- **`DataTablePagination`** says how many rows are selected and which page this is, offers the rows per page, and moves between pages. It wraps on a narrow screen.
+- **`DataTableViewOptions`** is a menu that shows or hides each column that can be hidden. A column is named by its `meta.label`, or by its `header` when that is a string. The label is used as written.
+
+Set `meta: { align: "end" }` on a column of numbers, and its heading and cells align to the end.
+
+## What Cadence changes
+
+shadcn's data table is a guide to copy, not a component. Here the parts are published and graded, and the differences are:
+
+- **The state is in words.** A sorted heading has `aria-sort`, the selected count and the page are announced when they change, and every checkbox and paging button is named.
+- **Nothing is cut short.** Cells wrap between words, as in [Table](/docs/components/table), and a table that is too wide scrolls inside its own focusable box.
+- **The column menu uses a column's name as written.** shadcn capitalises the column id.
+- **A chosen row is marked twice**: by its fill and by its ticked checkbox.
+- **Rows follow the [density](/docs/theming#density)**: 44px targets when comfortable.
+- **The grade covers what Cadence renders.** It says nothing about whether TanStack Table's sorting or filtering is right for a clinical purpose: see [decision 0014](https://github.com/cadence-clinical/cadence/blob/main/docs/decisions/0014-headless-libraries.md).
+
+## Props
+
+| Prop              | On                      | Type                    | Default              |
+| ----------------- | ----------------------- | ----------------------- | -------------------- |
+| `table`           | Every part              | A table from `useTable` |                      |
+| `aria-label`      | `DataTable`             | `string`                |                      |
+| `emptyMessage`    | `DataTable`             | `ReactNode`             | `"Nothing to show."` |
+| `column`, `title` | `DataTableColumnHeader` | A column and its words  |                      |
+| `rowLabel`        | `selectionColumn()`     | `(row) => string`       | The row's number     |
+| `pageSizes`       | `DataTablePagination`   | `number[]`              | `[10, 20, 50]`       |
