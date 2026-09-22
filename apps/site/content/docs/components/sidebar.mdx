@@ -1,0 +1,141 @@
+---
+title: Sidebar
+description: Collapsible application navigation. Its items follow the density, the page shown is marked by shape as well as fill, and on a phone it is a sheet over the page.
+---
+
+<GradeBadge component="sidebar" />
+
+<SidebarPreview />
+
+## Usage
+
+```tsx
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarInset,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@cadence-clinical/ui";
+
+<SidebarProvider>
+  <Sidebar collapsible="icon">
+    <SidebarContent>
+      <SidebarGroup>
+        <SidebarGroupLabel>Clinic</SidebarGroupLabel>
+        <SidebarGroupContent>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton isActive tooltip="Today" render={<a href="/today" />}>
+                <CalendarDays aria-hidden />
+                <span>Today</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroupContent>
+      </SidebarGroup>
+    </SidebarContent>
+  </Sidebar>
+  <SidebarInset>
+    <header>
+      <SidebarTrigger />
+    </header>
+    {children}
+  </SidebarInset>
+</SidebarProvider>;
+```
+
+Wrap the whole layout in `SidebarProvider`: the `Sidebar`, and the `SidebarInset` that holds the page. The provider holds whether the sidebar is open, and `useSidebar()` reads and changes that state from anywhere inside it.
+
+Render each `SidebarMenuButton` as a link through `render`, with an icon before its words. Set `isActive` on the item for the page that is shown.
+
+Sidebar follows the shadcn [Sidebar](https://ui.shadcn.com/docs/components/sidebar) and keeps its part names, so a sidebar copied from a shadcn block works as written. Its sheet on a phone is built on the Base UI [Dialog](https://base-ui.com/react/components/dialog), and its tooltips on [Tooltip](/docs/components/tooltip).
+
+## The parts
+
+| Part                                                           | What it is                                                                                      |
+| -------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `SidebarProvider`                                              | The state, and the layout of the sidebar beside the page.                                       |
+| `Sidebar`                                                      | The sidebar itself.                                                                             |
+| `SidebarHeader`, `SidebarFooter`                               | The top and bottom, which do not scroll: a product name, the signed-in user's menu.             |
+| `SidebarContent`                                               | The part that scrolls. It is a `nav` landmark.                                                  |
+| `SidebarGroup`, `SidebarGroupLabel`, `SidebarGroupContent`     | A set of items with words above it.                                                             |
+| `SidebarGroupAction`                                           | A button beside a group's label, such as "Add a list".                                          |
+| `SidebarMenu`, `SidebarMenuItem`, `SidebarMenuButton`          | A list of items, one item, and its link or button.                                              |
+| `SidebarMenuAction`                                            | A button at the end of an item, such as the trigger of its menu.                                |
+| `SidebarMenuBadge`                                             | A count at the end of an item.                                                                  |
+| `SidebarMenuSub`, `SidebarMenuSubItem`, `SidebarMenuSubButton` | A list of links under an item. It is hidden when the sidebar is collapsed to icons.             |
+| `SidebarInput`, `SidebarSeparator`                             | A field, such as search, and a line between parts. The field is hidden when collapsed to icons. |
+| `SidebarTrigger`                                               | The button that opens and closes the sidebar.                                                   |
+| `SidebarRail`                                                  | A strip along the sidebar's edge that toggles it when pressed.                                  |
+| `SidebarInset`                                                 | The page beside the sidebar, as `main`.                                                         |
+
+Give every icon-only control a name. `SidebarGroupAction` and `SidebarMenuAction` show an icon, so put their words in a `span` with `sr-only`.
+
+## Collapsing
+
+`collapsible` on `Sidebar` sets what closing does:
+
+- `offcanvas` slides the sidebar off the edge. The page takes its room. This is the default.
+- `icon` narrows the sidebar to its icons. Each item keeps its words as its name, and its `tooltip` shows them beside it. A group whose items have no icons has nothing to show, so hide it with `className="group-data-[collapsible=icon]:hidden"`.
+- `none` keeps it open, even on a phone. The trigger does nothing to it.
+
+`variant` sets how it sits: `sidebar` is flush with the edge, `floating` stands off it on its own panel, and `inset` frames the page as a rounded panel on the sidebar's colour. `side` puts it on the `left` or the `right`.
+
+The sidebar starts open. Set `defaultOpen` on the provider to start it closed, or control it with `open` and `onOpenChange`. The provider also remembers the choice in a `sidebar_state` cookie for seven days, under the name shadcn uses, so a server can read it and render the sidebar the way it was left.
+
+## The page that is shown
+
+`isActive` fills the item, sets its words in medium weight and puts a bar at its start. The bar is 3px wide in the accent's text colour, which reaches 3:1 against the fill, so the item is marked by shape as well as colour. The item also carries `aria-current="page"`, which a screen reader announces.
+
+## On a phone
+
+Below 768px wide, the sidebar is a sheet over the page. `SidebarTrigger` opens it. It holds focus while it is open, and Escape or a press outside closes it and returns focus to the trigger. A menu button does not close the sheet when it is pressed: close it yourself with `setOpenMobile(false)` from `useSidebar()` once the page has changed.
+
+## Colours
+
+The sidebar has one colour token of its own, `sidebar`, its surface. The seven other shadcn sidebar tokens, such as `sidebar-foreground` and `sidebar-primary`, point at the Cadence token they correspond to, so they follow the mode, the contrast level, the accent and any [brand](/docs/theming#add-your-own-brand) without values of their own. The pairings the sidebar uses, including its text and focus ring on `sidebar` and the bar on the item's fill, are asserted in the `@cadence-clinical/tokens` test suite.
+
+## What Cadence changes
+
+- **Items follow the [density](/docs/theming#density).** An item is as high as a control: 32px compact and 44px comfortable. Its icon stays put as the sidebar collapses, because it sits as far from the item's edge as from its top. The collapsed sidebar is 48px wide compact and 68px comfortable. The shadcn item is 32px at every density.
+- **The page shown is marked by a bar and `aria-current`**, as well as the fill and the weight shadcn uses.
+- **A long name wraps.** shadcn cuts it off with an ellipsis.
+- **Collapsed off the canvas, the sidebar's links are out of reach.** They are hidden once the slide has finished, so Tab cannot move focus to links nobody can see. In shadcn they stay in the tab order.
+- **Ctrl+B and Cmd+B leave fields alone.** They toggle the sidebar, except while focus is in a field, where Ctrl+B means bold in a note. shadcn takes the keys everywhere.
+- **The trigger says whether the sidebar is open**, with `aria-expanded`. The rail is for a pointer only, so it is hidden from screen readers, where it would be a second control with the trigger's name.
+- **`SidebarContent` is a `nav` landmark.** If yours holds something else, pass `render={<div />}`.
+- **An action set to `showOnHover` always shows on a touch screen.** It hides until its item is hovered or focused only where there is a fine pointer. shadcn hides it on any screen 768px or wider, including a tablet that cannot hover.
+- **`onOpenChange` works without `open`.** In shadcn, passing it stops the sidebar changing unless you also control `open`.
+- **No `SidebarMenuSkeleton`.** Cadence has no Skeleton, and the shadcn skeleton picks a random width.
+
+## Accessibility
+
+- `SidebarTrigger` is named "Toggle sidebar" and states `aria-expanded`. Give it other words as its children.
+- Collapsed to icons, every item keeps its words as its accessible name. The tooltip shows them to a sighted pointer user, and does not open on a touch screen.
+- On a phone the sheet is a dialog named "Sidebar". It holds focus until it closes.
+- Name `SidebarContent` with `aria-label` when the page has another `nav`.
+
+## Props
+
+| Prop           | On                     | Type                                 | Default       |
+| -------------- | ---------------------- | ------------------------------------ | ------------- |
+| `defaultOpen`  | `SidebarProvider`      | `boolean`                            | `true`        |
+| `open`         | `SidebarProvider`      | `boolean`                            |               |
+| `onOpenChange` | `SidebarProvider`      | `(open: boolean) => void`            |               |
+| `side`         | `Sidebar`              | `"left" \| "right"`                  | `"left"`      |
+| `variant`      | `Sidebar`              | `"sidebar" \| "floating" \| "inset"` | `"sidebar"`   |
+| `collapsible`  | `Sidebar`              | `"offcanvas" \| "icon" \| "none"`    | `"offcanvas"` |
+| `isActive`     | `SidebarMenuButton`    | `boolean`                            | `false`       |
+| `tooltip`      | `SidebarMenuButton`    | `string` or `TooltipContent`'s props |               |
+| `size`         | `SidebarMenuButton`    | `"sm" \| "default" \| "lg"`          | `"default"`   |
+| `variant`      | `SidebarMenuButton`    | `"default" \| "outline"`             | `"default"`   |
+| `showOnHover`  | `SidebarMenuAction`    | `boolean`                            | `false`       |
+| `isActive`     | `SidebarMenuSubButton` | `boolean`                            | `false`       |
+| `size`         | `SidebarMenuSubButton` | `"sm" \| "md"`                       | `"md"`        |
