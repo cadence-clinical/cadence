@@ -258,6 +258,29 @@
       }
     },
     {
+      "name": "empty",
+      "type": "registry:component",
+      "title": "Empty",
+      "description": "What a list or a panel shows when it has nothing in it: what is empty, and what to do next. Its spacing follows the density.",
+      "dependencies": ["@base-ui/react", "class-variance-authority"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/empty.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/empty.tsx"
+        }
+      ],
+      "docs": "Say what is empty, not what it means: an empty list is not a finding. Render EmptyTitle as a heading where the panel has one. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "composite",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "field",
       "type": "registry:component",
       "title": "Field",

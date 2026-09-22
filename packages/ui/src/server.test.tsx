@@ -32,6 +32,9 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  Empty,
+  EmptyHeader,
+  EmptyTitle,
   Field,
   FieldDescription,
   FieldError,
@@ -184,6 +187,13 @@ const RENDERS: Record<string, ReactElement> = {
     <ToggleGroup aria-label="Text style">
       <ToggleGroupItem value="bold">Bold</ToggleGroupItem>
     </ToggleGroup>
+  ),
+  empty: (
+    <Empty>
+      <EmptyHeader>
+        <EmptyTitle>No appointments today</EmptyTitle>
+      </EmptyHeader>
+    </Empty>
   ),
   "dropdown-menu": (
     <DropdownMenu>
