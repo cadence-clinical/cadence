@@ -49,6 +49,7 @@
     "components/sidebar",
     "components/toast",
     "---Layouts---",
-    "components/app-shell"
+    "components/app-shell",
+    "components/list-detail"
   ]
 }
