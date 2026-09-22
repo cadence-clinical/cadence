@@ -25,6 +25,8 @@ import { Spinner } from "@cadence-clinical/ui";
 
 Spinner follows the shadcn [Spinner](https://ui.shadcn.com/docs/components/spinner). It is an `svg` and accepts all of its props.
 
+To hold the place of content while it loads, pair a spinner that says what is loading with a [Skeleton](/docs/components/skeleton) in the content's shape.
+
 ## In a pending button
 
 Button has no loading prop. Compose it: disable the button, put a spinner where the icon goes, and say what is happening in the label. Hide the spinner from assistive technology, because the label already announces it.
