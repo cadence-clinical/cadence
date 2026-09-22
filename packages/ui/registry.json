@@ -525,6 +525,29 @@
       }
     },
     {
+      "name": "slider",
+      "type": "registry:component",
+      "title": "Slider",
+      "description": "Chooses a setting from a range, by pointer or keyboard. The whole strip is a target as high as a control, the track can be seen at 3:1, and each thumb of a range has its own name.",
+      "dependencies": ["@base-ui/react"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/slider.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/slider.tsx"
+        }
+      ],
+      "docs": "Use a Slider for a setting, not a clinical value, which is typed. Name each thumb of a range with thumbLabels. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "primitive",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "spinner",
       "type": "registry:component",
       "title": "Spinner",

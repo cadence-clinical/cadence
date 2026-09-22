@@ -180,6 +180,8 @@ export type {
 } from "@/components/cadence/sidebar";
 export { Skeleton } from "@/components/cadence/skeleton";
 export type { SkeletonProps } from "@/components/cadence/skeleton";
+export { Slider } from "@/components/cadence/slider";
+export type { SliderProps } from "@/components/cadence/slider";
 export { Spinner } from "@/components/cadence/spinner";
 export type { SpinnerProps } from "@/components/cadence/spinner";
 export { Switch } from "@/components/cadence/switch";
