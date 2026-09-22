@@ -476,6 +476,29 @@
       }
     },
     {
+      "name": "list-detail",
+      "type": "registry:component",
+      "title": "List and detail",
+      "description": "A list beside the record chosen from it. Side by side from md up, each scrolling on its own; on a phone one at a time, with focus moved between them.",
+      "dependencies": ["lucide-react"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn", "@cadence/button"],
+      "files": [
+        {
+          "path": "src/components/list-detail.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/list-detail.tsx"
+        }
+      ],
+      "docs": "Set open while a record is shown and clear it in onBack. Name each pane with aria-label. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "layout",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "marker",
       "type": "registry:component",
       "title": "Marker",
