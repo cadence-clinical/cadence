@@ -783,6 +783,34 @@
       }
     },
     {
+      "name": "toast",
+      "type": "registry:component",
+      "title": "Toast",
+      "description": "A short message that something happened, announced to a screen reader. Each type has its own outline, and a toast is never the only place an error is shown.",
+      "dependencies": ["@base-ui/react", "lucide-react"],
+      "registryDependencies": [
+        "@cadence/theme",
+        "@cadence/cn",
+        "@cadence/button",
+        "@cadence/spinner"
+      ],
+      "files": [
+        {
+          "path": "src/components/toast.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/toast.tsx"
+        }
+      ],
+      "docs": "Put Toaster once around the app and call toast.add. A toast goes away, so show an error where it happened too. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "pattern",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "toggle",
       "type": "registry:component",
       "title": "Toggle",
