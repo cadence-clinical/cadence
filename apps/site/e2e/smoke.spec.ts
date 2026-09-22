@@ -38,6 +38,7 @@ const DOCS_PAGES = [
   "/docs/levels",
   "/docs/components/alert",
   "/docs/components/alert-dialog",
+  "/docs/components/app-shell",
   "/docs/components/badge",
   "/docs/components/button",
   "/docs/components/calendar",

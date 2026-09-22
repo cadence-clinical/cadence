@@ -47,6 +47,8 @@
     "components/data-table",
     "components/form",
     "components/sidebar",
-    "components/toast"
+    "components/toast",
+    "---Layouts---",
+    "components/app-shell"
   ]
 }
