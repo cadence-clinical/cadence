@@ -88,6 +88,36 @@ test("no page scrolls sideways at the current viewport", async ({ page }) => {
   }
 });
 
+// Every component has a page, so the navigation folds each level away. The level holding the
+// page being read opens itself.
+test("the navigation folds each level, and opens the one being read", async ({
+  page,
+  isMobile,
+}) => {
+  await page.goto("/docs/components/button");
+  // On a phone the navigation is a drawer, opened from the bar at the top.
+  if (isMobile) await page.getByRole("button", { name: "Open Sidebar" }).click();
+  const primitives = page.getByRole("button", { name: "Primitives" });
+  const composites = page.getByRole("button", { name: "Composites" });
+  await expect(primitives).toHaveAttribute("aria-expanded", "true");
+  await expect(composites).toHaveAttribute("aria-expanded", "false");
+  await expect(page.getByRole("link", { name: "Card", exact: true })).toHaveCount(0);
+
+  await composites.click();
+  await expect(composites).toHaveAttribute("aria-expanded", "true");
+  await expect(page.getByRole("link", { name: "Card", exact: true })).toBeVisible();
+});
+
+// The items are compact, so a whole level fits on one screen. A phone keeps its touch targets.
+test("the navigation's items are compact", async ({ page, isMobile }) => {
+  test.skip(isMobile, "A phone keeps Fumadocs' own targets, which a thumb can hit.");
+  await page.goto("/docs/components/button");
+  const item = page.locator("#nd-sidebar a[data-active]").first();
+  const box = await item.boundingBox();
+  if (!box) throw new Error("The navigation has no items.");
+  expect(box.height).toBeLessThanOrEqual(28);
+});
+
 // Decision records are for contributors and live in the repository. A public page gives the reason
 // in a sentence instead of sending a reader to an internal record.
 test("no page links to or names an internal decision record", async ({ page }) => {
