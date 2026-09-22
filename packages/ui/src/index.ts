@@ -47,9 +47,6 @@ export {
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/cadence/dropdown-menu";
 export type {
@@ -58,7 +55,6 @@ export type {
   DropdownMenuItemProps,
   DropdownMenuLabelProps,
   DropdownMenuRadioItemProps,
-  DropdownMenuSubTriggerProps,
 } from "@/components/cadence/dropdown-menu";
 export {
   Field,

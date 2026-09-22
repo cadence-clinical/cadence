@@ -14,9 +14,6 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/cadence/dropdown-menu";
 
@@ -193,45 +190,6 @@ export const CheckboxAndRadioItems: Story = {
 
     await expect(screen.getByRole("menuitemradio", { name: "Date" })).toBeChecked();
     await expect(screen.getByRole("menuitemradio", { name: "Clinic" })).not.toBeChecked();
-  },
-};
-
-export const ASubmenu: Story = {
-  args: { defaultOpen: true },
-  parameters: {
-    a11y: {
-      config: {
-        // While a submenu is open, Base UI keeps two focus guards inside the parent menu, and in
-        // Safari it gives them `role="button"` so that VoiceOver can use them. axe then reports
-        // that a menu holds a button. They are Base UI's own, invisible and outside our control,
-        // so this one rule is off for this one story. Every other rule still runs.
-        rules: [{ id: "aria-required-children", enabled: false }],
-      },
-    },
-  },
-  render: (args) => (
-    <div className="h-80">
-      <DropdownMenu {...args}>
-        <DropdownMenuTrigger render={<Button variant="outline" />}>Actions</DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuItem>Reschedule</DropdownMenuItem>
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger>Move to clinic</DropdownMenuSubTrigger>
-            <DropdownMenuSubContent>
-              <DropdownMenuItem>General clinic</DropdownMenuItem>
-              <DropdownMenuItem>Review clinic</DropdownMenuItem>
-            </DropdownMenuSubContent>
-          </DropdownMenuSub>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
-  ),
-  play: async () => {
-    await screen.findByRole("menu");
-    const opener = screen.getByRole("menuitem", { name: "Move to clinic" });
-    await expect(opener).toHaveAttribute("aria-haspopup", "menu");
-    await userEvent.click(opener);
-    await expect(await screen.findByRole("menuitem", { name: "Review clinic" })).toBeVisible();
   },
 };
 

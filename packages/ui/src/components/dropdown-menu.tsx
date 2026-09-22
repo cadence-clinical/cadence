@@ -1,7 +1,7 @@
 "use client";
 
 import { Menu as MenuPrimitive } from "@base-ui/react/menu";
-import { Check, ChevronRight } from "lucide-react";
+import { Check } from "lucide-react";
 import { createContext, useContext, type ComponentProps, type ReactNode } from "react";
 
 import { cn } from "@/lib/cn";
@@ -142,61 +142,6 @@ function DropdownMenuItem({
   );
 }
 
-/** A menu that opens from an item of this one. */
-const DropdownMenuSub = MenuPrimitive.SubmenuRoot;
-
-/** The Base UI Submenu Trigger's props, plus `inset`. */
-type DropdownMenuSubTriggerProps = MenuPrimitive.SubmenuTrigger.Props & {
-  /** Lines the item up with items that have an icon. */
-  inset?: boolean;
-};
-
-/** The item that opens a submenu. It carries a chevron, so it does not look like an action. */
-function DropdownMenuSubTrigger({
-  className,
-  inset,
-  children,
-  ...props
-}: DropdownMenuSubTriggerProps) {
-  return (
-    <MenuPrimitive.SubmenuTrigger
-      data-slot="dropdown-menu-sub-trigger"
-      data-inset={inset ? "" : undefined}
-      className={cn(
-        ITEM,
-        "pr-2 data-popup-open:bg-accent data-popup-open:text-accent-foreground",
-        className,
-      )}
-      {...props}
-    >
-      <span className="min-w-0 flex-1">{children}</span>
-      <ChevronRight aria-hidden className="ml-auto rtl:rotate-180" />
-    </MenuPrimitive.SubmenuTrigger>
-  );
-}
-
-/** The submenu. It opens beside its item. */
-function DropdownMenuSubContent({
-  align = "start",
-  alignOffset = -5,
-  side = "right",
-  sideOffset = 0,
-  className,
-  ...props
-}: DropdownMenuContentProps) {
-  return (
-    <DropdownMenuContent
-      data-slot="dropdown-menu-sub-content"
-      className={cn("min-w-24 shadow-lg", className)}
-      align={align}
-      alignOffset={alignOffset}
-      side={side}
-      sideOffset={sideOffset}
-      {...props}
-    />
-  );
-}
-
 /** The tick of a checkbox or radio item, at the end of the item. */
 function Indicator({ children, slot }: { children: ReactNode; slot: string }) {
   return (
@@ -318,9 +263,6 @@ export {
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 };
 export type {
@@ -329,5 +271,4 @@ export type {
   DropdownMenuItemProps,
   DropdownMenuLabelProps,
   DropdownMenuRadioItemProps,
-  DropdownMenuSubTriggerProps,
 };
