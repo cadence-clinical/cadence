@@ -110,17 +110,29 @@ export const TheViewShowsItsFocus: Story = {
   },
 };
 
-/** The mark of the shown tab, once Base UI has measured the tab and shown it. */
-async function indicator(canvasElement: HTMLElement) {
-  const mark = canvasElement.querySelector("[data-slot=tabs-indicator]");
-  if (!(mark instanceof HTMLElement)) throw new Error("No indicator");
-  await waitFor(() => expect(mark).not.toHaveAttribute("hidden"));
-  return mark;
-}
-
 /** Whether a box sits where a tab is, within a pixel. */
 function covers(box: DOMRect, tab: DOMRect) {
   return Math.abs(box.left - tab.left) <= 1 && Math.abs(box.width - tab.width) <= 1;
+}
+
+/**
+ * The mark of the shown tab, once Base UI has shown it and it has come to rest over `tab`.
+ *
+ * The mark's position and width are animated. Anything that makes Base UI measure the tabs again
+ * after the mark appears, such as a web font arriving or a change of size, sends it sliding for
+ * 150ms. Measured once, it can be caught mid-slide, which Chromatic did twice. So this waits.
+ */
+async function settledOver(canvasElement: HTMLElement, tab: HTMLElement) {
+  const mark = canvasElement.querySelector("[data-slot=tabs-indicator]");
+  if (!(mark instanceof HTMLElement)) throw new Error("No indicator");
+  await waitFor(
+    async () => {
+      await expect(mark).not.toHaveAttribute("hidden");
+      await expect(covers(mark.getBoundingClientRect(), tab.getBoundingClientRect())).toBe(true);
+    },
+    { timeout: 3000 },
+  );
+  return mark;
 }
 
 // The tab that is shown differs from the rest by more than its colour: its mark has a boundary
@@ -128,9 +140,8 @@ function covers(box: DOMRect, tab: DOMRect) {
 export const TheShownTabIsMarkedByShape: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const mark = await indicator(canvasElement);
     const shown = canvas.getByRole("tab", { name: "Appointments" });
-    await expect(covers(mark.getBoundingClientRect(), shown.getBoundingClientRect())).toBe(true);
+    const mark = await settledOver(canvasElement, shown);
 
     const style = getComputedStyle(mark);
     const list = getComputedStyle(canvas.getByRole("tablist"));
@@ -146,10 +157,10 @@ export const TheShownLineTabCarriesARule: Story = {
   ...Line,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const mark = await indicator(canvasElement);
-    const shown = canvas.getByRole("tab", { name: "Appointments" }).getBoundingClientRect();
+    const tab = canvas.getByRole("tab", { name: "Appointments" });
+    const mark = await settledOver(canvasElement, tab);
+    const shown = tab.getBoundingClientRect();
     const rule = mark.getBoundingClientRect();
-    await expect(covers(rule, shown)).toBe(true);
     await expect(rule.height).toBe(2);
     await expect(Math.abs(rule.bottom - shown.bottom)).toBeLessThanOrEqual(2);
     // The tab's own rule has given way to the indicator.
@@ -164,7 +175,10 @@ export const TheMarkSlidesToTheTabChosenWithThePointer: Story = {
   parameters: { chromatic: { disableSnapshot: true } },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const mark = await indicator(canvasElement);
+    const mark = await settledOver(
+      canvasElement,
+      canvas.getByRole("tab", { name: "Appointments" }),
+    );
     await expect(getComputedStyle(mark).transitionProperty.split(", ")).toEqual([
       "translate",
       "width",
@@ -174,28 +188,33 @@ export const TheMarkSlidesToTheTabChosenWithThePointer: Story = {
 
     const contacts = canvas.getByRole("tab", { name: "Contacts" });
     await userEvent.click(contacts);
-    await waitFor(() =>
-      expect(covers(mark.getBoundingClientRect(), contacts.getBoundingClientRect())).toBe(true),
-    );
+    await settledOver(canvasElement, contacts);
   },
 };
 
 // Chosen from the keyboard, the mark is simply there. The change is what matters, not the trip.
+//
+// "From the keyboard" is the browser's :focus-visible, which it sets only for real key presses.
+// A story's keys are simulated, so after a real click on Storybook's sidebar the browser still
+// thinks the pointer is in use and rightly lets the mark slide. The story therefore puts the tab
+// into keyboard focus itself, which is what a real arrow key does, and checks what Cadence adds:
+// that keyboard focus stops the slide. The arrow keys are tested in ShowsAViewWithTheKeyboard.
 export const TheMarkIsSimplyThereFromTheKeyboard: Story = {
   parameters: { chromatic: { disableSnapshot: true } },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const mark = await indicator(canvasElement);
-    await userEvent.tab();
-    await userEvent.keyboard("{ArrowRight}");
+    const mark = await settledOver(
+      canvasElement,
+      canvas.getByRole("tab", { name: "Appointments" }),
+    );
     const letters = canvas.getByRole("tab", { name: "Letters" });
-    await waitFor(() => expect(letters).toHaveFocus());
+    letters.focus({ focusVisible: true });
+    await expect(letters).toHaveFocus();
+    await expect(letters.matches(":focus-visible")).toBe(true);
     await expect(getComputedStyle(mark).transitionProperty).toBe("none");
 
     await userEvent.keyboard("{Enter}");
-    await waitFor(() =>
-      expect(covers(mark.getBoundingClientRect(), letters.getBoundingClientRect())).toBe(true),
-    );
+    await settledOver(canvasElement, letters);
   },
 };
 
