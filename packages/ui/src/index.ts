@@ -23,6 +23,13 @@ export {
   alertVariants,
 } from "@/components/cadence/alert";
 export type { AlertProps } from "@/components/cadence/alert";
+export {
+  AppShell,
+  AppShellBody,
+  AppShellContent,
+  AppShellHeader,
+  AppShellSidebar,
+} from "@/components/cadence/app-shell";
 export { Badge, badgeVariants } from "@/components/cadence/badge";
 export type { BadgeProps } from "@/components/cadence/badge";
 export { Button, buttonVariants } from "@/components/cadence/button";
