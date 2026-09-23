@@ -20,12 +20,15 @@ export {
   applyObservationSchema,
   checkObservationSchema,
   defineObservationSchema,
+  labelFor,
   scoreRounds,
 } from "./observation-schema";
 export type {
   InterpretationLabel,
   InterpretedReading,
   InterpretedSeries,
+  LabelStyle,
+  Named,
   ObservationAnswer,
   ObservationBand,
   ObservationEscalation,

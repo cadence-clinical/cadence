@@ -70,7 +70,7 @@ export const BandsInWords: Story = {
 export const ChangesInWords: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const [first] = canvas.getAllByText(/^8 breaths\/min|^23 breaths\/min/);
+    const [first] = canvas.getAllByText(/^Respiratory rate, 23 breaths\/min/);
     await expect(first?.textContent).toMatch(/up 3 since 02:15/);
   },
 };
@@ -268,6 +268,34 @@ export const Keyboard: Story = {
       expect(
         canvasElement.ownerDocument.querySelector('[data-slot="tooltip-content"]')?.textContent,
       ).toMatch(/2026/),
+    );
+  },
+};
+
+/** Rows named in full, for a wider display. The default is the short names. */
+export const FullNames: Story = {
+  args: { labelStyle: "full" },
+  play: async ({ canvasElement }) => {
+    await expect(
+      within(canvasElement).getByRole("rowheader", { name: "Respiratory rate breaths/min" }),
+    ).toBeInTheDocument();
+    await expect(canvasElement.querySelector('[data-slot="observation-row-name"]')).toBeNull();
+  },
+};
+
+/** A short name shows its full name on hover, and a screen reader reads the full name. */
+export const ShortNames: Story = {
+  play: async ({ canvasElement }) => {
+    const name = canvasElement.querySelector<HTMLElement>('[data-slot="observation-row-name"]');
+    await expect(name?.textContent).toBe("RRRespiratory rate");
+    await expect(
+      within(canvasElement).getByRole("rowheader", { name: /^Respiratory rate/ }),
+    ).toBeInTheDocument();
+    if (name) await userEvent.hover(name);
+    await waitFor(() =>
+      expect(
+        canvasElement.ownerDocument.querySelector('[data-slot="tooltip-content"]')?.textContent,
+      ).toBe("Respiratory rate"),
     );
   },
 };
