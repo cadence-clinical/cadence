@@ -79,7 +79,7 @@ A rule a tool can enforce is enforced by the tool. This file records the rest, a
 - **Numbers that are compared use `tabular-nums`.** `review`
 - **Size with the density scale.** Controls use `h-control`, `px-control-x` and `text-control`. Content uses `text-body`, `text-title` and `p-container`, so a card and the controls inside it change size together. No fixed `text-sm` or `p-4` in a component. A new scale key is registered in `cn.ts`, or a consumer's override silently loses. `review`
 - **`gap-*`, not `space-*`. `size-*` when width equals height. `cn()` for conditional classes.** `review`
-- **Motion** (the `emil-design-eng` skill has the reasoning): movement animates only `transform` and `opacity`, and colour may transition on a state change. Name the properties (never `transition-all`), keep feedback under 200ms, use none on keyboard-initiated or high-frequency actions, and remove movement under `prefers-reduced-motion`. `review`
+- **Motion** (the `emil-design-eng` skill has the reasoning): movement animates only `transform` and `opacity`, and colour may transition on a state change. Name the properties (never `transition-all`), keep feedback under 200ms, use none on keyboard-initiated or high-frequency actions, and remove movement under `prefers-reduced-motion`. The exception is a part whose size is the change, as shadcn and Base UI animate it: the sidebar collapsing, a drawer, a toast stack and a collapsible opening may animate `width`, `height` or `margin`. Those transitions are removed under `prefers-reduced-motion` too. `review`
 - **Change a colour in `palette.ts`.** If a contrast test fails, fix the token. Do not relax the test. `test`
 - Class order is Prettier's. `lint`
 
