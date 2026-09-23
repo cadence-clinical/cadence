@@ -51,20 +51,28 @@ try {
   const config = path.join(consumer, "components.json");
   await writeFile(config, (await readFile(config, "utf8")).replace("REGISTRY_URL", origin));
 
-  // The theme depends on @cadence-clinical/tokens. Packing the workspace copy tests this commit's
-  // tokens, and works before the package is on npm.
-  await run("pnpm", ["pack", "--pack-destination", consumer], {
-    cwd: path.join(root, "packages/tokens"),
-  });
-  const tarball = (await readdir(consumer)).find((file) => file.endsWith(".tgz"));
-  assert.ok(tarball, "pnpm pack produced no tarball.");
+  // The theme depends on @cadence-clinical/tokens, and a clinical component on
+  // @cadence-clinical/core. Packing the workspace copies tests this commit's packages, and works
+  // before they are on npm.
+  const packed = {};
+  for (const name of ["tokens", "core"]) {
+    const before = new Set(await readdir(consumer));
+    await run("pnpm", ["pack", "--pack-destination", consumer], {
+      cwd: path.join(root, "packages", name),
+    });
+    const tarball = (await readdir(consumer)).find(
+      (file) => file.endsWith(".tgz") && !before.has(file),
+    );
+    assert.ok(tarball, `pnpm pack produced no tarball for ${name}.`);
+    packed[`@cadence-clinical/${name}`] = tarball;
+  }
   // pnpm 11 stops an install until every build script is decided. The Tailwind CLI's watcher
   // ships prebuilt, so its script is not needed.
   await writeFile(
     path.join(consumer, "pnpm-workspace.yaml"),
     [
       "overrides:",
-      `  "@cadence-clinical/tokens": "file:./${tarball}"`,
+      ...Object.entries(packed).map(([name, tarball]) => `  "${name}": "file:./${tarball}"`),
       "allowBuilds:",
       '  "@parcel/watcher": false',
       "",
@@ -101,6 +109,7 @@ try {
   const { dependencies } = await readJson(path.join(consumer, "package.json"));
   for (const name of [
     "@base-ui/react",
+    "@cadence-clinical/core",
     "@cadence-clinical/tokens",
     "class-variance-authority",
     "clsx",
