@@ -1,0 +1,238 @@
+---
+title: Button examples
+description: Every Button variant, size and state, each with its code.
+---
+
+import { ArrowRight, Plus, Printer } from "lucide-react";
+import {
+  Button,
+  Spinner,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+  buttonVariants,
+} from "@cadence-clinical/ui";
+
+## Primary
+
+Use a primary button for the main action in a view. Use one per view.
+
+<ComponentPreview>
+  <Button>Save observation</Button>
+</ComponentPreview>
+
+```tsx
+import { Button } from "@cadence-clinical/ui";
+
+<Button>Save observation</Button>;
+```
+
+## Secondary
+
+Use a secondary button for an action of the same weight as those beside it.
+
+<ComponentPreview>
+  <Button variant="secondary">Add note</Button>
+</ComponentPreview>
+
+```tsx
+<Button variant="secondary">Add note</Button>
+```
+
+## Outline
+
+Use an outline button for a lower-emphasis action that still needs a visible edge, such as "Cancel" beside a primary button.
+
+<ComponentPreview>
+  <Button variant="outline">Cancel</Button>
+  <Button>Save observation</Button>
+</ComponentPreview>
+
+```tsx
+<Button variant="outline">Cancel</Button>
+<Button>Save observation</Button>
+```
+
+## Ghost
+
+Use a ghost button where there are several actions close together, such as a toolbar or a table row.
+
+<ComponentPreview>
+  <Button variant="ghost">Edit</Button>
+  <Button variant="ghost">Duplicate</Button>
+  <Button variant="ghost">Archive</Button>
+</ComponentPreview>
+
+```tsx
+<Button variant="ghost">Edit</Button>
+<Button variant="ghost">Duplicate</Button>
+<Button variant="ghost">Archive</Button>
+```
+
+## Destructive
+
+Use a destructive button for an action that stops, removes or cannot be undone. Confirm it in an [Alert dialog](/docs/components/alert-dialog) first.
+
+<ComponentPreview>
+  <Button variant="destructive">Cease medication</Button>
+</ComponentPreview>
+
+```tsx
+<Button variant="destructive">Cease medication</Button>
+```
+
+## Link
+
+Use a link button for an action in running text. It looks like a link and behaves like a button. To go to another page, use a real link.
+
+<ComponentPreview>
+  <Button variant="link">Show earlier results</Button>
+</ComponentPreview>
+
+```tsx
+<Button variant="link">Show earlier results</Button>
+```
+
+## Sizes
+
+`sm`, `md` and `lg` are relative to the page's [density](/docs/theming#density). Leave the size at `md` unless the place calls for another.
+
+<ComponentPreview>
+  <Button size="sm">Small</Button>
+  <Button size="md">Medium</Button>
+  <Button size="lg">Large</Button>
+</ComponentPreview>
+
+```tsx
+<Button size="sm">Small</Button>
+<Button size="md">Medium</Button>
+<Button size="lg">Large</Button>
+```
+
+## With an icon
+
+Put an icon before the label to show what the action does, or after it to show where it leads. Say which side it is on with `data-icon`.
+
+<ComponentPreview>
+  <Button>
+    <Plus data-icon="inline-start" />
+    Add observation
+  </Button>
+  <Button variant="outline">
+    Next chart
+    <ArrowRight data-icon="inline-end" />
+  </Button>
+</ComponentPreview>
+
+```tsx
+import { Button } from "@cadence-clinical/ui";
+import { ArrowRight, Plus } from "lucide-react";
+
+<Button>
+  <Plus data-icon="inline-start" />
+  Add observation
+</Button>
+
+<Button variant="outline">
+  Next chart
+  <ArrowRight data-icon="inline-end" />
+</Button>
+```
+
+## Icon only
+
+Show only the icon for a well-known action where space is short. Keep the label as the button's text, and show it in a [Tooltip](/docs/components/tooltip).
+
+<ComponentPreview>
+  <Tooltip>
+    <TooltipTrigger
+      render={
+        <Button variant="outline" iconOnly>
+          <Printer />
+          Print chart
+        </Button>
+      }
+    />
+    <TooltipContent>Print chart</TooltipContent>
+  </Tooltip>
+</ComponentPreview>
+
+```tsx
+import { Button, Tooltip, TooltipContent, TooltipTrigger } from "@cadence-clinical/ui";
+import { Printer } from "lucide-react";
+
+<Tooltip>
+  <TooltipTrigger
+    render={
+      <Button variant="outline" iconOnly>
+        <Printer />
+        Print chart
+      </Button>
+    }
+  />
+  <TooltipContent>Print chart</TooltipContent>
+</Tooltip>;
+```
+
+## Saving
+
+While an action is under way, disable the button so it cannot be pressed twice, show a [Spinner](/docs/components/spinner) and say what is happening. Keep it focusable, so focus is not lost. In a [Form](/docs/components/form), `FormSubmit` does all of this for you.
+
+<ComponentPreview>
+  <Button disabled focusableWhenDisabled>
+    <Spinner aria-hidden data-icon="inline-start" />
+    Saving
+  </Button>
+</ComponentPreview>
+
+```tsx
+import { Button, Spinner } from "@cadence-clinical/ui";
+
+<Button disabled focusableWhenDisabled>
+  <Spinner aria-hidden data-icon="inline-start" />
+  Saving
+</Button>;
+```
+
+## Disabled
+
+Avoid a disabled button where you can: it does not say why. If you use one, say why in text beside it.
+
+<ComponentPreview>
+  <div className="grid justify-items-center gap-2">
+    <Button disabled aria-describedby="sign-reason">
+      Sign discharge summary
+    </Button>
+    <p id="sign-reason" className="text-control text-muted-foreground">
+      Only the treating team can sign this summary.
+    </p>
+  </div>
+</ComponentPreview>
+
+```tsx
+<Button disabled aria-describedby="sign-reason">
+  Sign discharge summary
+</Button>
+<p id="sign-reason" className="text-control text-muted-foreground">
+  Only the treating team can sign this summary.
+</p>
+```
+
+## A link that looks like a button
+
+A link that goes to another page is a link, even when it looks like a button. Give it the button's style with `buttonVariants`.
+
+<ComponentPreview>
+  <a href="#a-link-that-looks-like-a-button" className={buttonVariants({ variant: "outline" })}>
+    View all results
+  </a>
+</ComponentPreview>
+
+```tsx
+import { buttonVariants } from "@cadence-clinical/ui";
+import Link from "next/link";
+
+<Link href="/results" className={buttonVariants({ variant: "outline" })}>
+  View all results
+</Link>;
+```

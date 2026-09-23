@@ -1,0 +1,66 @@
+---
+title: Badge
+description: Labels an item with a short status, category or count, such as "Draft" or "Final".
+---
+
+import { Badge } from "@cadence-clinical/ui";
+
+<GradeBadge component="badge" />
+
+<ComponentPreview>
+  <Badge>Draft</Badge>
+  <Badge variant="outline">Archived</Badge>
+  <Badge variant="success">Final</Badge>
+  <Badge variant="critical">Cancelled</Badge>
+</ComponentPreview>
+
+## Use it for
+
+- The status of an item in a list, a table or a card, such as "Draft", "Final" or "Cancelled".
+- A category an item belongs to, such as "Inpatient".
+- A count beside a heading, such as the number of new results.
+
+## Do not use it for
+
+- **A message someone needs to read or act on.** Use an [Alert](/docs/components/alert), which has room for a sentence and carries the same four statuses.
+- **Telling someone that something has happened**, such as a record being saved. Use a [Toast](/docs/components/toast).
+- **An action.** Use a [Button](/docs/components/button). A badge can be a link, but it never does anything on the page.
+- **Working out a status.** A badge shows a status it is given. Whether a result is critical is decided outside Cadence, as [Clinical safety](/docs/clinical-safety) explains.
+
+## Choose a variant
+
+| Variant                                  | Use it for                                                                                                              |
+| ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `secondary`                              | The default. A neutral label or a count.                                                                                |
+| `outline`                                | A label with less weight, such as "Archived".                                                                           |
+| `primary`                                | A label that needs to stand out and is not a status, such as "New".                                                     |
+| `critical`, `warning`, `success`, `info` | A status the item has been given. What counts as each status is decided by the system that supplies it, not by Cadence. |
+
+[Examples](/docs/components/badge/examples) shows each variant.
+
+## Say the status in words
+
+Some people cannot tell the status colours apart, and a screen reader does not announce a colour. So the text of a status badge must say what the status is. "Cancelled" in a critical badge is enough. A red badge that holds only a count is not: add the word, or use an icon with a text alternative.
+
+## Use the status variants only for a status
+
+Use `critical`, `warning`, `success` and `info` only when the item has that status. For a category or a count, use `secondary`, `outline` or `primary`. The status colours are the same in every theme, and they keep their meaning only if they are used for nothing else.
+
+## Keep it short, and never cut it short
+
+A badge holds a word or two. If the text needs a sentence, use an [Alert](/docs/components/alert).
+
+A badge can hold clinical text, such as the name of an allergy. It wraps rather than clipping or cutting it short, because a medicine name or a dose that is cut short can be misread. Do not truncate a badge's text with CSS.
+
+## Write the text
+
+- **Use a noun or an adjective**, not a verb: "Cancelled", not "Cancel".
+- **Use sentence case**: "Awaiting review", not "Awaiting Review" or "AWAITING REVIEW".
+- **Use the same word for the same status everywhere.** If a result is "Final" in one list, it is not "Complete" in another.
+- **Say what a count counts** when it is not clear from where the badge sits: "3 new", not "3".
+
+## Accessibility
+
+- **Say the status in words**, not only with colour.
+- **Make a badge that is a link make sense on its own**, such as "3 new results", because a screen reader can list the links on a page out of context.
+- **Announce a status that changes while someone is looking at it.** A badge does not announce itself when its text changes.

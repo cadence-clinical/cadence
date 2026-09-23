@@ -34,12 +34,12 @@ A rule a tool can enforce is enforced by the tool. This file records the rest, a
 - **`interface` for object shapes, `type` for unions, mapped types and function types.** `lint`
 - **Discriminated unions over optional fields and boolean flags.** Make invalid states unrepresentable. Exhaustive `switch` with a `never` check. `lint` (the switch) and `review`
 - **No `enum`, no `namespace`, no parameter properties.** Use an `as const` object and derive the union from it. These features are not erasable, so they break type-stripping tools. `tsc` (`erasableSyntaxOnly`)
-- **Named exports only.** Default exports only where a framework requires one: Next.js routes, Storybook meta and config files. `lint`
-- **Explicit return types on exported functions.** Inference inside function bodies. React components are exempt. `lint`
+- **Named exports only.** Default exports only where a framework requires one: Next.js routes, Storybook meta and config files. `lint` in packages. The website turns the rule off, because Next.js loads its routes by default export, so there it is `review`.
+- **Explicit return types on exported functions.** Inference inside function bodies. React components are exempt. `lint` in `.ts` files, `review` in `.tsx`.
 - **`import type` for types**, inline with value imports. `lint`
 - **`readonly` on inputs.** Never mutate an argument. `review`
 - **Imports inside a component package use consumer-shaped aliases**: `@/lib/cn`, `@/components/cadence/button`. They are mapped in the package's tsconfig `paths` and are exactly what the import will be once the registry installs the file in someone's project. No relative imports between source files ([decision 0011](docs/decisions/0011-registry.md)). `lint`
-- **The package entry is the only barrel.** `src/index.ts` lists every public export by name. Anything it does not export is private. `review`
+- **The package entry is the only barrel.** `src/index.ts` lists every public export by name. Anything it does not export is private. A component with an optional peer dependency has its own entry point instead (`@cadence-clinical/ui/data-table`), so a consumer who does not use it never installs the peer ([decision 0014](docs/decisions/0014-headless-libraries.md)). `review`
 
 ## 3. Functions over classes
 
@@ -59,6 +59,7 @@ A rule a tool can enforce is enforced by the tool. This file records the rest, a
 - **`data-slot` on every part**, named for the part. `review`
 - **Composition over configuration.** Compound parts (`Card`, `CardHeader`) before a growing list of props. Polymorphism through Base UI's `render` prop, never `as` or `asChild`. `review`
 - **Variants with `cva`, named for purpose, not appearance**: `destructive`, not `red`. `review`
+- **shadcn's names win.** Where shadcn names a part, prop or variant, Cadence keeps its name, even when this file would choose another (`ghost`, `outline`, `showCloseButton`). Code written against shadcn's documentation has to work unchanged. The rules here apply to what Cadence adds. `review`
 - **A union prop, not a set of booleans**, for states that exclude each other. `review`
 - **Controlled and uncontrolled both work**, following Base UI: `value`, `defaultValue`, `onValueChange`. `test`
 - **No effect for derived state.** Compute it during render. A DOM change that a test or a snapshot depends on goes in a layout effect, because passive effects are flushed late outside Vitest. `review`
@@ -78,7 +79,7 @@ A rule a tool can enforce is enforced by the tool. This file records the rest, a
 - **Numbers that are compared use `tabular-nums`.** `review`
 - **Size with the density scale.** Controls use `h-control`, `px-control-x` and `text-control`. Content uses `text-body`, `text-title` and `p-container`, so a card and the controls inside it change size together. No fixed `text-sm` or `p-4` in a component. A new scale key is registered in `cn.ts`, or a consumer's override silently loses. `review`
 - **`gap-*`, not `space-*`. `size-*` when width equals height. `cn()` for conditional classes.** `review`
-- **Motion** (the `emil-design-eng` skill has the reasoning): movement animates only `transform` and `opacity`, and colour may transition on a state change. Name the properties (never `transition-all`), keep feedback under 200ms, use none on keyboard-initiated or high-frequency actions, and remove movement under `prefers-reduced-motion`. `review`
+- **Motion** (the `emil-design-eng` skill has the reasoning): movement animates only `transform` and `opacity`, and colour may transition on a state change. Name the properties (never `transition-all`), keep feedback under 200ms, use none on keyboard-initiated or high-frequency actions, and remove movement under `prefers-reduced-motion`. The exception is a part whose size is the change, as shadcn and Base UI animate it: the sidebar collapsing, a drawer, a toast stack and a collapsible opening may animate `width`, `height` or `margin`. Those transitions are removed under `prefers-reduced-motion` too. `review`
 - **Change a colour in `palette.ts`.** If a contrast test fails, fix the token. Do not relax the test. `test`
 - Class order is Prettier's. `lint`
 
@@ -104,7 +105,7 @@ A rule a tool can enforce is enforced by the tool. This file records the rest, a
 
 ## 8. Testing
 
-- **Unit tests (Vitest) for pure code**: `core`, `tokens`, `fhir`, Regions. Table-driven with `it.each`. `test`
+- **Unit tests (Vitest) for pure code**: `core`, `tokens`, `fhir`, Regions. `test`. Table-driven with `it.each`. `review`
 - **Stories are the component tests.** Every story runs in Chromium and WebKit. A play function asserts behaviour the way a user meets it: query by role and name, act with `userEvent`. `test`
 - **Test behaviour, not implementation.** No assertions on class names or internal state, and no markup snapshots. Appearance belongs to Chromatic. `review`
 - **Type tests where a type carries a guarantee**: the clinical view models in `core`, generic helpers such as `defineRegion`, and props that must reject invalid combinations. Write them in `*.test-d.ts` with Vitest's `expectTypeOf`, mostly as negative tests with `@ts-expect-error`. Plain interfaces do not need them. `test`
@@ -121,7 +122,7 @@ A rule a tool can enforce is enforced by the tool. This file records the rest, a
 - **Prettier formats. ESLint finds bugs.** No stylistic lint rules. `lint`
 - **A rule is an error or it is off.** No warnings, and lint runs with `--max-warnings 0`. `lint`
 - **No `eslint-disable` or `@ts-expect-error` without a reason on the same line.** Fix the code, not the rule. `lint`
-- **Linting is type-aware** (`strictTypeChecked`) in every package and app: floating promises, unsafe `any` flow, exhaustive switches. Config files are the exception, because package tsconfigs leave Node types out. `lint`
+- **Linting is type-aware** (`strictTypeChecked`) in every package and app: floating promises, unsafe `any` flow, exhaustive switches. Config files and plain JavaScript scripts are the exception, because package tsconfigs leave Node types out. `lint`
 - **Package boundaries are lint rules**, in `packages/config/eslint/boundaries.js`. A new package gets its boundary there first. `lint`
 - **Git hooks only format and check the commit message.** CI is the gate. `ci`
 
@@ -130,7 +131,7 @@ A rule a tool can enforce is enforced by the tool. This file records the rest, a
 - **A new runtime dependency in a published package is justified in the pull request**: size, maintenance, licence and what the platform already offers. MIT, Apache-2.0, BSD and ISC only, and the SIL Open Font License for a font. `review`
 - **React is a peer dependency.** Shared versions live in the pnpm catalog. `review`
 - **Pins are deliberate and documented** in `pnpm-workspace.yaml`. Dependabot is told about each one. `review`
-- **pnpm's minimum release age stays on, at seven days.** Widen a version range before adding an exclusion. Install scripts run only for allow-listed packages. `lint` (pnpm refuses the install)
+- **pnpm's minimum release age stays on, at seven days.** Widen a version range before adding an exclusion. Install scripts run only for allow-listed packages. `ci` (pnpm refuses the install)
 - **A third-party action's inputs come from its `action.yml`**, never from memory, and actions are pinned by commit. `review`
 
 ## 11. Naming and files
@@ -145,6 +146,43 @@ A rule a tool can enforce is enforced by the tool. This file records the rest, a
 - **Comments say why.** The code says what. No commented-out code. A `TODO` links an issue. `review`
 - **Every exported symbol has a JSDoc sentence**, plus what a type cannot say: units, ranges, what it throws. `lint` in packages. The website is an application with no public API, so it is exempt.
 - Documentation follows the `technical-writing` skill, and site copy follows `human-writing`. `review`
+
+## 13. Voice
+
+How Cadence sounds wherever it writes: the docs, READMEs, changesets, JSDoc and the default text in components. It is adapted from the NSW Government's [Finding a tone of voice](https://www.digital.nsw.gov.au/delivery/digital-service-toolkit/resources-and-guides/writing-content/content-101/finding-a-tone-of). The voice is the same everywhere. The tone changes with what the reader is doing. `review`
+
+**The voice** has four traits:
+
+| Cadence is    | So it                                                                                                  | It is not              |
+| ------------- | ------------------------------------------------------------------------------------------------------ | ---------------------- |
+| Authoritative | States what a component does, checked against its source, a test or a cited publication.               | Hedged, or from memory |
+| Transparent   | Says what a component does not do, what its grade is, and what is not built yet.                       | Selling                |
+| Inclusive     | Uses plain words, `you` for the reader and the active voice. Defines a term the first time it is used. | Jargon or in-jokes     |
+| Supportive    | Helps the reader choose. When it says do not, it names what to do instead, and why.                    | Cheerful or chatty     |
+
+**The tone** follows the page:
+
+| Tone      | Where                                                                                 | How it reads                                                                                                                                                                                      |
+| --------- | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Guidance  | A component's Guidance and Examples tabs, and the principle pages                     | The decision first. Short sentences, averaging under 20 words. Imperative verbs: "Use one primary button in a view", not "Consider using one". A reason for each rule the reader might not share. |
+| Reference | A component's Code tab, props tables, JSDoc, READMEs, changesets and decision records | One fact to a sentence, with exact names. The component is the subject: "Button accepts every Base UI Button prop."                                                                               |
+| Site      | The landing page and announcements. The `human-writing` skill governs it              | Warmer and shorter, and still exact                                                                                                                                                               |
+
+**In every tone:**
+
+- **No contractions.** Write "do not", not "don't". A full form is harder to misread, for someone reading in a second language and for a machine translation.
+- **No humour, wordplay or exclamation marks.** People read clinical software at work, often under pressure.
+- **Spell out an abbreviation the first time a page uses it**, unless the reader would never expand it: HTML, CSS, API.
+- **Sentence case** for headings, labels and button text.
+- **"Cadence", not "we"**, except for a decision the maintainers made.
+
+**For agents.** An agent often reads one section, or only the index at `/llms.txt`, and decides from it. So:
+
+- **A component's `description` is one sentence that says what it is for.** The index lists it, and an agent picks a component from it.
+- **A Guidance page opens with "Use it for" and "Do not use it for".** Each "do not" names the component to use instead and links to it.
+- **Each section stands alone.** Name the component rather than writing "it" at the start of a section, and state a critical fact where it applies, not only on another page.
+
+The `technical-writing` skill has the structure of a component's pages.
 
 ## References
 

@@ -17,6 +17,9 @@ export default defineConfig({
   use: {
     baseURL: deployedUrl ?? `http://localhost:${port}`,
     trace: "on-first-retry",
+    // The live examples format dates, so every run reads them in the same zone and language.
+    locale: "en-AU",
+    timezoneId: "Australia/Sydney",
   },
   projects: [
     { name: "desktop", use: { ...devices["Desktop Chrome"] } },

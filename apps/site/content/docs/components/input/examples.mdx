@@ -1,0 +1,133 @@
+---
+title: Input examples
+description: Input with a label, a description and an error, in each state and beside a button, each with its code.
+---
+
+import {
+  Button,
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldLabel,
+  Input,
+} from "@cadence-clinical/ui";
+
+## With a label
+
+Put the input in a [Field](/docs/components/field) with a `FieldLabel`. The Field connects them, so you set no `id` or `htmlFor`.
+
+<ComponentPreview>
+  <Field className="w-full max-w-64">
+    <FieldLabel>Family name</FieldLabel>
+    <Input />
+  </Field>
+</ComponentPreview>
+
+```tsx
+import { Field, FieldLabel, Input } from "@cadence-clinical/ui";
+
+<Field>
+  <FieldLabel>Family name</FieldLabel>
+  <Input />
+</Field>;
+```
+
+## With a description
+
+Put help that people need before they type in a `FieldDescription`, not in a placeholder.
+
+<ComponentPreview>
+  <Field className="w-full max-w-64">
+    <FieldLabel>Referral number</FieldLabel>
+    <Input className="max-w-40" />
+    <FieldDescription>As shown on the referral letter.</FieldDescription>
+  </Field>
+</ComponentPreview>
+
+```tsx
+import { Field, FieldDescription, FieldLabel, Input } from "@cadence-clinical/ui";
+
+<Field>
+  <FieldLabel>Referral number</FieldLabel>
+  <Input className="max-w-40" />
+  <FieldDescription>As shown on the referral letter.</FieldDescription>
+</Field>;
+```
+
+## With an error
+
+Mark the Field `invalid` and say what to do in a `FieldError`. The input takes a heavier border in the critical colour, and a screen reader announces the message.
+
+<ComponentPreview>
+  <Field invalid className="w-full max-w-64">
+    <FieldLabel>Weight (kg)</FieldLabel>
+    <Input defaultValue="seventy" className="max-w-32" />
+    <FieldError>Enter a weight in kilograms, using numbers.</FieldError>
+  </Field>
+</ComponentPreview>
+
+```tsx
+import { Field, FieldError, FieldLabel, Input } from "@cadence-clinical/ui";
+
+<Field invalid>
+  <FieldLabel>Weight (kg)</FieldLabel>
+  <Input defaultValue="seventy" className="max-w-32" />
+  <FieldError>Enter a weight in kilograms, using numbers.</FieldError>
+</Field>;
+```
+
+## Read-only
+
+Use `readOnly` for a value people need to read but cannot change here. It keeps full contrast.
+
+<ComponentPreview>
+  <Field className="w-full max-w-64">
+    <FieldLabel>Record number</FieldLabel>
+    <Input readOnly defaultValue="TEST-0001" />
+  </Field>
+</ComponentPreview>
+
+```tsx
+<Field>
+  <FieldLabel>Record number</FieldLabel>
+  <Input readOnly defaultValue="TEST-0001" />
+</Field>
+```
+
+## Disabled
+
+Use `disabled` only for an input that does not apply. Its value is faded.
+
+<ComponentPreview>
+  <Field disabled className="w-full max-w-64">
+    <FieldLabel>Interpreter language</FieldLabel>
+    <Input />
+  </Field>
+</ComponentPreview>
+
+```tsx
+<Field disabled>
+  <FieldLabel>Interpreter language</FieldLabel>
+  <Input />
+</Field>
+```
+
+## Beside a button
+
+An input is always as high as a Button beside it, at every density.
+
+<ComponentPreview>
+  <div className="flex w-full max-w-sm gap-2">
+    <Input aria-label="Search records" type="search" />
+    <Button variant="outline">Search</Button>
+  </div>
+</ComponentPreview>
+
+```tsx
+import { Button, Input } from "@cadence-clinical/ui";
+
+<div className="flex gap-2">
+  <Input aria-label="Search records" type="search" />
+  <Button variant="outline">Search</Button>
+</div>;
+```

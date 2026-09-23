@@ -1,0 +1,88 @@
+---
+title: Button
+description: Starts an action on the current page, such as saving a record or opening a dialog.
+---
+
+<GradeBadge component="button" />
+
+<ComponentPreview>
+  <Button variant="outline">Cancel</Button>
+  <Button>Save observation</Button>
+</ComponentPreview>
+
+## Use it for
+
+- Saving, sending or submitting what is on the page.
+- Opening a [Dialog](/docs/components/dialog), a [Sheet](/docs/components/sheet) or a menu.
+- Starting or stopping a task, such as ceasing a medication.
+
+## Do not use it for
+
+- **Going to another page.** Use a link. A screen reader announces a link and a button differently, and people expect a link to open a new page. If a link has to look like a button, give it the button's style, as the [Code](/docs/components/button/code#style-a-link-as-a-button) tab shows.
+- **Turning a setting on or off.** Use a [Switch](/docs/components/switch).
+- **An option that stays pressed**, such as bold text. Use a [Toggle](/docs/components/toggle).
+- **Choosing between views of the same content.** Use [Tabs](/docs/components/tabs).
+- **A set of related actions that would crowd the view**, such as the actions on a table row. Put them in a [Dropdown menu](/docs/components/dropdown-menu).
+
+## Choose a variant
+
+| Variant       | Use it for                                                                           |
+| ------------- | ------------------------------------------------------------------------------------ |
+| `primary`     | The main action in a view, such as "Save observation".                               |
+| `secondary`   | An action of the same weight as those beside it.                                     |
+| `outline`     | A lower-emphasis action that still needs a visible edge, such as "Cancel".           |
+| `ghost`       | Actions in a toolbar, a table row or a card, where there are several close together. |
+| `destructive` | An action that stops, removes or cannot be undone, such as "Cease medication".       |
+| `link`        | An action in running text.                                                           |
+
+[Examples](/docs/components/button/examples) shows each variant, size and state.
+
+## Use one primary button in a view
+
+The primary button marks the action most people take next. Two primary buttons make people stop and choose between them. Not every view needs one: a list of records may have no main action.
+
+## Ask before a destructive action
+
+Use the `destructive` variant for an action that stops, removes or cannot be undone. Its solid critical fill is hard to overlook, and its label says what it does, so it never relies on colour alone.
+
+Confirm the action in an [Alert dialog](/docs/components/alert-dialog) before it happens. Name the action again on the button that confirms it, so the choice is clear without reading the question: "Cease medication", not "Yes".
+
+## Avoid disabling a button
+
+A disabled button does not say why it is disabled. Its faded text is hard to read, and a keyboard or screen reader user cannot reach it to find out.
+
+Leave the button enabled instead, and when it is pressed, say what is missing. A [Form](/docs/components/form) does this: it lists what needs to be fixed and moves focus to that list. Do not explain a disabled button in a [Tooltip](/docs/components/tooltip), because some people cannot open one.
+
+The exception is an action that is under way. While a record saves, disable its button so it cannot be sent twice, and change the label to say what is happening, such as "Saving". Form's submit button does this, and it stays focusable, so focus is not lost.
+
+## Place the buttons where the reader finishes
+
+In a [Dialog](/docs/components/dialog) or an [Alert dialog](/docs/components/alert-dialog), put the cancel button first and the main action last. The footer sets them at the end of the row, so the main action is where the eye finishes. On a phone, the footer stacks them with the main action on top.
+
+On a full page, such as a [Form](/docs/components/form), put the buttons at the start of the row under the last field, with the main action first. People read down the left edge of a long form, and the main action is where they arrive.
+
+## Let the density set the size
+
+Leave `size` at its default. The page's [density](/docs/theming#density) sets a button's real size: 32px high on a desktop, 40px on a touch screen and 44px when the density is comfortable. Do not make a button larger to make it easier to tap. The comfortable density does that for every control.
+
+Use `sm` for a button in a crowded place, such as a table row. Use `lg` sparingly, for a single action that starts a task.
+
+## Write the label
+
+- **Start with a verb, and name what it acts on**: "Save observation", "Add allergy", "Cease medication".
+- **Do not write "OK", "Yes", "Confirm" or "Submit".** They make people read the question again to know what happens.
+- **Use sentence case**: "Print chart", not "Print Chart" or "PRINT CHART".
+- **Keep it short.** Leave out "a" and "the", and end without a full stop: "Add observation", not "Add an observation."
+- **Use the same words through a task.** If "Cease medication" opens a dialog, the button that finishes it also says "Cease medication".
+
+## Show only an icon when space is short
+
+A button can show only its icon, for a well-known action in a toolbar, such as printing or closing. It still has a text label: the label is hidden from sight and read by a screen reader. Show the same label in a [Tooltip](/docs/components/tooltip), so people who can see the icon can also check what it does.
+
+Use a label and an icon together when there is room, because not everyone reads an icon the same way.
+
+## Accessibility
+
+- **Give every button a text label**, including a button that shows only its icon.
+- **Use a button for an action and a link to go somewhere.** Assistive technology announces them differently, and keyboard users expect Space to press a button.
+- **Say why an action is not available** in text on the page, not only by disabling the button.

@@ -1,0 +1,104 @@
+---
+title: Badge examples
+description: Every Badge variant, a count, a link and long content, each with its code.
+---
+
+import { Badge } from "@cadence-clinical/ui";
+
+## Secondary
+
+The default. Use it for a neutral label or a count.
+
+<ComponentPreview>
+  <Badge>Draft</Badge>
+</ComponentPreview>
+
+```tsx
+import { Badge } from "@cadence-clinical/ui";
+
+<Badge>Draft</Badge>;
+```
+
+## Outline
+
+Use an outline badge for a label with less weight.
+
+<ComponentPreview>
+  <Badge variant="outline">Archived</Badge>
+</ComponentPreview>
+
+```tsx
+<Badge variant="outline">Archived</Badge>
+```
+
+## Primary
+
+Use a primary badge for a label that needs to stand out and is not a status.
+
+<ComponentPreview>
+  <Badge variant="primary">New</Badge>
+</ComponentPreview>
+
+```tsx
+<Badge variant="primary">New</Badge>
+```
+
+## Statuses
+
+Use a status variant for a status the item has been given. The text says what the status is, so the badge does not rely on colour.
+
+<ComponentPreview>
+  <Badge variant="critical">Cancelled</Badge>
+  <Badge variant="warning">Overdue</Badge>
+  <Badge variant="success">Final</Badge>
+  <Badge variant="info">Awaiting review</Badge>
+</ComponentPreview>
+
+```tsx
+<Badge variant="critical">Cancelled</Badge>
+<Badge variant="warning">Overdue</Badge>
+<Badge variant="success">Final</Badge>
+<Badge variant="info">Awaiting review</Badge>
+```
+
+## A count
+
+Say what the count counts, unless it is clear from where the badge sits.
+
+<ComponentPreview>
+  <Badge>3 new</Badge>
+</ComponentPreview>
+
+```tsx
+<Badge>3 new</Badge>
+```
+
+## As a link
+
+Pass a link to `render` to make the badge a link. Write text that makes sense on its own.
+
+<ComponentPreview>
+  <Badge variant="outline" render={<a href="#as-a-link" />}>
+    3 new results
+  </Badge>
+</ComponentPreview>
+
+```tsx
+<Badge variant="outline" render={<a href="/results" />}>
+  3 new results
+</Badge>
+```
+
+## Long content
+
+A badge that holds clinical text wraps. It is never clipped or cut short.
+
+<ComponentPreview>
+  <div className="w-40">
+    <Badge variant="warning">Allergy: amoxicillin and clavulanic acid</Badge>
+  </div>
+</ComponentPreview>
+
+```tsx
+<Badge variant="warning">Allergy: amoxicillin and clavulanic acid</Badge>
+```

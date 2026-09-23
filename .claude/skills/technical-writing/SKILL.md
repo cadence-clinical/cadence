@@ -15,6 +15,7 @@ Write accurate, task-focused documentation for Cadence. Treat developers, clinic
 - For formatting and terminology, read [references/style-rules.md](references/style-rules.md).
 - For wording, voice, or AI-pattern concerns, read [references/prose-quality.md](references/prose-quality.md).
 - For page structure, read [references/content-types.md](references/content-types.md) when the content type is unclear or changing.
+- For a component's pages, read [references/component-pages.md](references/component-pages.md).
 
 ## Verify before writing
 
@@ -40,8 +41,9 @@ Clinical statements have a stricter rule. A threshold, reference interval, unit,
 - Use exact public names such as `createAccent`, `data-density` and `critical-border`.
 - Distinguish the terms. An accent is brand colour and drives the `primary` token; shadcn's `accent` token is a hover surface. A Region is a contract in `core`; a Region package implements it. A grade belongs to a version of a component.
 - Treat `apps/site/content/docs/**` as published documentation. Update `content/docs/meta.json` when navigation changes.
-- Use MDX components only when nearby pages establish the convention: `Callout`, `Cards`, `ComponentPreview`, `GradeBadge`.
-- Every component page opens with `<GradeBadge>` and a live `<ComponentPreview>`.
+- Use MDX components only when nearby pages establish the convention: `Callout`, `Cards`, `ComponentPreview`, `GradeBadge`, `ComponentChangelog`.
+- A component's documentation is four tabs: Guidance, Examples, Code and Changelog. Read [references/component-pages.md](references/component-pages.md) before writing or moving one. Guidance opens with `<GradeBadge>`, a live `<ComponentPreview>`, and "Use it for" and "Do not use it for".
+- Follow the voice and tone in section 13 of `CONVENTIONS.md`.
 - Preserve published routes and heading anchors when possible.
 - Prefer TypeScript examples. Include imports and language labels, and verify examples against current exports.
 - Link to related pages with descriptive text. Include the critical fact locally because retrieved sections may be read without their links.

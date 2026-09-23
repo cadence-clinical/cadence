@@ -1,0 +1,64 @@
+---
+title: Input
+description: Takes one line of typed text, such as a name, a reference number or an exact value.
+---
+
+import { Field, FieldLabel, Input } from "@cadence-clinical/ui";
+
+<GradeBadge component="input" />
+
+<ComponentPreview>
+  <Field className="w-full max-w-64">
+    <FieldLabel>Family name</FieldLabel>
+    <Input />
+  </Field>
+</ComponentPreview>
+
+## Use it for
+
+- One line of free text, such as a name, a reference number or a search term.
+- A value that has to be exact, such as a weight. Typing it is how it stays exact.
+
+## Do not use it for
+
+- **More than one line**, such as a note. Use a [Textarea](/docs/components/textarea).
+- **A choice from a known list.** Use a [Select](/docs/components/select), or a [Radio group](/docs/components/radio-group) when there are only a few choices and all of them should be visible.
+- **A date.** Use a [Date picker](/docs/components/date-picker), which reads a typed date in the locale's order.
+- **Yes or no.** Use a [Checkbox](/docs/components/checkbox), or a [Switch](/docs/components/switch) for a setting that applies at once.
+- **A setting chosen from a range**, such as a zoom level. Use a [Slider](/docs/components/slider). Never use a slider for a clinical value.
+
+## Put every input in a Field
+
+A [Field](/docs/components/field) gives the input a label, a description and an error message, and connects them to it, so a screen reader reads them with the input. Use an Input on its own only where a visible label would repeat something already on screen, such as a search box beside a search button, and then give it an `aria-label`.
+
+## Label the input, not the placeholder
+
+A label stays when someone starts typing. Placeholder text disappears, so people forget what the input was for, and its pale text is hard to read. Put the question in the label and any help in the field's description. Do not use a placeholder for either.
+
+## Size the input to the answer
+
+An input fills the width it is given. When the answer has a known length, such as a postcode or a Medicare number, make the input about that wide. Its width tells people how much to type.
+
+## Show a value that cannot be changed as read-only
+
+Use `readOnly` for a value people need to read but cannot change here. It keeps full contrast. Use `disabled` only for an input that does not apply at all: its value is faded, and some people will not be able to read it.
+
+## Say what is wrong, and how to fix it
+
+When a value is wrong, the field shows an error in text beside the input, and a heavier border in the critical colour. The border alone is not enough, because not everyone can see it.
+
+Write the error as what to do: "Enter a weight in kilograms", not "Invalid weight". Show it after the person leaves the input or tries to send the form, not while they are typing.
+
+## Write the label
+
+- **Use a short noun phrase**: "Family name", not "Please enter the patient's family name".
+- **Use sentence case, with no colon at the end.**
+- **Name the unit** when the input takes a quantity: "Weight (kg)".
+- **Put examples and rules in the description**, not the label: "As shown on the referral".
+
+## Accessibility
+
+- **Give every input a label**, through a Field or an `aria-label`. A placeholder is not a label.
+- **Say what is wrong in text**, not only with the border colour.
+- **Use `readOnly`, not `disabled`, for a value people need to read.**
+- **Set `autoComplete` for details about the person using the app**, such as their own name or email address, so the browser can fill them in.

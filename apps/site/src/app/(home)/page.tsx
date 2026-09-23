@@ -2,13 +2,13 @@ import { buttonVariants } from "@cadence-clinical/ui";
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { gitConfig, siteDescription } from "@/lib/shared";
+import { GIT_CONFIG, SITE_DESCRIPTION } from "@/lib/shared";
 
 export const metadata: Metadata = {
-  description: siteDescription,
+  description: SITE_DESCRIPTION,
 };
 
-const principles = [
+const PRINCIPLES = [
   {
     title: "Built for the ward, not the dashboard",
     body: "Clinical screens are dense and read at speed. Compact by default, 44px touch targets when you need them, and numbers that line up so a trend is visible at a glance.",
@@ -48,7 +48,7 @@ export default function HomePage() {
             Read the docs
           </Link>
           <a
-            href={`https://github.com/${gitConfig.user}/${gitConfig.repo}`}
+            href={`https://github.com/${GIT_CONFIG.user}/${GIT_CONFIG.repo}`}
             className={buttonVariants({ variant: "outline", size: "lg" })}
           >
             View on GitHub
@@ -61,7 +61,7 @@ export default function HomePage() {
           What makes it clinical
         </h2>
         <ul className="grid gap-4 sm:grid-cols-2">
-          {principles.map((principle) => (
+          {PRINCIPLES.map((principle) => (
             <li key={principle.title} className="rounded-lg border bg-card p-5">
               <h3 className="font-medium">{principle.title}</h3>
               <p className="mt-2 text-sm text-pretty text-muted-foreground">{principle.body}</p>

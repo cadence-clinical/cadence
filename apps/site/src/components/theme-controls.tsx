@@ -14,8 +14,11 @@ import { ThemeSwitch, type ThemeSwitchProps } from "fumadocs-ui/layouts/shared/s
 import { Palette, Rows3, type LucideIcon } from "lucide-react";
 import { useSyncExternalStore } from "react";
 
+import { cn } from "@/lib/cn";
 import { BRAND, DENSITY, allows, type Preference } from "@/lib/preferences";
 
+// The one piece of module state: the pickers' subscribers, so a choice made in one picker, or in
+// another tab, redraws every picker that shows it. useSyncExternalStore needs it outside React.
 const listeners = new Set<() => void>();
 
 function subscribe(listener: () => void) {
@@ -124,7 +127,7 @@ const DENSITY_OPTIONS = [
  */
 export function ThemeControls({ className, ...props }: ThemeSwitchProps) {
   return (
-    <div className={["flex items-center gap-1.5", className].filter(Boolean).join(" ")}>
+    <div className={cn("flex items-center gap-1.5", className)}>
       <PreferencePicker
         preference={BRAND}
         title="Theme"
