@@ -16,8 +16,20 @@ const alertVariants = cva(
         success: "border-success-border bg-success-subtle text-foreground",
         info: "border-info-border bg-info-subtle text-foreground",
       },
+      emphasis: {
+        outlined: "",
+        // Quieter, for a note beside what it is about: the fill stays, the outline becomes a bar
+        // down the leading edge, in the same border token, and the padding is even all round,
+        // because the bar reads as an edge to sit in from rather than a rule to tuck under.
+        edge: "rounded-md border-0 border-s-4 p-container",
+      },
     },
-    defaultVariants: { variant: "default" },
+    compoundVariants: [
+      // Without a status there is no status border to draw the bar in, so it is the page's rule
+      // on the muted fill, which the token tests hold at 4.5:1 for text.
+      { variant: "default", emphasis: "edge", class: "border-s-border bg-muted text-foreground" },
+    ],
+    defaultVariants: { variant: "default", emphasis: "outlined" },
   },
 );
 
@@ -35,7 +47,7 @@ const STATUS = {
   default: { icon: undefined, label: undefined, role: "status" },
 } as const satisfies Record<AlertVariant, unknown>;
 
-/** A `div`'s props, plus `variant`, `icon` and `iconLabel`. */
+/** A `div`'s props, plus `variant`, `emphasis`, `icon` and `iconLabel`. */
 type AlertProps = ComponentProps<"div"> &
   VariantProps<typeof alertVariants> & {
     /** Replaces the variant's icon. A status variant always has one. */
@@ -54,6 +66,7 @@ type AlertProps = ComponentProps<"div"> &
 function Alert({
   className,
   variant = "default",
+  emphasis = "outlined",
   icon,
   iconLabel,
   role,
@@ -67,8 +80,9 @@ function Alert({
     <div
       data-slot="alert"
       data-variant={variant}
+      data-emphasis={emphasis}
       role={role ?? status.role}
-      className={cn(alertVariants({ variant }), className)}
+      className={cn(alertVariants({ variant, emphasis }), className)}
       {...props}
     >
       <div

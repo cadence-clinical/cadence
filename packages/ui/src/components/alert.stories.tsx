@@ -12,6 +12,7 @@ const meta = {
   parameters: { layout: "padded" },
   argTypes: {
     variant: { control: "select", options: ["default", "critical", "warning", "success", "info"] },
+    emphasis: { control: "inline-radio", options: ["outlined", "edge"] },
   },
   render: (args) => (
     <Alert {...args} className="max-w-md">
@@ -32,6 +33,43 @@ const STATUSES = [
   ["success", "Success", "The appointment is booked", "status"],
   ["info", "Information", "The clinic list updates each morning", "status"],
 ] as const;
+
+// A quieter alert for a note beside what it is about, as the documentation pages use. The fill
+// and the icon stay; the outline becomes a bar down the leading edge, in the same border token.
+export const Quieter: Story = {
+  render: () => (
+    <div className="grid max-w-md gap-3">
+      <Alert emphasis="edge">
+        <AlertTitle>A note</AlertTitle>
+        <AlertDescription>Without a status, the bar is the page&apos;s rule.</AlertDescription>
+      </Alert>
+      {STATUSES.map(([variant, , title]) => (
+        <Alert key={variant} variant={variant} emphasis="edge">
+          <AlertTitle>{title}</AlertTitle>
+          <AlertDescription>What happened, and what to do next.</AlertDescription>
+        </Alert>
+      ))}
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const [note, critical] = canvasElement.querySelectorAll("[data-slot=alert]");
+    if (!note || !critical) throw new Error("Nothing rendered.");
+    // The padding is even on all four sides, where an outlined alert is tighter top and bottom.
+    const bar = getComputedStyle(critical);
+    await expect(bar.paddingTop).toBe(bar.paddingLeft);
+    await expect(bar.paddingBottom).toBe(bar.paddingRight);
+    await expect(bar.paddingTop).toBe("12px");
+    // The bar is on the leading edge, and the other three sides have no rule.
+    await expect(bar.borderLeftWidth).toBe("4px");
+    await expect(bar.borderTopWidth).toBe("0px");
+    await expect(bar.borderRightWidth).toBe("0px");
+    // It is the status border token, so the status is still marked by more than its fill.
+    const outlined = getComputedStyle(note);
+    await expect(bar.borderLeftColor).not.toBe(outlined.borderLeftColor);
+    // The status keeps its fill and its icon.
+    await expect(within(canvasElement).getByRole("img", { name: "Critical" })).toBeVisible();
+  },
+};
 
 // Each status has its own fill, border, icon outline and word. None rests on colour.
 export const Statuses: Story = {
