@@ -132,6 +132,82 @@ export const status = {
 } satisfies Record<Mode, ColorTokens>;
 
 /**
+ * The severity scale: seven fixed, ordered steps that an observation schema's levels draw their
+ * colour from (docs/decisions/0015-charts.md). A schema picks a step and never a colour, so a step
+ * means the same on every screen. Like the status colours, no theme, accent or brand changes them.
+ *
+ * Step 0 is within range and carries no tint. Steps 1 to 5 run from yellow through orange to red,
+ * and step 6 is purple, the colour paper observation charts in Australia give an emergency call.
+ * Adjacent steps are close in colour by design, as they are on paper: the level's words and the
+ * marker's shape always go with them, so colour is never the only signal.
+ *
+ * Each step has three roles: a subtle fill for a band or a cell, which body text sits on; a border
+ * that gives that fill an edge; and a solid colour for a chart marker. The border and the marker
+ * meet the boundary minimum against the page.
+ */
+export const severity = {
+  light: {
+    "severity-0": "oklch(0.36 0.02 255)",
+    "severity-0-subtle": "oklch(1 0 0)",
+    "severity-0-border": "oklch(0.6 0.012 255)",
+    "severity-1": "oklch(0.55 0.11 90)",
+    "severity-1-subtle": "oklch(0.97 0.07 100)",
+    "severity-1-border": "oklch(0.6 0.12 90)",
+    "severity-2": "oklch(0.56 0.14 60)",
+    "severity-2-subtle": "oklch(0.93 0.06 65)",
+    "severity-2-border": "oklch(0.6 0.14 60)",
+    "severity-3": "oklch(0.55 0.17 25)",
+    "severity-3-subtle": "oklch(0.92 0.05 15)",
+    "severity-3-border": "oklch(0.58 0.17 25)",
+    "severity-4": "oklch(0.5 0.18 25)",
+    "severity-4-subtle": "oklch(0.87 0.08 15)",
+    "severity-4-border": "oklch(0.52 0.18 25)",
+    "severity-5": "oklch(0.45 0.17 25)",
+    "severity-5-subtle": "oklch(0.82 0.11 15)",
+    "severity-5-border": "oklch(0.45 0.17 25)",
+    "severity-6": "oklch(0.45 0.16 310)",
+    "severity-6-subtle": "oklch(0.88 0.07 310)",
+    "severity-6-border": "oklch(0.45 0.16 310)",
+  },
+  dark: {
+    "severity-0": "oklch(0.86 0.01 255)",
+    "severity-0-subtle": "oklch(0.17 0.01 255)",
+    "severity-0-border": "oklch(0.55 0.012 255)",
+    "severity-1": "oklch(0.87 0.13 95)",
+    "severity-1-subtle": "oklch(0.31 0.06 95)",
+    "severity-1-border": "oklch(0.87 0.13 95)",
+    "severity-2": "oklch(0.8 0.13 65)",
+    "severity-2-subtle": "oklch(0.31 0.07 60)",
+    "severity-2-border": "oklch(0.8 0.13 65)",
+    "severity-3": "oklch(0.76 0.13 25)",
+    "severity-3-subtle": "oklch(0.3 0.07 20)",
+    "severity-3-border": "oklch(0.76 0.13 25)",
+    "severity-4": "oklch(0.72 0.15 25)",
+    "severity-4-subtle": "oklch(0.35 0.1 22)",
+    "severity-4-border": "oklch(0.72 0.15 25)",
+    "severity-5": "oklch(0.68 0.17 25)",
+    "severity-5-subtle": "oklch(0.4 0.13 25)",
+    "severity-5-border": "oklch(0.68 0.17 25)",
+    "severity-6": "oklch(0.78 0.12 310)",
+    "severity-6-subtle": "oklch(0.33 0.09 310)",
+    "severity-6-border": "oklch(0.78 0.12 310)",
+  },
+} satisfies Record<Mode, ColorTokens>;
+
+/** The steps of the severity scale, lowest first. The same names as `SEVERITY_SCALE` in core. */
+export const SEVERITY_STEPS = [
+  "severity-0",
+  "severity-1",
+  "severity-2",
+  "severity-3",
+  "severity-4",
+  "severity-5",
+  "severity-6",
+] as const;
+/** One step of the severity scale. */
+export type SeverityStep = (typeof SEVERITY_STEPS)[number];
+
+/**
  * Overrides applied when the user asks for more contrast. Text pairings target 7:1 and control
  * boundaries 4.5:1. On dark, a fill dark enough for white text cannot also stand out from the
  * page, so fills flip to light with dark text.
@@ -157,6 +233,17 @@ export const moreContrast = {
     info: "oklch(0.4 0.12 240)",
     "info-text": "oklch(0.36 0.11 240)",
     "info-border": "oklch(0.36 0.11 240)",
+    "severity-0-border": "oklch(0.4 0.012 255)",
+    "severity-1": "oklch(0.45 0.1 90)",
+    "severity-1-border": "oklch(0.45 0.1 90)",
+    "severity-2": "oklch(0.45 0.12 60)",
+    "severity-2-border": "oklch(0.45 0.12 60)",
+    "severity-3": "oklch(0.45 0.16 25)",
+    "severity-3-border": "oklch(0.45 0.16 25)",
+    "severity-4": "oklch(0.42 0.16 25)",
+    "severity-4-border": "oklch(0.42 0.16 25)",
+    "severity-5": "oklch(0.38 0.15 25)",
+    "severity-5-border": "oklch(0.38 0.15 25)",
   },
   dark: {
     background: "oklch(0.12 0.008 255)",
@@ -182,6 +269,11 @@ export const moreContrast = {
     "info-foreground": "oklch(0.15 0.01 255)",
     "info-text": "oklch(0.86 0.07 240)",
     "info-border": "oklch(0.86 0.07 240)",
+    "severity-0-border": "oklch(0.72 0.012 255)",
+    "severity-4": "oklch(0.8 0.12 25)",
+    "severity-4-border": "oklch(0.8 0.12 25)",
+    "severity-5": "oklch(0.84 0.1 25)",
+    "severity-5-border": "oklch(0.84 0.1 25)",
   },
 } satisfies Record<Mode, ColorTokens>;
 
@@ -191,7 +283,8 @@ export const STATUSES = ["critical", "warning", "success", "info"] as const;
 export type Status = (typeof STATUSES)[number];
 
 /** A neutral or status token. Only a name that both modes define counts. */
-export type BaseTokenName = keyof (typeof neutral)[Mode] | keyof (typeof status)[Mode];
+export type BaseTokenName =
+  keyof (typeof neutral)[Mode] | keyof (typeof status)[Mode] | keyof (typeof severity)[Mode];
 /** A token an accent supplies. */
 export type AccentTokenName = "primary" | "primary-foreground" | "primary-text" | "ring";
 /**
@@ -227,6 +320,7 @@ export function baseTokens(mode: Mode, contrast: Contrast): BaseTokens {
   return {
     ...neutral[mode],
     ...status[mode],
+    ...severity[mode],
     ...(contrast === "more" ? moreContrast[mode] : {}),
   };
 }

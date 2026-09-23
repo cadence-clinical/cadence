@@ -1,8 +1,9 @@
+import { SEVERITY_SCALE } from "@cadence-clinical/core";
 import { describe, expect, it } from "vitest";
 
 import { ACCENT_NAMES } from "./accent";
 import { checkContrast } from "./contrast";
-import { CONTRASTS, MODES } from "./palette";
+import { CONTRASTS, MODES, SEVERITY_STEPS } from "./palette";
 import { generateColorCss, resolveTokens } from "./resolve";
 
 describe("palette contrast", () => {
@@ -17,11 +18,11 @@ describe("palette contrast", () => {
   });
 });
 
-describe("status colours", () => {
+describe("status and severity colours", () => {
   const statusTokens = (accent: (typeof ACCENT_NAMES)[number]) =>
     Object.fromEntries(
       Object.entries(resolveTokens("light", "standard", accent)).filter(([name]) =>
-        /^(critical|warning|success|info)/.test(name),
+        /^(critical|warning|success|info|severity)/.test(name),
       ),
     );
 
@@ -68,4 +69,20 @@ describe("generateColorCss", () => {
       expect(css).toContain(`:root[data-accent="${accent}"] {`);
     },
   );
+});
+
+describe("the severity scale", () => {
+  // An observation schema names a step from core. Each must be a colour here, and no more.
+  it("has the same steps as the scale an observation schema chooses from", () => {
+    expect(SEVERITY_STEPS).toEqual(SEVERITY_SCALE);
+  });
+
+  it.each(SEVERITY_STEPS)("gives %s a marker, a fill and a border in both modes", (step) => {
+    for (const mode of MODES) {
+      const tokens = resolveTokens(mode, "standard", "teal");
+      expect([tokens[step], tokens[`${step}-subtle`], tokens[`${step}-border`]]).not.toContain(
+        undefined,
+      );
+    }
+  });
 });
