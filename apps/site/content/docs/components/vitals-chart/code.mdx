@@ -1,0 +1,85 @@
+---
+title: Vitals chart code
+description: How to install the Vitals chart, lay out its tracks, and its props.
+---
+
+## Installation
+
+The clinical components are not on npm yet. Once they are:
+
+```tsx
+import { VitalsChart } from "@cadence-clinical/clinical";
+```
+
+Import its stylesheet after the ui stylesheet:
+
+```css
+@import "@cadence-clinical/ui/styles.css";
+@import "@cadence-clinical/clinical/styles.css";
+```
+
+From the shadcn registry:
+
+```bash
+pnpm dlx shadcn@latest add @cadence/vitals-chart
+```
+
+## Usage
+
+```tsx
+import { VitalsChart } from "@cadence-clinical/clinical";
+import { applyObservationSchema } from "@cadence-clinical/core";
+import { observationSeries } from "@cadence-clinical/fhir";
+
+const { series } = observationSeries(bundle, { series: schema.series });
+
+<VitalsChart
+  label="Adult observation chart"
+  series={applyObservationSchema(series, schema)}
+  schema={schema}
+  tracks={tracks}
+  now={now}
+  timeZone="Australia/Melbourne"
+/>;
+```
+
+## API
+
+The Vitals chart is a clinical pattern built on the [Track chart](/docs/components/track-chart), with a toolbar of [Toggle groups](/docs/components/toggle-group), [Buttons](/docs/components/button) and a [Dropdown menu](/docs/components/dropdown-menu). shadcn has no equivalent.
+
+## Props
+
+| Prop            | Type                           | Default   |
+| --------------- | ------------------------------ | --------- |
+| `series`        | `InterpretedSeries[]`          | Required  |
+| `schema`        | `ObservationSchema`            | Required  |
+| `tracks`        | `VitalsTrack[]`                | Required  |
+| `label`         | `string`                       | Required  |
+| `now`           | `string \| number`             | Required  |
+| `timeZone`      | `string`                       | Required  |
+| `spans`         | `VitalsSpan[]`                 | 2h to 3d  |
+| `defaultSpan`   | `string`                       | `"1d"`    |
+| `labelStyle`    | `"short" \| "full"`            | `"short"` |
+| `roundWindowMs` | `number`                       | `300000`  |
+| `locale`        | `string`                       | `"en-AU"` |
+| `hourCycle`     | `"h23" \| "h12"`               | `"h23"`   |
+| `messages`      | `Partial<VitalsChartMessages>` | en-AU     |
+
+## Tracks
+
+A `VitalsTrack` is one of:
+
+| `kind`     | Fields                                                    | Shows                                                                              |
+| ---------- | --------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| `"line"`   | `series`                                                  | One series as a line with labelled points, over its bands.                         |
+| `"pair"`   | `label`, `shortLabel?`, `high`, `low`, `middle?`, `line?` | A pair joined at each round, over the `high` series' bands, with `line` across it. |
+| `"events"` | `label`, `shortLabel?`, `series`                          | Answers in words at their times.                                                   |
+
+Each has a `key`, which the Tracks menu uses, and an optional `heightPx`. A track's default range comes from its series' `range` in the schema.
+
+## Accessibility
+
+- The chart's `label` is its visible heading and its accessible name.
+- The body is one tab stop, as the [Track chart](/docs/components/track-chart/code#accessibility) describes. The crosshair moves from round to round and each round's values are read out.
+- A short track name has its full name in a tooltip and in visually hidden text.
+- The span and range toggles always have one pressed: pressing the pressed one keeps it.
