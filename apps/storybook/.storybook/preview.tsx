@@ -1,10 +1,8 @@
-import { BRANDS } from "@cadence-clinical/tokens";
+import { ACCENT_NAMES, BRANDS } from "@cadence-clinical/tokens";
 import type { Decorator, Preview } from "@storybook/react-vite";
 import { useLayoutEffect } from "react";
 
 import "./preview.css";
-
-const ACCENTS = ["teal", "blue", "indigo", "violet", "plum", "slate"];
 
 /** Cadence's own look, with no brand applied. */
 const NO_BRAND = "cadence";
@@ -94,7 +92,12 @@ const preview: Preview = {
     },
     accent: {
       description: "Accent",
-      toolbar: { title: "Accent", icon: "paintbrush", items: ACCENTS, dynamicTitle: true },
+      toolbar: {
+        title: "Accent",
+        icon: "paintbrush",
+        items: ACCENT_NAMES,
+        dynamicTitle: true,
+      },
     },
     // A brand sets its own accent, surfaces and fonts, so it takes precedence over Accent.
     brand: {
