@@ -2,6 +2,36 @@
   "$schema": "https://ui.shadcn.com/schema/registry.json",
   "items": [
     {
+      "name": "medication-card",
+      "type": "registry:component",
+      "title": "Medication card",
+      "description": "One medicine: its name as given, how it is taken in the words of the national on-screen display guidelines, and its status. An order opens to its doses, including those not given and why. For a patient, plain instructions.",
+      "dependencies": ["@cadence-clinical/core", "lucide-react"],
+      "registryDependencies": [
+        "@cadence/theme",
+        "@cadence/cn",
+        "@cadence/badge",
+        "@cadence/button",
+        "@cadence/card",
+        "@cadence/collapsible"
+      ],
+      "files": [
+        {
+          "path": "src/components/medication-card.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/medication-card.tsx"
+        }
+      ],
+      "docs": "The card writes a dosage from its structured parts and shows the prescriber's text as written when it cannot. It makes no clinical judgement. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "composite",
+        "domain": "clinical",
+        "grade": {
+          "level": "draft"
+        }
+      }
+    },
+    {
       "name": "observation-table",
       "type": "registry:component",
       "title": "Observation table",
