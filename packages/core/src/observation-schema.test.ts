@@ -5,6 +5,7 @@ import {
   applyObservationSchema,
   checkObservationSchema,
   defineObservationSchema,
+  labelFor,
   type ObservationSchema,
 } from "./observation-schema";
 
@@ -467,5 +468,16 @@ describe("applyObservationSchema source labels", () => {
       )[0]?.readings ?? [];
     expect(interpreted?.source).toEqual(source);
     expect(interpreted?.band).toMatchObject({ kind: "level", level: { key: "act" } });
+  });
+});
+
+describe("labelFor", () => {
+  it.each([
+    [{ label: "Respiratory rate", shortLabel: "RR" }, undefined, "RR"],
+    [{ label: "Respiratory rate", shortLabel: "RR" }, "short", "RR"],
+    [{ label: "Respiratory rate", shortLabel: "RR" }, "full", "Respiratory rate"],
+    [{ label: "Consciousness" }, "short", "Consciousness"],
+  ] as const)("names %j in the %s style as %s", (named, style, expected) => {
+    expect(labelFor(named, style)).toBe(expected);
   });
 });

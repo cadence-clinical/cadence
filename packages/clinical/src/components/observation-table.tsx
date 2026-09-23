@@ -3,6 +3,8 @@
 import {
   describeTime,
   groupRounds,
+  labelFor,
+  type LabelStyle,
   type InterpretedReading,
   type InterpretedSeries,
   type ObservationLevel,
@@ -200,7 +202,17 @@ interface ObservationTableProps extends Omit<ComponentProps<"div">, "children"> 
    * A total for each round, from `scoreRounds`, shown in a last row. Group the rounds with the
    * same `roundWindowMs` as the table: a total whose round is not a column throws.
    */
-  totals?: { readonly label: string; readonly rounds: readonly RoundTotal[] };
+  totals?: {
+    readonly label: string;
+    readonly shortLabel?: string;
+    readonly rounds: readonly RoundTotal[];
+  };
+  /**
+   * Whether rows are named by their short names, such as "RR", or in full, such as "Respiratory
+   * rate". Defaults to short. A short name always has the full one in a tooltip and for a screen
+   * reader.
+   */
+  labelStyle?: LabelStyle;
   /** The keys of the rows to hide at first. The total's row is `TOTAL_ROW`. */
   defaultHiddenRows?: readonly string[];
   /** Called with the keys of the hidden rows when the reader shows or hides one. */
@@ -235,6 +247,23 @@ function LevelBox({ level }: { level: ObservationLevel | undefined }) {
     >
       {level.short}
     </span>
+  );
+}
+
+/**
+ * A row's name. A short name is shown, with the full name in a tooltip and for a screen reader,
+ * which would otherwise read the letters of an abbreviation.
+ */
+function RowName({ full, short }: { full: string; short: string }) {
+  if (short === full) return full;
+  return (
+    <Tooltip>
+      <TooltipTrigger render={<span data-slot="observation-row-name" />}>
+        <span aria-hidden="true">{short}</span>
+        <span className="sr-only">{full}</span>
+      </TooltipTrigger>
+      <TooltipContent>{full}</TooltipContent>
+    </Tooltip>
   );
 }
 
@@ -310,6 +339,7 @@ function ObservationTable({
   hourCycle = "h23",
   roundWindowMs = 5 * 60_000,
   totals,
+  labelStyle = "short",
   defaultHiddenRows = [],
   onHiddenRowsChange,
   messages: ownMessages,
@@ -354,6 +384,10 @@ function ObservationTable({
     const [first] = found?.readings ?? [];
     return found?.definition?.label ?? first?.code.text ?? first?.code.codings[0]?.display ?? key;
   };
+  const shortNameOf = (key: string): string => {
+    const definition = series.find((entry) => entry.key === key)?.definition;
+    return definition ? labelFor(definition, labelStyle) : nameOf(key);
+  };
 
   // Open at the newest round, on the right, and stay there while the table grows, as it does
   // when its font arrives, until the reader scrolls back through time.
@@ -371,8 +405,10 @@ function ObservationTable({
     // Only a scroll back towards older rounds lets go. The table growing, or the scroll event from
     // pinning arriving after it has grown, does not.
     const follow = () => {
-      if (box.scrollLeft < pinnedLeft - 1) isPinned = false;
-      else if (box.scrollLeft + box.clientWidth >= box.scrollWidth - 1) isPinned = true;
+      // At the end first: when the content narrows, the browser pulls the scroll back to the new
+      // end, which is not the reader scrolling away.
+      if (box.scrollLeft + box.clientWidth >= box.scrollWidth - 1) isPinned = true;
+      else if (box.scrollLeft < pinnedLeft - 1) isPinned = false;
     };
     pin();
     // The table grows as its font arrives, and the box changes width with the page.
@@ -399,12 +435,14 @@ function ObservationTable({
   }
 
   const describeReading = (
+    name: string,
     reading: InterpretedReading,
     unitLabel: string | undefined,
   ): string[] => {
     const unit =
       reading.value.kind === "quantity" ? (ownUnit(reading, unitLabel) ?? unitLabel) : undefined;
     const lines = [
+      name,
       `${valueText(reading.value, messages, number)}${unit === undefined ? "" : ` ${unit}`}`,
     ];
     if (reading.band.kind === "level") lines.push(reading.band.level.label);
@@ -595,9 +633,12 @@ function ObservationTable({
                 <TableRow key={key}>
                   <TableHead
                     scope="row"
-                    className="sticky left-0 z-10 min-w-32 border-r border-b bg-background font-medium"
+                    className={cn(
+                      "sticky left-0 z-10 border-r border-b bg-background font-medium",
+                      labelStyle === "full" ? "min-w-32" : "min-w-20",
+                    )}
                   >
-                    {nameOf(key)}
+                    <RowName full={nameOf(key)} short={shortNameOf(key)} />
                     {unitLabel === undefined ? null : (
                       <span className="block text-control-sm font-normal text-muted-foreground">
                         {unitLabel}
@@ -619,7 +660,7 @@ function ObservationTable({
                           return valueTrigger(
                             reading.id,
                             { row, sub, col },
-                            describeReading(reading, unitLabel),
+                            describeReading(nameOf(key), reading, unitLabel),
                             cn(
                               // A number and its unit stay on one line. Words wrap between words.
                               (value.kind === "quantity" || value.kind === "integer") &&
@@ -668,9 +709,9 @@ function ObservationTable({
               <TableRow data-slot="observation-total">
                 <TableHead
                   scope="row"
-                  className="sticky left-0 z-10 min-w-32 border-t-2 border-r bg-background font-semibold"
+                  className="sticky left-0 z-10 border-t-2 border-r bg-background font-semibold"
                 >
-                  {totals.label}
+                  <RowName full={totals.label} short={labelFor(totals, labelStyle)} />
                 </TableHead>
                 {columns.map(({ round }, col) => {
                   const total = totalsByTime.get(round.timeMs);
