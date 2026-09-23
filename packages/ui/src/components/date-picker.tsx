@@ -224,7 +224,7 @@ function DatePicker({
   const isWrong = invalid === true || isUnreadable;
 
   const dateField = (
-    <div className="relative flex w-full min-w-0 items-center">
+    <div data-slot="date-picker-field" className="relative flex w-full min-w-0 items-center">
       <Input
         ref={field}
         id={id}

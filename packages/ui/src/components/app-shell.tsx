@@ -29,6 +29,7 @@ function AppShell({ className, children, ...props }: SidebarProviderProps) {
   return (
     <AppShellContext value={mainId}>
       <SidebarProvider
+        data-slot="app-shell"
         className={cn(
           "flex-col [--header-height:calc(var(--control-height)+2*var(--container-padding-sm))]",
           className,
@@ -106,7 +107,13 @@ function AppShellContent({ className, ...props }: ComponentProps<"main">) {
   const mainId = useContext(AppShellContext);
   if (mainId === null) throw new Error("AppShellContent must be used inside an AppShell.");
   return (
-    <SidebarInset id={mainId} tabIndex={-1} className={cn("outline-none", className)} {...props} />
+    <SidebarInset
+      data-slot="app-shell-content"
+      id={mainId}
+      tabIndex={-1}
+      className={cn("outline-none", className)}
+      {...props}
+    />
   );
 }
 
