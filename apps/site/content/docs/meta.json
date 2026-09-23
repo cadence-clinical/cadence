@@ -42,6 +42,7 @@
     "components/sheet",
     "components/tabs",
     "components/toggle-group",
+    "components/track-chart",
     "---Patterns---",
     "components/calendar",
     "components/data-table",
