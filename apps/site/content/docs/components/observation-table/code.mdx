@@ -1,0 +1,94 @@
+---
+title: Observation table code
+description: How to install the Observation table, feed it from FHIR through a schema, its props, and how it meets accessibility.
+---
+
+## Installation
+
+The clinical components are not on npm yet. Once they are:
+
+```tsx
+import { ObservationTable } from "@cadence-clinical/clinical";
+```
+
+Import its stylesheet after the ui stylesheet, so Tailwind finds its classes:
+
+```css
+@import "@cadence-clinical/ui/styles.css";
+@import "@cadence-clinical/clinical/styles.css";
+```
+
+From the shadcn registry:
+
+```bash
+pnpm dlx shadcn@latest add @cadence/observation-table
+```
+
+The registry installs it beside your Table, Tooltip, Dropdown menu and Button, and adds `@cadence-clinical/core`.
+
+## Usage
+
+From FHIR, read the Observations into series, apply your schema, and add up the totals:
+
+```tsx
+import { ObservationTable } from "@cadence-clinical/clinical";
+import { applyObservationSchema, groupRounds, scoreRounds } from "@cadence-clinical/core";
+import { observationSeries } from "@cadence-clinical/fhir";
+
+// schema: your observation schema, or one from a Region package.
+const { series, issues } = observationSeries(bundle, { series: schema.series });
+const vitals = applyObservationSchema(series, schema);
+const totals = {
+  label: schema.total.label,
+  rounds: scoreRounds(groupRounds(vitals, 5 * 60_000), schema),
+};
+
+<ObservationTable
+  label="Vital signs"
+  series={vitals}
+  totals={totals}
+  now={now}
+  timeZone="Australia/Melbourne"
+/>;
+```
+
+`observationSeries` checks every field it reads. Anything it cannot read is in `issues`, with the resource and the reason.
+
+## API
+
+The Observation table is a clinical pattern built on [Table](/docs/components/table), [Tooltip](/docs/components/tooltip), [Dropdown menu](/docs/components/dropdown-menu) and [Button](/docs/components/button). shadcn has no equivalent. It renders a `div` around the table, and spreads the rest of its props onto it.
+
+## Props
+
+| Prop                 | Type                                      | Default   |
+| -------------------- | ----------------------------------------- | --------- |
+| `series`             | `InterpretedSeries[]`                     | Required  |
+| `label`              | `string`                                  | Required  |
+| `now`                | `string \| number`                        | Required  |
+| `timeZone`           | `string`                                  | Required  |
+| `totals`             | `{ label: string; rounds: RoundTotal[] }` | None      |
+| `locale`             | `string`                                  | `"en-AU"` |
+| `hourCycle`          | `"h23" \| "h12"`                          | `"h23"`   |
+| `roundWindowMs`      | `number`                                  | `300000`  |
+| `defaultHiddenRows`  | `string[]`                                | `[]`      |
+| `onHiddenRowsChange` | `(keys: string[]) => void`                | None      |
+| `messages`           | `Partial<ObservationTableMessages>`       | en-AU     |
+
+`messages` replaces any of the words the table shows or reads out. `TOTAL_ROW` is the key of the total's row, for `defaultHiddenRows`.
+
+## Totals
+
+Group the rounds for `scoreRounds` with the same window as the table's `roundWindowMs`. A total whose round is not one of the table's columns throws, because it would otherwise be shown nowhere.
+
+In a round where one row has two scored values, `scoreRounds` counts the higher score, so a round is never scored lower than one of its values.
+
+## Times
+
+`now` and `timeZone` are required. The table never reads the clock or the device's time zone, so a page rendered on a server shows the same days and times as the browser. Days near `now` are "Today" and "Yesterday", earlier ones a short date, and times use the 24 hour clock unless `hourCycle` is `"h12"`.
+
+## Accessibility
+
+- The table is named by `label`, and so is the region that scrolls it. The region takes focus, so a keyboard can scroll it.
+- Each value's band, change, exact time and the source's interpretation are in a visually hidden span, so a screen reader reads them with the value. The tooltip shows the same to sighted readers.
+- The values are one tab stop. The arrow keys, Home and End move between them, and each opens its tooltip when it takes focus.
+- Row headings are `th` elements with `scope="row"`, and each round's time is a `time` element with the full date and time for a screen reader.
