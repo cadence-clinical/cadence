@@ -84,7 +84,7 @@ A series definition's `shortLabel`, such as `"RR"`, names its row when `labelSty
 
 Group the rounds for `scoreRounds` with the same window as the table's `roundWindowMs`. A total whose round is not one of the table's columns throws, because it would otherwise be shown nowhere.
 
-In a round where one row has two scored values, `scoreRounds` counts the higher score, so a round is never scored lower than one of its values.
+In a round where one row has two values, `scoreRounds` counts the latest. When the latest cannot be scored, such as a value in another unit, the row is missing and the total is Incomplete: an earlier value is not used in its place. A value at a level that escalates raises the round whichever value it is.
 
 ## Times
 
