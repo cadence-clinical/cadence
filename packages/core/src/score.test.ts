@@ -125,10 +125,31 @@ describe("scoreRounds", () => {
     });
   });
 
-  it("counts the higher score when a series has two readings in a round", () => {
-    const total = score([at(0, "a", 5), at(10, "a", 25), at(20, "b", 1)]);
-    expect(total).toMatchObject({ kind: "complete", total: 3 });
-    expect(total?.parts.find(({ seriesKey }) => seriesKey === "a")?.score).toBe(3);
+  it("counts the latest reading when a series has two in a round", () => {
+    const total = score([at(0, "a", 25), at(10, "a", 5), at(20, "b", 1)]);
+    expect(total).toMatchObject({ kind: "complete", total: 0 });
+    expect(total?.parts.find(({ seriesKey }) => seriesKey === "a")?.score).toBe(0);
+  });
+
+  it("treats a series as missing when its latest reading cannot be scored", () => {
+    const [first, second] = [at(0, "a", 25), at(10, "a", 5)];
+    const unscored = {
+      ...second,
+      reading: { ...second.reading, value: { kind: "text" as const, text: "unreadable" } },
+    };
+    expect(score([first, unscored, at(20, "b", 1)])).toMatchObject({
+      kind: "incomplete",
+      missing: ["a"],
+    });
+  });
+
+  it("escalates from an earlier reading even when a later one follows", () => {
+    expect(score([at(0, "a", -1), at(10, "a", 5), at(20, "b", 1)])).toMatchObject({
+      kind: "complete",
+      total: 0,
+      level: { key: "call" },
+      isEscalated: true,
+    });
   });
 
   it("gives no number for an incomplete round, and names what is missing", () => {
