@@ -157,7 +157,9 @@ export const Disabled: Story = {
     const trigger = within(canvasElement).getByRole("button", { name: "Earlier entries" });
     // It stays focusable, so it can be found, and says it is disabled.
     await expect(trigger).toHaveAttribute("aria-disabled", "true");
-    trigger.click();
+    // A disabled button takes no pointer events, which user-event would refuse to press through.
+    // The check is off so the press reaches the trigger, which must ignore it.
+    await userEvent.click(trigger, { pointerEventsCheck: 0 });
     await expect(trigger).toHaveAttribute("aria-expanded", "false");
   },
 };

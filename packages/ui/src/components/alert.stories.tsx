@@ -187,7 +187,7 @@ const LONG = "SYNTHETIC" + "0".repeat(80);
 
 export const LongWordsWrap: Story = {
   render: () => (
-    <div className="w-56">
+    <div className="w-56" data-testid="narrow">
       <Alert variant="info">
         <AlertTitle>{LONG}</AlertTitle>
         <AlertDescription>{LONG}</AlertDescription>
@@ -195,8 +195,8 @@ export const LongWordsWrap: Story = {
     </div>
   ),
   play: async ({ canvasElement }) => {
-    const box = canvasElement.querySelector(".w-56");
-    await expect(box?.scrollWidth).toBeLessThanOrEqual(box?.clientWidth ?? 0);
+    const box = within(canvasElement).getByTestId("narrow");
+    await expect(box.scrollWidth).toBeLessThanOrEqual(box.clientWidth);
     const alert = canvasElement.querySelector("[data-slot=alert]");
     await expect(alert?.scrollWidth).toBeLessThanOrEqual(alert?.clientWidth ?? 0);
   },
