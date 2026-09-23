@@ -1,0 +1,42 @@
+---
+title: Track chart
+description: Plots values on tracks that share one time axis and scroll through time, with bands behind them and a crosshair to read them.
+---
+
+<GradeBadge component="track-chart" />
+
+<TrackChartPreview />
+
+## Use it for
+
+- Values that change over time, drawn as tracks one above another so they line up in time: vital signs, glucose and insulin, fluid balance.
+- A record longer than the screen. The chart scrolls sideways through time and opens at the latest.
+- Building a clinical chart. The [Observation table](/docs/components/observation-table)'s companion, the Vitals chart, is built on it.
+
+## Do not use it for
+
+- **Reading exact values.** A chart shows the shape of a series. Offer an [Observation table](/docs/components/observation-table) beside it, which a screen reader can read in full.
+- **Values that are not over time**, such as a comparison between groups.
+- **Deciding which band a value is in.** The chart draws the bands and colours it is given. They come from an observation schema, as [Clinical safety](/docs/clinical-safety) explains.
+
+## Give each track the range it needs
+
+A track's `domain` is the range of values it shows, bottom to top. Choose it from the values a track is expected to hold, so a change is visible and a value outside it is still in view. A band outside the domain is not drawn.
+
+## Show a band by more than its colour
+
+A band is drawn in one of the fixed [severity scale](/docs/theming#severity-scale) colours. A point in a band is also larger and ringed, and keeps its printed value when labels collide. Adjacent severity colours are close, so say what each band means in words somewhere on the screen, such as a legend or the crosshair's tooltip.
+
+## Keep a label for every value
+
+Where printed values would run into each other, the chart leaves some off. A value in a band and the newest value keep theirs. Every value is still in the crosshair's tooltip, so write `renderCrosshair` to show all the values at a moment.
+
+## Choose the span for the task
+
+`spanMs` is how much time is in view. The ticks and alternating stripes follow it: every day across three days, every four hours across twelve. A short span suits the last few hours after an intervention; a long one suits a trend over days.
+
+## Accessibility
+
+- **Give the chart a `label`**, such as "Vital signs". It names the chart for a screen reader.
+- **Write `renderCrosshair` to say the values in words.** A screen reader reads what it returns as the keyboard moves the crosshair.
+- **Offer the values in a table as well.** A chart is not a complete alternative on its own.
