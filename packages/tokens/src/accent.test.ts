@@ -33,10 +33,10 @@ describe("createAccent with a consumer's brand colour", () => {
     ["red", "#d92d20", "critical"],
     ["amber", "#f59e0b", "warning"],
     ["green", "#16a34a", "success"],
-  ])("rejects %s because it reads as the %s status", (_name, colour, status) => {
-    const { problems } = createAccent(colour);
+  ])("rejects %s because it reads as the %s status", (_name, color, status) => {
+    const { problems } = createAccent(color);
     expect(problems.join(" ")).toContain(`${status} status colour`);
-    expect(() => assertAccent(colour)).toThrow(/was rejected/);
+    expect(() => assertAccent(color)).toThrow(/was rejected/);
   });
 
   it("accepts a grey of any hue", () => {

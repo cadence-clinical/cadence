@@ -8,7 +8,7 @@ import { FRAMEWORK_FILES, noClasses, noDefaultExport, restrictSyntax } from "./b
 
 const PALETTE =
   "slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose|black|white";
-const COLOUR_UTILITIES =
+const COLOR_UTILITIES =
   "bg|text|border|ring|ring-offset|outline|fill|stroke|from|via|to|divide|decoration|shadow|caret|placeholder";
 
 const BANNED_CLASSES = [
@@ -17,7 +17,7 @@ const BANNED_CLASSES = [
     message: "No dark: overrides. A token already has its dark value: use the token.",
   },
   {
-    pattern: `(^|[\\s:])(${COLOUR_UTILITIES})-(${PALETTE})(-\\d{2,3})?($|[\\s/])`,
+    pattern: `(^|[\\s:])(${COLOR_UTILITIES})-(${PALETTE})(-\\d{2,3})?($|[\\s/])`,
     message:
       "No Tailwind palette colours. Use a semantic token such as bg-primary or text-critical-text.",
   },

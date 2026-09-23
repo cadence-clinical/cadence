@@ -30,7 +30,7 @@ export const SHADCN_TOKEN_NAMES = [
 ] as const satisfies readonly TokenName[];
 
 /** The sidebar aliases as a stylesheet writes them. A stock stylesheet gives each its own value. */
-const aliases = Object.fromEntries(
+const ALIASES = Object.fromEntries(
   Object.entries(SIDEBAR_ALIASES).map(([name, token]) => [name, `var(--${token})`]),
 );
 
@@ -38,7 +38,7 @@ function pick(mode: Mode): ColorTokens {
   const tokens = resolveTokens(mode);
   return {
     ...Object.fromEntries(SHADCN_TOKEN_NAMES.map((name) => [name, tokens[name]])),
-    ...aliases,
+    ...ALIASES,
   };
 }
 
