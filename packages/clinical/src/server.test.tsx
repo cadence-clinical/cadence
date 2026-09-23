@@ -11,9 +11,17 @@ import {
   syntheticTotals,
   syntheticVitals,
 } from "./fixtures/vitals";
-import { ObservationTable, VitalsChart } from "./index";
+import { MEDICATION_NOW, PARACETAMOL_ORDER } from "./fixtures/medications";
+import { MedicationCard, ObservationTable, VitalsChart } from "./index";
 
 const RENDERS: Record<string, ReactElement> = {
+  "medication-card": (
+    <MedicationCard
+      record={PARACETAMOL_ORDER}
+      now={MEDICATION_NOW}
+      timeZone="Australia/Melbourne"
+    />
+  ),
   "vitals-chart": (
     <VitalsChart
       label="Synthetic observation chart"
