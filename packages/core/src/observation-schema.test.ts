@@ -15,9 +15,9 @@ const V3 = "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation";
 
 const SCHEMA = defineObservationSchema({
   levels: [
-    { key: "in", label: "Within range", severity: "severity-0" },
-    { key: "watch", label: "Watch", severity: "severity-2" },
-    { key: "act", label: "Act now", severity: "severity-5" },
+    { key: "in", label: "Within range", short: "I", severity: "severity-0" },
+    { key: "watch", label: "Watch", short: "W", severity: "severity-2" },
+    { key: "act", label: "Act now", short: "A", severity: "severity-5" },
   ],
   series: [
     {
@@ -101,7 +101,7 @@ function bandOf(key: string, value: ObservationValue) {
 
 describe("checkObservationSchema", () => {
   const base: ObservationSchema = {
-    levels: [{ key: "a", label: "A", severity: "severity-0" }],
+    levels: [{ key: "a", label: "A", short: "A", severity: "severity-0" }],
     series: [],
   };
 
@@ -114,7 +114,10 @@ describe("checkObservationSchema", () => {
       "a level key used twice",
       {
         ...base,
-        levels: [...base.levels, { key: "a", label: "Again", severity: "severity-1" as const }],
+        levels: [
+          ...base.levels,
+          { key: "a", label: "Again", short: "", severity: "severity-1" as const },
+        ],
       },
       /level key "a" is used twice/,
     ],
