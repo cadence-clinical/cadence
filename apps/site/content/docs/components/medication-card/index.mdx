@@ -1,0 +1,42 @@
+---
+title: Medication card
+description: Shows one medicine, how it is taken in the words of the national on-screen display guidelines, and its status, and opens to the doses given.
+---
+
+<GradeBadge component="medication-card" />
+
+<MedicationCardPreview open />
+
+## Use it for
+
+- A medication order, with when it was last given and the doses in the last 24 hours, including those not given and why.
+- An entry in a patient's medication list.
+- The same medicine for a patient, in plain words, with `audience="patient"`.
+
+## Do not use it for
+
+- **Choosing or changing a dose.** The card shows what it is given. It checks nothing about the dose.
+- **Recording a dose.** The card has no form. Build one with [Form](/docs/components/form).
+
+## Show the medicine as it was ordered
+
+The medicine's name is shown as the source gave it, never shortened or re-cased: look-alike names are told apart by their letters. Tall Man lettering is not applied yet.
+
+## Read the dose in the guidelines' words
+
+The card writes how a medicine is taken from the order's parts, in the order and words of the [National Guidelines for On-Screen Display of Medicines Information](https://www.safetyandquality.gov.au/resources/national-guidelines-screen-display-medicines-information): route, the **DOSE** in bold, how often, "when required for …", and the most in 24 hours. Units are written in full where the guidelines ask, so "microgram", never "mcg", and "units", never "U". No medicine information is abbreviated.
+
+When the parts cannot be put into those words, the card shows the prescriber's own text, as written.
+
+## Act on what the card says is missing
+
+A "when required" order must say what it is for, and the most that may be given in 24 hours. When either is missing, the card says so under the dose. It does not fill the gap.
+
+## Check the last dose, not only the last given
+
+"Last given" is the last dose given. When the latest dose was not given, the card says so, and why, beside it.
+
+## Accessibility
+
+- The medicine's name is a heading, `h3`. Change the level with the Card title's `render` prop if your page needs another.
+- Each dose's time is a `time` element, with the full date and time for a screen reader.
