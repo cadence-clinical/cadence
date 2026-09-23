@@ -1,0 +1,28 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "items": [
+    {
+      "name": "observation-table",
+      "type": "registry:component",
+      "title": "Observation table",
+      "description": "A flowsheet of observations: one row per series, one column per round, oldest to newest. Each value shows the band a schema gave it and its change since the value before.",
+      "dependencies": ["@cadence-clinical/core"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn", "@cadence/table"],
+      "files": [
+        {
+          "path": "src/components/observation-table.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/observation-table.tsx"
+        }
+      ],
+      "docs": "The table shows the bands it is given and makes no clinical judgement of its own: apply an observation schema from @cadence-clinical/core first. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "pattern",
+        "domain": "clinical",
+        "grade": {
+          "level": "draft"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "extends": "@cadence-clinical/config/tsconfig/react-library.json",
+  "compilerOptions": {
+    // The aliases a consumer's project has, so a component's imports are already the ones the
+    // registry installs. A clinical component and the ui primitives it uses are installed side by
+    // side in components/cadence, so the alias looks here first and then in ui. The npm build
+    // rewrites what it finds in ui to @cadence-clinical/ui: see tsdown.config.ts.
+    "paths": {
+      "@/lib/*": ["../ui/src/lib/*"],
+      "@/components/cadence/*": ["./src/components/*", "../ui/src/components/*"]
+    }
+  },
+  "include": ["src"]
+}
