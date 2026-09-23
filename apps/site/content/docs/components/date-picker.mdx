@@ -42,7 +42,13 @@ From the registry, `shadcn add @cadence/date-picker` installs react-day-picker w
 <DatePicker mode="datetime" locale={enAU} onValueChange={setAppointment} />
 ```
 
-`onValueChange` receives a `Date`, or `undefined` while there is no whole value: nothing typed, something that is not a date, or a date and time with the time still empty. `step` sets how fine the time is, in seconds; `60` is to the minute.
+In `date` and `datetime`, `value`, `defaultValue` and `onValueChange` take a `Date`. `onValueChange` receives `undefined` while there is no whole value: nothing typed, something that is not a date, or a date and time with the time still empty. `step` sets how fine the time is, in seconds; `60` is to the minute.
+
+In `time`, they take the time of day as a string, `"14:30"`, or `"14:30:05"` when `step` asks for seconds. A time with no day is not a moment, so the picker does not make it one: it never guesses the day or reads the clock. Join the time to a day and a time zone you know.
+
+```tsx
+<DatePicker mode="time" defaultValue="09:30" onValueChange={setTimeOfDay} />
+```
 
 With `name`, the value is sent with a form: `yyyy-mm-dd`, `yyyy-mm-ddThh:mm`, or `hh:mm` by mode.
 
@@ -74,14 +80,14 @@ The field is marked `aria-invalid` while what is typed is not a date. In a Field
 
 ## Props
 
-| Prop            | Type                                       | Default       |
-| --------------- | ------------------------------------------ | ------------- |
-| `mode`          | `"date" \| "datetime" \| "time"`           | `"date"`      |
-| `value`         | `Date`                                     |               |
-| `defaultValue`  | `Date`                                     |               |
-| `onValueChange` | `(value: Date \| undefined) => void`       |               |
-| `locale`        | A locale from `react-day-picker/locale`    | The browser's |
-| `step`          | `number`, in seconds                       | `60`          |
-| `name`          | `string`                                   |               |
-| `invalid`       | `boolean`                                  |               |
-| `calendarProps` | The Calendar's props, less its value props |               |
+| Prop            | Type                                                               | Default       |
+| --------------- | ------------------------------------------------------------------ | ------------- |
+| `mode`          | `"date" \| "datetime" \| "time"`                                   | `"date"`      |
+| `value`         | `Date`, or `string` in `time` mode                                 |               |
+| `defaultValue`  | `Date`, or `string` in `time` mode                                 |               |
+| `onValueChange` | `(value: Date \| undefined) => void`, or a `string` in `time` mode |               |
+| `locale`        | A locale from `react-day-picker/locale`                            | The browser's |
+| `step`          | `number`, in seconds                                               | `60`          |
+| `name`          | `string`                                                           |               |
+| `invalid`       | `boolean`                                                          |               |
+| `calendarProps` | The Calendar's props, less its value props                         |               |

@@ -127,16 +127,8 @@ function withTime(day: Date, time: string): Date | undefined {
   return date;
 }
 
-/** A `div`'s props, without its value props, plus the picker's own. */
-type DatePickerProps = Omit<ComponentProps<"div">, "defaultValue" | "onChange"> & {
-  /** Whether it asks for a date, a date and a time, or a time. */
-  mode?: DatePickerMode;
-  /** The date shown. Leave it out to let the picker hold its own. */
-  value?: Date | undefined;
-  /** The date it starts with, when it holds its own. */
-  defaultValue?: Date;
-  /** Called with the date, or `undefined` while what is typed is not one. */
-  onValueChange?: (value: Date | undefined) => void;
+/** A `div`'s props, without its value props, plus what every mode of the picker takes. */
+interface DatePickerSharedProps extends Omit<ComponentProps<"div">, "defaultValue" | "onChange"> {
   /** A locale from `react-day-picker/locale`. It sets the calendar, the order and the words. */
   locale?: Partial<Locale>;
   /** What the date field says when it is empty. It defaults to the locale's shape. */
@@ -159,66 +151,110 @@ type DatePickerProps = Omit<ComponentProps<"div">, "defaultValue" | "onChange"> 
   id?: string;
   /** The rest of react-day-picker's props, such as `disabled` days or `captionLayout`. */
   calendarProps?: Omit<CalendarProps, "mode" | "selected" | "onSelect" | "locale">;
-};
+}
+
+/** A date, or a date and a time: the value is a `Date`. */
+interface DatePickerDateProps extends DatePickerSharedProps {
+  /** Whether it asks for a date, or a date and a time. */
+  mode?: "date" | "datetime";
+  /** The date shown. Leave it out to let the picker hold its own. */
+  value?: Date | undefined;
+  /** The date it starts with, when it holds its own. */
+  defaultValue?: Date;
+  /** Called with the date, or `undefined` while what is typed is not one. */
+  onValueChange?: (value: Date | undefined) => void;
+}
+
+/**
+ * A time on its own: the value is the time of day as ISO 8601 writes it, `HH:mm`, or `HH:mm:ss`
+ * when `step` asks for seconds. It is not a `Date`, because a time with no day is not a moment:
+ * the picker does not guess the day or the time zone. Join it to a day you know.
+ */
+interface DatePickerTimeProps extends DatePickerSharedProps {
+  /** Asks for a time on its own. */
+  mode: "time";
+  /** The time shown, such as `"14:30"`. Leave it out to let the picker hold its own. */
+  value?: string | undefined;
+  /** The time it starts with, when it holds its own. */
+  defaultValue?: string;
+  /** Called with the time, or `undefined` while the field is empty or incomplete. */
+  onValueChange?: (value: string | undefined) => void;
+}
+
+/** The picker's props. `mode` decides whether its value is a `Date` or a time of day. */
+type DatePickerProps = DatePickerDateProps | DatePickerTimeProps;
 
 /**
  * A date that can be typed or chosen from a calendar, as shadcn's date picker with an input does.
- * `mode` asks for a date, a date and a time, or a time on its own.
+ * `mode` asks for a date, a date and a time, or a time on its own. A date is a `Date`, and a time
+ * on its own is a string such as `"14:30"`, because the picker never guesses its day.
  *
  * What is typed is read in the locale's order, so 03/04/2026 is 3 April where the day comes first,
  * and a date that does not exist, such as 31 February, is marked wrong instead of being rolled
  * into the next month. The year is written in full.
  */
-function DatePicker({
-  mode = "date",
-  value,
-  defaultValue,
-  onValueChange,
-  locale,
-  placeholder,
-  dateLabel,
-  timeLabel = "Time",
-  calendarLabel = "Choose a date",
-  step = 60,
-  name,
-  disabled,
-  required,
-  invalid,
-  id,
-  calendarProps,
-  className,
-  ...props
-}: DatePickerProps) {
+function DatePicker(allProps: DatePickerProps) {
+  const {
+    mode = "date",
+    value: _value,
+    defaultValue: _defaultValue,
+    onValueChange: _onValueChange,
+    locale,
+    placeholder,
+    dateLabel,
+    timeLabel = "Time",
+    calendarLabel = "Choose a date",
+    step = 60,
+    name,
+    disabled,
+    required,
+    invalid,
+    id,
+    calendarProps,
+    className,
+    ...props
+  } = allProps;
   const code = locale?.code;
-  const given = value ?? defaultValue;
+  // The value props are read from the whole props, where `mode` tells a Date from a time of day.
+  const valueDay = allProps.mode === "time" ? undefined : allProps.value;
+  const valueTime = allProps.mode === "time" ? allProps.value : formatTime(allProps.value, step);
+  const givenDay = allProps.mode === "time" ? undefined : (allProps.value ?? allProps.defaultValue);
+  const givenTime =
+    allProps.mode === "time"
+      ? (allProps.value ?? allProps.defaultValue ?? "")
+      : formatTime(givenDay, step);
   // The day and the time are held apart, so clearing one does not throw the other away.
-  const [day, setDay] = useState<Date | undefined>(given);
-  const [time, setTime] = useState(() => formatTime(given, step));
-  const [text, setText] = useState(() => formatDate(given, code));
+  const [day, setDay] = useState<Date | undefined>(givenDay);
+  const [time, setTime] = useState(givenTime);
+  const [text, setText] = useState(() => formatDate(givenDay, code));
   const [isUnreadable, setIsUnreadable] = useState(false);
-  const [month, setMonth] = useState<Date | undefined>(given);
+  const [month, setMonth] = useState<Date | undefined>(givenDay);
   const [open, setOpen] = useState(false);
   const field = useRef<HTMLInputElement>(null);
 
-  // A date that arrives from outside, such as a form reset, replaces what was typed.
-  const [lastGiven, setLastGiven] = useState(value);
-  if (value?.getTime() !== lastGiven?.getTime()) {
-    setLastGiven(value);
-    setDay(value);
-    setTime(formatTime(value, step));
-    setText(formatDate(value, code));
-    setMonth(value);
+  // A value that arrives from outside, such as a form reset, replaces what was typed.
+  const valueKey = allProps.mode === "time" ? allProps.value : allProps.value?.getTime();
+  const [lastGiven, setLastGiven] = useState(valueKey);
+  if (valueKey !== lastGiven) {
+    setLastGiven(valueKey);
+    setDay(valueDay);
+    setTime(valueTime ?? "");
+    setText(formatDate(valueDay, code));
+    setMonth(valueDay);
     setIsUnreadable(false);
   }
 
-  /** The whole value: a day, a day at a time, or a time today, by mode. */
+  /** The whole value: a day, a day at a time, or a time of day, by mode. */
   const settle = (nextDay: Date | undefined, nextTime: string) => {
-    if (mode === "date") {
-      onValueChange?.(nextDay);
-      return;
+    if (allProps.mode === "time") {
+      allProps.onValueChange?.(nextTime === "" ? undefined : nextTime);
+    } else if (mode === "date") {
+      allProps.onValueChange?.(nextDay);
+    } else {
+      allProps.onValueChange?.(
+        nextDay && nextTime !== "" ? withTime(nextDay, nextTime) : undefined,
+      );
     }
-    const base = mode === "time" ? (nextDay ?? defaultValue ?? new Date()) : nextDay;
-    onValueChange?.(base && nextTime !== "" ? withTime(base, nextTime) : undefined);
   };
 
   const isWrong = invalid === true || isUnreadable;
@@ -321,10 +357,9 @@ function DatePicker({
   );
 
   const formValue = () => {
-    const base = mode === "time" ? (day ?? defaultValue ?? new Date()) : day;
     if (mode === "time") return time;
-    if (!base) return "";
-    const iso = `${String(base.getFullYear())}-${String(base.getMonth() + 1).padStart(2, "0")}-${String(base.getDate()).padStart(2, "0")}`;
+    if (!day) return "";
+    const iso = `${String(day.getFullYear())}-${String(day.getMonth() + 1).padStart(2, "0")}-${String(day.getDate()).padStart(2, "0")}`;
     if (mode === "date") return iso;
     return time === "" ? "" : `${iso}T${time}`;
   };
@@ -344,4 +379,4 @@ function DatePicker({
 }
 
 export { DatePicker };
-export type { DatePickerMode, DatePickerProps };
+export type { DatePickerDateProps, DatePickerMode, DatePickerProps, DatePickerTimeProps };

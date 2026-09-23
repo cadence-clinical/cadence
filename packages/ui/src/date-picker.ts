@@ -4,4 +4,9 @@
  * docs/decisions/0014-headless-libraries.md.
  */
 export { DatePicker } from "@/components/cadence/date-picker";
-export type { DatePickerMode, DatePickerProps } from "@/components/cadence/date-picker";
+export type {
+  DatePickerDateProps,
+  DatePickerMode,
+  DatePickerProps,
+  DatePickerTimeProps,
+} from "@/components/cadence/date-picker";
