@@ -19,6 +19,7 @@ function Tabs({ className, orientation = "horizontal", ...props }: TabsPrimitive
   );
 }
 
+/** The Tabs list's classes, for giving another element the look of a row of tabs. */
 const tabsListVariants = cva(
   [
     // `relative`, so the indicator that slides between tabs is placed against the list.

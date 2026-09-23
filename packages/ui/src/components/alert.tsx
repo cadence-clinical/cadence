@@ -4,6 +4,7 @@ import type { ComponentProps, ReactElement } from "react";
 
 import { cn } from "@/lib/cn";
 
+/** The Alert's classes, for giving another element the look of an alert. */
 const alertVariants = cva(
   // The alert measures itself, so its action can drop under the words when there is no room.
   "group/alert @container/alert w-full rounded-lg border px-(--container-padding) py-(--container-padding-sm) text-left text-body",
