@@ -307,9 +307,17 @@ function TrackChartBody({
     [scroller, fromMs, toMs, pxPerMs],
   );
 
+  // With snap times, the crosshair goes to the nearest, so its line and what it shows agree.
   const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
     setIsFromKeyboard(false);
-    setCrosshair(timeAt(event.clientX));
+    const at = timeAt(event.clientX);
+    if (at === undefined || snapTimes.length === 0) {
+      setCrosshair(at);
+      return;
+    }
+    setCrosshair(
+      snapTimes.reduce((best, time) => (Math.abs(time - at) < Math.abs(best - at) ? time : best)),
+    );
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -581,7 +589,8 @@ function TrackChartTrack({
                 <span
                   key={tick}
                   className="absolute right-0 -translate-y-1/2"
-                  style={{ top: y(tick) - 4 }}
+                  // Kept inside the track, so the top tick does not run into the track above.
+                  style={{ top: Math.min(Math.max(y(tick) - 4, 6), heightPx - 10) }}
                 >
                   {tick}
                 </span>
@@ -693,6 +702,8 @@ interface TrackMarkedPoint extends TrackPoint {
 /** The props of TrackChartPoints. */
 interface TrackChartPointsProps extends Omit<ComponentProps<"g">, "points"> {
   points: readonly TrackMarkedPoint[];
+  /** The fill of a point in no band, such as `fill-primary` to match its line. */
+  pointClassName?: string;
   /** The least room, in pixels, between two printed labels. Labels closer than this are left off. */
   labelGapPx?: number;
 }
@@ -702,7 +713,13 @@ interface TrackChartPointsProps extends Omit<ComponentProps<"g">, "points"> {
  * band and the newest value keep theirs and others are left off: every value is still in the
  * crosshair's tooltip.
  */
-function TrackChartPoints({ points, labelGapPx = 26, className, ...props }: TrackChartPointsProps) {
+function TrackChartPoints({
+  points,
+  labelGapPx = 26,
+  pointClassName = "fill-foreground",
+  className,
+  ...props
+}: TrackChartPointsProps) {
   const { x, y, drawnFromMs, drawnToMs } = useTrack("TrackChartPoints");
   const shown = nearView(points, drawnFromMs, drawnToMs);
   const newest = points.at(-1);
@@ -733,7 +750,7 @@ function TrackChartPoints({ points, labelGapPx = 26, className, ...props }: Trac
               cy={cy}
               r={point.tone === undefined ? 3 : 5}
               className={cn(
-                point.tone === undefined ? "fill-foreground" : MARK_FILL[point.tone],
+                point.tone === undefined ? pointClassName : MARK_FILL[point.tone],
                 // A ring sets a banded value apart by shape as well as colour.
                 point.tone !== undefined && "stroke-background stroke-2",
               )}
