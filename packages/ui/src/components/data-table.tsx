@@ -29,9 +29,9 @@ import {
   ChevronsUpDown,
   Settings2,
 } from "lucide-react";
-import type { ComponentProps, ReactNode } from "react";
+import { useId, type ComponentProps, type HTMLAttributes, type ReactNode } from "react";
 
-import { Button } from "@/components/cadence/button";
+import { Button, type ButtonProps } from "@/components/cadence/button";
 import { Checkbox } from "@/components/cadence/checkbox";
 import {
   DropdownMenu,
@@ -174,11 +174,16 @@ function DataTable<TData extends RowData>({
   );
 }
 
-/** A column and the words that head it. */
-interface DataTableColumnHeaderProps<TData extends RowData, TValue> {
+/**
+ * A column and the words that head it, plus the props of the element that shows them: a `button`
+ * when the column sorts, and a `span` when it does not.
+ */
+interface DataTableColumnHeaderProps<TData extends RowData, TValue> extends Omit<
+  HTMLAttributes<HTMLElement>,
+  "title" | "children"
+> {
   column: Column<DataTableFeatures, TData, TValue>;
   title: string;
-  className?: string;
 }
 
 /**
@@ -189,8 +194,16 @@ function DataTableColumnHeader<TData extends RowData, TValue>({
   column,
   title,
   className,
+  onClick,
+  ...props
 }: DataTableColumnHeaderProps<TData, TValue>) {
-  if (!column.getCanSort()) return <span className={className}>{title}</span>;
+  if (!column.getCanSort()) {
+    return (
+      <span data-slot="data-table-column-header" className={className} {...props}>
+        {title}
+      </span>
+    );
+  }
   const sorted = column.getIsSorted();
   const toEnd = column.columnDef.meta?.align === "end";
   return (
@@ -199,6 +212,7 @@ function DataTableColumnHeader<TData extends RowData, TValue>({
       variant="ghost"
       size="sm"
       data-slot="data-table-sort"
+      {...props}
       className={cn(
         // It fills the cell, so its words sit where a plain heading's do and it adds no width.
         // No border: a Button's transparent one would put its words a pixel further in.
@@ -206,7 +220,8 @@ function DataTableColumnHeader<TData extends RowData, TValue>({
         toEnd ? "justify-end text-end" : "justify-start text-start",
         className,
       )}
-      onClick={() => {
+      onClick={(event) => {
+        onClick?.(event);
         column.toggleSorting(sorted === "asc");
       }}
     >
@@ -257,11 +272,10 @@ function selectionColumn<TData extends RowData>(options?: { rowLabel?: (row: TDa
   });
 }
 
-/** The table, and the page sizes to offer. */
-interface DataTablePaginationProps<TData extends RowData> {
+/** A `div`'s props, plus the table and the page sizes to offer. */
+interface DataTablePaginationProps<TData extends RowData> extends ComponentProps<"div"> {
   table: DataTableInstance<TData>;
   pageSizes?: readonly number[];
-  className?: string;
 }
 
 /**
@@ -272,7 +286,9 @@ function DataTablePagination<TData extends RowData>({
   table,
   pageSizes = [10, 20, 50],
   className,
+  ...props
 }: DataTablePaginationProps<TData>) {
+  const pageSizeLabelId = useId();
   const selected = table.getFilteredSelectedRowModel().rows.length;
   const total = table.getFilteredRowModel().rows.length;
   const page = table.state.pagination.pageIndex + 1;
@@ -281,6 +297,7 @@ function DataTablePagination<TData extends RowData>({
   return (
     <div
       data-slot="data-table-pagination"
+      {...props}
       className={cn(
         "flex flex-wrap items-center justify-between gap-x-6 gap-y-2 text-control",
         className,
@@ -291,7 +308,7 @@ function DataTablePagination<TData extends RowData>({
       </p>
       <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
         <div className="flex items-center gap-2">
-          <span id="data-table-page-size">Rows per page</span>
+          <span id={pageSizeLabelId}>Rows per page</span>
           <Select
             items={sizes.map((size) => ({ value: size, label: size }))}
             value={String(table.state.pagination.pageSize)}
@@ -299,7 +316,7 @@ function DataTablePagination<TData extends RowData>({
               table.setPageSize(Number(value));
             }}
           >
-            <SelectTrigger size="sm" aria-labelledby="data-table-page-size" className="w-20">
+            <SelectTrigger size="sm" aria-labelledby={pageSizeLabelId} className="w-20">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -376,17 +393,25 @@ function columnLabel<TData extends RowData>(column: Column<DataTableFeatures, TD
   return typeof header === "string" ? header : column.id;
 }
 
+/** The props of the Button that opens the menu, plus the table. */
+interface DataTableViewOptionsProps<TData extends RowData> extends Omit<
+  ButtonProps,
+  "children" | "render"
+> {
+  table: DataTableInstance<TData>;
+}
+
 /** A menu that shows or hides each column that can be hidden. */
 function DataTableViewOptions<TData extends RowData>({
   table,
   className,
-}: {
-  table: DataTableInstance<TData>;
-  className?: string;
-}) {
+  ...props
+}: DataTableViewOptionsProps<TData>) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger render={<Button variant="outline" size="sm" className={className} />}>
+      <DropdownMenuTrigger
+        render={<Button variant="outline" size="sm" {...props} className={className} />}
+      >
         <Settings2 aria-hidden data-icon="inline-start" />
         Columns
       </DropdownMenuTrigger>
@@ -428,4 +453,5 @@ export type {
   DataTableInstance,
   DataTablePaginationProps,
   DataTableProps,
+  DataTableViewOptionsProps,
 };
