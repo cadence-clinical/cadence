@@ -282,3 +282,60 @@ export function readReferenceRanges(
   });
   return ranges;
 }
+
+/** A full FHIR dateTime or instant: a date, a time to the second and an offset. */
+const FULL_TIME = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2})$/;
+/** A FHIR dateTime with no time of day: a year, a month or a date. */
+const PARTIAL_DATE = /^\d{4}(-\d{2}(-\d{2})?)?$/;
+
+/** Milliseconds since the epoch for a full time, or undefined when it is not one. */
+export function parseFullTime(value: string): number | undefined {
+  if (!FULL_TIME.test(value)) return undefined;
+  const ms = Date.parse(value);
+  return Number.isNaN(ms) ? undefined : ms;
+}
+
+/**
+ * Checks a moment that must be placed on a timeline: a date, a time of day and an offset. Returns
+ * undefined, reported as an error, when it is missing, is a date alone, or is not a valid time.
+ * `subject` names what the time belongs to in the message, such as "observation".
+ */
+export function readMoment(
+  context: ReadContext,
+  time: string | undefined,
+  path: string,
+  subject: string,
+): { time: string; timeMs: number } | undefined {
+  if (time === undefined) {
+    reportAt(
+      context,
+      "error",
+      "missing-time",
+      path,
+      `The ${subject} has no time, so it was left out.`,
+    );
+    return undefined;
+  }
+  if (PARTIAL_DATE.test(time)) {
+    reportAt(
+      context,
+      "error",
+      "imprecise-time",
+      path,
+      `The ${subject}'s time "${time}" has no time of day, so it was left out.`,
+    );
+    return undefined;
+  }
+  const timeMs = parseFullTime(time);
+  if (timeMs === undefined) {
+    reportAt(
+      context,
+      "error",
+      "invalid-time",
+      path,
+      `The ${subject}'s time "${time}" is not a valid date and time with an offset, so it was left out.`,
+    );
+    return undefined;
+  }
+  return { time, timeMs };
+}
