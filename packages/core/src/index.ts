@@ -69,5 +69,7 @@ export { groupRounds } from "./rounds";
 export type { ObservationRound } from "./rounds";
 export { describeTime } from "./time";
 export type { DayWords, TimeDescription, TimeOptions } from "./time";
+export { describeDosage, quantityWords } from "./dosage-words";
+export type { DosageAudience, DosageGap, DosageWords } from "./dosage-words";
 export { defineRegion } from "./region";
 export type { Citation, Region, RegionDefinition, RuleSet } from "./region";
