@@ -1,0 +1,47 @@
+{
+  "name": "@cadence-clinical/fhir",
+  "version": "0.0.0",
+  "description": "Framework-free FHIR R4 transforms for Cadence Clinical: resources in, checked view models and a list of issues out.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cadence-clinical/cadence.git",
+    "directory": "packages/fhir"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "default": "./dist/index.mjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "lint": "eslint . --max-warnings 0",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@cadence-clinical/core": "workspace:^"
+  },
+  "devDependencies": {
+    "@cadence-clinical/config": "workspace:*",
+    "@types/fhir": "^0.0.44",
+    "@types/node": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
+    "eslint": "catalog:",
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}
