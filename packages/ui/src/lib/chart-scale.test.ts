@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 
-import { intervalForSpan, linearScale, niceTicks, timeTicks } from "@/lib/chart-scale";
+import {
+  friendlyTime,
+  intervalForSpan,
+  linearScale,
+  niceTicks,
+  timeTicks,
+} from "@/lib/chart-scale";
 
 const HOUR = 3_600_000;
 
@@ -78,5 +84,21 @@ describe("intervalForSpan", () => {
     [1, 15],
   ])("gives a %d hour span ticks every %d minutes", (hours, minutes) => {
     expect(intervalForSpan(hours * HOUR)).toBe(minutes);
+  });
+});
+
+describe("friendlyTime", () => {
+  const now = Date.parse("2026-09-23T15:00:00+10:00");
+  it.each([
+    ["2026-09-23T14:40:00+10:00", "Today", "20 mins ago"],
+    ["2026-09-22T21:00:00+10:00", "Yesterday", "18 hrs ago"],
+    ["2026-09-20T15:00:00+10:00", "Sun, 20 Sept", "3 days ago"],
+  ])("describes %s as %s, %s", (iso, day, ago) => {
+    expect(friendlyTime(Date.parse(iso), now, "Australia/Melbourne")).toEqual({ day, ago });
+  });
+
+  it("takes its own words for today and yesterday", () => {
+    const words = { today: "Heute", yesterday: "Gestern" };
+    expect(friendlyTime(now, now, "Australia/Melbourne", "en-AU", words).day).toBe("Heute");
   });
 });
