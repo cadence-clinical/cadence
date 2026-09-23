@@ -106,3 +106,43 @@ export function intervalForSpan(spanMs: number): number {
   if (hours > 1) return 30;
   return 15;
 }
+
+/** Words for the days nearest now. */
+export interface FriendlyWords {
+  readonly today: string;
+  readonly yesterday: string;
+}
+
+/**
+ * A moment in words beside its clock time: "Today", "Yesterday" or a short date, and how long ago
+ * it was, such as "6 hr ago", measured from `nowMs` in `timeZone`.
+ */
+export function friendlyTime(
+  ms: number,
+  nowMs: number,
+  timeZone: string,
+  locale = "en-AU",
+  words: FriendlyWords = { today: "Today", yesterday: "Yesterday" },
+): { day: string; ago: string } {
+  const days = localParts(nowMs, timeZone).day - localParts(ms, timeZone).day;
+  const day =
+    days === 0
+      ? words.today
+      : days === 1
+        ? words.yesterday
+        : new Intl.DateTimeFormat(locale, {
+            timeZone,
+            weekday: "short",
+            day: "numeric",
+            month: "short",
+          }).format(ms);
+  const minutes = Math.round((nowMs - ms) / MINUTE_MS);
+  const relative = new Intl.RelativeTimeFormat(locale, { style: "short", numeric: "always" });
+  const ago =
+    Math.abs(minutes) < 60
+      ? relative.format(-minutes, "minute")
+      : Math.abs(minutes) < 48 * 60
+        ? relative.format(-Math.round(minutes / 60), "hour")
+        : relative.format(-Math.round(minutes / DAY_MINUTES), "day");
+  return { day, ago };
+}
