@@ -38,8 +38,8 @@ describe("the committed registry theme", () => {
   const { light, dark, theme: scale } = theme.cssVars;
 
   it("matches the palette", () => {
-    const colours = Object.fromEntries(Object.entries(light).filter(([name]) => name !== "radius"));
-    expect(colours).toEqual(shadcnCssVars().light);
+    const colors = Object.fromEntries(Object.entries(light).filter(([name]) => name !== "radius"));
+    expect(colors).toEqual(shadcnCssVars().light);
     expect(dark).toEqual(shadcnCssVars().dark);
   });
 
