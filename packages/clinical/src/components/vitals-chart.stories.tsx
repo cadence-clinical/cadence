@@ -12,6 +12,7 @@ import {
   VITALS_TRACKS,
   syntheticReading,
   syntheticSeries,
+  syntheticTotals,
   syntheticVitals,
 } from "../fixtures/vitals";
 
@@ -26,6 +27,7 @@ const meta = {
     series: syntheticVitals(),
     schema: SYNTHETIC_SCHEMA,
     tracks: VITALS_TRACKS,
+    totals: syntheticTotals(),
     now: NOW,
     timeZone: TIME_ZONE,
   },
@@ -45,7 +47,7 @@ export const OneDay: Story = {
       expect(chart.scrollLeft + chart.clientWidth).toBeGreaterThanOrEqual(chart.scrollWidth - 1),
     );
     await expect(canvasElement.querySelectorAll('[data-slot="track-chart-track"]')).toHaveLength(
-      VITALS_TRACKS.length,
+      VITALS_TRACKS.length + 1,
     );
   },
 };
@@ -62,20 +64,20 @@ export const ThreeDays: Story = {
   },
 };
 
-/** The span toggles change the time in view, and one is always pressed. */
+/** The span tabs change the time in view. */
 export const ChooseTheSpan: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const spans = canvas.getByRole("group", { name: "Time in view" });
-    await userEvent.click(within(spans).getByRole("button", { name: "12h" }));
-    await expect(within(spans).getByRole("button", { name: "12h" })).toHaveAttribute(
-      "aria-pressed",
+    const spans = canvas.getByRole("tablist", { name: "Time in view" });
+    await userEvent.click(within(spans).getByRole("tab", { name: "12h" }));
+    await expect(within(spans).getByRole("tab", { name: "12h" })).toHaveAttribute(
+      "aria-selected",
       "true",
     );
-    // Pressing the pressed span keeps it: the chart always shows some span.
-    await userEvent.click(within(spans).getByRole("button", { name: "12h" }));
-    await expect(within(spans).getByRole("button", { name: "12h" })).toHaveAttribute(
-      "aria-pressed",
+    const ranges = canvas.getByRole("tablist", { name: "Range of values" });
+    await userEvent.click(within(ranges).getByRole("tab", { name: "Fit view" }));
+    await expect(within(ranges).getByRole("tab", { name: "Fit view" })).toHaveAttribute(
+      "aria-selected",
       "true",
     );
   },
@@ -102,7 +104,7 @@ export const Keyboard: Story = {
     await userEvent.keyboard("{End}");
     await waitFor(() =>
       expect(canvasElement.querySelector('[data-slot="track-chart-tooltip"]')?.textContent).toMatch(
-        /Respiratory rate: 17 br\/min/,
+        /Respiratory rate: 17 breaths\/min/,
       ),
     );
   },
@@ -145,4 +147,33 @@ export const NotOnTheScale: Story = {
 /** Tracks named in full, for a wider display. */
 export const FullNames: Story = {
   args: { labelStyle: "full" },
+};
+
+/** The pointer over a value opens its tooltip: the series in full, the value, its level and when. */
+export const HoverAValue: Story = {
+  play: async ({ canvasElement }) => {
+    const track = canvasElement.querySelector('[data-track="respiratory-rate"]');
+    const marks = track?.querySelectorAll('[data-slot="track-chart-mark"]') ?? [];
+    const last = marks[marks.length - 1];
+    if (!last) throw new Error("No marks were drawn.");
+    await userEvent.hover(last);
+    await waitFor(() =>
+      expect(
+        canvasElement.ownerDocument.querySelector('[data-slot="tooltip-content"]')?.textContent,
+      ).toMatch(/^Respiratory rate17 breaths\/minToday 10:00/),
+    );
+  },
+};
+
+/**
+ * The total at each round, in its level's colour, with Incomplete where an observation the total
+ * requires is missing.
+ */
+export const Totals: Story = {
+  args: { defaultSpan: "3d" },
+  play: async ({ canvasElement }) => {
+    const track = canvasElement.querySelector('[data-track="(total)"]');
+    await waitFor(() => expect(track?.textContent).toContain("Incomplete"));
+    await expect(track?.querySelectorAll('[data-tone="severity-3"]').length).toBeGreaterThan(0);
+  },
 };
