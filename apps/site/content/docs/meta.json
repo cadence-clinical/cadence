@@ -51,6 +51,7 @@
     "components/observation-table",
     "components/sidebar",
     "components/toast",
+    "components/vitals-chart",
     "---Layouts---",
     "components/app-shell",
     "components/list-detail"

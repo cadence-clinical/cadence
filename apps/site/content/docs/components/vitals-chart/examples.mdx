@@ -1,0 +1,63 @@
+---
+title: Vitals chart examples
+description: A day of synthetic vital signs, three days, and tracks named in full, each with its code.
+---
+
+Every example uses synthetic data. Its bands are arbitrary and are not clinical thresholds.
+
+## A day in view
+
+The default. The chart opens at the newest round.
+
+<VitalsChartPreview span="1d" />
+
+```tsx
+import { VitalsChart, type VitalsTrack } from "@cadence-clinical/clinical";
+import { applyObservationSchema } from "@cadence-clinical/core";
+
+const tracks: VitalsTrack[] = [
+  { kind: "line", key: "respiratory-rate", series: "respiratory-rate" },
+  { kind: "line", key: "spo2", series: "spo2" },
+  { kind: "line", key: "oxygen-flow", series: "oxygen-flow", heightPx: 64 },
+  {
+    kind: "pair",
+    key: "bp-hr",
+    label: "Blood pressure and heart rate",
+    shortLabel: "BP + HR",
+    high: "systolic",
+    low: "diastolic",
+    line: "heart-rate",
+  },
+  { kind: "line", key: "temperature", series: "temperature" },
+  { kind: "line", key: "gcs", series: "gcs", heightPx: 64 },
+];
+
+<VitalsChart
+  label="Adult observation chart"
+  series={applyObservationSchema(series, schema)}
+  schema={schema}
+  tracks={tracks}
+  now={now}
+  timeZone="Australia/Melbourne"
+/>;
+```
+
+## Three days in view
+
+Set `defaultSpan` to the span to show first.
+
+<VitalsChartPreview span="3d" />
+
+```tsx
+<VitalsChart defaultSpan="3d" {...props} />
+```
+
+## Tracks named in full
+
+Set `labelStyle` to `"full"` where there is room.
+
+<VitalsChartPreview labelStyle="full" />
+
+```tsx
+<VitalsChart labelStyle="full" {...props} />
+```

@@ -30,6 +30,37 @@
           "level": "draft"
         }
       }
+    },
+    {
+      "name": "vitals-chart",
+      "type": "registry:component",
+      "title": "Vitals chart",
+      "description": "Vital signs on stacked tracks over one time axis, with the bands an observation schema gave them, span presets, Start and Latest, a Tracks menu and range modes.",
+      "dependencies": ["@cadence-clinical/core", "lucide-react"],
+      "registryDependencies": [
+        "@cadence/theme",
+        "@cadence/cn",
+        "@cadence/button",
+        "@cadence/dropdown-menu",
+        "@cadence/toggle-group",
+        "@cadence/tooltip",
+        "@cadence/track-chart"
+      ],
+      "files": [
+        {
+          "path": "src/components/vitals-chart.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/vitals-chart.tsx"
+        }
+      ],
+      "docs": "The chart shows the bands it is given and makes no clinical judgement of its own. Offer the Observation table beside it. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "pattern",
+        "domain": "clinical",
+        "grade": {
+          "level": "draft"
+        }
+      }
     }
   ]
 }
