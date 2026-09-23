@@ -1,4 +1,4 @@
-import { source } from "@/lib/source";
+import { componentHeader, source } from "@/lib/source";
 import {
   DocsBody,
   DocsDescription,
@@ -8,10 +8,12 @@ import {
   ViewOptionsPopover,
 } from "fumadocs-ui/layouts/docs/page";
 import { notFound } from "next/navigation";
+import { ComponentTabs } from "@/components/component-tabs";
 import { getMDXComponents } from "@/components/mdx";
+import { cn } from "@/lib/cn";
 import type { Metadata } from "next";
 import { createRelativeLink } from "fumadocs-ui/mdx";
-import { getPageImageUrl, getPageMarkdownUrl, gitConfig } from "@/lib/shared";
+import { getPageImageUrl, getPageMarkdownUrl, GIT_CONFIG } from "@/lib/shared";
 
 export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
   const params = await props.params;
@@ -20,22 +22,26 @@ export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
 
   const MDX = page.data.body;
   const markdownUrl = getPageMarkdownUrl(page).url;
+  // Every tab of a component shares its name and description, so the tabs read as one page.
+  const header = componentHeader(page.url);
 
   return (
     <DocsPage toc={page.data.toc} full={page.data.full}>
-      <DocsTitle>{page.data.title}</DocsTitle>
-      <DocsDescription className="mb-0">{page.data.description}</DocsDescription>
-      <div className="flex flex-row items-center gap-2 border-b pb-6">
+      <DocsTitle>{header?.title ?? page.data.title}</DocsTitle>
+      <DocsDescription className="mb-0">
+        {header ? header.description : page.data.description}
+      </DocsDescription>
+      <div className={cn("flex flex-row items-center gap-2", header ? "pb-2" : "border-b pb-6")}>
         <MarkdownCopyButton markdownUrl={markdownUrl} />
         <ViewOptionsPopover
           markdownUrl={markdownUrl}
-          githubUrl={`https://github.com/${gitConfig.user}/${gitConfig.repo}/blob/${gitConfig.branch}/${gitConfig.contentDir}/${page.path}`}
+          githubUrl={`https://github.com/${GIT_CONFIG.user}/${GIT_CONFIG.repo}/blob/${GIT_CONFIG.branch}/${GIT_CONFIG.contentDir}/${page.path}`}
         />
       </div>
+      {header ? <ComponentTabs title={header.title} tabs={header.tabs} /> : null}
       <DocsBody>
         <MDX
           components={getMDXComponents({
-            // this allows you to link to other pages with relative file paths
             a: createRelativeLink(source, page),
           })}
         />

@@ -4,6 +4,7 @@ import type { MDXComponents } from "mdx/types";
 
 import { AppShellPreview } from "./app-shell-preview";
 import { Callout } from "./callout";
+import { ComponentChangelog } from "./component-changelog";
 import { ComponentPreview } from "./component-preview";
 import { DataTablePreview } from "./data-table-preview";
 import { DatePickerPreview } from "./date-picker-preview";
@@ -20,6 +21,7 @@ export function getMDXComponents(components?: MDXComponents) {
     AppShellPreview,
     Button,
     Callout,
+    ComponentChangelog,
     ComponentPreview,
     GradeBadge,
     ListDetailPreview,

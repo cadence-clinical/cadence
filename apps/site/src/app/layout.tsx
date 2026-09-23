@@ -2,14 +2,14 @@ import { RootProvider } from "fumadocs-ui/provider/next";
 import type { Metadata } from "next";
 
 import { PREFERENCE_SCRIPT } from "@/lib/preferences";
-import { appName, siteDescription, siteUrl } from "@/lib/shared";
+import { APP_NAME, SITE_DESCRIPTION, SITE_URL } from "@/lib/shared";
 
 import "./global.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  title: { default: appName, template: `%s | ${appName}` },
-  description: siteDescription,
+  metadataBase: new URL(SITE_URL),
+  title: { default: APP_NAME, template: `%s | ${APP_NAME}` },
+  description: SITE_DESCRIPTION,
 };
 
 export default function Layout({ children }: LayoutProps<"/">) {

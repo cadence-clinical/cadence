@@ -2,15 +2,14 @@ import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared";
 
 import { ThemeControls } from "@/components/theme-controls";
 
-import { appName, gitConfig } from "./shared";
+import { APP_NAME, GIT_CONFIG } from "./shared";
 
 export function baseOptions(): BaseLayoutProps {
   return {
     nav: {
-      // JSX supported
-      title: appName,
+      title: APP_NAME,
     },
-    githubUrl: `https://github.com/${gitConfig.user}/${gitConfig.repo}`,
+    githubUrl: `https://github.com/${GIT_CONFIG.user}/${GIT_CONFIG.repo}`,
     // The theme picker sits beside the light and dark switch.
     slots: { themeSwitch: ThemeControls },
   };

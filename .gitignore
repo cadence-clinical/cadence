@@ -38,6 +38,7 @@ __screenshots__
 # agent tooling: local state is ignored, and so are third-party skills, which skills-lock.json
 # pins and `pnpm skills:install` restores. Skills maintained here are committed.
 .claude/settings.local.json
+.claude/worktrees/
 .claude/skills/emil-design-eng
 .claude/skills/web-design-guidelines
 .claude/skills/fhir-developer-skill
