@@ -190,7 +190,7 @@ test("a live example sits on a card, so its field is white on a brand's grey pag
     localStorage.setItem("cadence-brand", "midnight");
   });
   await page.goto("/docs/components/input");
-  const field = page.locator("#input-preview");
+  const field = page.locator(".preview-surface [data-slot=input]").first();
   const fill = await field.evaluate((element) => getComputedStyle(element).backgroundColor);
   expect(fill).toBe("rgb(255, 255, 255)");
   expect((await look(page)).page).toBe("rgb(244, 243, 245)");
@@ -222,16 +222,12 @@ test("a touch screen gets the touch default, and comfortable when it asks", asyn
   isMobile,
 }) => {
   await page.goto("/docs/components/button");
-  const controlHeight = () =>
-    page.evaluate(() =>
-      getComputedStyle(document.documentElement).getPropertyValue("--control-height").trim(),
-    );
-  expect(await controlHeight()).toBe(isMobile ? "2.5rem" : "2rem");
+  expect(await controlHeight(page)).toBe(isMobile ? "2.5rem" : "2rem");
 
   await page.evaluate(() => {
     document.documentElement.setAttribute("data-density", "comfortable");
   });
-  expect(await controlHeight()).toBe("2.75rem");
+  expect(await controlHeight(page)).toBe("2.75rem");
 });
 
 /** The control height the page resolves, which is what the density sets. */
