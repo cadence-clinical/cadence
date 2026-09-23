@@ -43,6 +43,7 @@
   },
   "devDependencies": {
     "@cadence-clinical/config": "workspace:*",
+    "@cadence-clinical/core": "workspace:*",
     "@types/culori": "^4.0.1",
     "@types/node": "catalog:",
     "eslint": "catalog:",

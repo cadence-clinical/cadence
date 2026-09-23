@@ -94,6 +94,30 @@ Put the border token on every status surface. No amber fill reaches 3:1 against 
 
 Never signal status with colour alone. Pair it with text or an icon.
 
+## Severity scale
+
+The severity scale colours the bands of an observation chart and the cells of an observation table. It has seven fixed, ordered steps, `severity-0` to `severity-6`. Like the status colours, they are the same in every theme and brand.
+
+| Step         | Colour                    |
+| ------------ | ------------------------- |
+| `severity-0` | No tint: within range.    |
+| `severity-1` | Yellow.                   |
+| `severity-2` | Orange.                   |
+| `severity-3` | Light red.                |
+| `severity-4` | Red.                      |
+| `severity-5` | Deep red.                 |
+| `severity-6` | Purple, for an emergency. |
+
+Each step has three tokens:
+
+| Token               | Use                                                 |
+| ------------------- | --------------------------------------------------- |
+| `severity-2`        | A chart marker. It reaches 3:1 against the page.    |
+| `severity-2-subtle` | The fill of a band or a cell. Body text sits on it. |
+| `severity-2-border` | The edge of a band or a cell.                       |
+
+You do not choose a step's colour. An observation schema gives each of its levels a step, such as "Score 2" at `severity-2`, and the step's colour is fixed. Adjacent steps are close in colour, as they are on paper charts, so a level is always shown with its words and a marker's shape as well as its colour.
+
 ## Add your own accent
 
 An accent is brand colour only. It drives primary buttons, links and focus rings.
