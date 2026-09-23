@@ -1,5 +1,27 @@
 export { GRADE_LEVELS, compareGrades, validateGrade } from "./grade";
 export type { ComponentGrade, GradeLevel } from "./grade";
+export {
+  ADMINISTRATION_STATUSES,
+  MEDICATION_ORDER_STATUSES,
+  MEDICATION_STATEMENT_STATUSES,
+  TIME_UNITS,
+} from "./medication";
+export type {
+  Administration,
+  AdministrationStatus,
+  AsNeeded,
+  DoseTiming,
+  Dosage,
+  Ingredient,
+  MedicationName,
+  MedicationOrder,
+  MedicationOrderStatus,
+  MedicationRecord,
+  MedicationStatement,
+  MedicationStatementStatus,
+  Strength,
+  TimeUnit,
+} from "./medication";
 export { COMPARATORS, OBSERVATION_STATUSES } from "./observation";
 export type {
   CodingMatch,

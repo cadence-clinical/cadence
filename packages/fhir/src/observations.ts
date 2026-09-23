@@ -21,6 +21,8 @@ import {
   readConcept,
   readConcepts,
   readQuantity,
+  parseFullTime,
+  readMoment,
   readReferenceRanges,
   reportAt,
   stringField,
@@ -72,11 +74,6 @@ export interface ObservationSeriesResult {
   readonly issues: readonly TransformIssue[];
 }
 
-/** A full FHIR dateTime or instant: a date, a time to the second and an offset. */
-const FULL_TIME = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2})$/;
-/** A FHIR dateTime with no time of day: a year, a month or a date. */
-const PARTIAL_DATE = /^\d{4}(-\d{2}(-\d{2})?)?$/;
-
 /** The value[x] names this transform reads, and the kind each becomes. */
 const SUPPORTED_VALUES = [
   "valueQuantity",
@@ -94,13 +91,6 @@ function isSupportedValue(key: string): key is SupportedValue {
 
 function isStatus(value: unknown): value is ObservationStatus {
   return OBSERVATION_STATUSES.some((status) => status === value);
-}
-
-/** Milliseconds since the epoch for a full time, or undefined when it is not one. */
-function parseFullTime(value: string): number | undefined {
-  if (!FULL_TIME.test(value)) return undefined;
-  const ms = Date.parse(value);
-  return Number.isNaN(ms) ? undefined : ms;
 }
 
 /** Checks the period once, because a wrong period is a mistake in the calling code. */
@@ -142,11 +132,7 @@ function readTime(
   context: ReadContext,
   raw: UnknownRecord,
 ): { time: string; timeMs: number } | undefined {
-  const error = (
-    code: "missing-time" | "imprecise-time" | "invalid-time" | "unsupported-time",
-    path: string,
-    message: string,
-  ): void => {
+  const error = (code: "unsupported-time", path: string, message: string): void => {
     reportAt(context, "error", code, path, message);
   };
 
@@ -173,29 +159,8 @@ function readTime(
     time = stringField(raw, "effectiveDateTime");
   }
 
-  if (time === undefined) {
-    // The time the result was issued is not when it was observed, so it is not used instead.
-    error("missing-time", path, "The observation has no time it was observed, so it was left out.");
-    return;
-  }
-  if (PARTIAL_DATE.test(time)) {
-    error(
-      "imprecise-time",
-      path,
-      `The observation's time "${time}" has no time of day, so it was left out.`,
-    );
-    return;
-  }
-  const timeMs = parseFullTime(time);
-  if (timeMs === undefined) {
-    error(
-      "invalid-time",
-      path,
-      `The observation's time "${time}" is not a valid date and time with an offset, so it was left out.`,
-    );
-    return;
-  }
-  return { time, timeMs };
+  // The time the result was issued is not when it was observed, so it is not used instead.
+  return readMoment(context, time, path, "observation");
 }
 
 /**
