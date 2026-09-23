@@ -121,11 +121,18 @@ function solveRoles(
   return solid && text ? { solid, foreground, text } : undefined;
 }
 
-/** Builds a full accent from one seed colour, in any CSS colour syntax. */
+/**
+ * Builds a full accent from one seed colour, in any CSS colour syntax. A seed that is not a colour
+ * is reported in `problems`, and the default accent stands in for it, so the result is complete.
+ */
 export function createAccent(seed: string): AccentResult {
   const parsed = parse(seed);
   if (!parsed) {
-    throw new Error(`"${seed}" is not a colour Cadence can parse.`);
+    return {
+      seed,
+      definition: createAccent(ACCENT_SEEDS[DEFAULT_ACCENT]).definition,
+      problems: [`"${seed}" is not a colour Cadence can parse.`],
+    };
   }
 
   const { l, c, h = 0 } = toOklch(parsed);

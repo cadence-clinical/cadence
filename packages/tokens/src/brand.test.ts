@@ -40,6 +40,12 @@ describe("checkBrand", () => {
     expect(checkBrand("red", red).some((p) => p.includes("critical status colour"))).toBe(true);
   });
 
+  it("refuses an accent that is not a colour, rather than throwing", () => {
+    expect(checkBrand("plain", { label: "Plain", accent: "brand-blue" })).toEqual([
+      '"brand-blue" is not a colour Cadence can parse.',
+    ]);
+  });
+
   it("refuses a name that is not safe as an attribute value", () => {
     expect(checkBrand('bad"name', { label: "Bad", accent: "#25215d" })[0]).toContain(
       "is not a brand name",
