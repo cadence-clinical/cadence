@@ -17,4 +17,5 @@ export type {
   DataTableInstance,
   DataTablePaginationProps,
   DataTableProps,
+  DataTableViewOptionsProps,
 } from "@/components/cadence/data-table";
