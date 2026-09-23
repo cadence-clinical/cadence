@@ -1,0 +1,60 @@
+---
+title: Observation table
+description: Shows observations over time as a flowsheet, with the band each value was given, its change since the value before, and a total for each round.
+---
+
+<GradeBadge component="observation-table" />
+
+<ObservationTablePreview />
+
+## Use it for
+
+- Reviewing a patient's observations over hours or days, round by round.
+- The rows beside an observation chart: the same values, readable by a screen reader.
+- Showing a total score for each round, such as an early warning score, that an observation schema defines.
+
+## Do not use it for
+
+- **A list of records to sort, filter or select.** Use the [Data table](/docs/components/data-table).
+- **A trend at a glance.** A chart shows the shape of a series better. Offer the table beside it.
+- **Working out a band or a score.** The table shows the bands and totals it is given. They come from an observation schema you choose, as [Clinical safety](/docs/clinical-safety) explains.
+
+## Apply a schema before you show the table
+
+The table holds no threshold. An observation schema says which band each value is in and what each band scores, and `applyObservationSchema` and `scoreRounds` in `@cadence-clinical/core` apply it before the table sees the data. Cadence ships no clinical schema: yours comes from your organisation, or from a Region package that cites its source. [Code](/docs/components/observation-table/code) shows the steps.
+
+## Read a round down its column
+
+A set of vital signs is recorded over a minute or two, and each value carries its own time. The table puts readings taken within five minutes of a round's first reading in one column, headed by that first time. The newest round is on the right, and the table opens there.
+
+When a round has two values for one row, such as a heart rate from a monitor and one counted by hand, the cell shows both. Neither is dropped.
+
+## Show every band in words as well as colour
+
+A value in a band has four signs of it: a fill and an edge from the fixed [severity scale](/docs/theming#severity-scale), the level's short label in a box before the value, and bold figures. Its tooltip and a screen reader give the level in words. Keep each level's short label to a character or two, such as **2**, so it reads apart from the number.
+
+## Trust Incomplete over a number
+
+A total is shown only when every observation the schema requires is in the round. When one is missing, the cell says **Incomplete** and its tooltip names what is missing. The sum of what is there would read lower than the round is, so it is never shown.
+
+A schema can say that one observation at a level, such as an emergency level, raises the round whatever the sum. That round shows the raised level even when it is incomplete.
+
+## Look at what the schema could not judge
+
+A value with a dashed edge and a question mark is one the schema could not place in a band. Its tooltip says why:
+
+- **Another unit.** The value shows its own unit, and is never compared with bands written in another.
+- **A bound**, such as less than 95, that could be in more than one band.
+- **An answer the schema does not list.** Answers are matched exactly, never guessed.
+- **Outside every band** the schema has.
+
+A value that was not recorded says **Not recorded**, rather than leaving the cell empty.
+
+## Hide rows, not rounds
+
+The Rows menu shows and hides rows, including the total. Hiding a row never moves a column, so a round stays in the same place.
+
+## Accessibility
+
+- **Give the table a `label`**, such as "Vital signs". It names the table and its scrolling region.
+- **Tell people the arrow keys work.** The values are one stop for the Tab key, and the arrow keys, Home and End move between them, each showing its tooltip.
