@@ -3,7 +3,7 @@ import { renderToString } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
 import registry from "../registry.json";
-import { NOW, TIME_ZONE, syntheticVitals } from "./fixtures/vitals";
+import { NOW, TIME_ZONE, syntheticTotals, syntheticVitals } from "./fixtures/vitals";
 import { ObservationTable } from "./index";
 
 const RENDERS: Record<string, ReactElement> = {
@@ -46,5 +46,25 @@ describe("ObservationTable on the server", () => {
 
   it("says a value was not recorded rather than leaving the cell empty", () => {
     expect(html).toContain("Not recorded");
+  });
+});
+
+describe("ObservationTable totals", () => {
+  it("throws for a total whose round is not a column", () => {
+    const { label, rounds } = syntheticTotals();
+    const [first] = rounds;
+    if (!first) throw new Error("The fixture has no totals.");
+    const stray = { ...first, timeMs: first.timeMs + 1 };
+    expect(() =>
+      renderToString(
+        <ObservationTable
+          label="Vital signs"
+          series={syntheticVitals()}
+          totals={{ label, rounds: [stray] }}
+          now={NOW}
+          timeZone={TIME_ZONE}
+        />,
+      ),
+    ).toThrow(/is not a column/);
   });
 });

@@ -292,6 +292,9 @@ importers:
       '@cadence-clinical/ui':
         specifier: workspace:^
         version: link:../ui
+      lucide-react:
+        specifier: ^1.46.0
+        version: 1.46.0(react@19.3.0)
     devDependencies:
       '@base-ui/react':
         specifier: ^1.8.0
@@ -317,9 +320,6 @@ importers:
       eslint:
         specifier: 'catalog:'
         version: 9.39.5(jiti@2.7.0)
-      lucide-react:
-        specifier: ^1.46.0
-        version: 1.46.0(react@19.3.0)
       react:
         specifier: 'catalog:'
         version: 19.3.0

@@ -37,7 +37,8 @@
   },
   "dependencies": {
     "@cadence-clinical/core": "workspace:^",
-    "@cadence-clinical/ui": "workspace:^"
+    "@cadence-clinical/ui": "workspace:^",
+    "lucide-react": "^1.46.0"
   },
   "peerDependencies": {
     "react": "^19.0.0",
@@ -52,7 +53,6 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "eslint": "catalog:",
-    "lucide-react": "^1.46.0",
     "react": "catalog:",
     "react-dom": "catalog:",
     "storybook": "^10.6.0",

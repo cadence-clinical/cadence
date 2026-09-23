@@ -1,0 +1,90 @@
+---
+title: Observation table examples
+description: Vital signs with a total, two values in one round, values the schema could not judge, hidden rows and an empty period, each with its code.
+---
+
+Every example uses synthetic data. Its bands, scores and total are arbitrary, to show how they are drawn: they are not clinical thresholds.
+
+## Vital signs with a total
+
+Glasgow Coma Scale, blood pressure, SpO₂ and oxygen flow among the rows, and a total for each round. Oxygen flow has values only in the rounds when supplementary oxygen was given. The round with no temperature has an incomplete total.
+
+<ObservationTablePreview example="vitals" />
+
+```tsx
+import { ObservationTable } from "@cadence-clinical/clinical";
+import { applyObservationSchema, groupRounds, scoreRounds } from "@cadence-clinical/core";
+
+const vitals = applyObservationSchema(series, schema);
+const totals = {
+  label: schema.total.label,
+  rounds: scoreRounds(groupRounds(vitals, 5 * 60_000), schema),
+};
+
+<ObservationTable
+  label="Vital signs"
+  series={vitals}
+  totals={totals}
+  now={now}
+  timeZone="Australia/Melbourne"
+/>;
+```
+
+## Without a total
+
+Leave `totals` out when the schema defines no total.
+
+<ObservationTablePreview example="no-total" />
+
+```tsx
+<ObservationTable label="Vital signs" series={vitals} now={now} timeZone="Australia/Melbourne" />
+```
+
+## Two values in one round
+
+A heart rate from a monitor and one counted by hand, 40 seconds apart, share a column. The cell shows both.
+
+<ObservationTablePreview example="two-values" />
+
+```tsx
+<ObservationTable label="Heart rate" series={heartRate} now={now} timeZone="Australia/Melbourne" />
+```
+
+## Values the schema could not judge
+
+A temperature in another unit, a bound and a value not recorded. Hover over one, or move to it with the arrow keys, to see why it has no band.
+
+<ObservationTablePreview example="not-banded" />
+
+```tsx
+<ObservationTable label="Vital signs" series={vitals} now={now} timeZone="Australia/Melbourne" />
+```
+
+## Rows hidden at first
+
+`defaultHiddenRows` hides rows until the reader shows them from the Rows menu. `TOTAL_ROW` is the total's row.
+
+<ObservationTablePreview example="vitals" hide={["diastolic", "total"]} />
+
+```tsx
+import { ObservationTable, TOTAL_ROW } from "@cadence-clinical/clinical";
+
+<ObservationTable
+  label="Vital signs"
+  series={vitals}
+  totals={totals}
+  defaultHiddenRows={["diastolic", TOTAL_ROW]}
+  now={now}
+  timeZone="Australia/Melbourne"
+/>;
+```
+
+## Nothing in the period
+
+The table says so.
+
+<ObservationTablePreview example="empty" />
+
+```tsx
+<ObservationTable label="Vital signs" series={[]} now={now} timeZone="Australia/Melbourne" />
+```

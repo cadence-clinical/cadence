@@ -33,7 +33,9 @@ const problems = [];
 for (const file of await readdir(dist, { recursive: true })) {
   if (!/\.(mjs|d\.mts)$/.test(file)) continue;
   if (!sources.has(withoutExtension(file))) {
-    problems.push(`dist/${file} has no source in packages/clinical/src: it was built in from ui.`);
+    problems.push(
+      `dist/${file} has no source in packages/clinical/src: it was built in from ui or another package that is not a dependency.`,
+    );
   }
   const code = await readFile(new URL(file, dist), "utf8");
   if (/from ["']@\//.test(code)) problems.push(`dist/${file} still imports through an @/ alias.`);

@@ -20,6 +20,7 @@ export {
   applyObservationSchema,
   checkObservationSchema,
   defineObservationSchema,
+  scoreRounds,
 } from "./observation-schema";
 export type {
   InterpretationLabel,
@@ -27,12 +28,16 @@ export type {
   InterpretedSeries,
   ObservationAnswer,
   ObservationBand,
+  ObservationEscalation,
   ObservationLevel,
   ObservationSchema,
   ObservationSeriesDefinition,
+  ObservationTotal,
   ReadingBand,
   ReadingChange,
+  RoundTotal,
   SeverityStep,
+  TotalPart,
   UnbandedReason,
 } from "./observation-schema";
 export { groupRounds } from "./rounds";
