@@ -1,6 +1,6 @@
 {
   "name": "@cadence-clinical/ui",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Accessible React primitives for clinical software, built on Base UI and Tailwind CSS.",
   "license": "MIT",
   "repository": {
