@@ -14,6 +14,7 @@ import { ListDetailPreview } from "./list-detail-preview";
 import { ObservationTablePreview } from "./observation-table-preview";
 import { SidebarPreview } from "./sidebar-preview";
 import { ToastPreview } from "./toast-preview";
+import { TrackChartPreview } from "./track-chart-preview";
 import { TypesetPreview } from "./typeset-preview";
 
 export function getMDXComponents(components?: MDXComponents) {
@@ -33,6 +34,7 @@ export function getMDXComponents(components?: MDXComponents) {
     FormPreview,
     SidebarPreview,
     ToastPreview,
+    TrackChartPreview,
     ...components,
   } satisfies MDXComponents;
 }
