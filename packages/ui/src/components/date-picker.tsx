@@ -195,7 +195,7 @@ function DatePicker({
   const [day, setDay] = useState<Date | undefined>(given);
   const [time, setTime] = useState(() => formatTime(given, step));
   const [text, setText] = useState(() => formatDate(given, code));
-  const [unreadable, setUnreadable] = useState(false);
+  const [isUnreadable, setIsUnreadable] = useState(false);
   const [month, setMonth] = useState<Date | undefined>(given);
   const [open, setOpen] = useState(false);
   const field = useRef<HTMLInputElement>(null);
@@ -208,7 +208,7 @@ function DatePicker({
     setTime(formatTime(value, step));
     setText(formatDate(value, code));
     setMonth(value);
-    setUnreadable(false);
+    setIsUnreadable(false);
   }
 
   /** The whole value: a day, a day at a time, or a time today, by mode. */
@@ -221,7 +221,7 @@ function DatePicker({
     onValueChange?.(base && nextTime !== "" ? withTime(base, nextTime) : undefined);
   };
 
-  const wrong = invalid === true || unreadable;
+  const isWrong = invalid === true || isUnreadable;
 
   const dateField = (
     <div className="relative flex w-full min-w-0 items-center">
@@ -229,7 +229,7 @@ function DatePicker({
         ref={field}
         id={id}
         aria-label={dateLabel}
-        aria-invalid={wrong || undefined}
+        aria-invalid={isWrong || undefined}
         disabled={disabled}
         required={required}
         placeholder={placeholder ?? datePattern(code)}
@@ -239,7 +239,7 @@ function DatePicker({
           const next = event.target.value;
           setText(next);
           const read = parseDate(next, code);
-          setUnreadable(read === null);
+          setIsUnreadable(read === null);
           const nextDay = read ?? undefined;
           setDay(nextDay);
           if (nextDay) setMonth(nextDay);
@@ -286,7 +286,7 @@ function DatePicker({
             onSelect={(chosen) => {
               setDay(chosen);
               setText(formatDate(chosen, code));
-              setUnreadable(false);
+              setIsUnreadable(false);
               if (chosen) setMonth(chosen);
               settle(chosen, time);
               setOpen(false);

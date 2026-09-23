@@ -7,13 +7,13 @@ import { cn } from "@/lib/cn";
  * an icon button whose name is only in its tooltip. 50ms is quick enough to feel immediate, and
  * long enough that a pointer crossing a toolbar does not set every tooltip off.
  */
-const OPEN_DELAY = 50;
+const OPEN_DELAY_MS = 50;
 
 /**
  * Groups tooltips so they share a delay. While one is open, the next opens at once and without
  * animation, which is what makes a toolbar quick to explore. Wrap a toolbar, or the whole app.
  */
-function TooltipProvider({ delay = OPEN_DELAY, ...props }: TooltipPrimitive.Provider.Props) {
+function TooltipProvider({ delay = OPEN_DELAY_MS, ...props }: TooltipPrimitive.Provider.Props) {
   return <TooltipPrimitive.Provider data-slot="tooltip-provider" delay={delay} {...props} />;
 }
 
@@ -32,7 +32,7 @@ function Tooltip(props: TooltipPrimitive.Root.Props) {
  * What the tooltip describes. Pass the control through `render`, such as an icon-only Button.
  * Its hover waits 50ms, unless a `TooltipProvider` around it sets the group's delay.
  */
-function TooltipTrigger({ delay = OPEN_DELAY, ...props }: TooltipPrimitive.Trigger.Props) {
+function TooltipTrigger({ delay = OPEN_DELAY_MS, ...props }: TooltipPrimitive.Trigger.Props) {
   return <TooltipPrimitive.Trigger data-slot="tooltip-trigger" delay={delay} {...props} />;
 }
 

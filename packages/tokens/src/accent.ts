@@ -102,10 +102,10 @@ function solveRoles(
   const surfaces = [base.background, base.card];
 
   // On dark with more contrast the fill flips to light with dark text. See palette.ts.
-  const flipped = mode === "dark" && contrast === "more";
-  const foreground = flipped ? ON_SOLID_DARK : ON_SOLID_LIGHT;
+  const isFlipped = mode === "dark" && contrast === "more";
+  const foreground = isFlipped ? ON_SOLID_DARK : ON_SOLID_LIGHT;
 
-  const solid = solveLightness(chroma, hue, seedLightness, flipped ? [0.6, 0.97] : [0.2, 0.7], [
+  const solid = solveLightness(chroma, hue, seedLightness, isFlipped ? [0.6, 0.97] : [0.2, 0.7], [
     { against: foreground, minimum: minimum.text },
     ...surfaces.map((against) => ({ against, minimum: minimum.boundary })),
   ]);
