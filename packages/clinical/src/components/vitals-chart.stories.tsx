@@ -151,6 +151,9 @@ export const FullNames: Story = {
 
 /** The pointer over a value opens its tooltip: the series in full, the value, its level and when. */
 export const HoverAValue: Story = {
+  // It opens a Tooltip by hovering, which Chromatic's capture browser does not do. The component
+  // tests run it in Chromium and WebKit.
+  parameters: { chromatic: { disableSnapshot: true } },
   play: async ({ canvasElement }) => {
     const track = canvasElement.querySelector('[data-track="respiratory-rate"]');
     const marks = track?.querySelectorAll('[data-slot="track-chart-mark"]') ?? [];
