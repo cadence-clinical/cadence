@@ -1,0 +1,104 @@
+---
+title: Track chart code
+description: How to install the Track chart, its parts and props, and how it meets accessibility.
+---
+
+## Installation
+
+From npm:
+
+```tsx
+import { TrackChart, TrackChartBody, TrackChartTrack } from "@cadence-clinical/ui";
+```
+
+From the shadcn registry:
+
+```bash
+pnpm dlx shadcn@latest add @cadence/track-chart
+```
+
+The registry installs its scales, `lib/chart-scale.ts`, beside it.
+
+## Usage
+
+```tsx
+import {
+  TrackChart,
+  TrackChartAxis,
+  TrackChartBody,
+  TrackChartLine,
+  TrackChartTrack,
+} from "@cadence-clinical/ui";
+
+<TrackChart fromMs={from} toMs={to} spanMs={12 * 3_600_000} timeZone="Australia/Melbourne">
+  <TrackChartBody label="Heart rate">
+    <TrackChartAxis />
+    <TrackChartTrack label="Heart rate" domain={[30, 180]}>
+      <TrackChartLine points={points} />
+    </TrackChartTrack>
+  </TrackChartBody>
+</TrackChart>;
+```
+
+## API
+
+The Track chart is drawn by Cadence in SVG and uses no charting library. shadcn's Chart is a set of wrappers for Recharts, so this composite does not take its names, and code written for shadcn's Chart does not work with it.
+
+Its time axis falls on the local hour in the `timeZone` you pass, so a page rendered on a server draws the same axis as the browser. A charting library's time scale works in UTC or in the zone of the machine running it.
+
+| Part               | What it is                                                                                  |
+| ------------------ | ------------------------------------------------------------------------------------------- |
+| `TrackChart`       | The root. It holds the time range, the span in view and the time zone.                      |
+| `TrackChartBody`   | The part that scrolls, and the one stop for the keyboard. It holds the axis and the tracks. |
+| `TrackChartAxis`   | The time at each tick, and the date where a day starts.                                     |
+| `TrackChartTrack`  | One track: its name, its range of values, its bands, and its marks.                         |
+| `TrackChartLine`   | A line through values.                                                                      |
+| `TrackChartPoints` | A labelled point at each value.                                                             |
+| `TrackChartRange`  | A pair of values at each moment, joined.                                                    |
+| `TrackChartEvents` | Words at moments.                                                                           |
+| `useTrackChart`    | For a toolbar inside `TrackChart`: `scrollToStart`, `scrollToEnd`, and the times in view.   |
+
+## Props
+
+`TrackChart`:
+
+| Prop        | Type             | Default   |
+| ----------- | ---------------- | --------- |
+| `fromMs`    | `number`         | Required  |
+| `toMs`      | `number`         | Required  |
+| `spanMs`    | `number`         | Required  |
+| `timeZone`  | `string`         | Required  |
+| `locale`    | `string`         | `"en-AU"` |
+| `hourCycle` | `"h23" \| "h12"` | `"h23"`   |
+
+`TrackChartBody`:
+
+| Prop              | Type                            | Default                                                   |
+| ----------------- | ------------------------------- | --------------------------------------------------------- |
+| `label`           | `string`                        | Required                                                  |
+| `snapTimes`       | `number[]`                      | `[]`: the arrow keys move by a tenth of the span          |
+| `renderCrosshair` | `(timeMs: number) => ReactNode` | None                                                      |
+| `instructions`    | `string`                        | "Use the left and right arrow keys to move through time." |
+
+`TrackChartTrack`:
+
+| Prop          | Type                                                   | Default                 |
+| ------------- | ------------------------------------------------------ | ----------------------- |
+| `label`       | `ReactNode`                                            | Required                |
+| `description` | `ReactNode`                                            | None                    |
+| `domain`      | `[number, number]`                                     | None: a track of events |
+| `bands`       | `{ from?: number; below?: number; tone: TrackTone }[]` | `[]`                    |
+| `heightPx`    | `number`                                               | `72`                    |
+
+`TrackTone` is a step of the severity scale from `"severity-1"` to `"severity-6"`.
+
+## Drawing what is in view
+
+Only the time in view, and a span either side, is drawn, so a record of weeks costs about as much as one of a day. The chart opens at the latest time and stays there as it is measured, until the reader scrolls back.
+
+## Accessibility
+
+- `TrackChartBody` is a group with the role description "chart", named by `label` and described by `instructions`.
+- It is one tab stop. The arrow keys move the crosshair to the next or previous of `snapTimes`, Home and End go to the first and last, and Escape hides it. The chart scrolls to keep the crosshair in view.
+- What `renderCrosshair` returns is shown in the crosshair's tooltip, and read out through a polite live region when the keyboard moves the crosshair.
+- The SVG is hidden from screen readers. The values reach them through the crosshair, and should also be offered in a table.
