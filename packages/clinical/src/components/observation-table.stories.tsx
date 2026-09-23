@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, waitFor, within } from "storybook/test";
+import { expect, userEvent, waitFor, within } from "storybook/test";
 
 import { applyObservationSchema } from "@cadence-clinical/core";
 
@@ -10,6 +10,8 @@ import {
   SYNTHETIC_SCHEMA,
   TIME_ZONE,
   syntheticReading,
+  syntheticSeries,
+  syntheticTotals,
   syntheticVitals,
 } from "../fixtures/vitals";
 
@@ -22,6 +24,7 @@ const meta = {
   args: {
     label: "Vital signs",
     series: syntheticVitals(),
+    totals: syntheticTotals(),
     now: NOW,
     timeZone: TIME_ZONE,
   },
@@ -75,6 +78,7 @@ export const ChangesInWords: Story = {
 /** A round with two heart rates, from a monitor and counted by hand, shows both in its cell. */
 export const TwoValuesInOneRound: Story = {
   args: {
+    totals: undefined,
     series: applyObservationSchema(
       [
         {
@@ -113,6 +117,7 @@ export const TwoValuesInOneRound: Story = {
  */
 export const WhatIsNotBanded: Story = {
   args: {
+    totals: undefined,
     series: applyObservationSchema(
       [
         {
@@ -165,10 +170,104 @@ export const WhatIsNotBanded: Story = {
 
 /** With nothing in the period, the table says so. */
 export const Empty: Story = {
-  args: { series: [] },
+  args: { series: [], totals: undefined },
   play: async ({ canvasElement }) => {
     await expect(
       within(canvasElement).getByText("No observations in this period."),
     ).toBeInTheDocument();
+  },
+};
+
+/**
+ * The total row adds up each round's levels, as the schema says. A round missing a required
+ * observation says Incomplete and names what is missing, rather than showing a sum that would read
+ * lower than the round is.
+ */
+export const Totals: Story = {
+  play: async ({ canvasElement }) => {
+    const totals = canvasElement.querySelectorAll<HTMLElement>("[data-total]");
+    await expect(totals.length).toBeGreaterThan(0);
+    const incomplete = canvasElement.querySelector<HTMLElement>('[data-total="incomplete"]');
+    await expect(incomplete?.textContent).toMatch(/Incomplete.*Missing: Temperature/);
+    const complete = [...totals].find(
+      (total) =>
+        total.dataset["total"] === "complete" && total.dataset["severity"] === "severity-3",
+    );
+    await expect(complete?.textContent).toMatch(/Synthetic total score 6, Synthetic level 3/);
+  },
+};
+
+/** One observation at the emergency level raises its round, whatever the sum. */
+export const Escalated: Story = {
+  args: (() => {
+    const series = syntheticSeries().map((entry) =>
+      entry.key === "consciousness"
+        ? {
+            ...entry,
+            readings: entry.readings.map((reading, index, all) =>
+              index === all.length - 1
+                ? {
+                    ...reading,
+                    value: { kind: "concept" as const, concept: { codings: [], text: "Pain" } },
+                  }
+                : reading,
+            ),
+          }
+        : entry,
+    );
+    const vitals = applyObservationSchema(series, SYNTHETIC_SCHEMA);
+    return { series: vitals, totals: syntheticTotals(vitals) };
+  })(),
+  play: async ({ canvasElement }) => {
+    const escalated = [
+      ...canvasElement.querySelectorAll<HTMLElement>('[data-total][data-severity="severity-6"]'),
+    ];
+    await expect(escalated).toHaveLength(1);
+    await expect(escalated[0]?.textContent).toMatch(/Raised by a single observation/);
+  },
+};
+
+/** The Rows menu shows and hides rows, as the data table's Columns menu does. */
+export const ShowAndHideRows: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByRole("rowheader", { name: /Oxygen flow/ })).toBeInTheDocument();
+    await userEvent.click(canvas.getByRole("button", { name: "Rows" }));
+    const body = within(canvasElement.ownerDocument.body);
+    await userEvent.click(await body.findByRole("menuitemcheckbox", { name: "Oxygen flow" }));
+    await userEvent.keyboard("{Escape}");
+    await waitFor(() =>
+      expect(canvas.queryByRole("rowheader", { name: /Oxygen flow/ })).not.toBeInTheDocument(),
+    );
+  },
+};
+
+/**
+ * The values are one stop for the keyboard. The arrow keys move between them, and each shows its
+ * details in a tooltip.
+ */
+export const Keyboard: Story = {
+  play: async ({ canvasElement }) => {
+    const first = canvasElement.querySelector<HTMLElement>(
+      '[data-slot="observation-value"][tabindex="0"]',
+    );
+    await expect(first).not.toBeNull();
+    first?.focus();
+    await userEvent.keyboard("{ArrowLeft}");
+    const moved = canvasElement.ownerDocument.activeElement;
+    await expect(moved).not.toBe(first);
+    await expect(moved?.getAttribute("data-row")).toBe(first?.getAttribute("data-row"));
+    await expect(Number(moved?.getAttribute("data-col"))).toBe(
+      Number(first?.getAttribute("data-col")) - 1,
+    );
+    await userEvent.keyboard("{ArrowDown}");
+    await expect(canvasElement.ownerDocument.activeElement?.getAttribute("data-col")).toBe(
+      moved?.getAttribute("data-col"),
+    );
+    await waitFor(() =>
+      expect(
+        canvasElement.ownerDocument.querySelector('[data-slot="tooltip-content"]')?.textContent,
+      ).toMatch(/2026/),
+    );
   },
 };

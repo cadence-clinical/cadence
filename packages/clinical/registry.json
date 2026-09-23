@@ -6,8 +6,15 @@
       "type": "registry:component",
       "title": "Observation table",
       "description": "A flowsheet of observations: one row per series, one column per round, oldest to newest. Each value shows the band a schema gave it and its change since the value before.",
-      "dependencies": ["@cadence-clinical/core"],
-      "registryDependencies": ["@cadence/theme", "@cadence/cn", "@cadence/table"],
+      "dependencies": ["@cadence-clinical/core", "lucide-react"],
+      "registryDependencies": [
+        "@cadence/theme",
+        "@cadence/cn",
+        "@cadence/button",
+        "@cadence/dropdown-menu",
+        "@cadence/table",
+        "@cadence/tooltip"
+      ],
       "files": [
         {
           "path": "src/components/observation-table.tsx",
