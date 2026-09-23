@@ -44,3 +44,6 @@ __screenshots__
 .claude/skills/fhir-developer-skill
 .claude/skills/shadcn
 .claude/skills/typescript-advanced-types
+
+# Local data extracts. Never committed: they can hold real patient information.
+samples/
