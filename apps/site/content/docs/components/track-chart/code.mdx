@@ -62,14 +62,16 @@ Its time axis falls on the local hour in the `timeZone` you pass, so a page rend
 
 `TrackChart`:
 
-| Prop        | Type             | Default   |
-| ----------- | ---------------- | --------- |
-| `fromMs`    | `number`         | Required  |
-| `toMs`      | `number`         | Required  |
-| `spanMs`    | `number`         | Required  |
-| `timeZone`  | `string`         | Required  |
-| `locale`    | `string`         | `"en-AU"` |
-| `hourCycle` | `"h23" \| "h12"` | `"h23"`   |
+| Prop        | Type                                   | Default                                                |
+| ----------- | -------------------------------------- | ------------------------------------------------------ |
+| `fromMs`    | `number`                               | Required                                               |
+| `toMs`      | `number`                               | Required                                               |
+| `spanMs`    | `number`                               | Required                                               |
+| `timeZone`  | `string`                               | Required                                               |
+| `locale`    | `string`                               | `"en-AU"`                                              |
+| `hourCycle` | `"h23" \| "h12"`                       | `"h23"`                                                |
+| `now`       | `string \| number`                     | None: the time under the pointer is not given in words |
+| `words`     | `{ today: string; yesterday: string }` | en-AU                                                  |
 
 `TrackChartBody`:
 
@@ -92,6 +94,8 @@ Its time axis falls on the local hour in the `timeZone` you pass, so a page rend
 
 `TrackTone` is a step of the severity scale from `"severity-1"` to `"severity-6"`.
 
+A point, a pair and an event each take a `detail`, a `ReactNode` shown in the mark's Tooltip when the pointer is over it. A band open at an end, or reaching past the track's range, runs to the track's edge.
+
 ## Drawing what is in view
 
 Only the time in view, and a span either side, is drawn, so a record of weeks costs about as much as one of a day. The chart opens at the latest time and stays there as it is measured, until the reader scrolls back.
@@ -100,5 +104,5 @@ Only the time in view, and a span either side, is drawn, so a record of weeks co
 
 - `TrackChartBody` is a group with the role description "chart", named by `label` and described by `instructions`.
 - It is one tab stop. The arrow keys move the crosshair to the next or previous of `snapTimes`, Home and End go to the first and last, and Escape hides it. The chart scrolls to keep the crosshair in view.
-- What `renderCrosshair` returns is shown in the crosshair's tooltip, and read out through a polite live region when the keyboard moves the crosshair.
+- When the keyboard moves the crosshair, what `renderCrosshair` returns is shown beside it and read out through a polite live region. The pointer shows only the time, because it can hover a mark's own tooltip.
 - The SVG is hidden from screen readers. The values reach them through the crosshair, and should also be offered in a table.
