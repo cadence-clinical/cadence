@@ -31,6 +31,10 @@ Run `pnpm check` and `pnpm test:browser` before you say a change is done.
   (`button.tsx`, `button.stories.tsx`), and `registry.json` is the manifest: each component's
   files, dependencies, level, domain and grade. Source imports through `@/lib/*` and
   `@/components/cadence/*`, never a relative path, because the registry installs it as written.
+- `packages/clinical`: clinical components, laid out like `ui`. Its alias `@/components/cadence/*`
+  looks in its own components and then in ui's, and its build rewrites what it finds in ui to
+  `@cadence-clinical/ui`: see `tsdown.config.ts`.
+- `packages/fhir`: hand-written FHIR R4 transforms into the view models in `core`, at 100% coverage.
 - `packages/config`: shared tsconfig and ESLint, including the package boundary rules.
 - `apps/site`: Next.js and Fumadocs. Docs content is in `content/docs`. Its build also runs
   `shadcn build` on the root `registry.json` and serves the result at `/r/{name}.json`.

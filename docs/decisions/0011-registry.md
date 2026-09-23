@@ -23,6 +23,8 @@ Findings 9 and 10 came from building the registry, after the first eight were re
 
 ## Decision
 
+Updated 2026-09-23: a clinical component reaches a primitive through the consumer-shaped alias, as a ui component does: `import { Table } from "@/components/cadence/table"`. The maintainer chose this over importing `@cadence-clinical/ui`, which would give a registry install two Tables. The `clinical` package maps the alias to its own components first and then to ui's. Its npm build rewrites every import that reaches ui to `@cadence-clinical/ui`, or to a ui entry point, so no ui source is built into it, and its post-build script fails the build if any is. The grade check sees the alias, so a clinical component's dependencies are checked like any other.
+
 1. **Components are authored with consumer-shaped aliases, and there is no generator.** `registry.json` points at the real source files. Each component package maps the aliases in its tsconfig:
 
    ```json
@@ -57,11 +59,10 @@ Findings 9 and 10 came from building the registry, after the first eight were re
 - The registry cannot be used before `@cadence-clinical/tokens` is on npm, because the theme depends on it.
 - `resolve.tsconfigPaths` is set in Storybook's Vite config. Any other Vite or Vitest project that loads component source needs it too.
 - A lint rule rejects relative imports in component packages, and `scripts/check-grades.mjs` rejects a component that is missing from its manifest or has no `target` under `components/cadence/`.
-- `pnpm test:registry` installs from the built registry into a scratch consumer app with the real CLI, then typechecks it and builds its CSS. It packs the workspace copy of `tokens`, so it tests the commit and works before the package is on npm.
+- `pnpm test:registry` installs from the built registry into a scratch consumer app with the real CLI, then typechecks it and builds its CSS. It packs the workspace copies of `tokens` and `core`, so it tests the commit and works before the packages are on npm.
 - The scope is `ui` now and `clinical` later, plus the theme item from `tokens`. `core`, `fhir` and Region packages are npm only.
 
 ## Open
 
 - **What authentication is for.** Everything in this repository is public under MIT, so a token on the registry does not protect that source. It could identify users, which has a real use here: telling registered users about a clinical safety issue. If it is meant to gate components that are not public, their source cannot live in this repository, and that needs its own decision.
-- **How a clinical component reaches a primitive.** Across packages it can import `@cadence-clinical/ui`, which a consumer resolves from npm, or a consumer-shaped alias, which resolves to the registry copy but must not pull the primitive's source into the `clinical` build. Decide when `clinical` gets its first component.
 - **A consumer whose `components` alias is not `@/components`.** Explicit targets ignore it. Accepted for now.

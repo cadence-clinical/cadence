@@ -1,0 +1,5 @@
+/*
+ * Tailwind scans this package's built components for their class names. Import it after
+ * @cadence-clinical/ui/styles.css, which brings the tokens and the theme.
+ */
+@source "./";
