@@ -159,6 +159,9 @@ export const TwelveHours: Story = {
 
 /** The pointer over a mark opens its tooltip, with its value and details. */
 export const HoverAMark: Story = {
+  // It opens a Tooltip by hovering, which Chromatic's capture browser does not do. The component
+  // tests run it in Chromium and WebKit.
+  parameters: { chromatic: { disableSnapshot: true } },
   play: async ({ canvasElement }) => {
     const marks = canvasElement.querySelectorAll('[data-slot="track-chart-mark"]');
     const last = marks[marks.length - 1];
