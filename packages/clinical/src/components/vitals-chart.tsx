@@ -10,6 +10,7 @@ import {
   type ObservationRound,
   type ObservationSchema,
   type ObservationSeriesDefinition,
+  type RoundTotal,
   type SeverityStep,
 } from "@cadence-clinical/core";
 import { ChevronsLeft, ChevronsRight, Rows3 } from "lucide-react";
@@ -24,7 +25,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/cadence/dropdown-menu";
-import { ToggleGroup, ToggleGroupItem } from "@/components/cadence/toggle-group";
+import { Tabs, TabsList, TabsTrigger } from "@/components/cadence/tabs";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/cadence/tooltip";
 import {
   TrackChart,
@@ -112,6 +113,15 @@ interface VitalsChartMessages {
   rangeFitView: string;
   absent: string;
   empty: string;
+  /** Read for a change, such as "▲2 since 06:00". */
+  since: string;
+  /** Before the source's own interpretation, such as "Source: High". */
+  source: string;
+  /** For a value the schema could not place in a band. */
+  notBanded: string;
+  incomplete: string;
+  missing: string;
+  escalated: string;
 }
 
 const MESSAGES: VitalsChartMessages = {
@@ -126,6 +136,12 @@ const MESSAGES: VitalsChartMessages = {
   rangeFitView: "Fit view",
   absent: "Not recorded",
   empty: "No observations in this period.",
+  since: "since",
+  source: "Source",
+  notBanded: "Not banded",
+  incomplete: "Incomplete",
+  missing: "Missing",
+  escalated: "Raised by a single observation, whatever the sum",
 };
 
 const TONE: Readonly<Record<SeverityStep, TrackTone | undefined>> = {
@@ -167,12 +183,17 @@ function readingText(
   reading: InterpretedReading,
   number: Intl.NumberFormat,
   absent: string,
+  definition?: ObservationSeriesDefinition,
 ): string {
   const { value } = reading;
   switch (value.kind) {
     case "quantity": {
       const { comparator, value: amount, unitText, ucum } = value.quantity;
-      const unit = unitText ?? ucum;
+      // In the series' own unit, the schema's words for it, such as °C for Cel.
+      const unit =
+        ucum !== undefined && ucum === definition?.ucum && definition.unitLabel !== undefined
+          ? definition.unitLabel
+          : (unitText ?? ucum);
       return `${comparator === undefined ? "" : `${comparator} `}${number.format(amount)}${unit === undefined ? "" : ` ${unit}`}`;
     }
     case "integer":
@@ -236,7 +257,35 @@ interface VitalsChartProps extends Omit<ComponentProps<"div">, "children"> {
   labelStyle?: LabelStyle;
   /** Readings within this many milliseconds of a round's first reading are one round. */
   roundWindowMs?: number;
+  /**
+   * A total for each round, from `scoreRounds`, drawn as a last track: the total, or Incomplete,
+   * at each round, in its level's colour.
+   */
+  totals?: {
+    readonly label: string;
+    readonly shortLabel?: string;
+    readonly rounds: readonly RoundTotal[];
+  };
   messages?: Partial<VitalsChartMessages>;
+}
+
+/** The key of the total's track, for the Tracks menu. */
+const TOTAL_TRACK = "(total)";
+
+/** Lines of a tooltip, one to a line. */
+function Lines({ lines }: { lines: readonly string[] }) {
+  return (
+    <span className="block">
+      {lines.map((line, index) => (
+        <span
+          key={`${String(index)}:${line}`}
+          className={cn("block", index === 0 && "font-semibold")}
+        >
+          {line}
+        </span>
+      ))}
+    </span>
+  );
 }
 
 /**
@@ -259,6 +308,7 @@ function VitalsChart({
   defaultSpan = "1d",
   labelStyle = "short",
   roundWindowMs = 5 * 60_000,
+  totals,
   messages: ownMessages,
   className,
   ...props
@@ -304,6 +354,7 @@ function VitalsChart({
       timeZone={timeZone}
       locale={locale}
       hourCycle={hourCycle}
+      now={now}
       className={className}
       {...props}
     >
@@ -314,7 +365,10 @@ function VitalsChart({
         onSpanChange={setSpanKey}
         mode={mode}
         onModeChange={setMode}
-        tracks={tracks.map((track) => ({ key: track.key, name: nameOf(track).full }))}
+        tracks={[
+          ...tracks.map((track) => ({ key: track.key, name: nameOf(track).full })),
+          ...(totals ? [{ key: TOTAL_TRACK, name: totals.label }] : []),
+        ]}
         hidden={hidden}
         onHiddenChange={setHidden}
         messages={messages}
@@ -328,6 +382,8 @@ function VitalsChart({
         series={series}
         schema={schema}
         tracks={tracks.filter(({ key }) => !hidden.has(key))}
+        totals={totals && !hidden.has(TOTAL_TRACK) ? totals : undefined}
+        labelStyle={labelStyle}
         rounds={rounds}
         nameOf={nameOf}
         mode={mode}
@@ -377,15 +433,6 @@ function VitalsToolbar({
   const describe = (ms: number) => describeTime(ms, { now, timeZone, locale, hourCycle });
   const from = describe(viewFromMs);
   const to = describe(viewToMs);
-  // A choice that must have an answer: pressing the pressed toggle again keeps it pressed.
-  const choose = <T extends string>(
-    values: unknown[],
-    set: (value: T) => void,
-    isValue: (value: unknown) => value is T,
-  ) => {
-    const [next] = values;
-    if (isValue(next)) set(next);
-  };
   const isMode = (value: unknown): value is RangeMode =>
     value === "default" || value === "fit-all" || value === "fit-view";
   const isSpan = (value: unknown): value is string =>
@@ -394,21 +441,23 @@ function VitalsToolbar({
   return (
     <div data-slot="vitals-chart-toolbar" className="flex flex-wrap items-center gap-x-4 gap-y-2">
       {title}
-      <ToggleGroup
-        aria-label={messages.span}
-        size="sm"
-        spacing={0}
-        value={[spanKey]}
-        onValueChange={(values) => {
-          choose(values, onSpanChange, isSpan);
+      {/* A choice that always has an answer, so Tabs. They change the chart below, which is not
+          a panel of its own: the range tabs change it too. */}
+      <Tabs
+        className="shrink-0"
+        value={spanKey}
+        onValueChange={(value) => {
+          if (isSpan(value)) onSpanChange(value);
         }}
       >
-        {spans.map((span) => (
-          <ToggleGroupItem key={span.key} value={span.key}>
-            {span.label}
-          </ToggleGroupItem>
-        ))}
-      </ToggleGroup>
+        <TabsList aria-label={messages.span}>
+          {spans.map((span) => (
+            <TabsTrigger key={span.key} value={span.key}>
+              {span.label}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </Tabs>
       <div className="flex gap-1">
         <Button variant="ghost" size="sm" onClick={scrollToStart}>
           <ChevronsLeft aria-hidden data-icon="inline-start" />
@@ -444,19 +493,19 @@ function VitalsToolbar({
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
-      <ToggleGroup
-        aria-label={messages.range}
-        size="sm"
-        spacing={0}
-        value={[mode]}
-        onValueChange={(values) => {
-          choose(values, onModeChange, isMode);
+      <Tabs
+        className="shrink-0"
+        value={mode}
+        onValueChange={(value) => {
+          if (isMode(value)) onModeChange(value);
         }}
       >
-        <ToggleGroupItem value="default">{messages.rangeDefault}</ToggleGroupItem>
-        <ToggleGroupItem value="fit-all">{messages.rangeFitAll}</ToggleGroupItem>
-        <ToggleGroupItem value="fit-view">{messages.rangeFitView}</ToggleGroupItem>
-      </ToggleGroup>
+        <TabsList aria-label={messages.range}>
+          <TabsTrigger value="default">{messages.rangeDefault}</TabsTrigger>
+          <TabsTrigger value="fit-all">{messages.rangeFitAll}</TabsTrigger>
+          <TabsTrigger value="fit-view">{messages.rangeFitView}</TabsTrigger>
+        </TabsList>
+      </Tabs>
       <p className="ms-auto text-control-sm text-muted-foreground tabular-nums">
         {from.day} {from.time} – {to.day} {to.time}
       </p>
@@ -470,6 +519,8 @@ function VitalsTracks({
   series,
   schema,
   tracks,
+  totals,
+  labelStyle,
   rounds,
   nameOf,
   mode,
@@ -483,6 +534,8 @@ function VitalsTracks({
   series: readonly InterpretedSeries[];
   schema: ObservationSchema;
   tracks: readonly VitalsTrack[];
+  totals: VitalsChartProps["totals"];
+  labelStyle: LabelStyle;
   rounds: readonly ObservationRound<InterpretedReading>[];
   nameOf: (track: VitalsTrack) => { full: string; short: string };
   mode: RangeMode;
@@ -525,6 +578,34 @@ function VitalsTracks({
     return [low - pad, high + pad];
   };
 
+  const describe = (ms: number) => describeTime(ms, { now, timeZone, locale, hourCycle });
+
+  // What a mark's tooltip says: the series in full, the value, its level, when, its change, and
+  // what the source said.
+  const detailLines = (key: string, reading: InterpretedReading): string[] => {
+    const definition = byKey.get(key)?.definition;
+    const lines = [
+      definition?.label ?? key,
+      readingText(reading, number, messages.absent, definition),
+    ];
+    const { band, previous, sourceLabels } = reading;
+    if (band.kind === "level" && band.level.severity !== "severity-0") lines.push(band.level.label);
+    if (band.kind === "none" && !["no-bands", "not-banded-kind", "absent"].includes(band.reason)) {
+      lines.push(messages.notBanded);
+    }
+    const at = describe(reading.timeMs);
+    lines.push(`${at.day} ${at.time}`);
+    if (previous?.change !== undefined && previous.change !== 0) {
+      const before = describe(reading.timeMs - previous.elapsedMs);
+      const arrow = previous.change > 0 ? "▲" : "▼";
+      lines.push(
+        `${arrow}${number.format(Math.abs(previous.change))} ${messages.since} ${before.dayKey === at.dayKey ? before.time : `${before.day} ${before.time}`}`,
+      );
+    }
+    if (sourceLabels.length > 0) lines.push(`${messages.source}: ${sourceLabels.join(", ")}`);
+    return lines;
+  };
+
   const pointsOf = (key: string): { points: TrackMarkedPoint[]; events: TrackEvent[] } => {
     const entry = byKey.get(key);
     const points: TrackMarkedPoint[] = [];
@@ -536,6 +617,7 @@ function VitalsTracks({
         events.push({
           timeMs: reading.timeMs,
           text: readingText(reading, number, messages.absent),
+          detail: <Lines lines={detailLines(key, reading)} />,
           ...(tone === undefined ? {} : { tone }),
         });
       } else {
@@ -543,14 +625,13 @@ function VitalsTracks({
           timeMs: reading.timeMs,
           value,
           label: number.format(value),
+          detail: <Lines lines={detailLines(key, reading)} />,
           ...(tone === undefined ? {} : { tone }),
         });
       }
     }
     return { points, events };
   };
-
-  const describe = (ms: number) => describeTime(ms, { now, timeZone, locale, hourCycle });
 
   // The crosshair snaps to the nearest round, and lists its values as the table would.
   const nearestRound = (timeMs: number) =>
@@ -577,7 +658,7 @@ function VitalsTracks({
           change === undefined || change === 0
             ? ""
             : ` ${change > 0 ? "▲" : "▼"}${number.format(Math.abs(change))}`;
-        return `${name}: ${readingText(reading, number, messages.absent)}${level}${trend}`;
+        return `${name}: ${readingText(reading, number, messages.absent, definition)}${level}${trend}`;
       });
     });
     const when = describe(round.timeMs);
@@ -596,8 +677,7 @@ function VitalsTracks({
   };
 
   // A short name shows its full name on hover, and a screen reader reads the full name.
-  const name = (track: VitalsTrack) => {
-    const { full, short } = nameOf(track);
+  const name = ({ full, short }: { full: string; short: string }) => {
     if (short === full) return full;
     return (
       <Tooltip>
@@ -626,7 +706,7 @@ function VitalsTracks({
               <TrackChartTrack
                 key={track.key}
                 data-track={track.key}
-                label={name(track)}
+                label={name(nameOf(track))}
                 description={entry?.definition?.unitLabel}
                 domain={domainOf([track.series])}
                 bands={bandsOf(entry, levels)}
@@ -672,6 +752,12 @@ function VitalsTracks({
                   lowLabel: partner.label ?? "",
                   ...(between === undefined ? {} : { middle: between }),
                   ...(point.tone === undefined ? {} : { tone: point.tone }),
+                  detail: (
+                    <>
+                      {point.detail}
+                      {partner.detail}
+                    </>
+                  ),
                 },
               ];
             });
@@ -683,7 +769,7 @@ function VitalsTracks({
               <TrackChartTrack
                 key={track.key}
                 data-track={track.key}
-                label={name(track)}
+                label={name(nameOf(track))}
                 description={[pairUnit, lineUnit].filter(Boolean).join(" · ")}
                 domain={domainOf(keys)}
                 bands={bandsOf(byKey.get(track.high), levels)}
@@ -726,7 +812,7 @@ function VitalsTracks({
               <TrackChartTrack
                 key={track.key}
                 data-track={track.key}
-                label={name(track)}
+                label={name(nameOf(track))}
                 heightPx={track.heightPx ?? 48}
               >
                 <TrackChartEvents events={events} />
@@ -735,6 +821,43 @@ function VitalsTracks({
           }
         }
       })}
+      {totals ? (
+        <TrackChartTrack
+          data-track={TOTAL_TRACK}
+          label={name({ full: totals.label, short: labelFor(totals, labelStyle) })}
+          heightPx={40}
+        >
+          <TrackChartEvents
+            events={totals.rounds.map((total): TrackEvent => {
+              const tone = total.level === undefined ? undefined : TONE[total.level.severity];
+              const at = describe(total.timeMs);
+              const lines =
+                total.kind === "complete"
+                  ? [`${totals.label} ${number.format(total.total)}`]
+                  : [
+                      `${totals.label}: ${messages.incomplete}`,
+                      `${messages.missing}: ${total.missing.map((key) => byKey.get(key)?.definition?.label ?? key).join(", ")}`,
+                    ];
+              if (total.level) lines.push(total.level.label);
+              if (total.isEscalated) lines.push(messages.escalated);
+              lines.push(`${at.day} ${at.time}`);
+              for (const part of total.parts) {
+                if (part.score !== 0) {
+                  lines.push(
+                    `${byKey.get(part.seriesKey)?.definition?.label ?? part.seriesKey} ${number.format(part.score)}`,
+                  );
+                }
+              }
+              return {
+                timeMs: total.timeMs,
+                text: total.kind === "complete" ? number.format(total.total) : messages.incomplete,
+                detail: <Lines lines={lines} />,
+                ...(tone === undefined ? {} : { tone }),
+              };
+            })}
+          />
+        </TrackChartTrack>
+      ) : null}
     </TrackChartBody>
   );
 }
