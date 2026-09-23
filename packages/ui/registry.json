@@ -15,6 +15,18 @@
       ]
     },
     {
+      "name": "chart-scale",
+      "type": "registry:lib",
+      "title": "Chart scale",
+      "description": "Linear scales, round-number ticks, and time ticks on the local hour in a time zone the caller states.",
+      "files": [
+        {
+          "path": "src/lib/chart-scale.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
       "name": "alert",
       "type": "registry:component",
       "title": "Alert",
@@ -975,6 +987,28 @@
         "domain": "general",
         "grade": {
           "level": "tested"
+        }
+      }
+    },
+    {
+      "name": "track-chart",
+      "type": "registry:component",
+      "title": "Track chart",
+      "description": "Tracks of values on one shared time axis that scrolls through time, with bands, a crosshair and its tooltip. Clinical charts are built on it.",
+      "registryDependencies": ["@cadence/theme", "@cadence/cn", "@cadence/chart-scale"],
+      "files": [
+        {
+          "path": "src/components/track-chart.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/track-chart.tsx"
+        }
+      ],
+      "docs": "The chart draws the bands and tones it is given and decides nothing about them. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "composite",
+        "domain": "general",
+        "grade": {
+          "level": "draft"
         }
       }
     }

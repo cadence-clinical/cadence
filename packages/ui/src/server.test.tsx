@@ -101,6 +101,11 @@ import {
   ToastProvider,
   ToastViewport,
   Toggle,
+  TrackChart,
+  TrackChartAxis,
+  TrackChartBody,
+  TrackChartLine,
+  TrackChartTrack,
   ToggleGroup,
   ToggleGroupItem,
   Tooltip,
@@ -292,6 +297,26 @@ const RENDERS: Record<string, ReactElement> = {
     </Field>
   ),
   toggle: <Toggle>Show ceased</Toggle>,
+  "track-chart": (
+    <TrackChart
+      fromMs={Date.parse("2026-09-23T00:00:00+10:00")}
+      toMs={Date.parse("2026-09-23T12:00:00+10:00")}
+      spanMs={6 * 3_600_000}
+      timeZone="Australia/Melbourne"
+    >
+      <TrackChartBody label="Synthetic values">
+        <TrackChartAxis />
+        <TrackChartTrack label="Rate" domain={[0, 100]} bands={[{ from: 80, tone: "severity-2" }]}>
+          <TrackChartLine
+            points={[
+              { timeMs: Date.parse("2026-09-23T06:00:00+10:00"), value: 40 },
+              { timeMs: Date.parse("2026-09-23T10:00:00+10:00"), value: 85 },
+            ]}
+          />
+        </TrackChartTrack>
+      </TrackChartBody>
+    </TrackChart>
+  ),
   tooltip: (
     <Tooltip>
       <TooltipTrigger>Print chart</TooltipTrigger>
