@@ -1,6 +1,6 @@
 import { VitalsChart, type VitalsTrack } from "@cadence-clinical/clinical";
 
-import { NOW, SCHEMA, TIME_ZONE, VITALS } from "./observation-table-preview";
+import { NOW, SCHEMA, TIME_ZONE, TOTALS, VITALS } from "./observation-table-preview";
 
 // All content is synthetic, and the schema's bands are arbitrary: they are not clinical
 // thresholds. The tracks are laid out as the maintainer's mock-up lays them out.
@@ -36,6 +36,7 @@ export function VitalsChartPreview({
         series={VITALS}
         schema={SCHEMA}
         tracks={TRACKS}
+        totals={TOTALS}
         defaultSpan={span}
         labelStyle={labelStyle}
         now={NOW}

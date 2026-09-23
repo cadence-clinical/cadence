@@ -29,11 +29,15 @@ A value that cannot go on its track's scale is written at its time rather than p
 
 ## Choose the time and the range for the question
 
-The span toggles set how much time is in view, from 2 hours to 3 days. **Start** and **Latest** move to the first and newest rounds. The range toggles set each track's range of values: **Default** is the range the schema gives, **Fit all** fits all the values, and **Fit view** fits the values in view. A fitted range makes a small change look large, so go back to Default before judging a trend.
+The span tabs set how much time is in view, from 2 hours to 3 days. **Start** and **Latest** move to the first and newest rounds. The range tabs set each track's range of values: **Default** is the range the schema gives, **Fit all** fits all the values, and **Fit view** fits the values in view. A fitted range makes a small change look large, so go back to Default before judging a trend.
 
-## Read the crosshair, not only the labels
+## Point at a value for its details
 
-Printed values are left off where they would collide, and the heart rate across a blood pressure track has none. Every value at a round is in the crosshair's tooltip, with its level and its change.
+The pointer over a value opens its tooltip: the series in full, the value, its level, when it was taken, its change and what the source said. Elsewhere, the pointer draws a line for timing, with the time and the time in words, such as "Yesterday, 6 hrs ago". Printed values are left off where they would collide, and the heart rate across a blood pressure track has none, so the tooltip is where every value can be read.
+
+## Read the total at the foot
+
+Pass `totals` and a last track shows each round's total, in its level's colour. A round missing an observation the total requires says **Incomplete**, and its tooltip names what is missing. When a round has two values of one observation, the latest counts.
 
 ## Name tracks by their short names in a dense view
 
