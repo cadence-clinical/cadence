@@ -11,6 +11,7 @@ import { DatePickerPreview } from "./date-picker-preview";
 import { FormPreview } from "./form-preview";
 import { GradeBadge } from "./grade-badge";
 import { ListDetailPreview } from "./list-detail-preview";
+import { ObservationTablePreview } from "./observation-table-preview";
 import { SidebarPreview } from "./sidebar-preview";
 import { ToastPreview } from "./toast-preview";
 import { TypesetPreview } from "./typeset-preview";
@@ -25,6 +26,7 @@ export function getMDXComponents(components?: MDXComponents) {
     ComponentPreview,
     GradeBadge,
     ListDetailPreview,
+    ObservationTablePreview,
     TypesetPreview,
     DataTablePreview,
     DatePickerPreview,

@@ -1,4 +1,5 @@
-import manifest from "@cadence-clinical/ui/meta.json";
+import clinical from "@cadence-clinical/clinical/meta.json";
+import ui from "@cadence-clinical/ui/meta.json";
 import Link from "next/link";
 
 const LABELS: Record<string, string> = {
@@ -8,11 +9,14 @@ const LABELS: Record<string, string> = {
   "in-production": "Used in production",
 };
 
+/** Every published component, from the manifests the ui and clinical packages publish. */
+const COMPONENTS = [...ui.components, ...clinical.components];
+
 /** Shows a component's grade, read from the same manifest the package publishes. */
 export function GradeBadge({ component }: { component: string }) {
-  const meta = manifest.components.find((entry) => entry.name === component);
+  const meta = COMPONENTS.find((entry) => entry.name === component);
   if (!meta) {
-    throw new Error(`No component named "${component}" in @cadence-clinical/ui/meta.json.`);
+    throw new Error(`No component named "${component}" in the ui or clinical meta.json.`);
   }
 
   const { level } = meta.grade;
