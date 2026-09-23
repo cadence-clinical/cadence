@@ -1,3 +1,4 @@
+import { applyObservationSchema, defineObservationSchema } from "@cadence-clinical/core";
 import { describe, expect, it } from "vitest";
 
 import { observationSeries, type ObservationSeriesOptions } from "./observations";
@@ -652,6 +653,41 @@ describe("observationSeries issues", () => {
     expect(others.map(({ id }) => id)).toEqual(["Observation/bad#component[0]"]);
     expect(issues).toEqual([
       expect.objectContaining({ code: "invalid-value", path: "Observation.valueString" }),
+    ]);
+  });
+});
+
+describe("observationSeries with an observation schema", () => {
+  // Synthetic bands, far from any clinical threshold.
+  const schema = defineObservationSchema({
+    levels: [
+      { key: "in", label: "Within range", severity: "severity-0" },
+      { key: "out", label: "Out of range", severity: "severity-4" },
+    ],
+    series: [
+      {
+        key: "heart-rate",
+        label: "Heart rate",
+        match: [{ system: LOINC, code: "8867-4" }],
+        ucum: "/min",
+        bands: [
+          { level: "out", below: 83 },
+          { level: "in", from: 83 },
+        ],
+      },
+    ],
+  });
+
+  it("selects with the schema's series, and the schema then bands them", () => {
+    const { series } = observationSeries(VITALS_PAGES, { series: schema.series });
+    const [heartRate] = applyObservationSchema(series, schema);
+    expect(
+      heartRate?.readings.map(({ band }) => (band.kind === "level" ? band.level.key : band.reason)),
+    ).toEqual(["out", "in", "out"]);
+    expect(heartRate?.readings.map(({ previous }) => previous?.change)).toEqual([
+      undefined,
+      12,
+      10,
     ]);
   });
 });
