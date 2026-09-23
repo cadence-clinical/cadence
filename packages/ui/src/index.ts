@@ -294,4 +294,34 @@ export {
   TooltipTrigger,
 } from "@/components/cadence/tooltip";
 export type { TooltipContentProps } from "@/components/cadence/tooltip";
+export {
+  TrackChart,
+  TrackChartAxis,
+  TrackChartBody,
+  TrackChartEvents,
+  TrackChartLine,
+  TrackChartPoints,
+  TrackChartRange,
+  TrackChartTrack,
+  useTrackChart,
+} from "@/components/cadence/track-chart";
+export type {
+  TrackBand,
+  TrackChartAxisProps,
+  TrackChartBodyProps,
+  TrackChartControls,
+  TrackChartEventsProps,
+  TrackChartLineProps,
+  TrackChartPointsProps,
+  TrackChartProps,
+  TrackChartRangeProps,
+  TrackChartTrackProps,
+  TrackEvent,
+  TrackMarkedPoint,
+  TrackPoint,
+  TrackRange,
+  TrackTone,
+} from "@/components/cadence/track-chart";
+export { intervalForSpan, linearScale, niceTicks, timeTicks } from "@/lib/chart-scale";
+export type { TimeTick } from "@/lib/chart-scale";
 export { cn } from "@/lib/cn";
