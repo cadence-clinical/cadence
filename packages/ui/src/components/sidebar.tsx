@@ -34,7 +34,7 @@ import { cn } from "@/lib/cn";
 
 /** The cookie that keeps the sidebar open or closed between visits, under shadcn's name. */
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
-const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
+const SIDEBAR_COOKIE_MAX_AGE_S = 60 * 60 * 24 * 7;
 /** With Ctrl or Cmd, toggles the sidebar. */
 const SIDEBAR_KEYBOARD_SHORTCUT = "b";
 /** Below Tailwind's `md` breakpoint the sidebar is a sheet over the page. */
@@ -135,7 +135,7 @@ function SidebarProvider({
     (value: boolean) => {
       setOwnOpen(value);
       onOpenChange?.(value);
-      document.cookie = `${SIDEBAR_COOKIE_NAME}=${String(value)}; path=/; max-age=${String(SIDEBAR_COOKIE_MAX_AGE)}; samesite=lax`;
+      document.cookie = `${SIDEBAR_COOKIE_NAME}=${String(value)}; path=/; max-age=${String(SIDEBAR_COOKIE_MAX_AGE_S)}; samesite=lax`;
     },
     [onOpenChange],
   );
@@ -146,15 +146,15 @@ function SidebarProvider({
   }, [isMobile, open, setOpen]);
 
   useEffect(() => {
-    function onKeyDown(event: KeyboardEvent) {
+    function handleKeyDown(event: KeyboardEvent) {
       if (event.key.toLowerCase() !== SIDEBAR_KEYBOARD_SHORTCUT) return;
       if (!(event.metaKey || event.ctrlKey) || isEditable(event.target)) return;
       event.preventDefault();
       toggleSidebar();
     }
-    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
     return () => {
-      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, [toggleSidebar]);
 
@@ -262,7 +262,7 @@ function Sidebar({
     );
   }
 
-  const framed = variant === "floating" || variant === "inset";
+  const isFramed = variant === "floating" || variant === "inset";
 
   return (
     <div
@@ -279,7 +279,7 @@ function Sidebar({
         className={cn(
           "relative w-(--sidebar-width) bg-transparent transition-[width] duration-200 ease-out-strong motion-reduce:transition-none",
           "group-data-[collapsible=offcanvas]:w-0 group-data-[side=right]:rotate-180",
-          framed
+          isFramed
             ? "group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+2*var(--container-padding-sm))]"
             : "group-data-[collapsible=icon]:w-(--sidebar-width-icon)",
         )}
@@ -291,7 +291,7 @@ function Sidebar({
           "fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) transition-[left,right,width] duration-200 ease-out-strong motion-reduce:transition-none md:flex",
           "data-[side=left]:left-0 data-[side=left]:group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]",
           "data-[side=right]:right-0 data-[side=right]:group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]",
-          framed
+          isFramed
             ? "p-container-sm group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+2*var(--container-padding-sm)+2px)]"
             : "group-data-[collapsible=icon]:w-(--sidebar-width-icon) group-data-[side=left]:border-r group-data-[side=right]:border-l",
           className,

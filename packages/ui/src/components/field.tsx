@@ -101,13 +101,13 @@ type FieldProps = FieldPrimitive.Root.Props & VariantProps<typeof fieldVariants>
  * A Field inside a Field is one option of a set, such as one radio with its label.
  */
 function Field({ className, orientation = "vertical", ...props }: FieldProps) {
-  const inside = useContext(InsideFieldContext);
+  const isInsideField = useContext(InsideFieldContext);
   const shared = {
     "data-slot": "field",
     "data-orientation": orientation,
     className: cn(fieldVariants({ orientation }), className),
   };
-  if (inside) {
+  if (isInsideField) {
     // The set's Field owns the name and the validity. An option has neither of its own.
     const {
       name: _name,
@@ -239,12 +239,12 @@ function messagesOf(errors: FieldErrorProps["errors"]): ReactNode {
  */
 function FieldError({ className, children, errors, match, ...props }: FieldErrorProps) {
   const message = children ?? messagesOf(errors);
-  const given = message !== undefined && message !== null;
+  const hasMessage = message !== undefined && message !== null;
   return (
     <FieldPrimitive.Error
       data-slot="field-error"
       role="alert"
-      match={match ?? (given ? true : undefined)}
+      match={match ?? (hasMessage ? true : undefined)}
       className={cn(
         "flex items-start gap-control-gap text-control leading-snug font-normal text-critical-text",
         "[&_ul]:ml-4 [&_ul]:flex [&_ul]:list-disc [&_ul]:flex-col [&_ul]:gap-1",
@@ -263,7 +263,7 @@ function FieldError({ className, children, errors, match, ...props }: FieldError
       {...props}
       // Base UI supplies its own message as `children`, and an explicit `undefined` would
       // overrule it, so ours is passed only when there is one.
-      {...(given ? { children: message } : {})}
+      {...(hasMessage ? { children: message } : {})}
     />
   );
 }

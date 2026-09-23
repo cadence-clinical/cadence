@@ -245,13 +245,13 @@ function FormErrorSummary({ title, className, ...props }: FormErrorSummaryProps)
   const problems = useProblems(id);
   const titleId = useId();
   const summary = useRef<HTMLDivElement>(null);
-  const shown = (attempts > 0 || hasErrors) && problems.length > 0;
+  const isShown = (attempts > 0 || hasErrors) && problems.length > 0;
 
   useEffect(() => {
-    if (shown && claimFocus()) summary.current?.focus();
-  }, [shown, attempts, problems, claimFocus]);
+    if (isShown && claimFocus()) summary.current?.focus();
+  }, [isShown, attempts, problems, claimFocus]);
 
-  if (!shown) return null;
+  if (!isShown) return null;
   return (
     <Alert
       ref={summary}
@@ -329,16 +329,16 @@ function FormSubmit({
   ...props
 }: FormSubmitProps) {
   const status = useFormStatus();
-  const sending = pending ?? status.pending;
+  const isSending = pending ?? status.pending;
   return (
     <Button
       data-slot="form-submit"
       type="submit"
-      disabled={disabled === true || sending}
+      disabled={disabled === true || isSending}
       focusableWhenDisabled={focusableWhenDisabled}
       {...props}
     >
-      {sending ? (
+      {isSending ? (
         <>
           <Spinner aria-hidden data-icon="inline-start" />
           {pendingLabel ?? children}

@@ -186,8 +186,8 @@ function SelectContent({
     },
     [readName],
   );
-  const named = ariaLabel !== undefined || ariaLabelledBy !== undefined;
-  const name: ListName = named
+  const isNamed = ariaLabel !== undefined || ariaLabelledBy !== undefined;
+  const name: ListName = isNamed
     ? { "aria-label": ariaLabel, "aria-labelledby": ariaLabelledBy }
     : (select?.name ?? {});
   return (

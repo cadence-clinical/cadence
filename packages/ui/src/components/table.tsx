@@ -16,14 +16,14 @@ function Table({
   "aria-labelledby": ariaLabelledBy,
   ...props
 }: ComponentProps<"table">) {
-  const named = ariaLabel !== undefined || ariaLabelledBy !== undefined;
+  const isNamed = ariaLabel !== undefined || ariaLabelledBy !== undefined;
   return (
     <div
       data-slot="table-container"
       // A box that scrolls must take focus, or a keyboard cannot reach what is out of view.
       // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a scrolling region is operated from the keyboard, which needs focus
       tabIndex={0}
-      role={named ? "region" : undefined}
+      role={isNamed ? "region" : undefined}
       aria-label={ariaLabel}
       aria-labelledby={ariaLabelledBy}
       // min-w-0: as a grid or flex item this box would otherwise grow to the table's widest
