@@ -8,6 +8,7 @@ describe("ObservationLevel", () => {
     expectTypeOf({
       key: "a",
       label: "A",
+      short: "A",
       severity: "severity-3" as const,
     }).toExtend<ObservationLevel>();
   });
@@ -16,11 +17,13 @@ describe("ObservationLevel", () => {
     expectTypeOf({
       key: "a",
       label: "A",
+      short: "A",
       severity: "#ff0000" as const,
     }).not.toExtend<ObservationLevel>();
     expectTypeOf({
       key: "a",
       label: "A",
+      short: "A",
       severity: "severity-7" as const,
     }).not.toExtend<ObservationLevel>();
   });
