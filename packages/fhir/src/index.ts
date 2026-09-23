@@ -5,3 +5,5 @@ export type {
   ObservationSeriesOptions,
   ObservationSeriesResult,
 } from "./observations";
+export { medicationRecords } from "./medications";
+export type { ExcludedMedicationResource, MedicationRecordsResult } from "./medications";
