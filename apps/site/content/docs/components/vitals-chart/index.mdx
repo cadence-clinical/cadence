@@ -1,0 +1,45 @@
+---
+title: Vitals chart
+description: Plots vital signs on stacked tracks over one time axis, with the band each value was given, so a trend and a deterioration can be seen at a glance.
+---
+
+<GradeBadge component="vitals-chart" />
+
+<VitalsChartPreview />
+
+## Use it for
+
+- Seeing how a patient's vital signs have moved over hours or days, and where they entered a band.
+- Reading the vital signs of one round together: the crosshair lists every value at a moment.
+- The chart beside an [Observation table](/docs/components/observation-table), which shows every value in rows.
+
+## Do not use it for
+
+- **The only view of the values.** A chart shows the shape. Offer the Observation table beside it, which a screen reader reads in full.
+- **Working out a band or a score.** The chart shows the bands it is given, from an observation schema, as [Clinical safety](/docs/clinical-safety) explains.
+- **Values that are not over time.** Build on the [Track chart](/docs/components/track-chart) for another chart over time.
+
+## Lay the tracks out as the paper chart does
+
+The `tracks` prop is the chart's layout: which series each track shows, top to bottom. A track is one series as a line, a pair such as systolic and diastolic with another series such as heart rate across it, or answers in words such as a level of consciousness. Follow the order of the paper chart your staff already know.
+
+## Trust a value written in words
+
+A value that cannot go on its track's scale is written at its time rather than plotted: a value in another unit, such as a temperature in degrees Fahrenheit on a track in Celsius, a bound such as less than 95, or a value not recorded. A number is never drawn on the wrong scale.
+
+## Choose the time and the range for the question
+
+The span toggles set how much time is in view, from 2 hours to 3 days. **Start** and **Latest** move to the first and newest rounds. The range toggles set each track's range of values: **Default** is the range the schema gives, **Fit all** fits all the values, and **Fit view** fits the values in view. A fitted range makes a small change look large, so go back to Default before judging a trend.
+
+## Read the crosshair, not only the labels
+
+Printed values are left off where they would collide, and the heart rate across a blood pressure track has none. Every value at a round is in the crosshair's tooltip, with its level and its change.
+
+## Name tracks by their short names in a dense view
+
+Tracks are named by the short names a schema gives, such as **RR**, unless `labelStyle` is `"full"`. A short name shows its full name on hover, and a screen reader reads the full name.
+
+## Accessibility
+
+- **Give the chart a `label`.** It is shown as the chart's heading and names the chart for a screen reader.
+- **Offer the Observation table beside it.** The chart is one tab stop, and the arrow keys move the crosshair from round to round, reading each out, but a table is the complete alternative.
