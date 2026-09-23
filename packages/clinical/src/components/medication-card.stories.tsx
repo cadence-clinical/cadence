@@ -39,9 +39,13 @@ const text = (element: HTMLElement) => element.textContent.replaceAll("\u00a0", 
 export const WhenRequired: Story = {
   play: async ({ canvasElement }) => {
     await expect(text(canvasElement)).toContain(
-      "oral – DOSE 1 to 2 tablets – every 6 hours – when required for pain – do not exceed 8 tablets in 24 hours",
+      "DOSE 1 to 2 tablets – every 6 hours – when required for pain – do not exceed 8 tablets in 24 hours",
     );
     await expect(text(canvasElement)).toContain("Last given: Today 06:00 (2 tablets)");
+    // The route is a badge beside the name, not repeated in the dose.
+    await expect(canvasElement.querySelector('[data-slot="medication-route"]')?.textContent).toBe(
+      "oral",
+    );
     await expect(
       canvasElement.querySelector('[data-slot="medication-last-not-given"]')?.textContent,
     ).toMatch(/Patient declined/);
@@ -53,11 +57,41 @@ export const DoseHistory: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.click(canvas.getByRole("button", { name: "Doses" }));
-    const doses = () => canvasElement.querySelectorAll('[data-slot="medication-doses"] li');
+    const doses = () => canvasElement.querySelectorAll('[data-slot="medication-doses"] tbody tr');
     await waitFor(() => expect(doses()).toHaveLength(3));
     await expect(doses()[0]?.getAttribute("data-status")).toBe("not-done");
     await userEvent.click(canvas.getByRole("button", { name: /Show earlier doses/ }));
     await waitFor(() => expect(doses()).toHaveLength(5));
+  },
+};
+
+/**
+ * The times, statuses and doses line up in columns. Why a dose was not given is in a Tooltip on
+ * its badge, which a keyboard can reach, rather than beside it.
+ */
+export const WhyNotGiven: Story = {
+  args: { defaultOpen: true },
+  // It moves focus, which Chromatic's capture browser does not give. The component tests run it in
+  // Chromium and WebKit.
+  parameters: { chromatic: { disableSnapshot: true } },
+  play: async ({ canvasElement }) => {
+    const rows = [
+      ...canvasElement.querySelectorAll<HTMLElement>('[data-slot="medication-doses"] tbody tr'),
+    ];
+    const lefts = (column: number) =>
+      rows.map((row) => Math.round(row.children[column]?.getBoundingClientRect().left ?? 0));
+    for (const column of [0, 1, 2]) await expect(new Set(lefts(column)).size).toBe(1);
+    const badge = rows[0]?.querySelector<HTMLElement>('[data-slot="medication-reason"]');
+    if (!badge) throw new Error("The dose not given has no badge with a reason.");
+    // The reason is not written beside the badge, only read with it.
+    await expect(rows[0]?.textContent).toContain("Patient declined");
+    await expect(badge.querySelector(".sr-only")?.textContent).toBe(": Patient declined");
+    badge.focus();
+    await waitFor(() =>
+      expect(
+        canvasElement.ownerDocument.querySelector('[data-slot="tooltip-content"]')?.textContent,
+      ).toBe("Patient declined"),
+    );
   },
 };
 
@@ -70,6 +104,8 @@ export const ForAPatient: Story = {
     );
     await expect(text(canvasElement)).toContain("Last taken:");
     await expect(canvasElement.querySelector('[data-slot="medication-status"]')).toBeNull();
+    // A patient reads the route within the instruction, so there is no badge.
+    await expect(canvasElement.querySelector('[data-slot="medication-route"]')).toBeNull();
   },
 };
 
@@ -79,7 +115,7 @@ export const OnHold: Story = {
   play: async ({ canvasElement }) => {
     await expect(within(canvasElement).getByText("On hold")).toBeInTheDocument();
     await expect(text(canvasElement)).toContain(
-      "oral – DOSE 10 mg – once a day in the morning – with food",
+      "DOSE 10 mg – once a day in the morning – with food",
     );
     await expect(text(canvasElement)).toContain("No doses recorded");
   },
@@ -115,6 +151,7 @@ export const ListEntry: Story = {
   play: async ({ canvasElement }) => {
     await expect(within(canvasElement).getByText("Taking")).toBeInTheDocument();
     await expect(text(canvasElement)).toContain("right eye – DOSE 1 drop – four times a day");
-    await expect(text(canvasElement)).toContain("Recorded Sun, 20 Sept 10:00");
+    // The date's words come from the browser's own date formatting, so only its parts are checked.
+    await expect(text(canvasElement)).toMatch(/Recorded .*20.* 10:00/);
   },
 };
