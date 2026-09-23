@@ -12,7 +12,8 @@ import {
 // All content is synthetic. The bands, scores and total are arbitrary, to show how bands are
 // drawn and a total is added up: they are not clinical thresholds or a clinical score. A real
 // schema comes from a Region package that cites its source.
-const SCHEMA = defineObservationSchema({
+/** The synthetic schema the docs previews share. Its bands and scores are arbitrary. */
+export const SCHEMA = defineObservationSchema({
   levels: [
     { key: "in", label: "Within the synthetic range", short: "", severity: "severity-0", score: 0 },
     { key: "one", label: "Synthetic level 1", short: "1", severity: "severity-1", score: 1 },
@@ -140,8 +141,10 @@ const SCHEMA = defineObservationSchema({
   },
 });
 
-const NOW = "2026-09-23T15:00:00+10:00";
-const TIME_ZONE = "Australia/Melbourne";
+/** The moment the previews are read at. */
+export const NOW = "2026-09-23T15:00:00+10:00";
+/** The time zone the previews are shown in. */
+export const TIME_ZONE = "Australia/Melbourne";
 const WINDOW_MS = 5 * 60_000;
 
 type Key = (typeof SCHEMA.series)[number]["key"];
@@ -262,7 +265,8 @@ function valueOf(key: Key, raw: number | null): ObservationValue {
 }
 
 // Each series is recorded a little after the last, as a round of vital signs is.
-const VITALS = applyObservationSchema(
+/** The synthetic vital signs, with the schema applied. */
+export const VITALS = applyObservationSchema(
   SCHEMA.series.map(({ key }, index) => ({
     key,
     readings: ROUNDS.flatMap((round) => {
