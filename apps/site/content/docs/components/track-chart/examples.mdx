@@ -1,0 +1,76 @@
+---
+title: Track chart examples
+description: A line with labelled points over bands, a pair of values such as blood pressure, and events in words, each with its code.
+---
+
+Every example uses synthetic data, and its bands are arbitrary.
+
+## Values over bands
+
+A line through the values, a labelled point at each, and bands behind them.
+
+<TrackChartPreview parts="line" />
+
+```tsx
+import {
+  TrackChart,
+  TrackChartAxis,
+  TrackChartBody,
+  TrackChartLine,
+  TrackChartPoints,
+  TrackChartTrack,
+} from "@cadence-clinical/ui";
+
+<TrackChart fromMs={from} toMs={to} spanMs={24 * 3_600_000} timeZone="Australia/Melbourne">
+  <TrackChartBody
+    label="Respiratory rate"
+    snapTimes={times}
+    renderCrosshair={(timeMs) => <span>Rate {valueAt(timeMs)}</span>}
+  >
+    <TrackChartAxis label="Time" />
+    <TrackChartTrack
+      label="Rate"
+      description="per minute"
+      domain={[0, 40]}
+      heightPx={96}
+      bands={[
+        { from: 22, below: 30, tone: "severity-2" },
+        { from: 30, tone: "severity-3" },
+      ]}
+    >
+      <TrackChartLine points={points} />
+      <TrackChartPoints points={points} />
+    </TrackChartTrack>
+  </TrackChartBody>
+</TrackChart>;
+```
+
+`points` are `{ timeMs, value, label?, tone? }`, oldest first. A point with a `tone` is in that band.
+
+## A pair of values
+
+Two values at each moment, joined, such as systolic and diastolic blood pressure: a triangle pointing down onto the high value, one pointing up onto the low, and a cross between.
+
+<TrackChartPreview parts="range" />
+
+```tsx
+<TrackChartTrack label="Pressure" description="high and low" domain={[40, 180]} heightPx={120}>
+  <TrackChartRange ranges={ranges} />
+</TrackChartTrack>
+```
+
+`ranges` are `{ timeMs, high, low, middle?, highLabel?, lowLabel?, tone? }`.
+
+## Events in words
+
+Something recorded in words at a moment, such as how oxygen is given. An event is never cut short, and one that would run into the next moves to a second lane.
+
+<TrackChartPreview parts="events" />
+
+```tsx
+<TrackChartTrack label="Device" heightPx={48}>
+  <TrackChartEvents events={events} />
+</TrackChartTrack>
+```
+
+`events` are `{ timeMs, text, tone? }`.

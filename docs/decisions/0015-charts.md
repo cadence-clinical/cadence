@@ -41,6 +41,8 @@ The chart drawn by hand in the benchmark had no accessibility work and no resize
 
 ## Decision
 
+Updated 2026-09-23: the composite uses no d3 module either. Its time axis must fall on the local hour in a time zone the caller states, so that a server and a browser draw the same axis, and d3's time scales work only in UTC or in the zone of the machine running them. What else it needed from d3, a linear scale, round-number ticks and a line path, is a few tested lines in `packages/ui/src/lib/chart-scale.ts`. With no library there is no optional peer, so the composite is in the `ui` barrel. It is named Track chart.
+
 1. **Cadence draws its charts itself, in SVG, using `d3-scale`, `d3-shape` and `d3-array`** (ISC) for scales, paths and searching. It does not use a charting library.
 2. **A general chart composite in `packages/ui`**, with parts for the frame, a track, bands, marks, the crosshair and the tooltip. The frame owns the shared x-scale, the horizontal scroll and the crosshair. Only the visible time window and a margin either side are rendered. The crosshair and tooltip are an overlay that moves without re-rendering the series.
 3. **Clinical charts are patterns in `packages/clinical`** built on that composite: the Vitals chart first, then the glucose and insulin chart and the growth chart when they are agreed.
