@@ -31,7 +31,11 @@ export default defineConfig({
           browser: {
             enabled: true,
             headless: true,
-            provider: playwright(),
+            // A fixed zone and locale, so a story reads the same on any machine. Sydney keeps
+            // daylight saving, so a date that crosses a change is tested as users meet it.
+            provider: playwright({
+              contextOptions: { timezoneId: "Australia/Sydney", locale: "en-AU" },
+            }),
             instances: browsers.map((browser) => ({ browser })),
           },
         },
