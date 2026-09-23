@@ -24,12 +24,18 @@ const toneOf = (value: number): TrackTone | undefined => (value >= 22 ? "severit
 const POINTS = TIMES.map((timeMs, index) => {
   const value = RATE[index] ?? 16;
   const tone = toneOf(value);
-  return { timeMs, value, label: String(value), ...(tone === undefined ? {} : { tone }) };
+  return {
+    timeMs,
+    value,
+    label: String(value),
+    detail: `Rate ${value}`,
+    ...(tone === undefined ? {} : { tone }),
+  };
 });
 
 function Example({ spanMs = 24 * HOUR }: { spanMs?: number }) {
   return (
-    <TrackChart fromMs={START} toMs={END} spanMs={spanMs} timeZone="Australia/Melbourne">
+    <TrackChart fromMs={START} toMs={END} spanMs={spanMs} timeZone="Australia/Melbourne" now={END}>
       <TrackChartBody
         label="Synthetic observations"
         snapTimes={TIMES}
@@ -149,4 +155,41 @@ export const Keyboard: Story = {
 /** Twelve hours in view: ticks and stripes every four hours. */
 export const TwelveHours: Story = {
   render: () => <Example spanMs={12 * 3_600_000} />,
+};
+
+/** The pointer over a mark opens its tooltip, with its value and details. */
+export const HoverAMark: Story = {
+  play: async ({ canvasElement }) => {
+    const marks = canvasElement.querySelectorAll('[data-slot="track-chart-mark"]');
+    const last = marks[marks.length - 1];
+    if (!last) throw new Error("No marks were drawn.");
+    await userEvent.hover(last);
+    await waitFor(() =>
+      expect(
+        canvasElement.ownerDocument.querySelector('[data-slot="tooltip-content"]')?.textContent,
+      ).toBe("Rate 16"),
+    );
+  },
+};
+
+/**
+ * The pointer over the chart draws a line for timing, with the time and the time in words
+ * beside it, and nothing else: the values are on the marks.
+ */
+export const PointerTime: Story = {
+  play: async ({ canvasElement }) => {
+    const body = within(canvasElement).getByRole("group", { name: "Synthetic observations" });
+    const box = body.getBoundingClientRect();
+    await userEvent.pointer({
+      target: body,
+      coords: { clientX: box.right - 40, clientY: box.top + 80 },
+    });
+    await waitFor(() =>
+      expect(canvasElement.querySelector('[data-slot="track-chart-crosshair"]')).not.toBeNull(),
+    );
+    await expect(
+      canvasElement.querySelector('[data-slot="track-chart-friendly-time"]')?.textContent,
+    ).toMatch(/^Today, /);
+    await expect(canvasElement.querySelector('[data-slot="track-chart-tooltip"]')).toBeNull();
+  },
 };
