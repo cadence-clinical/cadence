@@ -22,15 +22,15 @@ import {
 /** The colours an accent needs in one mode at one contrast level. */
 export interface AccentRoles {
   /** Fill for primary actions. */
-  solid: string;
+  readonly solid: string;
   /** Text and icons on the solid fill. */
-  foreground: string;
+  readonly foreground: string;
   /** The accent as text, an icon or a focus ring on the page. */
-  text: string;
+  readonly text: string;
 }
 
 /** An accent's roles in every mode and at every contrast level. */
-export type AccentDefinition = Record<Mode, Record<Contrast, AccentRoles>>;
+export type AccentDefinition = Readonly<Record<Mode, Readonly<Record<Contrast, AccentRoles>>>>;
 
 /** What createAccent found: the accent, and every reason it is not safe to use. */
 export interface AccentResult {

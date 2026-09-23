@@ -51,16 +51,16 @@ const NAME = /^[a-z][a-z0-9-]*$/;
 /** A preset for the whole page. */
 export interface Brand {
   /** What a person choosing a brand sees. */
-  label: string;
+  readonly label: string;
   /**
    * The brand colour, as one seed in any CSS colour syntax. It is solved for dark mode and more
    * contrast, and for any accent token `light` leaves unset, as a curated accent is.
    */
-  accent: string;
+  readonly accent: string;
   /** Values for light mode at standard contrast. A token left unset keeps Cadence's value. */
-  light?: Partial<Record<BrandTokenName, string>>;
+  readonly light?: Readonly<Partial<Record<BrandTokenName, string>>>;
   /** CSS font-family lists. A brand names its fonts. Loading them is the page's job. */
-  font?: { sans?: string; mono?: string };
+  readonly font?: Readonly<{ sans?: string; mono?: string }>;
 }
 
 /** Every colour token for one mode and contrast level, with the brand applied. */
