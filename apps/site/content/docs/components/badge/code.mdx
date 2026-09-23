@@ -1,0 +1,58 @@
+---
+title: Badge code
+description: How to install Badge, its props, and how it differs from the shadcn Badge.
+---
+
+## Installation
+
+From npm:
+
+```tsx
+import { Badge } from "@cadence-clinical/ui";
+```
+
+From the shadcn registry:
+
+```bash
+pnpm dlx shadcn@latest add @cadence/badge
+```
+
+[Installation](/docs/installation) covers both routes and the styles each one needs.
+
+## Usage
+
+```tsx
+import { Badge } from "@cadence-clinical/ui";
+
+<Badge variant="outline">Archived</Badge>;
+```
+
+## API
+
+Badge follows the shadcn [Badge](https://ui.shadcn.com/docs/components/badge). It renders a `span`, spreads the rest of its props onto it, and takes the Base UI [render prop](https://base-ui.com/react/utils/use-render) to become another element, such as a link.
+
+## Props
+
+| Prop      | Type                                                                                      | Default       |
+| --------- | ----------------------------------------------------------------------------------------- | ------------- |
+| `variant` | `"secondary" \| "primary" \| "outline" \| "critical" \| "warning" \| "success" \| "info"` | `"secondary"` |
+| `render`  | An element or a function, as in Base UI                                                   | A `span`      |
+
+`badgeVariants` returns the classes for a variant, to give another element the look of a badge.
+
+## Status variants
+
+Each status variant uses three of its status's tokens: the tinted fill (`critical-subtle`), the text (`critical-text`) and the border (`critical-border`). The border gives an amber fill an edge on a white page. The [status colours](/docs/theming#status-colours) are the same in every theme, and no attribute changes them.
+
+## What Cadence changes
+
+- **The variant names differ.** The default is `secondary`, and shadcn's `default` is `primary`. shadcn's `destructive` is replaced by the four status variants, and its `ghost` and `link` variants are not included. Code written for shadcn's Badge that uses `default`, `destructive`, `ghost` or `link` does not compile against Cadence's.
+- **Four status variants**, each with its fill, its text and its border token.
+- **Nothing is clipped or cut short.** shadcn's badge has a fixed height, hides its overflow and keeps its text on one line. Cadence's has a minimum height and wraps, even a value with nowhere to break, because a badge can hold clinical text.
+- **Its text and icon follow the [density](/docs/theming#density)**, and its digits are tabular, so counts line up.
+
+## Accessibility
+
+- Badge renders a `span` with no role. A screen reader reads its text as part of the content around it.
+- A badge's text is not announced when it changes. To announce a change, put the badge in a live region, or announce it another way.
+- A status's text holds at least 4.5:1 against its tinted fill, and its border at least 3:1 against the page and a card, in every mode. The token tests check both.

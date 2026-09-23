@@ -17,6 +17,32 @@ test("the Button page renders live components and their grade", async ({ page })
   await expect(page.getByRole("link", { name: /Grade\s*Tested/ })).toBeVisible();
 });
 
+// A component's documentation is four pages. Each has its own URL and markdown, and the
+// navigation lists only the component, highlighted on every one of its tabs.
+test("a component's tabs are pages of their own", async ({ page, isMobile, request }) => {
+  await page.goto("/docs/components/button");
+  const tabs = page.getByRole("navigation", { name: "Button documentation" });
+  await expect(tabs.getByRole("link", { name: "Guidance" })).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
+
+  await tabs.getByRole("link", { name: "Code" }).click();
+  await expect(page).toHaveURL(/\/docs\/components\/button\/code$/);
+  await expect(page.getByRole("heading", { level: 1, name: "Button" })).toBeVisible();
+  await expect(tabs.getByRole("link", { name: "Code" })).toHaveAttribute("aria-current", "page");
+
+  // Only the navigation's links carry data-active. On a phone they are in a drawer.
+  if (isMobile) await page.getByRole("button", { name: "Open Sidebar" }).click();
+  const item = (href: string) =>
+    page.locator(`a[data-active][href="${href}"]`).filter({ visible: true });
+  await expect(item("/docs/components/button")).toHaveAttribute("data-active", "true");
+  await expect(item("/docs/components/button/code")).toHaveCount(0);
+
+  const changelog = await request.get("/docs/components/button/changelog.md");
+  expect(await changelog.text()).toContain("iconOnly");
+});
+
 test("the Typeset page styles its live sample", async ({ page }) => {
   await page.goto("/docs/components/typeset");
   await expect(page.getByRole("link", { name: /Grade\s*Tested/ })).toBeVisible();
@@ -34,13 +60,22 @@ test("the Typeset page styles its live sample", async ({ page }) => {
 const DOCS_PAGES = [
   "/",
   "/docs",
+  "/docs/installation",
   "/docs/theming",
+  "/docs/clinical-safety",
+  "/docs/grades",
   "/docs/levels",
   "/docs/components/alert",
   "/docs/components/alert-dialog",
   "/docs/components/app-shell",
   "/docs/components/badge",
+  "/docs/components/badge/examples",
+  "/docs/components/badge/code",
+  "/docs/components/badge/changelog",
   "/docs/components/button",
+  "/docs/components/button/examples",
+  "/docs/components/button/code",
+  "/docs/components/button/changelog",
   "/docs/components/calendar",
   "/docs/components/card",
   "/docs/components/checkbox",
@@ -71,6 +106,9 @@ const DOCS_PAGES = [
   "/docs/components/textarea",
   "/docs/components/toast",
   "/docs/components/input",
+  "/docs/components/input/examples",
+  "/docs/components/input/code",
+  "/docs/components/input/changelog",
   "/docs/components/item",
   "/docs/components/label",
   "/docs/components/list-detail",
@@ -79,6 +117,8 @@ const DOCS_PAGES = [
 ];
 
 test("no page scrolls sideways at the current viewport", async ({ page }) => {
+  // It visits every page, so it has longer than one page gets.
+  test.slow();
   for (const path of DOCS_PAGES) {
     await page.goto(path);
     const overflow = await page.evaluate(
@@ -121,6 +161,8 @@ test("the navigation's items are compact", async ({ page, isMobile }) => {
 // Decision records are for contributors and live in the repository. A public page gives the reason
 // in a sentence instead of sending a reader to an internal record.
 test("no page links to or names an internal decision record", async ({ page }) => {
+  // It visits every page, so it has longer than one page gets.
+  test.slow();
   for (const path of DOCS_PAGES) {
     await page.goto(path);
     const internal = await page.evaluate(() => {
@@ -168,8 +210,6 @@ test("the registry serves its index and each item it lists", async ({ request })
   expect((await request.get("/r/not-a-component.json")).status()).toBe(404);
 });
 
-// The sidebar is fixed to the window. Its live example contains layout, so the sidebar is placed
-// against the frame instead and cannot cover the docs page.
 // The docs example is a real form: sent empty, it lists its problems and takes focus to them.
 test("the form example summarises its problems when it is sent empty", async ({ page }) => {
   await page.goto("/docs/components/form");
@@ -180,6 +220,8 @@ test("the form example summarises its problems when it is sent empty", async ({ 
   await expect(page.getByRole("combobox", { name: "Clinic" })).toBeFocused();
 });
 
+// The sidebar is fixed to the window. Its live example contains layout, so the sidebar is placed
+// against the frame instead and cannot cover the docs page.
 test("the sidebar example stays inside its frame", async ({ page, isMobile }) => {
   test.skip(isMobile, "On a phone the sidebar is a sheet, opened by its trigger.");
   await page.goto("/docs/components/sidebar");
