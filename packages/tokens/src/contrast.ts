@@ -1,6 +1,12 @@
 import { wcagContrast } from "culori";
 
-import { STATUSES, type Contrast, type ResolvedTokens, type TokenName } from "./palette";
+import {
+  SEVERITY_STEPS,
+  STATUSES,
+  type Contrast,
+  type ResolvedTokens,
+  type TokenName,
+} from "./palette";
 
 /** WCAG 2.x contrast ratio between two CSS colours, from 1 to 21. */
 export function contrastRatio(a: string, b: string): number {
@@ -67,6 +73,17 @@ export const REQUIRED_PAIRINGS: readonly Pairing[] = [
     { foreground: "foreground", background: `${status}-subtle`, kind: "text" },
     { foreground: `${status}-border`, background: "background", kind: "boundary" },
     { foreground: `${status}-border`, background: "card", kind: "boundary" },
+  ]),
+  ...SEVERITY_STEPS.flatMap((step): Pairing[] => [
+    // A band's words and a cell's value are body text on the step's fill.
+    { foreground: "foreground", background: `${step}-subtle`, kind: "text" },
+    // The fill's edge, and a chart marker, against the page and a card.
+    { foreground: `${step}-border`, background: "background", kind: "boundary" },
+    { foreground: `${step}-border`, background: "card", kind: "boundary" },
+    { foreground: step, background: "background", kind: "boundary" },
+    { foreground: step, background: "card", kind: "boundary" },
+    // A marker drawn inside its own band.
+    { foreground: step, background: `${step}-subtle`, kind: "boundary" },
   ]),
 ];
 

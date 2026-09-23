@@ -86,6 +86,7 @@ describe("generateBrandCss", () => {
       expect(css).not.toContain(`--${status}-text:`);
     }
     expect(css).not.toContain("--destructive:");
+    expect(css).not.toContain("--severity-");
   });
 
   it("names the brand's fonts", () => {
