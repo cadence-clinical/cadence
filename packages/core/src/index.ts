@@ -15,5 +15,25 @@ export type {
   ReferenceRange,
   SourceInterpretation,
 } from "./observation";
+export {
+  SEVERITY_SCALE,
+  applyObservationSchema,
+  checkObservationSchema,
+  defineObservationSchema,
+} from "./observation-schema";
+export type {
+  InterpretationLabel,
+  InterpretedReading,
+  InterpretedSeries,
+  ObservationAnswer,
+  ObservationBand,
+  ObservationLevel,
+  ObservationSchema,
+  ObservationSeriesDefinition,
+  ReadingBand,
+  ReadingChange,
+  SeverityStep,
+  UnbandedReason,
+} from "./observation-schema";
 export { defineRegion } from "./region";
 export type { Citation, Region, RegionDefinition, RuleSet } from "./region";

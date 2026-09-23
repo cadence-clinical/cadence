@@ -329,6 +329,9 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 24.13.4
+      '@vitest/coverage-v8':
+        specifier: 'catalog:'
+        version: 4.1.11(@vitest/browser@4.1.11)(vitest@4.1.11)
       eslint:
         specifier: 'catalog:'
         version: 9.39.5(jiti@2.7.0)
