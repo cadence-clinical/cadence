@@ -30,6 +30,23 @@ const totals = {
 />;
 ```
 
+## Full names
+
+Set `labelStyle` to `"full"` where there is room. Short names are the default.
+
+<ObservationTablePreview example="vitals" labelStyle="full" />
+
+```tsx
+<ObservationTable
+  label="Vital signs"
+  series={vitals}
+  totals={totals}
+  labelStyle="full"
+  now={now}
+  timeZone="Australia/Melbourne"
+/>
+```
+
 ## Without a total
 
 Leave `totals` out when the schema defines no total.

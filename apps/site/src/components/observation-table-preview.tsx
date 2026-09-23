@@ -24,6 +24,7 @@ const SCHEMA = defineObservationSchema({
     {
       key: "respiratory-rate",
       label: "Respiratory rate",
+      shortLabel: "RR",
       unitLabel: "breaths/min",
       match: [],
       ucum: "/min",
@@ -49,6 +50,7 @@ const SCHEMA = defineObservationSchema({
       // Recorded only while supplementary oxygen is given, so the row is empty otherwise.
       key: "oxygen-flow",
       label: "Oxygen flow",
+      shortLabel: "O₂ flow",
       unitLabel: "L/min",
       match: [],
       ucum: "L/min",
@@ -61,6 +63,7 @@ const SCHEMA = defineObservationSchema({
     {
       key: "heart-rate",
       label: "Heart rate",
+      shortLabel: "HR",
       unitLabel: "beats/min",
       match: [],
       ucum: "/min",
@@ -73,6 +76,7 @@ const SCHEMA = defineObservationSchema({
     {
       key: "systolic",
       label: "Systolic blood pressure",
+      shortLabel: "SBP",
       unitLabel: "mmHg",
       match: [],
       ucum: "mm[Hg]",
@@ -85,6 +89,7 @@ const SCHEMA = defineObservationSchema({
     {
       key: "diastolic",
       label: "Diastolic blood pressure",
+      shortLabel: "DBP",
       unitLabel: "mmHg",
       match: [],
       ucum: "mm[Hg]",
@@ -97,6 +102,7 @@ const SCHEMA = defineObservationSchema({
     {
       key: "temperature",
       label: "Temperature",
+      shortLabel: "Temp",
       unitLabel: "°C",
       match: [],
       ucum: "Cel",
@@ -109,6 +115,7 @@ const SCHEMA = defineObservationSchema({
     {
       key: "gcs",
       label: "Glasgow Coma Scale",
+      shortLabel: "GCS",
       match: [],
       ucum: "{score}",
       bands: [
@@ -121,6 +128,7 @@ const SCHEMA = defineObservationSchema({
   ],
   total: {
     label: "Synthetic total score",
+    shortLabel: "Total",
     requires: ["respiratory-rate", "spo2", "heart-rate", "systolic", "temperature", "gcs"],
     bands: [
       { level: "in", below: 1 },
@@ -267,6 +275,7 @@ const VITALS = applyObservationSchema(
 
 const TOTALS = {
   label: SCHEMA.total.label,
+  shortLabel: SCHEMA.total.shortLabel,
   rounds: scoreRounds(groupRounds(VITALS, WINDOW_MS), SCHEMA),
 };
 
@@ -340,9 +349,11 @@ export type ObservationTableExample = keyof typeof EXAMPLES;
 export function ObservationTablePreview({
   example = "vitals",
   hide = [],
+  labelStyle = "short",
 }: {
   example?: ObservationTableExample;
   hide?: readonly string[];
+  labelStyle?: "short" | "full";
 }) {
   const { series, ...rest } = EXAMPLES[example];
   return (
@@ -352,6 +363,7 @@ export function ObservationTablePreview({
         series={series}
         totals={"totals" in rest ? rest.totals : undefined}
         defaultHiddenRows={hide.map((key) => (key === "total" ? TOTAL_ROW : key))}
+        labelStyle={labelStyle}
         now={NOW}
         timeZone={TIME_ZONE}
       />
