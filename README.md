@@ -14,7 +14,7 @@ A systematic review led from Macquarie University found that poor user interface
 
 Clinicians carry that cost as cognitive load. Patients carry it as harm.
 
-Cadence works on this in two ways. The first is an open source, accessible design system that clinicians have tested. Each component carries a grade that records how far it has been verified – automated tests, review by practising clinicians, use in production – so "clinician-tested" is a claim you can check against a version and an evidence record. No component has reached the clinician-verified grade yet, and the review process is still being designed.
+Cadence works on this in two ways. The first is an open source, accessible design system that clinicians can review. Each component carries a grade that records how far it has been verified – automated tests, review by practising clinicians, use in production – so "clinician-verified" is a claim you can check against a version and an evidence record. No component has reached the clinician-verified grade yet, and the review process is still being designed.
 
 The second is preparing for agentic use. We expect more clinical software to be written by coding agents, often with a clinician in the room steering a prototype. An agent with no design system invents a new one on every screen. Cadence gives an agent the same constraints it gives a person: documentation served as markdown, grades it can read, and lint rules that keep regional rule sets and FHIR types out of components.
 
@@ -98,14 +98,14 @@ const css = generateAccentCss("brand", accent);
 
 ### Status
 
-| Package                      | What it does                                                           | State       |
-| ---------------------------- | ---------------------------------------------------------------------- | ----------- |
-| `@cadence-clinical/ui`       | Primitives on [Base UI](https://base-ui.com) and Tailwind CSS          | Button only |
-| `@cadence-clinical/tokens`   | Colour modes, contrast, density, accents and the accent validator      | Working     |
-| `@cadence-clinical/core`     | The `Region` contract and the grade schema. No React.                  | First cut   |
-| `@cadence-clinical/clinical` | Clinical components: vital signs, observation chart and others         | Planned     |
-| `@cadence-clinical/fhir`     | Turns verbose FHIR R4 resources into the concise props components take | Planned     |
-| `@cadence-clinical/au`       | Australian conventions and cited clinical rule sets, as a Region       | Planned     |
+| Package                      | What it does                                                           | State                       |
+| ---------------------------- | ---------------------------------------------------------------------- | --------------------------- |
+| `@cadence-clinical/ui`       | Components on [Base UI](https://base-ui.com) and Tailwind CSS          | 40 built, all graded tested |
+| `@cadence-clinical/tokens`   | Colour modes, contrast, density, accents and the accent validator      | Working                     |
+| `@cadence-clinical/core`     | The `Region` contract and the grade schema. No React.                  | First cut                   |
+| `@cadence-clinical/clinical` | Clinical components: vital signs, observation chart and others         | Planned                     |
+| `@cadence-clinical/fhir`     | Turns verbose FHIR R4 resources into the concise props components take | Planned                     |
+| `@cadence-clinical/au`       | Australian conventions and cited clinical rule sets, as a Region       | Planned                     |
 
 What comes next, in order:
 
