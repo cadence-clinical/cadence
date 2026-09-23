@@ -36,6 +36,7 @@ export const SYNTHETIC_SCHEMA = defineObservationSchema({
     {
       key: "respiratory-rate",
       label: "Respiratory rate",
+      shortLabel: "RR",
       unitLabel: "breaths/min",
       match: [{ system: LOCAL, code: "rr" }],
       ucum: "/min",
@@ -63,6 +64,7 @@ export const SYNTHETIC_SCHEMA = defineObservationSchema({
       // Shown only in the rounds where supplementary oxygen was given.
       key: "oxygen-flow",
       label: "Oxygen flow",
+      shortLabel: "O₂ flow",
       unitLabel: "L/min",
       match: [{ system: LOCAL, code: "o2-flow" }],
       ucum: "L/min",
@@ -75,6 +77,7 @@ export const SYNTHETIC_SCHEMA = defineObservationSchema({
     {
       key: "heart-rate",
       label: "Heart rate",
+      shortLabel: "HR",
       unitLabel: "beats/min",
       match: [{ system: LOCAL, code: "hr" }],
       ucum: "/min",
@@ -88,6 +91,7 @@ export const SYNTHETIC_SCHEMA = defineObservationSchema({
     {
       key: "systolic",
       label: "Systolic blood pressure",
+      shortLabel: "SBP",
       unitLabel: "mmHg",
       match: [{ system: LOCAL, code: "sbp" }],
       ucum: "mm[Hg]",
@@ -100,6 +104,7 @@ export const SYNTHETIC_SCHEMA = defineObservationSchema({
     {
       key: "diastolic",
       label: "Diastolic blood pressure",
+      shortLabel: "DBP",
       unitLabel: "mmHg",
       match: [{ system: LOCAL, code: "dbp" }],
       ucum: "mm[Hg]",
@@ -112,6 +117,7 @@ export const SYNTHETIC_SCHEMA = defineObservationSchema({
     {
       key: "temperature",
       label: "Temperature",
+      shortLabel: "Temp",
       unitLabel: "°C",
       match: [{ system: LOCAL, code: "temp" }],
       ucum: "Cel",
@@ -124,6 +130,7 @@ export const SYNTHETIC_SCHEMA = defineObservationSchema({
     {
       key: "consciousness",
       label: "Consciousness",
+      shortLabel: "AVPU",
       match: [{ system: LOCAL, code: "avpu" }],
       answers: [
         { level: "in", text: ["Alert"] },
@@ -134,6 +141,7 @@ export const SYNTHETIC_SCHEMA = defineObservationSchema({
     {
       key: "gcs",
       label: "Glasgow Coma Scale",
+      shortLabel: "GCS",
       match: [{ system: LOCAL, code: "gcs" }],
       ucum: "{score}",
       bands: [
@@ -146,6 +154,7 @@ export const SYNTHETIC_SCHEMA = defineObservationSchema({
   ],
   total: {
     label: "Synthetic total score",
+    shortLabel: "Total",
     requires: [
       "respiratory-rate",
       "spo2",
@@ -365,10 +374,12 @@ export function syntheticSeries(
 /** The synthetic totals for the synthetic vitals, grouped as the table groups its columns. */
 export function syntheticTotals(vitals: readonly InterpretedSeries[] = syntheticVitals()): {
   label: string;
+  shortLabel: string;
   rounds: RoundTotal[];
 } {
   return {
     label: SYNTHETIC_SCHEMA.total.label,
+    shortLabel: SYNTHETIC_SCHEMA.total.shortLabel,
     rounds: scoreRounds(groupRounds(vitals, 5 * 60_000), SYNTHETIC_SCHEMA),
   };
 }
