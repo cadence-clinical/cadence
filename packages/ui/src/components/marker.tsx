@@ -5,9 +5,7 @@ import type { ComponentProps } from "react";
 
 import { cn } from "@/lib/cn";
 
-// Base UI writes each key of `state` as a data attribute, which is how the marker gets its
-// `data-slot` and `data-variant`.
-
+/** The Marker's classes, for giving another element the look of a marker. */
 const markerVariants = cva(
   [
     "group/marker relative flex w-full items-center gap-2 text-left text-body text-muted-foreground",
@@ -48,6 +46,8 @@ function Marker({ className, variant = "default", render, ...props }: MarkerProp
     defaultTagName: "div",
     render,
     props: mergeProps<"div">({ className: cn(markerVariants({ variant }), className) }, props),
+    // Base UI writes each key of `state` as a data attribute, which is how the marker gets its
+    // `data-slot` and `data-variant`.
     state: { slot: "marker", variant },
   });
 }

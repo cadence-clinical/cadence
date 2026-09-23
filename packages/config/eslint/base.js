@@ -92,6 +92,11 @@ export default tseslint.config(
             "ExportNamedDeclaration > VariableDeclaration",
             "ExportNamedDeclaration > TSInterfaceDeclaration",
             "ExportNamedDeclaration > TSTypeAliasDeclaration",
+            // A type declared first and exported by name in an `export type { … }` list:
+            // `publicOnly` keeps only the ones the list names. The plugin cannot do the same for a
+            // `const` or an interface, because its export parser does not tie a name in the list
+            // back to either declaration, so those are for review.
+            "Program > TSTypeAliasDeclaration",
           ],
         },
       ],

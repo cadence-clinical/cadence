@@ -34,6 +34,7 @@ function EmptyHeader({ className, ...props }: ComponentProps<"div">) {
   );
 }
 
+/** The Empty media's classes, for giving another element the look of its icon tile. */
 const emptyMediaVariants = cva(
   "mb-2 flex shrink-0 items-center justify-center [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {

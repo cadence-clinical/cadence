@@ -214,7 +214,9 @@ function Toaster({ children, toastManager = toast, ...props }: ToastPrimitive.Pr
   );
 }
 
+/** Makes a toast manager of your own, to pass to `ToastProvider`'s `toastManager`. */
 const createToastManager = ToastPrimitive.createToastManager;
+/** The toasts on show and the functions that add, update and close them, inside `ToastProvider`. */
 const useToastManager = ToastPrimitive.useToastManager;
 
 export {
