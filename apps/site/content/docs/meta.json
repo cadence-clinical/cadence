@@ -47,6 +47,7 @@
     "components/data-table",
     "components/date-picker",
     "components/form",
+    "components/observation-table",
     "components/sidebar",
     "components/toast",
     "---Layouts---",

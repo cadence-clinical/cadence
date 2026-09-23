@@ -15,6 +15,7 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
+    "@cadence-clinical/clinical": "workspace:*",
     "@cadence-clinical/core": "workspace:*",
     "@cadence-clinical/tokens": "workspace:*",
     "@cadence-clinical/ui": "workspace:*",

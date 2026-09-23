@@ -36,12 +36,13 @@ const aliasRule = {
 };
 
 /**
- * Component source is what the registry installs, so it imports through the aliases. A test is
- * never installed, and it has to reach the package entry and registry.json.
+ * Component source is what the registry installs, so it imports through the aliases. A test or a
+ * story is never installed: a test has to reach the package entry and registry.json, and a story
+ * may share synthetic fixtures with the tests.
  */
 const componentPackage = (patterns) => [
   restrict([...patterns, aliasRule]),
-  { files: ["**/*.test.{ts,tsx}"], ...restrict(patterns) },
+  { files: ["**/*.test.{ts,tsx}", "**/*.stories.tsx"], ...restrict(patterns) },
 ];
 
 const uiRules = [

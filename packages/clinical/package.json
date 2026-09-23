@@ -1,0 +1,64 @@
+{
+  "name": "@cadence-clinical/clinical",
+  "version": "0.0.0",
+  "description": "Clinical components for Cadence Clinical: render-only displays of observations and medicines, built on the ui primitives.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cadence-clinical/cadence.git",
+    "directory": "packages/clinical"
+  },
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "default": "./dist/index.mjs"
+    },
+    "./styles.css": "./dist/styles.css",
+    "./meta.json": "./dist/meta.json",
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "lint": "eslint . --max-warnings 0",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@cadence-clinical/core": "workspace:^",
+    "@cadence-clinical/ui": "workspace:^"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@base-ui/react": "^1.8.0",
+    "@cadence-clinical/config": "workspace:*",
+    "@storybook/react-vite": "^10.6.0",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "eslint": "catalog:",
+    "lucide-react": "^1.46.0",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "storybook": "^10.6.0",
+    "tailwind-merge": "^3.7.0",
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

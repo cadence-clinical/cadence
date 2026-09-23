@@ -1,7 +1,8 @@
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 
-import manifest from "@cadence-clinical/ui/meta.json";
+import clinical from "@cadence-clinical/clinical/meta.json";
+import ui from "@cadence-clinical/ui/meta.json";
 
 /**
  * A component's changelog, read from the changesets that describe it. Nothing is written twice:
@@ -33,10 +34,13 @@ export interface ChangelogRelease {
 // The site builds from apps/site, and the changesets are at the root of the repository.
 const ROOT = path.join(process.cwd(), "..", "..");
 const CHANGESETS = path.join(ROOT, ".changeset");
-const RELEASED = path.join(ROOT, "packages", "ui", "CHANGELOG.md");
+// The component packages are versioned together, so their releases share version numbers.
+const RELEASED = ["ui", "clinical"].map((name) =>
+  path.join(ROOT, "packages", name, "CHANGELOG.md"),
+);
 
 // Longest first, so "Toggle group" is matched before "Toggle".
-const TITLES = manifest.components
+const TITLES = [...ui.components, ...clinical.components]
   .map(({ name, title }) => ({ name, title: title.toLowerCase() }))
   .sort((a, b) => b.title.length - a.title.length);
 
@@ -103,9 +107,9 @@ function releasedSummary(item: string): string {
     .trim();
 }
 
-/** The releases in `packages/ui/CHANGELOG.md`, newest first. There is none before the first. */
-async function readReleased(): Promise<ChangelogRelease[]> {
-  const source = await readFile(RELEASED, "utf8").catch(() => "");
+/** The releases in one package's CHANGELOG.md, newest first. There is none before the first. */
+async function readReleasedFrom(file: string): Promise<ChangelogRelease[]> {
+  const source = await readFile(file, "utf8").catch(() => "");
   return source
     .split(/^## /m)
     .slice(1)
@@ -121,6 +125,17 @@ async function readReleased(): Promise<ChangelogRelease[]> {
       }
       return { version: version.trim(), entries };
     });
+}
+
+/** The releases of the ui and clinical packages, merged by version, newest first. */
+async function readReleased(): Promise<ChangelogRelease[]> {
+  const byVersion = new Map<string, ChangelogEntry[]>();
+  for (const releases of await Promise.all(RELEASED.map(readReleasedFrom))) {
+    for (const { version = "", entries } of releases) {
+      byVersion.set(version, [...(byVersion.get(version) ?? []), ...entries]);
+    }
+  }
+  return [...byVersion].map(([version, entries]) => ({ version, entries }));
 }
 
 /** A component's changes, waiting and released, newest first. Empty releases are left out. */

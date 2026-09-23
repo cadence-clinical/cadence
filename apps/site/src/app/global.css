@@ -3,6 +3,7 @@
 @import "fumadocs-ui/css/preset.css";
 @import "@cadence-clinical/ui/styles.css";
 @import "@cadence-clinical/ui/typeset.css";
+@import "@cadence-clinical/clinical/styles.css";
 /* Example brands, chosen with the theme picker. After the theme, so a brand wins over an accent. */
 @import "@cadence-clinical/tokens/brands.css";
 @import "@fontsource-variable/geist/wght.css";

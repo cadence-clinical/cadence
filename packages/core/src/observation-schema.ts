@@ -42,6 +42,11 @@ export interface ObservationLevel {
   readonly key: string;
   /** The level in words. It is shown with the colour, so the colour is never the only signal. */
   readonly label: string;
+  /**
+   * A few characters for the level where there is no room for its words, such as `2` beside a
+   * value in a table cell. A level at step 0 may leave it empty.
+   */
+  readonly short: string;
   readonly severity: SeverityStep;
 }
 
@@ -76,6 +81,8 @@ export interface ObservationSeriesDefinition extends ObservationSeriesSelection 
    * scores, such as a sedation score given as a whole number, uses `{score}`.
    */
   readonly ucum?: string;
+  /** The unit in words for people to read, such as "breaths/min" for `/min`. */
+  readonly unitLabel?: string;
   /** The range to show by default, in `ucum`. */
   readonly range?: { readonly min: number; readonly max: number };
   /** Bands for numeric values, in `ucum`. They must not overlap or leave a gap. */
