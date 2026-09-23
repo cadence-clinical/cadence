@@ -39,7 +39,11 @@ export type IssueCode =
   /** A quantity kept without a UCUM unit. It is shown with the unit the source wrote. */
   | "no-ucum-unit"
   /** An optional element that could not be read, and was left out. */
-  | "invalid-element";
+  | "invalid-element"
+  /** An order or a list entry whose medicine cannot be found, so it cannot be shown. */
+  | "unresolved-medication"
+  /** A dose that names no order in the input, so it cannot be shown with one. */
+  | "unlinked-administration";
 
 /** One problem with the input. */
 export interface TransformIssue {
