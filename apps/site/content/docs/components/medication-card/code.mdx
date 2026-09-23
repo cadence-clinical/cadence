@@ -1,0 +1,63 @@
+---
+title: Medication card code
+description: How to install the Medication card, feed it from FHIR, and its props.
+---
+
+## Installation
+
+The clinical components are not on npm yet. Once they are:
+
+```tsx
+import { MedicationCard } from "@cadence-clinical/clinical";
+```
+
+From the shadcn registry:
+
+```bash
+pnpm dlx shadcn@latest add @cadence/medication-card
+```
+
+## Usage
+
+```tsx
+import { MedicationCard } from "@cadence-clinical/clinical";
+import { medicationRecords } from "@cadence-clinical/fhir";
+
+// A Bundle of MedicationRequest, MedicationAdministration, MedicationStatement and Medication.
+const { records, issues } = medicationRecords(bundle);
+
+{
+  records.map((record) => (
+    <MedicationCard key={record.id} record={record} now={now} timeZone="Australia/Melbourne" />
+  ));
+}
+```
+
+`medicationRecords` joins each MedicationAdministration to its order, resolves each medicine, leaves out anything entered in error, and reports what it cannot read in `issues`.
+
+## API
+
+The Medication card is a clinical composite built on [Card](/docs/components/card), [Badge](/docs/components/badge), [Collapsible](/docs/components/collapsible) and [Button](/docs/components/button). The words come from `describeDosage` in `@cadence-clinical/core`, which you can use in your own components.
+
+## Props
+
+| Prop              | Type                              | Default       |
+| ----------------- | --------------------------------- | ------------- |
+| `record`          | `MedicationRecord`                | Required      |
+| `now`             | `string \| number`                | Required      |
+| `timeZone`        | `string`                          | Required      |
+| `audience`        | `"clinician" \| "patient"`        | `"clinician"` |
+| `historyWindowMs` | `number`                          | `86400000`    |
+| `defaultOpen`     | `boolean`                         | `false`       |
+| `locale`          | `string`                          | `"en-AU"`     |
+| `hourCycle`       | `"h23" \| "h12"`                  | `"h23"`       |
+| `messages`        | `Partial<MedicationCardMessages>` | en-AU         |
+
+## The words
+
+`describeDosage(dosage, audience)` returns each part, the whole line, whether it was written from the parts or is the prescriber's text, and any `gaps`. `quantityWords(quantity)` writes one amount, such as "600 microgram", with a non-breaking space before the unit.
+
+## Accessibility
+
+- The medicine's name is a heading, and the dose history is a list behind a button.
+- A status is always words in a badge, never colour alone.

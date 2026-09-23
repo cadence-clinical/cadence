@@ -38,6 +38,7 @@
     "components/empty",
     "components/field",
     "components/item",
+    "components/medication-card",
     "components/popover",
     "components/sheet",
     "components/tabs",
