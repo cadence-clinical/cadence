@@ -661,8 +661,8 @@ describe("observationSeries with an observation schema", () => {
   // Synthetic bands, far from any clinical threshold.
   const schema = defineObservationSchema({
     levels: [
-      { key: "in", label: "Within range", severity: "severity-0" },
-      { key: "out", label: "Out of range", severity: "severity-4" },
+      { key: "in", label: "Within range", short: "I", severity: "severity-0" },
+      { key: "out", label: "Out of range", short: "O", severity: "severity-4" },
     ],
     series: [
       {
