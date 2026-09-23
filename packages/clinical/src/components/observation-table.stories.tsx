@@ -285,6 +285,9 @@ export const FullNames: Story = {
 
 /** A short name shows its full name on hover, and a screen reader reads the full name. */
 export const ShortNames: Story = {
+  // It opens a Tooltip by hovering, which Chromatic's capture browser does not do. The component
+  // tests run it in Chromium and WebKit.
+  parameters: { chromatic: { disableSnapshot: true } },
   play: async ({ canvasElement }) => {
     const name = canvasElement.querySelector<HTMLElement>('[data-slot="observation-row-name"]');
     await expect(name?.textContent).toBe("RRRespiratory rate");
