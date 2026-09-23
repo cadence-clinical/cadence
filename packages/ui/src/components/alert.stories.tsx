@@ -54,8 +54,12 @@ export const Quieter: Story = {
   play: async ({ canvasElement }) => {
     const [note, critical] = canvasElement.querySelectorAll("[data-slot=alert]");
     if (!note || !critical) throw new Error("Nothing rendered.");
-    // The bar is on the leading edge, and the other three sides have no rule.
+    // The padding is even on all four sides, where an outlined alert is tighter top and bottom.
     const bar = getComputedStyle(critical);
+    await expect(bar.paddingTop).toBe(bar.paddingLeft);
+    await expect(bar.paddingBottom).toBe(bar.paddingRight);
+    await expect(bar.paddingTop).toBe("12px");
+    // The bar is on the leading edge, and the other three sides have no rule.
     await expect(bar.borderLeftWidth).toBe("4px");
     await expect(bar.borderTopWidth).toBe("0px");
     await expect(bar.borderRightWidth).toBe("0px");

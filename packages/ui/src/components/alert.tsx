@@ -18,9 +18,10 @@ const alertVariants = cva(
       },
       emphasis: {
         outlined: "",
-        // Quieter, for a note beside what it is about: the fill stays, and the outline becomes a
-        // bar down the leading edge, in the same border token.
-        edge: "rounded-md border-0 border-s-4",
+        // Quieter, for a note beside what it is about: the fill stays, the outline becomes a bar
+        // down the leading edge, in the same border token, and the padding is even all round,
+        // because the bar reads as an edge to sit in from rather than a rule to tuck under.
+        edge: "rounded-md border-0 border-s-4 p-container",
       },
     },
     compoundVariants: [
