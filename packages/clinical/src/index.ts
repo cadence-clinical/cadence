@@ -10,3 +10,8 @@ export type {
   VitalsSpan,
   VitalsTrack,
 } from "@/components/cadence/vitals-chart";
+export { MedicationCard } from "@/components/cadence/medication-card";
+export type {
+  MedicationCardMessages,
+  MedicationCardProps,
+} from "@/components/cadence/medication-card";
