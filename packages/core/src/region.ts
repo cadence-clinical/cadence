@@ -37,21 +37,21 @@ export interface RuleSet<TData = unknown> {
  */
 export interface Region {
   /** Stable identifier, for example "au" or "au-vic". */
-  id: string;
+  readonly id: string;
   /** Identifiers of the regions this one was composed from, nearest parent first. */
-  lineage: readonly string[];
+  readonly lineage: readonly string[];
   /** BCP 47 locale used for Intl formatting, for example "en-AU". */
-  locale: string;
-  dateTime: {
+  readonly locale: string;
+  readonly dateTime: Readonly<{
     hourCycle: "h23" | "h12";
     /** IANA time zone. Undefined means the viewer's zone. */
     timeZone?: string;
-  };
+  }>;
   /** Preferred display unit per analyte: LOINC code to UCUM unit. */
-  preferredUnits: Readonly<Record<string, string>>;
+  readonly preferredUnits: Readonly<Record<string, string>>;
   /** Static interface strings, keyed by message id. */
-  labels: Readonly<Record<string, string>>;
-  ruleSets: Readonly<Record<string, RuleSet>>;
+  readonly labels: Readonly<Record<string, string>>;
+  readonly ruleSets: Readonly<Record<string, RuleSet>>;
 }
 
 /** What defineRegion takes: an id, an optional region to extend, and the parts that differ. */
@@ -63,6 +63,8 @@ export type RegionDefinition = {
 /**
  * Defines a region, optionally layered over a parent. Scalar settings override the parent;
  * keyed maps (units, labels, rule sets) merge by key so a state variant states only what differs.
+ * The region and every map and list in it are frozen. The rule sets are the author's own objects,
+ * so they are shared, not frozen.
  */
 export function defineRegion(definition: RegionDefinition): Region {
   const { extends: parent, id, ...own } = definition;
@@ -74,11 +76,11 @@ export function defineRegion(definition: RegionDefinition): Region {
 
   return Object.freeze({
     id,
-    lineage: parent ? [parent.id, ...parent.lineage] : [],
+    lineage: Object.freeze(parent ? [parent.id, ...parent.lineage] : []),
     locale,
-    dateTime: { hourCycle: "h23" as const, ...parent?.dateTime, ...own.dateTime },
-    preferredUnits: { ...parent?.preferredUnits, ...own.preferredUnits },
-    labels: { ...parent?.labels, ...own.labels },
-    ruleSets: { ...parent?.ruleSets, ...own.ruleSets },
+    dateTime: Object.freeze({ hourCycle: "h23" as const, ...parent?.dateTime, ...own.dateTime }),
+    preferredUnits: Object.freeze({ ...parent?.preferredUnits, ...own.preferredUnits }),
+    labels: Object.freeze({ ...parent?.labels, ...own.labels }),
+    ruleSets: Object.freeze({ ...parent?.ruleSets, ...own.ruleSets }),
   });
 }

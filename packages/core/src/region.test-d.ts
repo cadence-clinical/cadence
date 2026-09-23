@@ -37,5 +37,7 @@ describe("Region", () => {
     region.ruleSets.extra = undefined;
     // @ts-expect-error -- so is the lineage
     region.lineage.push("uk");
+    // @ts-expect-error -- and the date and time settings
+    region.dateTime.hourCycle = "h12";
   });
 });
