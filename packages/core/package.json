@@ -29,11 +29,12 @@
     "dev": "tsdown --watch",
     "lint": "eslint . --max-warnings 0",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run --coverage"
   },
   "devDependencies": {
     "@cadence-clinical/config": "workspace:*",
     "@types/node": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
     "eslint": "catalog:",
     "tsdown": "catalog:",
     "typescript": "catalog:",
