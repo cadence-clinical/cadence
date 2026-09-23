@@ -157,9 +157,10 @@ export const ADateAndATime: Story = {
   },
 };
 
-// A time on its own: one field, named by the Field's label.
+// A time on its own: one field, named by the Field's label. Its value is the time of day as a
+// string, not a Date, so the picker never guesses which day, or which zone, the time is in.
 export const ATimeOnItsOwn: Story = {
-  args: { mode: "time", defaultValue: new Date(2026, 3, 3, 9, 30) },
+  args: { mode: "time", defaultValue: "09:30" },
   render: (args) => (
     <Field className="max-w-xs">
       <FieldLabel>Appointment time</FieldLabel>
@@ -168,8 +169,13 @@ export const ATimeOnItsOwn: Story = {
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await expect(canvas.getByLabelText("Appointment time")).toHaveValue("09:30");
+    const time = canvas.getByLabelText("Appointment time");
+    await expect(time).toHaveValue("09:30");
     await expect(canvas.queryByRole("button", { name: "Choose a date" })).not.toBeInTheDocument();
+
+    await userEvent.clear(time);
+    await userEvent.type(time, "14:15");
+    await waitFor(() => expect(onValueChange).toHaveBeenLastCalledWith("14:15"));
   },
 };
 

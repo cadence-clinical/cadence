@@ -6,5 +6,7 @@ export default defineConfig({
   test: {
     // No DOM on purpose: server.test.tsx proves each component renders without one.
     environment: "node",
+    // Type tests (*.test-d.ts) are compiled, not run: a guarantee that stops holding fails here.
+    typecheck: { enabled: true },
   },
 });
