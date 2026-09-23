@@ -76,6 +76,10 @@ The Observation table is a clinical pattern built on [Table](/docs/components/ta
 
 `messages` replaces any of the words the table shows or reads out. `TOTAL_ROW` is the key of the total's row, for `defaultHiddenRows`.
 
+## Short names
+
+A series definition's `shortLabel`, such as `"RR"`, names its row when `labelStyle` is `"short"`, the default. A series with no short name is named in full. `labelFor(definition, style)` in `@cadence-clinical/core` gives the same name, for your own components.
+
 ## Totals
 
 Group the rounds for `scoreRounds` with the same window as the table's `roundWindowMs`. A total whose round is not one of the table's columns throws, because it would otherwise be shown nowhere.

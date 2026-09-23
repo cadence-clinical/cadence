@@ -82,6 +82,11 @@ export interface ObservationSeriesDefinition extends ObservationSeriesSelection 
   /** The series in words, such as "Respiratory rate". */
   readonly label: string;
   /**
+   * The series' short name, such as "RR", for a dense display. A component that shows it also
+   * gives the full `label`, in a tooltip and to a screen reader.
+   */
+  readonly shortLabel?: string;
+  /**
    * The UCUM unit the bands are written in. A reading in any other unit is not banded, so a
    * temperature in degrees Fahrenheit is never compared with thresholds in Celsius. A series of
    * scores, such as a sedation score given as a whole number, uses `{score}`.
@@ -115,6 +120,8 @@ export interface ObservationEscalation {
 export interface ObservationTotal {
   /** The total in words, such as "Total score". */
   readonly label: string;
+  /** The total's short name, for a dense display. */
+  readonly shortLabel?: string;
   /**
    * The series a round must have a scored reading of for its total to be complete. A total with
    * one missing would read lower than it is, so it is shown as incomplete.
@@ -135,6 +142,23 @@ export interface ObservationSchema {
   readonly interpretationLabels?: readonly InterpretationLabel[];
   /** A total score for each round. */
   readonly total?: ObservationTotal;
+}
+
+/** Whether a component names a series by its short name or its full one. */
+export type LabelStyle = "short" | "full";
+
+/** Something with a name and, perhaps, a short one: a series definition or a total. */
+export interface Named {
+  readonly label: string;
+  readonly shortLabel?: string;
+}
+
+/**
+ * The name to show in a style: the short name when it is asked for and there is one, and
+ * otherwise the full name. Short is the default, because clinical displays are dense.
+ */
+export function labelFor(named: Named, style: LabelStyle = "short"): string {
+  return style === "short" ? (named.shortLabel ?? named.label) : named.label;
 }
 
 /** Why a reading has no band. Each reason is shown differently from "normal". */
