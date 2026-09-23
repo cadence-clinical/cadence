@@ -1,0 +1,55 @@
+---
+title: Medication card examples
+description: An order with its doses, for a patient, on hold, missing what the guidelines require, the prescriber's text, and a medication list entry.
+---
+
+Every example is synthetic, and none is advice on a dose.
+
+## An order with its doses
+
+When it was last given, and the doses in the last 24 hours, including one not given.
+
+<MedicationCardPreview record="order" open />
+
+```tsx
+import { MedicationCard } from "@cadence-clinical/clinical";
+import { medicationRecords } from "@cadence-clinical/fhir";
+
+const { records } = medicationRecords(bundle);
+
+<MedicationCard record={records[0]} now={now} timeZone="Australia/Melbourne" />;
+```
+
+## For a patient
+
+The instruction in plain words with a verb, "Last taken", and no internal status.
+
+<MedicationCardPreview record="order" audience="patient" />
+
+```tsx
+<MedicationCard record={record} audience="patient" now={now} timeZone="Australia/Melbourne" />
+```
+
+## On hold
+
+A regular order on hold, with no doses given yet.
+
+<MedicationCardPreview record="regular" />
+
+## What is missing
+
+A "when required" order with no reason and no maximum in 24 hours.
+
+<MedicationCardPreview record="missing" />
+
+## The prescriber's text
+
+A dosage that cannot be written from its parts, shown as the prescriber wrote it.
+
+<MedicationCardPreview record="text" />
+
+## A medication list entry
+
+An entry in the patient's medication list, and when it was recorded.
+
+<MedicationCardPreview record="list" />
