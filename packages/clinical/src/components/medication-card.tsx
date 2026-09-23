@@ -13,7 +13,7 @@ import {
   type MedicationRecord,
   type MedicationStatementStatus,
 } from "@cadence-clinical/core";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Info } from "lucide-react";
 import { useState, type ComponentProps } from "react";
 
 import { Badge } from "@/components/cadence/badge";
@@ -24,6 +24,15 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/cadence/collapsible";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/cadence/table";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/cadence/tooltip";
 import { cn } from "@/lib/cn";
 
 const DAY_MS = 24 * 3_600_000;
@@ -43,6 +52,10 @@ interface MedicationCardMessages {
   doses: string;
   earlier: string;
   recorded: string;
+  /** The dose history's column headings, read by a screen reader. */
+  time: string;
+  status: string;
+  amount: string;
   gaps: Readonly<Record<DosageGap, string>>;
 }
 
@@ -92,6 +105,9 @@ const MESSAGES: MedicationCardMessages = {
   doses: "Doses",
   earlier: "Show earlier doses",
   recorded: "Recorded",
+  time: "Time",
+  status: "Status",
+  amount: "Dose",
   gaps: {
     indication: "No reason given for when required",
     maximum: "No maximum in 24 hours given",
@@ -105,13 +121,51 @@ function statusVariant(status: string): "secondary" | "outline" | "warning" {
   return "secondary";
 }
 
-/** One dosage's line. For a clinician, the DOSE label and dose are bold, as section 6.3.1 asks. */
+/**
+ * A status in a badge. When it has reasons, such as why a dose was not given, they are in a
+ * Tooltip on the badge rather than beside it, and the badge takes focus so a keyboard reaches
+ * them. A screen reader reads them with the status.
+ */
+function StatusBadge({
+  label,
+  variant,
+  reasons,
+}: {
+  label: string;
+  variant: "secondary" | "outline" | "warning";
+  reasons: readonly string[];
+}) {
+  if (reasons.length === 0) return <Badge variant={variant}>{label}</Badge>;
+  return (
+    <Tooltip>
+      <TooltipTrigger
+        render={
+          <Badge
+            data-slot="medication-reason"
+            variant={variant}
+            tabIndex={0}
+            className="cursor-help"
+          />
+        }
+      >
+        {label}
+        <Info aria-hidden />
+        <span className="sr-only">: {reasons.join(", ")}</span>
+      </TooltipTrigger>
+      <TooltipContent>{reasons.join(", ")}</TooltipContent>
+    </Tooltip>
+  );
+}
+
+/**
+ * One dosage's line. For a clinician, the DOSE label and dose are bold, as section 6.3.1 asks, and
+ * the route is left out because it is in a badge beside the medicine's name.
+ */
 function DosageLine({ words, audience }: { words: DosageWords; audience: DosageAudience }) {
   if (!words.composed || audience === "patient" || words.dose === undefined) {
     return <p className="text-body">{words.line}</p>;
   }
   const parts = [
-    words.route,
     words.site,
     <strong key="dose">DOSE {words.dose}</strong>,
     words.frequency,
@@ -186,6 +240,11 @@ function MedicationCard({
   const isStatusShown = !isPatient || (record.status !== "active" && record.status !== "unknown");
   const dosages = record.dosages.map((dosage) => describeDosage(dosage, audience));
   const gaps = [...new Set(dosages.flatMap(({ gaps: each }) => each))];
+  // The route beside the name, as the source wrote it, for a clinician. A patient reads it within
+  // the instruction, such as "by mouth".
+  const routes = isPatient
+    ? []
+    : [...new Set(dosages.flatMap(({ route }) => (route === undefined ? [] : [route])))];
 
   const doses = record.kind === "order" ? [...record.administrations].reverse() : [];
   const lastGiven = doses.find(({ status: each }) => each === "completed");
@@ -215,10 +274,17 @@ function MedicationCard({
       {...props}
     >
       <CardHeader className="flex flex-row flex-wrap items-start justify-between gap-2">
-        {/* The medicine's name as given, never shortened or re-cased. */}
-        <CardTitle render={<h3 />} className="min-w-0 wrap-break-word">
-          {record.medication.text}
-        </CardTitle>
+        <div className="flex min-w-0 flex-wrap items-center gap-2">
+          {/* The medicine's name as given, never shortened or re-cased. */}
+          <CardTitle render={<h3 />} className="min-w-0 wrap-break-word">
+            {record.medication.text}
+          </CardTitle>
+          {routes.map((route) => (
+            <Badge key={route} data-slot="medication-route" variant="outline">
+              {route}
+            </Badge>
+          ))}
+        </div>
         {isStatusShown ? (
           <Badge data-slot="medication-status" variant={statusVariant(record.status)}>
             {status}
@@ -263,12 +329,16 @@ function MedicationCard({
               )}
             </p>
             {!isPatient && latest !== undefined && latest.status === "not-done" ? (
-              <p data-slot="medication-last-not-given" className="text-control-sm">
-                <Badge variant="warning">{messages.lastNotGiven}</Badge>{" "}
+              <p
+                data-slot="medication-last-not-given"
+                className="flex flex-wrap items-center gap-2 text-control-sm"
+              >
+                <StatusBadge
+                  label={messages.lastNotGiven}
+                  variant="warning"
+                  reasons={doseLine(latest).reasons}
+                />
                 <time dateTime={latest.time}>{when(latest.timeMs).short}</time>
-                {doseLine(latest).reasons.length > 0
-                  ? ` – ${doseLine(latest).reasons.join(", ")}`
-                  : null}
               </p>
             ) : null}
             {doses.length > 0 ? (
@@ -284,30 +354,43 @@ function MedicationCard({
                   />
                 </CollapsibleTrigger>
                 <CollapsibleContent>
-                  <ol data-slot="medication-doses" className="flex flex-col divide-y text-body">
-                    {shown.map((dose) => {
-                      const { at, amount, reasons } = doseLine(dose);
-                      return (
-                        <li
-                          key={dose.id}
-                          data-status={dose.status}
-                          className="flex flex-wrap items-baseline gap-x-2 py-1"
-                        >
-                          <time dateTime={dose.time} className="tabular-nums">
-                            <span className="sr-only">{at.full}</span>
-                            <span aria-hidden="true">{at.short}</span>
-                          </time>
-                          <Badge variant={statusVariant(dose.status)}>
-                            {doseStatus[dose.status]}
-                          </Badge>
-                          {amount === undefined ? null : <span>{amount}</span>}
-                          {reasons.length > 0 ? (
-                            <span className="text-muted-foreground">{reasons.join(", ")}</span>
-                          ) : null}
-                        </li>
-                      );
-                    })}
-                  </ol>
+                  {/* A table, so the times, statuses and doses line up in columns. */}
+                  <Table
+                    data-slot="medication-doses"
+                    aria-label={messages.doses}
+                    className="w-auto"
+                  >
+                    <TableHeader className="sr-only">
+                      <TableRow>
+                        <TableHead>{messages.time}</TableHead>
+                        <TableHead>{messages.status}</TableHead>
+                        <TableHead>{messages.amount}</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {shown.map((dose) => {
+                        const { at, amount, reasons } = doseLine(dose);
+                        return (
+                          <TableRow key={dose.id} data-status={dose.status}>
+                            <TableCell className="ps-0 whitespace-nowrap tabular-nums">
+                              <time dateTime={dose.time}>
+                                <span className="sr-only">{at.full}</span>
+                                <span aria-hidden="true">{at.short}</span>
+                              </time>
+                            </TableCell>
+                            <TableCell>
+                              <StatusBadge
+                                label={doseStatus[dose.status]}
+                                variant={statusVariant(dose.status)}
+                                reasons={reasons}
+                              />
+                            </TableCell>
+                            <TableCell className="whitespace-nowrap">{amount}</TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
                   {!isShowingEarlier && earlier.length > 0 ? (
                     <Button
                       variant="ghost"
