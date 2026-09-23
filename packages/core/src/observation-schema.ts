@@ -565,8 +565,9 @@ export type RoundTotal =
 
 /**
  * Adds up each round's scores into the schema's total, such as an early warning score. Each
- * series counts once in a round: when it has two scored readings, such as two heart rates, the
- * higher score counts, so a round is never scored lower than one of its readings.
+ * series counts once in a round, by its latest reading: when it has two, such as two heart rates,
+ * the later one counts, and when the later one cannot be scored, the series is missing. A reading
+ * at a level that escalates raises the round whichever reading it is.
  *
  * Throws when the schema cannot be applied or has no total.
  */
@@ -582,6 +583,7 @@ export function scoreRounds(
   if (!total) throw new Error("scoreRounds: the schema has no total to add up.");
 
   const rank = new Map(schema.levels.map((level, index) => [level.key, index]));
+  const escalating = new Set((total.escalations ?? []).flatMap(({ fromLevels }) => fromLevels));
   const byKey = new Map(schema.levels.map((level) => [level.key, level]));
   const higher = (a: ObservationLevel | undefined, b: ObservationLevel | undefined) =>
     (rank.get(b?.key ?? "") ?? -1) > (rank.get(a?.key ?? "") ?? -1) ? b : a;
@@ -591,22 +593,24 @@ export function scoreRounds(
     const present = new Set<string>();
     let escalation: ObservationLevel | undefined;
     for (const [seriesKey, readings] of Object.entries(round.readings)) {
-      let best: TotalPart | undefined;
+      // Any reading at a level that escalates raises the round, even one a later reading follows.
       for (const reading of readings) {
         if (reading.band.kind !== "level") continue;
-        const { level } = reading.band;
         for (const rule of total.escalations ?? []) {
-          if (rule.fromLevels.includes(level.key)) {
+          if (rule.fromLevels.includes(reading.band.level.key)) {
             escalation = higher(escalation, byKey.get(rule.level));
-            present.add(seriesKey);
           }
         }
-        if (level.score !== undefined && (best === undefined || level.score > best.score)) {
-          best = { seriesKey, readingId: reading.id, score: level.score };
-        }
       }
-      if (best) {
-        parts.push(best);
+      // The series' latest reading is the one that counts. When it cannot be scored, the series
+      // is missing: an earlier reading is not used in its place.
+      const latest = readings.at(-1);
+      if (latest?.band.kind !== "level") continue;
+      const { level } = latest.band;
+      if (level.score !== undefined) {
+        parts.push({ seriesKey, readingId: latest.id, score: level.score });
+        present.add(seriesKey);
+      } else if (escalating.has(level.key)) {
         present.add(seriesKey);
       }
     }
