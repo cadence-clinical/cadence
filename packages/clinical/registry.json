@@ -13,7 +13,9 @@
         "@cadence/badge",
         "@cadence/button",
         "@cadence/card",
-        "@cadence/collapsible"
+        "@cadence/collapsible",
+        "@cadence/table",
+        "@cadence/tooltip"
       ],
       "files": [
         {
