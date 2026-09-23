@@ -27,9 +27,13 @@ A track's `domain` is the range of values it shows, bottom to top. Choose it fro
 
 A band is drawn in one of the fixed [severity scale](/docs/theming#severity-scale) colours. A point in a band is also larger and ringed, and keeps its printed value when labels collide. Adjacent severity colours are close, so say what each band means in words somewhere on the screen, such as a legend or the crosshair's tooltip.
 
-## Keep a label for every value
+## Give every mark its details
 
-Where printed values would run into each other, the chart leaves some off. A value in a band and the newest value keep theirs. Every value is still in the crosshair's tooltip, so write `renderCrosshair` to show all the values at a moment.
+The pointer over a mark opens its tooltip. Give each point, pair and event a `detail`: its value and unit, its level, when it was taken, and its change. Where printed values would run into each other, the chart leaves some off, so the tooltip is where every value can be read.
+
+## Read the time from the line
+
+Elsewhere, the pointer draws only a line, with the time under it. Pass `now` and the time is also given in words beside it, such as "Yesterday, 6 hrs ago". From the keyboard, the crosshair also lists what `renderCrosshair` returns for its moment, since a keyboard cannot hover a mark.
 
 ## Choose the span for the task
 

@@ -277,7 +277,8 @@ export const VITALS = applyObservationSchema(
   SCHEMA,
 );
 
-const TOTALS = {
+/** The synthetic totals for the synthetic vital signs. */
+export const TOTALS = {
   label: SCHEMA.total.label,
   shortLabel: SCHEMA.total.shortLabel,
   rounds: scoreRounds(groupRounds(VITALS, WINDOW_MS), SCHEMA),

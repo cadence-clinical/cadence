@@ -45,25 +45,26 @@ const { series } = observationSeries(bundle, { series: schema.series });
 
 ## API
 
-The Vitals chart is a clinical pattern built on the [Track chart](/docs/components/track-chart), with a toolbar of [Toggle groups](/docs/components/toggle-group), [Buttons](/docs/components/button) and a [Dropdown menu](/docs/components/dropdown-menu). shadcn has no equivalent.
+The Vitals chart is a clinical pattern built on the [Track chart](/docs/components/track-chart), with a toolbar of [Tabs](/docs/components/tabs), [Buttons](/docs/components/button) and a [Dropdown menu](/docs/components/dropdown-menu), and a [Tooltip](/docs/components/tooltip) on every value. shadcn has no equivalent.
 
 ## Props
 
-| Prop            | Type                           | Default   |
-| --------------- | ------------------------------ | --------- |
-| `series`        | `InterpretedSeries[]`          | Required  |
-| `schema`        | `ObservationSchema`            | Required  |
-| `tracks`        | `VitalsTrack[]`                | Required  |
-| `label`         | `string`                       | Required  |
-| `now`           | `string \| number`             | Required  |
-| `timeZone`      | `string`                       | Required  |
-| `spans`         | `VitalsSpan[]`                 | 2h to 3d  |
-| `defaultSpan`   | `string`                       | `"1d"`    |
-| `labelStyle`    | `"short" \| "full"`            | `"short"` |
-| `roundWindowMs` | `number`                       | `300000`  |
-| `locale`        | `string`                       | `"en-AU"` |
-| `hourCycle`     | `"h23" \| "h12"`               | `"h23"`   |
-| `messages`      | `Partial<VitalsChartMessages>` | en-AU     |
+| Prop            | Type                                                           | Default   |
+| --------------- | -------------------------------------------------------------- | --------- |
+| `series`        | `InterpretedSeries[]`                                          | Required  |
+| `schema`        | `ObservationSchema`                                            | Required  |
+| `tracks`        | `VitalsTrack[]`                                                | Required  |
+| `label`         | `string`                                                       | Required  |
+| `now`           | `string \| number`                                             | Required  |
+| `timeZone`      | `string`                                                       | Required  |
+| `spans`         | `VitalsSpan[]`                                                 | 2h to 3d  |
+| `defaultSpan`   | `string`                                                       | `"1d"`    |
+| `labelStyle`    | `"short" \| "full"`                                            | `"short"` |
+| `roundWindowMs` | `number`                                                       | `300000`  |
+| `totals`        | `{ label: string; shortLabel?: string; rounds: RoundTotal[] }` | None      |
+| `locale`        | `string`                                                       | `"en-AU"` |
+| `hourCycle`     | `"h23" \| "h12"`                                               | `"h23"`   |
+| `messages`      | `Partial<VitalsChartMessages>`                                 | en-AU     |
 
 ## Tracks
 
@@ -82,4 +83,4 @@ Each has a `key`, which the Tracks menu uses, and an optional `heightPx`. A trac
 - The chart's `label` is its visible heading and its accessible name.
 - The body is one tab stop, as the [Track chart](/docs/components/track-chart/code#accessibility) describes. The crosshair moves from round to round and each round's values are read out.
 - A short track name has its full name in a tooltip and in visually hidden text.
-- The span and range toggles always have one pressed: pressing the pressed one keeps it.
+- The span and range choices are Tabs, which always have one selected. They change the chart below, which is not a tab panel, because both sets of tabs change it.
