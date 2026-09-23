@@ -15,11 +15,11 @@ export type GradeLevel = (typeof GRADE_LEVELS)[number];
 
 /** The grade a component declares in its package's registry.json. */
 export interface ComponentGrade {
-  level: GradeLevel;
+  readonly level: GradeLevel;
   /** The package version the grade was assessed against. Required above "tested". */
-  version?: string;
+  readonly version?: string;
   /** Repo-relative paths to the review records backing the grade. Required above "tested". */
-  evidence?: readonly string[];
+  readonly evidence?: readonly string[];
 }
 
 /** Negative when a ranks below b, zero when equal, positive when above. */

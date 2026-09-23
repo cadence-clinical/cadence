@@ -41,7 +41,14 @@ describe("defineRegion", () => {
     expect(national.labels["patient.identifier"]).toBe("MRN");
   });
 
-  it("returns a frozen region", () => {
-    expect(Object.isFrozen(national)).toBe(true);
+  it.each([
+    ["the region", national],
+    ["its lineage", national.lineage],
+    ["its date and time settings", national.dateTime],
+    ["its preferred units", national.preferredUnits],
+    ["its labels", national.labels],
+    ["its rule sets", national.ruleSets],
+  ])("freezes %s", (_name, value) => {
+    expect(Object.isFrozen(value)).toBe(true);
   });
 });
