@@ -1,0 +1,73 @@
+---
+title: Input code
+description: How to install Input, its states, and how it differs from the shadcn Input.
+---
+
+## Installation
+
+From npm:
+
+```tsx
+import { Input } from "@cadence-clinical/ui";
+```
+
+From the shadcn registry:
+
+```bash
+pnpm dlx shadcn@latest add @cadence/input
+```
+
+[Installation](/docs/installation) covers both routes and the styles each one needs.
+
+## Usage
+
+```tsx
+import { Field, FieldLabel, Input } from "@cadence-clinical/ui";
+
+<Field>
+  <FieldLabel>Family name</FieldLabel>
+  <Input onValueChange={setFamilyName} />
+</Field>;
+```
+
+## API
+
+Input follows the shadcn [Input](https://ui.shadcn.com/docs/components/input) and is built on the Base UI [Input](https://base-ui.com/react/components/input). It accepts every Base UI Input prop, including `onValueChange`, and every `input` attribute. It adds no props of its own.
+
+## States
+
+| State     | Set            | Shows as                                                                  |
+| --------- | -------------- | ------------------------------------------------------------------------- |
+| Read-only | `readOnly`     | A muted fill at full contrast. The value is still there to be read.       |
+| Disabled  | `disabled`     | Faded. Use it for a control that does not apply, not for a value to read. |
+| Invalid   | `aria-invalid` | A heavier border in the critical colour.                                  |
+
+Inside a [Field](/docs/components/field), set `invalid` or `disabled` on the Field, and it sets them on the input.
+
+## An error without a Field
+
+An invalid input needs a message in text that says what is wrong. A Field connects the message for you. Without one, give the input an `id` and connect the message with `aria-describedby`:
+
+```tsx
+<Input id="family-name" aria-invalid aria-describedby="family-name-error" />
+<p id="family-name-error" className="text-control text-critical-text">
+  Enter a name using letters.
+</p>
+```
+
+## What Cadence changes
+
+- **Height, padding and text follow the [density](/docs/theming#density)**, so an input is 32px high when compact and 44px when comfortable, and always as high as a Button beside it.
+- **Text is 16px on a touch device.** iOS zooms the page when a focused input's text is smaller.
+- **Focus and the boundary are never faded.** The boundary and the focus ring each hold 3:1 against the page and against a card, which the token tests check. shadcn fades both.
+- **Read-only and disabled look different**, because a read-only clinical value must stay legible.
+- **Digits are tabular**, so numbers line up when inputs are stacked.
+
+shadcn code for Input works unchanged: it takes the same props.
+
+## Accessibility
+
+- Input renders a native `input`, so it works with the browser's own editing, autofill and spell checking.
+- It has no name of its own. It takes one from a `FieldLabel`, a `Label` whose `htmlFor` is its `id`, or an `aria-label`.
+- An invalid input shows a heavier border as well as the colour, and its message is connected by the Field or by `aria-describedby`.
+- The focus transition is removed when the user asks for reduced motion.

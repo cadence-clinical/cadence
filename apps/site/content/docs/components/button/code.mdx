@@ -1,0 +1,127 @@
+---
+title: Button code
+description: How to install Button, its props, and how it differs from the shadcn Button.
+---
+
+## Installation
+
+From npm:
+
+```tsx
+import { Button } from "@cadence-clinical/ui";
+```
+
+From the shadcn registry:
+
+```bash
+pnpm dlx shadcn@latest add @cadence/button
+```
+
+[Installation](/docs/installation) covers both routes and the styles each one needs.
+
+## Usage
+
+```tsx
+import { Button } from "@cadence-clinical/ui";
+
+<Button onClick={save}>Save observation</Button>;
+```
+
+## API
+
+Button follows the shadcn [Button](https://ui.shadcn.com/docs/components/button) and is built on the Base UI [Button](https://base-ui.com/react/components/button). It accepts every Base UI Button prop, including `disabled`, `focusableWhenDisabled` and `render`, and spreads the rest onto the `button` element.
+
+## Props
+
+| Prop       | Type                                                                          | Default     |
+| ---------- | ----------------------------------------------------------------------------- | ----------- |
+| `variant`  | `"primary" \| "secondary" \| "outline" \| "ghost" \| "destructive" \| "link"` | `"primary"` |
+| `size`     | `"sm" \| "md" \| "lg"`                                                        | `"md"`      |
+| `iconOnly` | `boolean`                                                                     | `false`     |
+
+## Size and density
+
+`size` is relative to the page's [density](/docs/theming#density):
+
+| Density                               | `sm` | `md` | `lg` |
+| ------------------------------------- | ---- | ---- | ---- |
+| Compact                               | 28px | 32px | 36px |
+| Touch (the default on a touch screen) | 36px | 40px | 44px |
+| Comfortable                           | 36px | 44px | 48px |
+
+The text steps with the size: 12, 13 and 14px when compact, 13, 14 and 15px on touch, and 14, 15 and 16px when comfortable. An icon is 16px when compact, 18px on touch and 20px when comfortable.
+
+## Icons
+
+Pass a [Lucide](https://lucide.dev) icon as a child, and say which side of the label it is on with `data-icon="inline-start"` or `data-icon="inline-end"`. Button sizes the icon and takes less padding on that side, so the label looks centred. Do not add a size class or a margin.
+
+```tsx
+import { Button } from "@cadence-clinical/ui";
+import { Plus } from "lucide-react";
+
+<Button>
+  <Plus data-icon="inline-start" />
+  Add observation
+</Button>;
+```
+
+An icon beside a label is decorative. Lucide hides it from assistive technology by default.
+
+## Icon only
+
+Set `iconOnly` and keep the label as the button's text. The button becomes square, and everything in it but the icon is hidden from sight and kept as its accessible name, so there is no `aria-label` to forget. `iconOnly` is separate from `size`, so it works at every size and with every variant.
+
+```tsx
+import { Button } from "@cadence-clinical/ui";
+import { Printer } from "lucide-react";
+
+<Button variant="outline" size="sm" iconOnly>
+  <Printer />
+  Print chart
+</Button>;
+```
+
+## Pending
+
+Button has no loading prop. While an action is under way, set `disabled` and `focusableWhenDisabled`, put a [Spinner](/docs/components/spinner) where the icon goes with `aria-hidden`, and change the label. `focusableWhenDisabled` keeps focus on the button, so a keyboard user is not sent back to the top of the page.
+
+```tsx
+import { Button, Spinner } from "@cadence-clinical/ui";
+
+<Button disabled={saving} focusableWhenDisabled onClick={save}>
+  {saving ? <Spinner aria-hidden data-icon="inline-start" /> : null}
+  {saving ? "Saving" : "Save observation"}
+</Button>;
+```
+
+In a [Form](/docs/components/form), use `FormSubmit`, which does this while the form's action runs.
+
+## Style a link as a button
+
+A link that goes to another page stays a link. Give it the button's classes with `buttonVariants`, which takes the same `variant`, `size` and `iconOnly` options:
+
+```tsx
+import { buttonVariants } from "@cadence-clinical/ui";
+import Link from "next/link";
+
+<Link href="/results" className={buttonVariants({ variant: "outline" })}>
+  View all results
+</Link>;
+```
+
+## What Cadence changes
+
+- **The variant and size names differ.** The main variant is `primary`, where shadcn calls it `default`, and the sizes are `sm`, `md` and `lg`. shadcn's `default` and `xs` sizes and its `icon` sizes are not included. Code written for shadcn's Button that uses those names does not compile against Cadence's.
+- **Icon-only is `iconOnly`, not a size**, so it works at every size, and the hidden label is the accessible name.
+- **Height, padding, text and icon follow the [density](/docs/theming#density)**, where shadcn's are fixed.
+- **`destructive` is a solid critical fill.** shadcn tints it, which is easier to miss.
+- **The focus ring is never faded**, so it holds 3:1 against the page in every mode.
+- **Press feedback is a slight scale**, and it is removed when the user asks for reduced motion.
+
+## Accessibility
+
+- Button renders a native `button`, so Enter and Space press it and it is in the tab order.
+- An icon-only button's name is its hidden text.
+- A disabled button is removed from the tab order, unless `focusableWhenDisabled` is set. Then it stays focusable and is announced as disabled.
+- The focus ring holds at least 3:1 against the page in every mode.
+- Transitions and the press animation are removed under `prefers-reduced-motion`.
