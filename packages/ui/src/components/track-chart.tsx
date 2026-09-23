@@ -16,10 +16,18 @@ import {
 } from "react";
 
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/cadence/tooltip";
+import {
+  friendlyTime,
   intervalForSpan,
   linearScale,
   niceTicks,
   timeTicks,
+  type FriendlyWords,
   type TimeTick,
 } from "@/lib/chart-scale";
 import { cn } from "@/lib/cn";
@@ -39,6 +47,14 @@ const BAND_FILL: Readonly<Record<TrackTone, string>> = {
   "severity-4": "fill-severity-4-subtle",
   "severity-5": "fill-severity-5-subtle",
   "severity-6": "fill-severity-6-subtle",
+};
+const MARK_STROKE: Readonly<Record<TrackTone, string>> = {
+  "severity-1": "stroke-severity-1-border",
+  "severity-2": "stroke-severity-2-border",
+  "severity-3": "stroke-severity-3-border",
+  "severity-4": "stroke-severity-4-border",
+  "severity-5": "stroke-severity-5-border",
+  "severity-6": "stroke-severity-6-border",
 };
 const MARK_FILL: Readonly<Record<TrackTone, string>> = {
   "severity-1": "fill-severity-1",
@@ -68,6 +84,9 @@ interface TrackChartContextValue {
   readonly timeZone: string;
   readonly locale: string;
   readonly hourCycle: "h23" | "h12";
+  /** The moment the chart is read at, for "Yesterday" and "6 hrs ago" beside a time. */
+  readonly nowMs: number | undefined;
+  readonly words: FriendlyWords;
   readonly crosshairMs: number | undefined;
   readonly x: (timeMs: number) => number;
   readonly setPlotWidth: (widthPx: number) => void;
@@ -123,6 +142,13 @@ interface TrackChartProps extends ComponentProps<"div"> {
   locale?: string;
   /** Defaults to the 24 hour clock. */
   hourCycle?: "h23" | "h12";
+  /**
+   * The moment the chart is read at: ISO 8601 with an offset, or milliseconds. With it, the time
+   * under the pointer is also given in words, such as "Yesterday, 6 hrs ago".
+   */
+  now?: string | number;
+  /** Words for today and yesterday. Defaults to en-AU. */
+  words?: FriendlyWords;
 }
 
 /**
@@ -138,6 +164,8 @@ function TrackChart({
   timeZone,
   locale = "en-AU",
   hourCycle = "h23",
+  now,
+  words = { today: "Today", yesterday: "Yesterday" },
   className,
   children,
   ...props
@@ -174,6 +202,8 @@ function TrackChart({
     timeZone,
     locale,
     hourCycle,
+    nowMs: now === undefined ? undefined : typeof now === "number" ? now : Date.parse(now),
+    words,
     crosshairMs,
     x: (timeMs) => (timeMs - fromMs) * pxPerMs,
     setPlotWidth,
@@ -307,17 +337,10 @@ function TrackChartBody({
     [scroller, fromMs, toMs, pxPerMs],
   );
 
-  // With snap times, the crosshair goes to the nearest, so its line and what it shows agree.
+  // The pointer gives a line for timing, where it is. A mark's own tooltip gives its value.
   const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
     setIsFromKeyboard(false);
-    const at = timeAt(event.clientX);
-    if (at === undefined || snapTimes.length === 0) {
-      setCrosshair(at);
-      return;
-    }
-    setCrosshair(
-      snapTimes.reduce((best, time) => (Math.abs(time - at) < Math.abs(best - at) ? time : best)),
-    );
+    setCrosshair(timeAt(event.clientX));
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -402,9 +425,12 @@ function TrackChartBody({
         className="relative overflow-x-clip"
         style={{ width: LABEL_WIDTH_PX + chart.contentWidthPx }}
       >
-        {children}
+        {/* Moving from one mark to the next opens its tooltip at once. */}
+        <TooltipProvider>{children}</TooltipProvider>
         {crosshairMs === undefined ? null : (
-          <TrackChartCrosshair timeMs={crosshairMs} content={crosshair} />
+          // From the keyboard, the crosshair lists what is at its moment. The pointer can hover a
+          // mark instead, so from the pointer it shows only the time.
+          <TrackChartCrosshair timeMs={crosshairMs} content={isFromKeyboard ? crosshair : null} />
         )}
       </div>
       {/* What the crosshair shows, read out when the keyboard moves it. */}
@@ -417,8 +443,10 @@ function TrackChartBody({
 
 /** The vertical line at the crosshair's moment, its time, and what it shows. */
 function TrackChartCrosshair({ timeMs, content }: { timeMs: number; content: ReactNode }) {
-  const { x, contentWidthPx, timeZone, locale, hourCycle } =
+  const { x, contentWidthPx, timeZone, locale, hourCycle, nowMs, words } =
     useTrackChartContext("TrackChartCrosshair");
+  const friendly =
+    nowMs === undefined ? undefined : friendlyTime(timeMs, nowMs, timeZone, locale, words);
   const left = LABEL_WIDTH_PX + x(timeMs);
   // The tooltip sits right of the line, and flips left near the end so it stays in the chart.
   const isNearEnd = x(timeMs) > contentWidthPx - 240;
@@ -435,8 +463,24 @@ function TrackChartCrosshair({ timeMs, content }: { timeMs: number; content: Rea
       className="pointer-events-none absolute inset-y-0 z-20 w-px bg-foreground/60"
       style={{ left }}
     >
-      <span className="absolute top-0 left-1/2 -translate-x-1/2 rounded-sm bg-foreground px-1 text-control-sm text-background tabular-nums">
-        {time}
+      <span
+        className={cn(
+          "absolute top-0 flex w-max gap-1 text-control-sm tabular-nums",
+          isNearEnd
+            ? "right-0 translate-x-[calc(50%-0.5px)] flex-row-reverse"
+            : "left-0 -translate-x-[calc(50%-0.5px)]",
+        )}
+      >
+        <span className="rounded-sm bg-foreground px-1 text-background">{time}</span>
+        {friendly === undefined ? null : (
+          // The time in words beside it, in a Tooltip's colours.
+          <span
+            data-slot="track-chart-friendly-time"
+            className="rounded-sm bg-foreground/85 px-1 text-background"
+          >
+            {friendly.day}, {friendly.ago}
+          </span>
+        )}
       </span>
       {content ? (
         // The look of a Tooltip. It follows the pointer, which a tooltip anchored to a trigger
@@ -625,8 +669,11 @@ function TrackChartTrack({
           })}
           {domain
             ? bands.map((band) => {
-                const top = y(Math.min(band.below ?? domain[1], domain[1]));
-                const bottom = y(Math.max(band.from ?? domain[0], domain[0]));
+                // A band open at an end, or reaching past the range shown, runs to the track's
+                // edge, not to the padding inside it.
+                const top = band.below === undefined || band.below >= domain[1] ? 0 : y(band.below);
+                const bottom =
+                  band.from === undefined || band.from <= domain[0] ? heightPx : y(band.from);
                 if (bottom <= top) return null;
                 return (
                   <rect
@@ -645,6 +692,20 @@ function TrackChartTrack({
         </svg>
       </div>
     </TrackContext>
+  );
+}
+
+/**
+ * A mark with its tooltip. The pointer over the mark opens it: the chart's line gives the time,
+ * and the mark gives its value and details.
+ */
+function MarkTooltip({ detail, children }: { detail: ReactNode; children: ReactNode }) {
+  if (detail === undefined || detail === null) return <g>{children}</g>;
+  return (
+    <Tooltip>
+      <TooltipTrigger render={<g data-slot="track-chart-mark" />}>{children}</TooltipTrigger>
+      <TooltipContent>{detail}</TooltipContent>
+    </Tooltip>
   );
 }
 
@@ -697,6 +758,8 @@ interface TrackMarkedPoint extends TrackPoint {
   readonly label?: string;
   /** The band's step. A point in a band is drawn larger, ringed, and in its colour. */
   readonly tone?: TrackTone;
+  /** What the point's tooltip shows when the pointer is over it: its value and details. */
+  readonly detail?: ReactNode;
 }
 
 /** The props of TrackChartPoints. */
@@ -745,16 +808,20 @@ function TrackChartPoints({
         const cy = y(point.value);
         return (
           <g key={point.timeMs} data-tone={point.tone}>
-            <circle
-              cx={cx}
-              cy={cy}
-              r={point.tone === undefined ? 3 : 5}
-              className={cn(
-                point.tone === undefined ? pointClassName : MARK_FILL[point.tone],
-                // A ring sets a banded value apart by shape as well as colour.
-                point.tone !== undefined && "stroke-background stroke-2",
-              )}
-            />
+            <MarkTooltip detail={point.detail}>
+              {/* A target larger than the dot, so it is easy to point at. */}
+              <circle cx={cx} cy={cy} r={10} className="fill-transparent" />
+              <circle
+                cx={cx}
+                cy={cy}
+                r={point.tone === undefined ? 3 : 5}
+                className={cn(
+                  point.tone === undefined ? pointClassName : MARK_FILL[point.tone],
+                  // A ring sets a banded value apart by shape as well as colour.
+                  point.tone !== undefined && "stroke-background stroke-2",
+                )}
+              />
+            </MarkTooltip>
             {labelled.has(point) ? (
               <text
                 x={cx}
@@ -785,6 +852,8 @@ interface TrackRange {
   readonly highLabel?: string;
   readonly lowLabel?: string;
   readonly tone?: TrackTone;
+  /** What the pair's tooltip shows when the pointer is over it. */
+  readonly detail?: ReactNode;
 }
 
 /** The props of TrackChartRange. */
@@ -807,18 +876,30 @@ function TrackChartRange({ ranges, className, ...props }: TrackChartRangeProps) 
         const fill = range.tone === undefined ? "fill-foreground" : MARK_FILL[range.tone];
         return (
           <g key={range.timeMs} data-tone={range.tone}>
-            <line x1={cx} x2={cx} y1={top} y2={bottom} className="stroke-muted-foreground" />
-            <path d={`M${cx - 5},${top - 6}L${cx + 5},${top - 6}L${cx},${top}Z`} className={fill} />
-            <path
-              d={`M${cx - 5},${bottom + 6}L${cx + 5},${bottom + 6}L${cx},${bottom}Z`}
-              className={fill}
-            />
-            {range.middle === undefined ? null : (
-              <path
-                d={`M${cx - 3},${y(range.middle) - 3}L${cx + 3},${y(range.middle) + 3}M${cx + 3},${y(range.middle) - 3}L${cx - 3},${y(range.middle) + 3}`}
-                className="stroke-foreground stroke-[1.5]"
+            <MarkTooltip detail={range.detail}>
+              <rect
+                x={cx - 8}
+                y={top - 8}
+                width={16}
+                height={bottom - top + 16}
+                className="fill-transparent"
               />
-            )}
+              <line x1={cx} x2={cx} y1={top} y2={bottom} className="stroke-muted-foreground" />
+              <path
+                d={`M${cx - 5},${top - 6}L${cx + 5},${top - 6}L${cx},${top}Z`}
+                className={fill}
+              />
+              <path
+                d={`M${cx - 5},${bottom + 6}L${cx + 5},${bottom + 6}L${cx},${bottom}Z`}
+                className={fill}
+              />
+              {range.middle === undefined ? null : (
+                <path
+                  d={`M${cx - 3},${y(range.middle) - 3}L${cx + 3},${y(range.middle) + 3}M${cx + 3},${y(range.middle) - 3}L${cx - 3},${y(range.middle) + 3}`}
+                  className="stroke-foreground stroke-[1.5]"
+                />
+              )}
+            </MarkTooltip>
             {range.highLabel === undefined ? null : (
               <text
                 x={cx}
@@ -850,7 +931,10 @@ function TrackChartRange({ ranges, className, ...props }: TrackChartRangeProps) 
 interface TrackEvent {
   readonly timeMs: number;
   readonly text: string;
+  /** The band's step. A toned event has a fill and an edge in its colour, and bold words. */
   readonly tone?: TrackTone;
+  /** What the event's tooltip shows when the pointer is over it. */
+  readonly detail?: ReactNode;
 }
 
 /** The props of TrackChartEvents. */
@@ -869,29 +953,50 @@ function TrackChartEvents({ events, className, ...props }: TrackChartEventsProps
   const lanes: number[] = [];
   const placed = shown.map((event) => {
     const left = x(event.timeMs);
-    const right = left + 12 + event.text.length * 6.5;
+    const width = 8 + event.text.length * 6.5;
+    const right = left + 4 + width;
     let lane = lanes.findIndex((end) => end <= left);
     if (lane === -1) lane = lanes.length;
     lanes[lane] = right;
-    return { event, left, lane };
+    return { event, left, lane, width };
   });
   return (
     <g data-slot="track-chart-events" className={className} {...props}>
-      {placed.map(({ event, left, lane }) => {
+      {placed.map(({ event, left, lane, width }) => {
         const top = 4 + (lane % 2) * ((heightPx - 8) / 2);
         return (
           <g key={`${event.timeMs}:${event.text}`} data-tone={event.tone}>
-            <line x1={left} x2={left} y1={top} y2={top + 18} className="stroke-muted-foreground" />
-            <text
-              x={left + 4}
-              y={top + 13}
-              className={cn(
-                "fill-foreground text-[11px]",
-                event.tone !== undefined && "font-semibold",
+            <MarkTooltip detail={event.detail}>
+              {event.tone === undefined ? (
+                <rect x={left} y={top} width={width} height={18} className="fill-transparent" />
+              ) : (
+                <rect
+                  x={left + 1}
+                  y={top}
+                  width={width}
+                  height={18}
+                  rx={3}
+                  className={cn(BAND_FILL[event.tone], MARK_STROKE[event.tone])}
+                />
               )}
-            >
-              {event.text}
-            </text>
+              <line
+                x1={left}
+                x2={left}
+                y1={top}
+                y2={top + 18}
+                className="stroke-muted-foreground"
+              />
+              <text
+                x={left + 4}
+                y={top + 13}
+                className={cn(
+                  "fill-foreground text-[11px]",
+                  event.tone !== undefined && "font-semibold",
+                )}
+              >
+                {event.text}
+              </text>
+            </MarkTooltip>
           </g>
         );
       })}

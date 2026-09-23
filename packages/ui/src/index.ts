@@ -322,6 +322,12 @@ export type {
   TrackRange,
   TrackTone,
 } from "@/components/cadence/track-chart";
-export { intervalForSpan, linearScale, niceTicks, timeTicks } from "@/lib/chart-scale";
-export type { TimeTick } from "@/lib/chart-scale";
+export {
+  friendlyTime,
+  intervalForSpan,
+  linearScale,
+  niceTicks,
+  timeTicks,
+} from "@/lib/chart-scale";
+export type { FriendlyWords, TimeTick } from "@/lib/chart-scale";
 export { cn } from "@/lib/cn";
