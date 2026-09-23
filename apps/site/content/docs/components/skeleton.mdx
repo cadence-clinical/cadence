@@ -1,0 +1,60 @@
+---
+title: Skeleton
+description: Holds the place of content that is loading, in the shape it will take. It shows on every surface, and is hidden from assistive technology.
+---
+
+import { Skeleton } from "@cadence-clinical/ui";
+
+<GradeBadge component="skeleton" />
+
+<ComponentPreview>
+  <div className="flex w-full max-w-sm items-center gap-3">
+    <Skeleton className="size-control-lg shrink-0 rounded-full" />
+    <div className="flex flex-1 flex-col gap-2">
+      <Skeleton className="h-4 w-3/4" />
+      <Skeleton className="h-4 w-1/2" />
+    </div>
+  </div>
+</ComponentPreview>
+
+## Usage
+
+```tsx
+import { Skeleton } from "@cadence-clinical/ui";
+
+<Skeleton className="h-4 w-40" />;
+```
+
+Give each skeleton the size and shape of the content it stands in for, so the page does not jump when the content arrives. Where it stands in for a control, size it with the [density](/docs/theming#density) scale, such as `h-control`, so it matches the control at either density.
+
+Skeleton follows the shadcn [Skeleton](https://ui.shadcn.com/docs/components/skeleton). It is a `div` and accepts all of its props.
+
+## While a region loads
+
+A skeleton is only a shape, and a screen reader skips it. Say what is loading in words, and mark the region busy until it has loaded:
+
+```tsx
+<section aria-label="Appointments" aria-busy={loading}>
+  {loading ? (
+    <>
+      <Spinner aria-label="Loading appointments" />
+      <Skeleton className="h-4 w-3/4" />
+      <Skeleton className="h-4 w-1/2" />
+    </>
+  ) : (
+    <AppointmentList />
+  )}
+</section>
+```
+
+The [Spinner](/docs/components/spinner) is a status, so a screen reader announces "Loading appointments".
+
+## What Cadence changes
+
+- **It shows on every surface.** shadcn fills a skeleton with the `muted` token. Where a brand's page is its muted colour, that skeleton does not show at all, and on a white page it is 1.10:1. Cadence fills it with the text colour at 10%, which is at least 1.17:1 on the page, a card or a muted surface, in every brand and mode.
+- **It is hidden from assistive technology**, because it has nothing to say.
+
+## Accessibility
+
+- It pulses. A pulse is a fade, not a movement, so it still pulses when the user asks for reduced motion, as a [Spinner](/docs/components/spinner) does.
+- The words that say what is loading carry the meaning. The skeleton only keeps the layout still.

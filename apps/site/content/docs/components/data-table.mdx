@@ -84,7 +84,7 @@ Cadence renders what the table says and never decides it. Sort, filter and page 
 
 ## The parts
 
-- **`DataTable`** renders the table. Name it with `aria-label`. A sorted column's heading carries `aria-sort`, a chosen row is marked as selected, and a table with no rows says `emptyMessage` in its one row.
+- **`DataTable`** renders the table. Name it with `aria-label`. A sorted column's heading carries `aria-sort`, a chosen row is marked as selected, and a table with no rows says `emptyMessage` in its one row. For a list that is empty before anything has been added, with something to do next, show an [Empty](/docs/components/empty) in place of the table.
 - **`DataTableColumnHeader`** is a heading that sorts its column when pressed: ascending, then descending. A column that cannot be sorted is words only.
 - **`selectionColumn()`** is a column of checkboxes. The heading's checkbox selects every row on the page and is half-checked while only some are. Each row's checkbox is named: give `rowLabel` for a name better than the row's number.
 - **`DataTablePagination`** says how many rows are selected and which page this is, offers the rows per page, and moves between pages. It wraps on a narrow screen.

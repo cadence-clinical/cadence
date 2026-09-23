@@ -66,6 +66,33 @@
       }
     },
     {
+      "name": "app-shell",
+      "type": "registry:component",
+      "title": "Application shell",
+      "description": "The frame of an application, as shadcn's sidebar-16 lays it out: a header across the top, and a sidebar beside the content below it. It starts with a link that skips to the content.",
+      "registryDependencies": [
+        "@cadence/theme",
+        "@cadence/cn",
+        "@cadence/separator",
+        "@cadence/sidebar"
+      ],
+      "files": [
+        {
+          "path": "src/components/app-shell.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/app-shell.tsx"
+        }
+      ],
+      "docs": "Put AppShellHeader first, then AppShellBody holding AppShellSidebar and AppShellContent. The header's first button opens the sidebar. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "layout",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "badge",
       "type": "registry:component",
       "title": "Badge",
@@ -112,6 +139,29 @@
       }
     },
     {
+      "name": "calendar",
+      "type": "registry:component",
+      "title": "Calendar",
+      "description": "A month of days to choose from, on react-day-picker. Each day is as tall as a control, and today and unavailable days are marked by more than colour.",
+      "dependencies": ["react-day-picker@^10.0.1", "lucide-react"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn", "@cadence/button"],
+      "files": [
+        {
+          "path": "src/components/calendar.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/calendar.tsx"
+        }
+      ],
+      "docs": "Pass a locale from react-day-picker/locale, such as enAU, for the week to start on the right day. Cadence grades what it renders, not react-day-picker. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "pattern",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "card",
       "type": "registry:component",
       "title": "Card",
@@ -151,6 +201,29 @@
       "docs": "Wrap each Checkbox in a Label. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
       "meta": {
         "level": "primitive",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
+      "name": "collapsible",
+      "type": "registry:component",
+      "title": "Collapsible",
+      "description": "One section that opens and closes. The trigger says whether it is open, and the section grows to its height in 150ms, without motion under reduced motion.",
+      "dependencies": ["@base-ui/react"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/collapsible.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/collapsible.tsx"
+        }
+      ],
+      "docs": "Render CollapsibleTrigger as a Button. Set hiddenUntilFound on CollapsibleContent so the browser's find can open it. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "composite",
         "domain": "general",
         "grade": {
           "level": "tested"
@@ -212,6 +285,29 @@
       }
     },
     {
+      "name": "drawer",
+      "type": "registry:component",
+      "title": "Drawer",
+      "description": "A panel from an edge of the screen that can be swiped away, most often from the bottom of a phone. What does not fit scrolls inside it.",
+      "dependencies": ["@base-ui/react"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/drawer.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/drawer.tsx"
+        }
+      ],
+      "docs": "Give every drawer a DrawerTitle, and keep a DrawerClose in it: a screen reader on a touch screen cannot swipe. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "composite",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "dropdown-menu",
       "type": "registry:component",
       "title": "Dropdown menu",
@@ -226,6 +322,29 @@
         }
       ],
       "docs": "A menu does things. To hold a choice, use a Select. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "composite",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
+      "name": "empty",
+      "type": "registry:component",
+      "title": "Empty",
+      "description": "What a list or a panel shows when it has nothing in it: what is empty, and what to do next. Its spacing follows the density.",
+      "dependencies": ["@base-ui/react", "class-variance-authority"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/empty.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/empty.tsx"
+        }
+      ],
+      "docs": "Say what is empty, not what it means: an empty list is not a finding. Render EmptyTitle as a heading where the panel has one. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
       "meta": {
         "level": "composite",
         "domain": "general",
@@ -251,6 +370,36 @@
       "docs": "Put one control in each Field. Render FieldError only while the value is wrong. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
       "meta": {
         "level": "composite",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
+      "name": "form",
+      "type": "registry:component",
+      "title": "Form",
+      "description": "A group of fields with one error summary. A failed attempt to send lists every problem at the top, each linked to its field, and moves focus there.",
+      "dependencies": ["@base-ui/react"],
+      "registryDependencies": [
+        "@cadence/theme",
+        "@cadence/cn",
+        "@cadence/alert",
+        "@cadence/button",
+        "@cadence/field",
+        "@cadence/spinner"
+      ],
+      "files": [
+        {
+          "path": "src/components/form.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/form.tsx"
+        }
+      ],
+      "docs": "Put a FormErrorSummary first in the Form and a Field around each control: the summary reads each Field's error. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "pattern",
         "domain": "general",
         "grade": {
           "level": "tested"
@@ -318,6 +467,29 @@
         }
       ],
       "docs": "Point htmlFor at the control's id. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "primitive",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
+      "name": "marker",
+      "type": "registry:component",
+      "title": "Marker",
+      "description": "A line of muted text that marks a place in a list or a page, plain, between two rules or over one. A long label wraps between its rules.",
+      "dependencies": ["@base-ui/react", "class-variance-authority"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/marker.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/marker.tsx"
+        }
+      ],
+      "docs": "Where a Marker heads what follows, render it as a heading. In a list, render it as an li. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
       "meta": {
         "level": "primitive",
         "domain": "general",
@@ -419,6 +591,34 @@
       }
     },
     {
+      "name": "sheet",
+      "type": "registry:component",
+      "title": "Sheet",
+      "description": "A panel from an edge of the screen, for a task beside the page. It slides in from its edge, scrolls what does not fit, and its title clears the close button.",
+      "dependencies": ["@base-ui/react", "lucide-react"],
+      "registryDependencies": [
+        "@cadence/theme",
+        "@cadence/cn",
+        "@cadence/button",
+        "@cadence/dialog"
+      ],
+      "files": [
+        {
+          "path": "src/components/sheet.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/sheet.tsx"
+        }
+      ],
+      "docs": "Give every sheet a SheetTitle. Render SheetTrigger and SheetClose as a Button through render. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "composite",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "sidebar",
       "type": "registry:component",
       "title": "Sidebar",
@@ -443,6 +643,51 @@
       "docs": "Wrap the layout in SidebarProvider, with the Sidebar and a SidebarInset beside it. Mark the page shown with isActive. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
       "meta": {
         "level": "pattern",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
+      "name": "skeleton",
+      "type": "registry:component",
+      "title": "Skeleton",
+      "description": "Holds the place of content that is loading, in the shape it will take. It shows on every surface in every brand and mode, and is hidden from assistive technology.",
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/skeleton.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/skeleton.tsx"
+        }
+      ],
+      "docs": "Mark the region that is loading aria-busy, and say in words what is loading. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "primitive",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
+      "name": "slider",
+      "type": "registry:component",
+      "title": "Slider",
+      "description": "Chooses a setting from a range, by pointer or keyboard. The whole strip is a target as high as a control, the track can be seen at 3:1, and each thumb of a range has its own name.",
+      "dependencies": ["@base-ui/react"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/slider.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/slider.tsx"
+        }
+      ],
+      "docs": "Use a Slider for a setting, not a clinical value, which is typed. Name each thumb of a range with thumbLabels. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "primitive",
         "domain": "general",
         "grade": {
           "level": "tested"
@@ -558,6 +803,34 @@
       "docs": "Give every Textarea a Label or an aria-label, or put it in a Field. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
       "meta": {
         "level": "primitive",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
+      "name": "toast",
+      "type": "registry:component",
+      "title": "Toast",
+      "description": "A short message that something happened, announced to a screen reader. Each type has its own outline, and a toast is never the only place an error is shown.",
+      "dependencies": ["@base-ui/react", "lucide-react"],
+      "registryDependencies": [
+        "@cadence/theme",
+        "@cadence/cn",
+        "@cadence/button",
+        "@cadence/spinner"
+      ],
+      "files": [
+        {
+          "path": "src/components/toast.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/toast.tsx"
+        }
+      ],
+      "docs": "Put Toaster once around the app and call toast.add. A toast goes away, so show an error where it happened too. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "pattern",
         "domain": "general",
         "grade": {
           "level": "tested"

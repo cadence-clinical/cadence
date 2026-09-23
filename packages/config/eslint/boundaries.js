@@ -58,9 +58,15 @@ const uiRules = [
  * must not re-export it, or that library becomes compulsory: docs/decisions/0014-headless-libraries.md.
  */
 const ownEntryPoints = {
-  group: ["@/components/cadence/data-table", "@tanstack/*"],
+  group: [
+    "@/components/cadence/data-table",
+    "@tanstack/*",
+    "@/components/cadence/calendar",
+    "react-day-picker",
+    "react-day-picker/*",
+  ],
   message:
-    "data-table has its own entry point, src/data-table.ts. Re-exporting it here would make TanStack Table compulsory for every consumer: see docs/decisions/0014-headless-libraries.md.",
+    "data-table and calendar have their own entry points, src/data-table.ts and src/calendar.ts. Re-exporting either here would make its library compulsory for every consumer: see docs/decisions/0014-headless-libraries.md.",
 };
 
 /** For packages/ui: primitives know nothing about regions, FHIR or clinical components. */

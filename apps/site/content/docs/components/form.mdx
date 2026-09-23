@@ -1,0 +1,153 @@
+---
+title: Form
+description: A group of fields with one error summary. A failed attempt to send lists every problem at the top, each linked to its field, and moves focus there.
+---
+
+<GradeBadge component="form" />
+
+<FormPreview />
+
+## Usage
+
+```tsx
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  Form,
+  FormActions,
+  FormErrorSummary,
+  FormSubmit,
+  Input,
+} from "@cadence-clinical/ui";
+
+<Form onFormSubmit={bookAppointment}>
+  <FormErrorSummary />
+  <FieldGroup>
+    <Field name="given">
+      <FieldLabel>Given name</FieldLabel>
+      <Input required />
+      <FieldError match="valueMissing">Enter a given name.</FieldError>
+    </Field>
+    <Field name="family">
+      <FieldLabel>Family name</FieldLabel>
+      <Input required />
+      <FieldError match="valueMissing">Enter a family name.</FieldError>
+    </Field>
+  </FieldGroup>
+  <FormActions>
+    <FormSubmit>Book appointment</FormSubmit>
+  </FormActions>
+</Form>;
+```
+
+Put each control in a [Field](/docs/components/field) with a `name`, and put the `FormErrorSummary` first. When the form is sent, every Field is checked. While one is wrong, the form is not sent: the summary lists the problems and focus moves to it. When every Field is right, `onFormSubmit` receives the values by field name.
+
+Form is built on the Base UI [Form](https://base-ui.com/react/components/form) and accepts all of its props. shadcn has no Form for Base UI: its [forms guide](https://ui.shadcn.com/docs/forms) puts Fields in a plain `form` with a form library. Form is a [pattern](/docs/levels): it uses the [Field](/docs/components/field) and [Alert](/docs/components/alert) composites and the [Button](/docs/components/button) and [Spinner](/docs/components/spinner) primitives.
+
+## The error summary
+
+`FormErrorSummary` is a critical [Alert](/docs/components/alert) with a title and a list of links. Each link is a Field's own error message, in the order the Fields appear in the form. A Field with no error message is listed by its label. Following a link moves focus to the Field's control and scrolls the Field into view with its label. The address in the browser does not change.
+
+The summary appears once the form has been sent, and lists what is wrong at that moment. When the user fixes a problem, it leaves the list. When the last one is fixed, the summary goes. Clearing the form with a `type="reset"` button hides it.
+
+The title says how many problems there are: "There is a problem", or "There are 3 problems". Pass `title` for your own words.
+
+Each Field still shows its error beside its control. The summary adds a list of every problem. It does not replace the errors beside the fields.
+
+## Errors from a server
+
+Pass a server's errors to `errors`, keyed by field name. Each shows in its Field's `FieldError` and in the summary, and focus moves to the summary when they arrive. Base UI removes a field's error when its value changes.
+
+```tsx
+const [errors, setErrors] = useState<Record<string, string>>({});
+const [pending, setPending] = useState(false);
+
+async function send(values: Record<string, unknown>) {
+  setPending(true);
+  setErrors(await checkCode(values.code));
+  setPending(false);
+}
+
+<Form
+  errors={errors}
+  onFormSubmit={(values) => {
+    void send(values);
+  }}
+>
+  <FormErrorSummary />
+  <Field name="code">
+    <FieldLabel>Clinic code</FieldLabel>
+    <Input />
+    <FieldError />
+  </Field>
+  <FormActions>
+    <FormSubmit pending={pending} pendingLabel="Checking">
+      Check code
+    </FormSubmit>
+  </FormActions>
+</Form>;
+```
+
+A `FieldError` with no message of its own shows the error for its Field's `name`.
+
+## With a form library
+
+A form library such as React Hook Form checks the values itself. Mark each Field `invalid` and pass the library's messages to `FieldError`, as the [Field](/docs/components/field#show-an-error) page shows. The summary reads each Field's error the same way, whichever produced it.
+
+## From shadcn
+
+shadcn's Base UI styles have no Form. Its [forms guide](https://ui.shadcn.com/docs/forms) writes a plain `form`, with `data-invalid` on each Field, `aria-invalid` on each control and a `FieldError` rendered while the value is wrong. That code works unchanged inside a Form: replace `form` with `Form` and add a `FormErrorSummary`.
+
+```tsx
+<Form onSubmit={form.handleSubmit(onSubmit)}>
+  <FormErrorSummary />
+  <Controller
+    name="title"
+    control={form.control}
+    render={({ field, fieldState }) => (
+      <Field data-invalid={fieldState.invalid}>
+        <FieldLabel htmlFor={field.name}>Title</FieldLabel>
+        <Input {...field} id={field.name} aria-invalid={fieldState.invalid} />
+        {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+      </Field>
+    )}
+  />
+</Form>
+```
+
+shadcn's older Radix styles have a `Form` that is React Hook Form's `FormProvider` and renders no element, used as `<Form {...form}><form>`. Cadence's `Form` is the `form` element itself, so pass the library's handler to its `onSubmit` instead.
+
+## Sending the form
+
+`FormSubmit` is a submit [Button](/docs/components/button). While the form's `action` runs, it is disabled, shows a spinner and says `pendingLabel` if you give one, so the same record cannot be sent twice. It reads that from React's `useFormStatus`. When you send the form from `onFormSubmit`, set `pending` yourself, as in the example above.
+
+A pending `FormSubmit` stays focusable, so focus is not lost to the page, and neither a press nor Enter sends the form again.
+
+`FormActions` holds the buttons in a row that wraps when it runs out of room. Put the main action first.
+
+## What Cadence changes
+
+- **One error summary.** Base UI's Form moves focus to the first field that is wrong. With a `FormErrorSummary`, focus moves to the summary, which lists every problem. Without one, the form behaves as Base UI's does.
+- **The summary reads the page.** It lists what each Field shows, so it works the same for Base UI's checks, a server's errors and a form library's, and it needs no list of fields.
+- **A button that cannot send twice.** `FormSubmit` follows the form's `action` and stays focusable while it waits.
+- **Spacing follows the [density](/docs/theming#density).** The form spaces its summary, its fields and its buttons like the fields in a `FieldGroup`.
+
+## Accessibility
+
+- When an attempt to send fails, focus moves to the summary. A screen reader reads its title first, so the user hears how many problems there are, then moves through the links with Tab.
+- The summary is not announced as an alert as well, because focus has already brought the user to it.
+- If the user presses a key or a pointer in the form before a server's errors arrive, focus stays where they are. The errors still appear in the summary and beside each field.
+- The status does not rest on colour: the summary has the critical icon, a title and the word "Critical" for a screen reader.
+
+## Props
+
+| Prop             | On                 | Type                                   | Default                             |
+| ---------------- | ------------------ | -------------------------------------- | ----------------------------------- |
+| `onFormSubmit`   | `Form`             | `(values, eventDetails) => void`       |                                     |
+| `errors`         | `Form`             | `Record<string, string \| string[]>`   |                                     |
+| `validationMode` | `Form`             | `"onSubmit" \| "onBlur" \| "onChange"` | `"onSubmit"`                        |
+| `title`          | `FormErrorSummary` | `ReactNode`                            | "There is a problem", or the number |
+| `pending`        | `FormSubmit`       | `boolean`                              | The form's `action`                 |
+| `pendingLabel`   | `FormSubmit`       | `ReactNode`                            | Its label                           |

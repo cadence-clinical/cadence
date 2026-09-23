@@ -38,19 +38,28 @@ const DOCS_PAGES = [
   "/docs/levels",
   "/docs/components/alert",
   "/docs/components/alert-dialog",
+  "/docs/components/app-shell",
   "/docs/components/badge",
   "/docs/components/button",
+  "/docs/components/calendar",
   "/docs/components/card",
   "/docs/components/checkbox",
+  "/docs/components/collapsible",
   "/docs/components/data-table",
   "/docs/components/dialog",
+  "/docs/components/drawer",
   "/docs/components/dropdown-menu",
+  "/docs/components/empty",
   "/docs/components/field",
+  "/docs/components/form",
   "/docs/components/popover",
   "/docs/components/radio-group",
   "/docs/components/select",
   "/docs/components/separator",
+  "/docs/components/sheet",
   "/docs/components/sidebar",
+  "/docs/components/skeleton",
+  "/docs/components/slider",
   "/docs/components/spinner",
   "/docs/components/switch",
   "/docs/components/table",
@@ -59,9 +68,11 @@ const DOCS_PAGES = [
   "/docs/components/toggle-group",
   "/docs/components/tooltip",
   "/docs/components/textarea",
+  "/docs/components/toast",
   "/docs/components/input",
   "/docs/components/item",
   "/docs/components/label",
+  "/docs/components/marker",
   "/docs/components/typeset",
 ];
 
@@ -127,6 +138,16 @@ test("the registry serves its index and each item it lists", async ({ request })
 
 // The sidebar is fixed to the window. Its live example contains layout, so the sidebar is placed
 // against the frame instead and cannot cover the docs page.
+// The docs example is a real form: sent empty, it lists its problems and takes focus to them.
+test("the form example summarises its problems when it is sent empty", async ({ page }) => {
+  await page.goto("/docs/components/form");
+  await page.getByRole("button", { name: "Book appointment" }).click();
+  const summary = page.getByRole("group", { name: "There are 3 problems" });
+  await expect(summary).toBeFocused();
+  await summary.getByRole("link", { name: "Choose a clinic." }).click();
+  await expect(page.getByRole("combobox", { name: "Clinic" })).toBeFocused();
+});
+
 test("the sidebar example stays inside its frame", async ({ page, isMobile }) => {
   test.skip(isMobile, "On a phone the sidebar is a sheet, opened by its trigger.");
   await page.goto("/docs/components/sidebar");

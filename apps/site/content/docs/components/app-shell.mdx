@@ -1,0 +1,59 @@
+---
+title: Application shell
+description: The frame of an application. A header across the top, and below it a sidebar beside the page's content, with a link that skips to the content.
+---
+
+<GradeBadge component="app-shell" />
+
+<AppShellPreview />
+
+## Usage
+
+```tsx
+import {
+  AppShell,
+  AppShellBody,
+  AppShellContent,
+  AppShellHeader,
+  AppShellSidebar,
+  SidebarContent,
+} from "@cadence-clinical/ui";
+
+<AppShell>
+  <AppShellHeader>
+    <span className="font-medium">Cadence Clinic</span>
+  </AppShellHeader>
+  <AppShellBody>
+    <AppShellSidebar collapsible="icon">
+      <SidebarContent aria-label="Clinic">...</SidebarContent>
+    </AppShellSidebar>
+    <AppShellContent>...</AppShellContent>
+  </AppShellBody>
+</AppShell>;
+```
+
+The Application shell lays a page out as shadcn's [`sidebar-16`](https://ui.shadcn.com/blocks/sidebar#sidebar-16) block does: a header that stays at the top, and a [Sidebar](/docs/components/sidebar) that starts under the header, beside the content. shadcn ships that as a block you copy. Cadence ships the frame, and you keep using the Sidebar's own parts inside it.
+
+The shell is a [layout](/docs/levels): it holds no content of its own. The header's words, the sidebar's items and the page are yours.
+
+## The parts
+
+- **`AppShell`** is the Sidebar's `SidebarProvider`, arranged in a column, and takes its props, such as `defaultOpen`. It starts with a "Skip to content" link, hidden until it takes focus.
+- **`AppShellHeader`** is the `header` across the top. It stays in view as the page scrolls. It starts with the button that opens and closes the sidebar, followed by your content.
+- **`AppShellBody`** is the row under the header.
+- **`AppShellSidebar`** is a `Sidebar`, with all its props, starting under the header. On a phone it is the Sidebar's sheet, over the whole screen.
+- **`AppShellContent`** is the page's `main` landmark, where the skip link moves focus to.
+
+The header is as tall as a control plus its padding, so it follows the [density](/docs/theming#density): 48px compact and 68px comfortable.
+
+## What Cadence changes
+
+- **A link skips to the content.** The first Tab on a page shows "Skip to content", which moves focus past the header and the sidebar. It moves focus without changing the page's address, so it does not upset a router.
+- **The header always has the sidebar's button.** On a phone, where the sidebar is a sheet, that button is the only way to reach it.
+- **The header's height follows the density**, where `sidebar-16` sets it to 56px.
+
+## Accessibility
+
+- The frame gives the page its landmarks: the header is the banner, the Sidebar's content is navigation, and the content is the main landmark. Name the navigation with `aria-label` on `SidebarContent`.
+- The skip link is the first thing Tab reaches, and it appears when it has focus.
+- The header's button says whether the sidebar is open.

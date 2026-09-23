@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 import { createColumnHelper, useTable } from "@tanstack/react-table";
 
 import registry from "../registry.json";
+import { Calendar } from "./calendar";
 import { DataTable, dataTableFeatures } from "./data-table";
 import {
   Alert,
@@ -14,6 +15,10 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
   AlertTitle,
+  AppShell,
+  AppShellBody,
+  AppShellContent,
+  AppShellHeader,
   Badge,
   Button,
   Card,
@@ -21,23 +26,39 @@ import {
   CardHeader,
   CardTitle,
   Checkbox,
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
   Dialog,
   DialogContent,
   DialogTitle,
   DialogTrigger,
+  Drawer,
+  DrawerContent,
+  DrawerTitle,
+  DrawerTrigger,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  Empty,
+  EmptyHeader,
+  EmptyTitle,
   Field,
   FieldDescription,
   FieldError,
   FieldLabel,
+  Form,
+  FormActions,
+  FormErrorSummary,
+  FormSubmit,
   Input,
   Item,
   ItemContent,
   ItemTitle,
   Label,
+  Marker,
+  MarkerContent,
   Popover,
   PopoverContent,
   PopoverTitle,
@@ -50,12 +71,18 @@ import {
   SelectTrigger,
   SelectValue,
   Separator,
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
   Sidebar,
   SidebarContent,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
+  Skeleton,
+  Slider,
   Spinner,
   Switch,
   Table,
@@ -67,6 +94,8 @@ import {
   TabsList,
   TabsTrigger,
   Textarea,
+  ToastProvider,
+  ToastViewport,
   Toggle,
   ToggleGroup,
   ToggleGroupItem,
@@ -93,9 +122,23 @@ function ServerDataTable() {
 }
 
 const RENDERS: Record<string, ReactElement> = {
+  "app-shell": (
+    <AppShell>
+      <AppShellHeader>Cadence Clinic</AppShellHeader>
+      <AppShellBody>
+        <AppShellContent>Today</AppShellContent>
+      </AppShellBody>
+    </AppShell>
+  ),
   badge: <Badge variant="info">New</Badge>,
   button: <Button>Save observation</Button>,
   checkbox: <Checkbox aria-label="Interpreter needed" />,
+  collapsible: (
+    <Collapsible defaultOpen>
+      <CollapsibleTrigger>Earlier entries</CollapsibleTrigger>
+      <CollapsibleContent>Letter sent to the referrer.</CollapsibleContent>
+    </Collapsible>
+  ),
   input: <Input aria-label="Family name" />,
   "radio-group": (
     <RadioGroup aria-label="Contact by" defaultValue="phone">
@@ -113,9 +156,26 @@ const RENDERS: Record<string, ReactElement> = {
     </Select>
   ),
   separator: <Separator />,
+  sheet: (
+    <Sheet>
+      <SheetTrigger>Edit contact details</SheetTrigger>
+      <SheetContent>
+        <SheetTitle>Contact details</SheetTitle>
+      </SheetContent>
+    </Sheet>
+  ),
+  skeleton: <Skeleton className="h-4 w-40" />,
+  slider: <Slider aria-label="Text size" defaultValue={100} min={80} max={150} />,
   spinner: <Spinner />,
   switch: <Switch aria-label="Appointment reminders" />,
   textarea: <Textarea aria-label="Notes" />,
+  // The Toaster renders its toasts through a portal, which the server does not reach.
+  toast: (
+    <ToastProvider>
+      <ToastViewport />
+    </ToastProvider>
+  ),
+  calendar: <Calendar mode="single" defaultMonth={new Date(2026, 8, 1)} />,
   "data-table": <ServerDataTable />,
   sidebar: (
     <SidebarProvider>
@@ -131,6 +191,18 @@ const RENDERS: Record<string, ReactElement> = {
         </SidebarContent>
       </Sidebar>
     </SidebarProvider>
+  ),
+  form: (
+    <Form>
+      <FormErrorSummary />
+      <Field name="given">
+        <FieldLabel>Given name</FieldLabel>
+        <Input required />
+      </Field>
+      <FormActions>
+        <FormSubmit>Save</FormSubmit>
+      </FormActions>
+    </Form>
   ),
   "alert-dialog": (
     <AlertDialog>
@@ -153,6 +225,21 @@ const RENDERS: Record<string, ReactElement> = {
     <ToggleGroup aria-label="Text style">
       <ToggleGroupItem value="bold">Bold</ToggleGroupItem>
     </ToggleGroup>
+  ),
+  empty: (
+    <Empty>
+      <EmptyHeader>
+        <EmptyTitle>No appointments today</EmptyTitle>
+      </EmptyHeader>
+    </Empty>
+  ),
+  drawer: (
+    <Drawer>
+      <DrawerTrigger>Edit contact details</DrawerTrigger>
+      <DrawerContent>
+        <DrawerTitle>Contact details</DrawerTitle>
+      </DrawerContent>
+    </Drawer>
   ),
   "dropdown-menu": (
     <DropdownMenu>
@@ -214,6 +301,11 @@ const RENDERS: Record<string, ReactElement> = {
     </Item>
   ),
   label: <Label htmlFor="family-name">Family name</Label>,
+  marker: (
+    <Marker variant="separator">
+      <MarkerContent>Today</MarkerContent>
+    </Marker>
+  ),
   card: (
     <Card>
       <CardHeader>
@@ -261,6 +353,28 @@ describe("Sidebar", () => {
     expect(html).toContain('data-slot="sidebar-container"');
     expect(html).toMatch(/<nav[^>]*data-slot="sidebar-content"/);
     expect(html).toMatch(/<a[^>]*aria-current="page"[^>]*>Today<\/a>/);
+  });
+});
+
+describe("Form", () => {
+  // The summary is read from the page after it renders, so the server sends a form without one,
+  // even when it is given errors.
+  it("renders a form that sends itself, with no summary before it is sent", () => {
+    const html = renderToString(
+      <Form errors={{ given: "Enter a given name." }}>
+        <FormErrorSummary />
+        <Field name="given">
+          <FieldLabel>Given name</FieldLabel>
+          <Input />
+          <FieldError />
+        </Field>
+        <FormSubmit>Save</FormSubmit>
+      </Form>,
+    );
+
+    expect(html).toMatch(/<form[^>]*data-slot="form"/);
+    expect(html).not.toContain("form-error-summary");
+    expect(html).toMatch(/<button[^>]*type="submit"[^>]*>Save<\/button>/);
   });
 });
 

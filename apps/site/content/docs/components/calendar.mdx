@@ -1,0 +1,80 @@
+---
+title: Calendar
+description: A month of days to choose from, on react-day-picker. Each day is as tall as a control, and today is marked by more than colour.
+---
+
+import { Calendar } from "@cadence-clinical/ui/calendar";
+
+<GradeBadge component="calendar" />
+
+<ComponentPreview>
+  <Calendar mode="single" className="rounded-lg border" />
+</ComponentPreview>
+
+## Usage
+
+```tsx
+import { Calendar } from "@cadence-clinical/ui/calendar";
+import { useState } from "react";
+
+function AppointmentDay() {
+  const [date, setDate] = useState<Date | undefined>();
+  return <Calendar mode="single" selected={date} onSelect={setDate} />;
+}
+```
+
+Calendar follows the shadcn [Calendar](https://ui.shadcn.com/docs/components/calendar) and keeps its props, including `buttonVariant`, and its part, `CalendarDayButton`, so shadcn code works unchanged. It renders [react-day-picker](https://daypicker.dev) 10 and accepts all of its props: `mode`, `selected`, `onSelect`, `disabled`, `captionLayout`, `locale` and the rest.
+
+Calendar has its own entry point, `@cadence-clinical/ui/calendar`, so a project that never shows a calendar is not made to install react-day-picker. Install it beside Cadence when you use one:
+
+```bash
+pnpm add react-day-picker
+```
+
+From the registry, `shadcn add @cadence/calendar` installs react-day-picker with it.
+
+Use a calendar to choose a date near today, such as an appointment. A date the user already knows, such as a date of birth, is quicker and surer typed.
+
+## The week and the language
+
+react-day-picker starts the week on Sunday and writes in American English unless it is given a `locale`. Pass one from `react-day-picker/locale`. With `enAU` the week starts on Monday:
+
+```tsx
+import { enAU } from "react-day-picker/locale";
+
+<Calendar mode="single" locale={enAU} />;
+```
+
+When the dates belong to a place in another time zone, such as a clinic's appointments seen from elsewhere, pass that zone to `timeZone`, such as `"Australia/Melbourne"`.
+
+## Days that cannot be chosen
+
+Pass the days to `disabled`, such as `{ dayOfWeek: [0, 6] }` for weekends or `{ before: today }` for the past. Such a day is struck through as well as faded, and it cannot be pressed.
+
+## What Cadence changes
+
+- **Each day is as tall as a control**, so it follows the [density](/docs/theming#density): 32px compact, 40px on a touch screen and 44px comfortable. shadcn's days are 28px.
+- **Today is bold and underlined** as well as filled, so it does not rest on colour. A screen reader hears "Today" before the date.
+- **A day that cannot be chosen is struck through** as well as faded.
+- **The month and year menus look like controls**, with a border, when `captionLayout` is `"dropdown"`.
+- **Text follows the density**, and there is no dark-mode override: the tokens carry both modes.
+
+Cadence grades what it renders, not react-day-picker: its grade covers the calendar's markup, its marks and its keyboard behaviour, not the dates react-day-picker works out.
+
+## Accessibility
+
+- Each month is a grid named by its month and year. Each day is a button named by its full date, with "Today" before today and "selected" after a chosen day.
+- The arrow keys move between days, Page Up and Page Down between months, and Enter or Space chooses the day in focus. react-day-picker's [accessibility guide](https://daypicker.dev/guides/accessibility) lists every key.
+- With `captionLayout="dropdown"`, the month and year are native selects, so a phone shows its own picker.
+
+## Props
+
+| Prop            | Type                                                             | Default          |
+| --------------- | ---------------------------------------------------------------- | ---------------- |
+| `mode`          | `"single" \| "multiple" \| "range"`                              |                  |
+| `selected`      | A date, dates or a range, by `mode`                              |                  |
+| `onSelect`      | As in react-day-picker                                           |                  |
+| `disabled`      | A matcher, as in react-day-picker                                |                  |
+| `captionLayout` | `"label" \| "dropdown" \| "dropdown-months" \| "dropdown-years"` | `"label"`        |
+| `locale`        | A locale from `react-day-picker/locale`                          | American English |
+| `buttonVariant` | A Button `variant`, for the month buttons                        | `"ghost"`        |

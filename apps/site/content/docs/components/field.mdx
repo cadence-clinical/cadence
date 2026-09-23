@@ -170,6 +170,8 @@ The legend names the radio group, and the error describes it. `variant="label"` 
 
 `FieldTitle` looks like a label and names nothing. Use it to head content in a Field that is not a control.
 
+To send fields together, with every problem listed once at the top, put them in a [Form](/docs/components/form).
+
 ## What Cadence changes
 
 - **The Field does the wiring.** The shadcn field is layout only: you give the control an `id`, point the label at it, and set `aria-invalid` and `data-invalid` yourself, and nothing ties the description or the error to the control. Here Base UI's Field does all of it.
