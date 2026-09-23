@@ -5,6 +5,13 @@
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "fixed": [["@cadence-clinical/core", "@cadence-clinical/tokens", "@cadence-clinical/ui"]],
+  "fixed": [
+    [
+      "@cadence-clinical/core",
+      "@cadence-clinical/fhir",
+      "@cadence-clinical/tokens",
+      "@cadence-clinical/ui"
+    ]
+  ],
   "privatePackages": { "version": false, "tag": false }
 }

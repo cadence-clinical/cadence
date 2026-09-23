@@ -1,0 +1,4 @@
+{
+  "extends": "@cadence-clinical/config/tsconfig/base.json",
+  "include": ["src"]
+}

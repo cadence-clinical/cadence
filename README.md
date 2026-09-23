@@ -98,14 +98,14 @@ const css = generateAccentCss("brand", accent);
 
 ### Status
 
-| Package                      | What it does                                                           | State                       |
-| ---------------------------- | ---------------------------------------------------------------------- | --------------------------- |
-| `@cadence-clinical/ui`       | Components on [Base UI](https://base-ui.com) and Tailwind CSS          | 40 built, all graded tested |
-| `@cadence-clinical/tokens`   | Colour modes, contrast, density, accents and the accent validator      | Working                     |
-| `@cadence-clinical/core`     | The `Region` contract and the grade schema. No React.                  | First cut                   |
-| `@cadence-clinical/clinical` | Clinical components: vital signs, observation chart and others         | Planned                     |
-| `@cadence-clinical/fhir`     | Turns verbose FHIR R4 resources into the concise props components take | Planned                     |
-| `@cadence-clinical/au`       | Australian conventions and cited clinical rule sets, as a Region       | Planned                     |
+| Package                      | What it does                                                                      | State                       |
+| ---------------------------- | --------------------------------------------------------------------------------- | --------------------------- |
+| `@cadence-clinical/ui`       | Components on [Base UI](https://base-ui.com) and Tailwind CSS                     | 40 built, all graded tested |
+| `@cadence-clinical/tokens`   | Colour modes, contrast, density, accents and the accent validator                 | Working                     |
+| `@cadence-clinical/core`     | The `Region` contract, the observation view model and the grade schema. No React. | First cut                   |
+| `@cadence-clinical/clinical` | Clinical components: vital signs, observation chart and others                    | Planned                     |
+| `@cadence-clinical/fhir`     | Turns verbose FHIR R4 resources into the concise props components take            | First cut: Observations     |
+| `@cadence-clinical/au`       | Australian conventions and cited clinical rule sets, as a Region                  | Planned                     |
 
 What comes next, in order:
 
