@@ -9,6 +9,7 @@
  * graded `RuleSet`.
  */
 
+import type { ObservationRound } from "./rounds";
 import type {
   CodingMatch,
   Comparator,
@@ -48,6 +49,11 @@ export interface ObservationLevel {
    */
   readonly short: string;
   readonly severity: SeverityStep;
+  /**
+   * What a reading at this level adds to a total score, such as an early warning score. Leave it
+   * out for a schema with no total, or for a level that escalates a total on its own.
+   */
+  readonly score?: number;
 }
 
 /**
@@ -96,6 +102,30 @@ export interface InterpretationLabel extends CodingMatch {
   readonly label: string;
 }
 
+/** A reading at any of `fromLevels` puts its round's total at `level` at least, whatever the sum. */
+export interface ObservationEscalation {
+  readonly fromLevels: readonly string[];
+  readonly level: string;
+}
+
+/**
+ * A total score for each round, such as an early warning score: the sum of the scores of the
+ * levels its readings are in. The schema states it. Cadence adds it up and holds no value of it.
+ */
+export interface ObservationTotal {
+  /** The total in words, such as "Total score". */
+  readonly label: string;
+  /**
+   * The series a round must have a scored reading of for its total to be complete. A total with
+   * one missing would read lower than it is, so it is shown as incomplete.
+   */
+  readonly requires: readonly string[];
+  /** Bands for the total, in `{score}`, placing it in one of the schema's levels. */
+  readonly bands?: readonly ObservationBand[];
+  /** Levels that raise a round's total on their own, such as a value that calls for help. */
+  readonly escalations?: readonly ObservationEscalation[];
+}
+
 /** A schema for interpreting observations. */
 export interface ObservationSchema {
   /** The levels, in order of severity, lowest first. */
@@ -103,6 +133,8 @@ export interface ObservationSchema {
   readonly series: readonly ObservationSeriesDefinition[];
   /** Words for the source's interpretation codes. A code with none keeps the source's words. */
   readonly interpretationLabels?: readonly InterpretationLabel[];
+  /** A total score for each round. */
+  readonly total?: ObservationTotal;
 }
 
 /** Why a reading has no band. Each reason is shown differently from "normal". */
@@ -174,10 +206,35 @@ interface ResolvedSeries {
   readonly answers: readonly Resolved<ObservationAnswer>[];
 }
 
+/** Collects what is wrong with the shape of a set of bands: an empty band, an overlap or a gap. */
+function checkBandShape(name: string, bands: readonly ObservationBand[], problems: string[]): void {
+  for (const band of bands) {
+    if (band.from !== undefined && band.below !== undefined && band.from >= band.below) {
+      problems.push(
+        `${name} has a band from ${band.from} below ${band.below}, which holds no value.`,
+      );
+    }
+  }
+  const ordered = [...bands].sort((a, b) => (a.from ?? -Infinity) - (b.from ?? -Infinity));
+  ordered.forEach((band, index) => {
+    const next = ordered[index + 1];
+    if (next === undefined) return;
+    const end = band.below ?? Infinity;
+    const start = next.from ?? -Infinity;
+    if (end > start) problems.push(`${name} has bands that overlap at ${start}.`);
+    if (end < start) {
+      problems.push(
+        `${name} has a gap between ${end} and ${start}, where a value would get no band.`,
+      );
+    }
+  });
+}
+
 /** Checks a schema and looks up every level it refers to, collecting what is wrong. */
 function resolve(schema: ObservationSchema): {
   problems: string[];
   series: Map<string, ResolvedSeries>;
+  totalBands: Resolved<ObservationBand>[];
 } {
   const problems: string[] = [];
   const levels = new Map<string, ObservationLevel>();
@@ -208,32 +265,45 @@ function resolve(schema: ObservationSchema): {
     if (bands.length > 0 && definition.ucum === undefined) {
       problems.push(`${name} has bands but no unit. Bands need the unit they are written in.`);
     }
-    for (const band of bands) {
-      if (band.from !== undefined && band.below !== undefined && band.from >= band.below) {
-        problems.push(
-          `${name} has a band from ${band.from} below ${band.below}, which holds no value.`,
-        );
-      }
-    }
-    const ordered = [...bands].sort((a, b) => (a.from ?? -Infinity) - (b.from ?? -Infinity));
-    ordered.forEach((band, index) => {
-      const next = ordered[index + 1];
-      if (next === undefined) return;
-      const end = band.below ?? Infinity;
-      const start = next.from ?? -Infinity;
-      if (end > start) problems.push(`${name} has bands that overlap at ${start}.`);
-      if (end < start) {
-        problems.push(
-          `${name} has a gap between ${end} and ${start}, where a value would get no band.`,
-        );
-      }
-    });
+    checkBandShape(name, bands, problems);
 
     series.set(definition.key, {
       definition,
       bands: withLevels(bands),
       answers: withLevels(definition.answers ?? []),
     });
+  }
+
+  const totalBands: Resolved<ObservationBand>[] = [];
+  const { total } = schema;
+  if (total) {
+    const name = `The total "${total.label}"`;
+    for (const key of total.requires) {
+      const required = series.get(key);
+      if (!required) {
+        problems.push(`${name} requires the series "${key}", which is not defined.`);
+        continue;
+      }
+      const escalating = new Set((total.escalations ?? []).flatMap(({ fromLevels }) => fromLevels));
+      for (const { level } of [...required.bands, ...required.answers]) {
+        // A level that escalates on its own, such as a call for help, needs no score.
+        if (level.score === undefined && !escalating.has(level.key)) {
+          problems.push(`${name} adds up "${key}", whose level "${level.key}" has no score.`);
+        }
+      }
+    }
+    checkBandShape(name, total.bands ?? [], problems);
+    for (const rule of total.bands ?? []) {
+      const level = levels.get(rule.level);
+      if (level) totalBands.push({ rule, level });
+      else problems.push(`${name} has a band at the level "${rule.level}", which is not defined.`);
+    }
+    for (const { fromLevels, level } of total.escalations ?? []) {
+      for (const key of [...fromLevels, level]) {
+        if (!levels.has(key))
+          problems.push(`${name} escalates with the level "${key}", which is not defined.`);
+      }
+    }
   }
 
   const labelled = new Set<string>();
@@ -243,7 +313,7 @@ function resolve(schema: ObservationSchema): {
     labelled.add(id);
   }
 
-  return { problems, series };
+  return { problems, series, totalBands };
 }
 
 /** Returns the problems with a schema. An empty array means it can be applied. */
@@ -430,6 +500,116 @@ export function applyObservationSchema(
           ...(previous === undefined ? {} : { previous }),
         };
       }),
+    };
+  });
+}
+
+/** One series' part in a round's total: the reading that scored, and its score. */
+export interface TotalPart {
+  readonly seriesKey: string;
+  readonly readingId: string;
+  readonly score: number;
+}
+
+/**
+ * A round's total score. It is complete only when every series the total requires has a reading
+ * in the round that scored, or that is at a level that escalates. An incomplete total gives no number: the sum of what is there would read
+ * lower than the round is. Either can carry a level from an escalation.
+ */
+export type RoundTotal =
+  | {
+      readonly kind: "complete";
+      /** The round's first time, which heads its column. */
+      readonly timeMs: number;
+      readonly total: number;
+      /** The level the total's bands, or an escalation, put it in. */
+      readonly level?: ObservationLevel;
+      /** True when an escalation, not the sum, set the level. */
+      readonly isEscalated: boolean;
+      readonly parts: readonly TotalPart[];
+    }
+  | {
+      readonly kind: "incomplete";
+      readonly timeMs: number;
+      /** The required series with no scored reading in the round. */
+      readonly missing: readonly string[];
+      /** The level an escalation put the round in, whatever else is missing. */
+      readonly level?: ObservationLevel;
+      readonly isEscalated: boolean;
+      readonly parts: readonly TotalPart[];
+    };
+
+/**
+ * Adds up each round's scores into the schema's total, such as an early warning score. Each
+ * series counts once in a round: when it has two scored readings, such as two heart rates, the
+ * higher score counts, so a round is never scored lower than one of its readings.
+ *
+ * Throws when the schema cannot be applied or has no total.
+ */
+export function scoreRounds(
+  rounds: readonly ObservationRound<InterpretedReading>[],
+  schema: ObservationSchema,
+): RoundTotal[] {
+  const { problems, totalBands } = resolve(schema);
+  if (problems.length > 0) {
+    throw new Error(`The observation schema cannot be applied:\n- ${problems.join("\n- ")}`);
+  }
+  const { total } = schema;
+  if (!total) throw new Error("scoreRounds: the schema has no total to add up.");
+
+  const rank = new Map(schema.levels.map((level, index) => [level.key, index]));
+  const byKey = new Map(schema.levels.map((level) => [level.key, level]));
+  const higher = (a: ObservationLevel | undefined, b: ObservationLevel | undefined) =>
+    (rank.get(b?.key ?? "") ?? -1) > (rank.get(a?.key ?? "") ?? -1) ? b : a;
+  return rounds.map((round) => {
+    const parts: TotalPart[] = [];
+    // A series is present when a reading scored, or when it is at a level that escalates.
+    const present = new Set<string>();
+    let escalation: ObservationLevel | undefined;
+    for (const [seriesKey, readings] of Object.entries(round.readings)) {
+      let best: TotalPart | undefined;
+      for (const reading of readings) {
+        if (reading.band.kind !== "level") continue;
+        const { level } = reading.band;
+        for (const rule of total.escalations ?? []) {
+          if (rule.fromLevels.includes(level.key)) {
+            escalation = higher(escalation, byKey.get(rule.level));
+            present.add(seriesKey);
+          }
+        }
+        if (level.score !== undefined && (best === undefined || level.score > best.score)) {
+          best = { seriesKey, readingId: reading.id, score: level.score };
+        }
+      }
+      if (best) {
+        parts.push(best);
+        present.add(seriesKey);
+      }
+    }
+
+    const missing = total.requires.filter((key) => !present.has(key));
+    if (missing.length > 0) {
+      return {
+        kind: "incomplete",
+        timeMs: round.timeMs,
+        missing,
+        ...(escalation === undefined ? {} : { level: escalation }),
+        isEscalated: escalation !== undefined,
+        parts,
+      };
+    }
+
+    const sum = parts.reduce((all, { score }) => all + score, 0);
+    const band = numericBand(sum, undefined, totalBands);
+    const summed = typeof band === "string" ? undefined : band.level;
+    const level = higher(summed, escalation);
+    return {
+      kind: "complete",
+      timeMs: round.timeMs,
+      total: sum,
+      ...(level === undefined ? {} : { level }),
+      isEscalated: level !== undefined && level !== summed,
+      parts,
     };
   });
 }
