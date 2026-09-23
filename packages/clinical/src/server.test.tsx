@@ -3,10 +3,27 @@ import { renderToString } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
 import registry from "../registry.json";
-import { NOW, TIME_ZONE, syntheticTotals, syntheticVitals } from "./fixtures/vitals";
-import { ObservationTable } from "./index";
+import {
+  NOW,
+  SYNTHETIC_SCHEMA,
+  TIME_ZONE,
+  VITALS_TRACKS,
+  syntheticTotals,
+  syntheticVitals,
+} from "./fixtures/vitals";
+import { ObservationTable, VitalsChart } from "./index";
 
 const RENDERS: Record<string, ReactElement> = {
+  "vitals-chart": (
+    <VitalsChart
+      label="Synthetic observation chart"
+      series={syntheticVitals()}
+      schema={SYNTHETIC_SCHEMA}
+      tracks={VITALS_TRACKS}
+      now={NOW}
+      timeZone={TIME_ZONE}
+    />
+  ),
   "observation-table": (
     <ObservationTable
       label="Vital signs"

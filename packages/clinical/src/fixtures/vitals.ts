@@ -16,6 +16,8 @@ import {
   type RoundTotal,
 } from "@cadence-clinical/core";
 
+import type { VitalsTrack } from "@/components/cadence/vitals-chart";
+
 const LOCAL = "https://ehr.example.org/codes/observation";
 
 /** The moment the stories treat as now, in Melbourne. */
@@ -35,6 +37,7 @@ export const SYNTHETIC_SCHEMA = defineObservationSchema({
   series: [
     {
       key: "respiratory-rate",
+      range: { min: 0, max: 40 },
       label: "Respiratory rate",
       shortLabel: "RR",
       unitLabel: "breaths/min",
@@ -50,6 +53,7 @@ export const SYNTHETIC_SCHEMA = defineObservationSchema({
     },
     {
       key: "spo2",
+      range: { min: 80, max: 100 },
       label: "SpO₂",
       unitLabel: "%",
       match: [{ system: LOCAL, code: "spo2" }],
@@ -63,6 +67,7 @@ export const SYNTHETIC_SCHEMA = defineObservationSchema({
     {
       // Shown only in the rounds where supplementary oxygen was given.
       key: "oxygen-flow",
+      range: { min: 0, max: 10 },
       label: "Oxygen flow",
       shortLabel: "O₂ flow",
       unitLabel: "L/min",
@@ -76,6 +81,7 @@ export const SYNTHETIC_SCHEMA = defineObservationSchema({
     },
     {
       key: "heart-rate",
+      range: { min: 30, max: 180 },
       label: "Heart rate",
       shortLabel: "HR",
       unitLabel: "beats/min",
@@ -90,6 +96,7 @@ export const SYNTHETIC_SCHEMA = defineObservationSchema({
     },
     {
       key: "systolic",
+      range: { min: 40, max: 220 },
       label: "Systolic blood pressure",
       shortLabel: "SBP",
       unitLabel: "mmHg",
@@ -103,6 +110,7 @@ export const SYNTHETIC_SCHEMA = defineObservationSchema({
     },
     {
       key: "diastolic",
+      range: { min: 30, max: 140 },
       label: "Diastolic blood pressure",
       shortLabel: "DBP",
       unitLabel: "mmHg",
@@ -116,6 +124,7 @@ export const SYNTHETIC_SCHEMA = defineObservationSchema({
     },
     {
       key: "temperature",
+      range: { min: 34, max: 41 },
       label: "Temperature",
       shortLabel: "Temp",
       unitLabel: "°C",
@@ -140,6 +149,7 @@ export const SYNTHETIC_SCHEMA = defineObservationSchema({
     },
     {
       key: "gcs",
+      range: { min: 3, max: 15 },
       label: "Glasgow Coma Scale",
       shortLabel: "GCS",
       match: [{ system: LOCAL, code: "gcs" }],
@@ -390,3 +400,28 @@ export function syntheticVitals(
 ): InterpretedSeries[] {
   return applyObservationSchema(series, SYNTHETIC_SCHEMA);
 }
+
+/** The tracks of the synthetic vitals chart, as the maintainer's mock-up lays them out. */
+export const VITALS_TRACKS: readonly VitalsTrack[] = [
+  { kind: "line", key: "respiratory-rate", series: "respiratory-rate" },
+  { kind: "line", key: "spo2", series: "spo2" },
+  { kind: "line", key: "oxygen-flow", series: "oxygen-flow", heightPx: 64 },
+  {
+    kind: "pair",
+    key: "bp-hr",
+    label: "Blood pressure and heart rate",
+    shortLabel: "BP + HR",
+    high: "systolic",
+    low: "diastolic",
+    line: "heart-rate",
+  },
+  { kind: "line", key: "temperature", series: "temperature" },
+  {
+    kind: "events",
+    key: "consciousness",
+    label: "Consciousness",
+    shortLabel: "AVPU",
+    series: ["consciousness"],
+  },
+  { kind: "line", key: "gcs", series: "gcs", heightPx: 64 },
+];
