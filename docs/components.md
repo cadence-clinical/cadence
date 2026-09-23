@@ -10,7 +10,7 @@ The components Cadence intends to build, by [level](decisions/0013-component-lev
 | Planned  | Intended, and agreed one at a time when its turn comes      |
 | Deferred | Agreed in principle, and set aside until something needs it |
 
-The maintainer approved this plan on 2026-09-20, and asked for Skeleton, Marker, Slider, Collapsible, Empty, Sheet, Drawer, Calendar, Date picker and Toast on 2026-09-22.
+The maintainer approved this plan on 2026-09-20, and asked for Skeleton, Marker, Slider, Collapsible, Empty, Sheet, Drawer, Calendar, Date picker and Toast on 2026-09-22. On 2026-09-23 the maintainer agreed the Observation table, the Vitals chart, the Medication card and the Track chart they are built on.
 
 Sections 1 to 4 are general components in `packages/ui`. [Clinical components](#clinical-components) follow them.
 
@@ -44,22 +44,23 @@ One control or one element. Built first, in this order, because the composites n
 
 A small group of parts or primitives that works as one unit.
 
-| Component     | Status | Built on                         | Why                                                                                                  |
-| ------------- | ------ | -------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| Card          | Built  | None                             |                                                                                                      |
-| Item          | Built  | None                             | A row of media, title, description and actions.                                                      |
-| Field         | Built  | Base UI Field, Label, the inputs | Label, control, description and error as one unit. The label sits 4px (`gap-1`) above its control.   |
-| Tabs          | Built  | Base UI Tabs                     |                                                                                                      |
-| Alert         | Built  | None                             | The first status surface: fill, border token, icon and text, never colour alone.                     |
-| Dialog        | Built  | Base UI Dialog, Button           | One task over the page, such as editing a record. The sidebar also needs a sheet on a phone.         |
-| Alert dialog  | Built  | Base UI Alert dialog, Button     | Confirming a destructive action. It must be answered, and a press outside does not close it.         |
-| Popover       | Built  | Base UI Popover                  | The data table's filters and column settings.                                                        |
-| Dropdown menu | Built  | Base UI Menu                     | Row actions in the data table, and the sidebar's user menu. No submenus.                             |
-| Toggle group  | Built  | Base UI Toggle group, Toggle     | A set of filters or text styles. A view switch must have an answer, so it is Tabs.                   |
-| Collapsible   | Built  | Base UI Collapsible              | Shows and hides one section, such as earlier entries or further detail.                              |
-| Empty         | Built  | None                             | What a list or panel shows when it has nothing in it, and what to do next. List and detail needs it. |
-| Sheet         | Built  | Base UI Dialog, Button           | A panel from the edge of the screen, for a task beside the page rather than over it.                 |
-| Drawer        | Built  | Base UI Drawer                   | A panel from the bottom of a phone screen that can be swiped away.                                   |
+| Component     | Status | Built on                         | Why                                                                                                                                                                                |
+| ------------- | ------ | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Card          | Built  | None                             |                                                                                                                                                                                    |
+| Item          | Built  | None                             | A row of media, title, description and actions.                                                                                                                                    |
+| Field         | Built  | Base UI Field, Label, the inputs | Label, control, description and error as one unit. The label sits 4px (`gap-1`) above its control.                                                                                 |
+| Tabs          | Built  | Base UI Tabs                     |                                                                                                                                                                                    |
+| Alert         | Built  | None                             | The first status surface: fill, border token, icon and text, never colour alone.                                                                                                   |
+| Dialog        | Built  | Base UI Dialog, Button           | One task over the page, such as editing a record. The sidebar also needs a sheet on a phone.                                                                                       |
+| Alert dialog  | Built  | Base UI Alert dialog, Button     | Confirming a destructive action. It must be answered, and a press outside does not close it.                                                                                       |
+| Popover       | Built  | Base UI Popover                  | The data table's filters and column settings.                                                                                                                                      |
+| Dropdown menu | Built  | Base UI Menu                     | Row actions in the data table, and the sidebar's user menu. No submenus.                                                                                                           |
+| Toggle group  | Built  | Base UI Toggle group, Toggle     | A set of filters or text styles. A view switch must have an answer, so it is Tabs.                                                                                                 |
+| Collapsible   | Built  | Base UI Collapsible              | Shows and hides one section, such as earlier entries or further detail.                                                                                                            |
+| Empty         | Built  | None                             | What a list or panel shows when it has nothing in it, and what to do next. List and detail needs it.                                                                               |
+| Sheet         | Built  | Base UI Dialog, Button           | A panel from the edge of the screen, for a task beside the page rather than over it.                                                                                               |
+| Drawer        | Built  | Base UI Drawer                   | A panel from the bottom of a phone screen that can be swiped away.                                                                                                                 |
+| Track chart   | Agreed | d3-scale, d3-shape, d3-array     | Tracks of values on one shared axis, with bands, a crosshair and a tooltip. The clinical charts are built on it. Drawn in SVG by Cadence, with its own entry point: decision 0015. |
 
 ## 3. Patterns
 
@@ -91,11 +92,13 @@ Layouts filled with synthetic content. They live in the example apps and are not
 
 Subject-matter components in `packages/clinical`, built on the general ones above. Each is render-only: it displays an interpretation it is given and holds no threshold ([decision 0002](decisions/0002-clinical-logic-boundary.md)). Each arrives with its view model in `core` and its FHIR transform in `fhir`, and is agreed one at a time. The grading matrix comes before the first one ships.
 
-| Component         | Status  | Level     | Built on                                                | Shows                                                           |
-| ----------------- | ------- | --------- | ------------------------------------------------------- | --------------------------------------------------------------- |
-| Observation table | Planned | Pattern   | Data table, Badge                                       | Observations over time, in rows, with the interpretation given. |
-| Vitals chart      | Planned | Pattern   | Card, Toggle group. The charting approach is undecided. | Vital signs over time, plotted, with the interpretation given.  |
-| Medication card   | Planned | Composite | Card, Badge, Item                                       | One medicine: name, dose, route and frequency as given.         |
+| Component         | Status | Level     | Built on                                  | Shows                                                                                                                                                                                                      |
+| ----------------- | ------ | --------- | ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Observation table | Agreed | Pattern   | Table, Badge                              | A flowsheet: one row per observation, one column per time, with each value's band and the source's own interpretation, both named.                                                                         |
+| Vitals chart      | Agreed | Pattern   | Track chart, Toggle group, Select, Button | Vital signs on stacked tracks over a linear time axis, with bands from a schema, span presets, a track filter and three y-range modes. The Observation table is its equivalent without the chart.          |
+| Medication card   | Agreed | Composite | Card, Badge, Item, Collapsible            | One medicine: name, dose, route, frequency and status, expanding to its dose history and when it was last given. For an order with its administrations, for a medication list, and in words for a patient. |
+
+The FHIR transforms are written by hand in `fhir`, and an observation schema, applied outside the component, holds the thresholds and labels ([decision 0016](decisions/0016-fhir-transforms.md)).
 
 More will be added here as they are named. The adult and paediatric observation chart formats are a Region's to supply.
 
