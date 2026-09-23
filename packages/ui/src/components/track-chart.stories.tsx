@@ -179,6 +179,11 @@ export const HoverAMark: Story = {
 export const PointerTime: Story = {
   play: async ({ canvasElement }) => {
     const body = within(canvasElement).getByRole("group", { name: "Synthetic observations" });
+    // Point only once the chart has opened at the latest time, or the time under the pointer
+    // depends on how far it has scrolled.
+    await waitFor(() =>
+      expect(body.scrollLeft + body.clientWidth).toBeGreaterThanOrEqual(body.scrollWidth - 1),
+    );
     const box = body.getBoundingClientRect();
     await userEvent.pointer({
       target: body,
