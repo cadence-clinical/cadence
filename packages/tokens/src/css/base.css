@@ -167,6 +167,28 @@
   --color-info-text: var(--info-text);
   --color-info-border: var(--info-border);
 
+  --color-severity-0: var(--severity-0);
+  --color-severity-0-subtle: var(--severity-0-subtle);
+  --color-severity-0-border: var(--severity-0-border);
+  --color-severity-1: var(--severity-1);
+  --color-severity-1-subtle: var(--severity-1-subtle);
+  --color-severity-1-border: var(--severity-1-border);
+  --color-severity-2: var(--severity-2);
+  --color-severity-2-subtle: var(--severity-2-subtle);
+  --color-severity-2-border: var(--severity-2-border);
+  --color-severity-3: var(--severity-3);
+  --color-severity-3-subtle: var(--severity-3-subtle);
+  --color-severity-3-border: var(--severity-3-border);
+  --color-severity-4: var(--severity-4);
+  --color-severity-4-subtle: var(--severity-4-subtle);
+  --color-severity-4-border: var(--severity-4-border);
+  --color-severity-5: var(--severity-5);
+  --color-severity-5-subtle: var(--severity-5-subtle);
+  --color-severity-5-border: var(--severity-5-border);
+  --color-severity-6: var(--severity-6);
+  --color-severity-6-subtle: var(--severity-6-subtle);
+  --color-severity-6-border: var(--severity-6-border);
+
   /* Strong ease-out for UI feedback; the built-in curves are too soft to read as intentional. */
   --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
 }

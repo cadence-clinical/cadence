@@ -6,7 +6,14 @@ export { assertBrand, checkBrand, generateBrandCss } from "./brand";
 export type { Brand, BrandTokenName, NeutralTokenName } from "./brand";
 export { BRANDS } from "./brands";
 export type { BrandName } from "./brands";
-export { CONTRASTS, MODES, RESERVED_HUES, SIDEBAR_ALIASES, STATUSES } from "./palette";
+export {
+  CONTRASTS,
+  MODES,
+  RESERVED_HUES,
+  SEVERITY_STEPS,
+  SIDEBAR_ALIASES,
+  STATUSES,
+} from "./palette";
 export type {
   AccentTokenName,
   AliasTokenName,
@@ -16,6 +23,7 @@ export type {
   Contrast,
   Mode,
   ResolvedTokens,
+  SeverityStep,
   Status,
   TokenName,
 } from "./palette";
