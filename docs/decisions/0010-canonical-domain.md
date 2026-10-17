@@ -25,6 +25,6 @@ The origin is still set in one place, `apps/site/src/lib/shared.ts`, and can be 
   primary domain (for example apex instead of `www`) before the registry ships.
 - `cadenceclinical.app` and `cadenceclinical.com.au` are registered but not attached. If they
   are attached later, they should redirect here.
-- Storybook has no custom domain yet. `storybook.cadenceclinical.dev` is the intended address.
+- Storybook is at `https://storybook.cadenceclinical.dev` (attached 2026-10-17), and the site links to it from its navigation.
 - The smoke tests can run against the live site:
   `PLAYWRIGHT_BASE_URL=https://www.cadenceclinical.dev pnpm --filter @cadence-clinical/site test:e2e`.

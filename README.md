@@ -114,7 +114,7 @@ What comes next, in order:
 3. Australian rule sets, with Victoria as the first state variant.
 4. Screens and example apps, the agent skill and the Claude Design bundle.
 
-The documentation is at [www.cadenceclinical.dev](https://www.cadenceclinical.dev). Its source is in `apps/site`.
+The documentation is at [www.cadenceclinical.dev](https://www.cadenceclinical.dev), and its source is in `apps/site`. Every component's stories are in Storybook at [storybook.cadenceclinical.dev](https://storybook.cadenceclinical.dev).
 
 ### Run it locally
 
