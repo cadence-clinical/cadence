@@ -1,6 +1,6 @@
 {
   "name": "@cadence-clinical/fhir",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Framework-free FHIR R4 transforms for Cadence Clinical: resources in, checked view models and a list of issues out.",
   "license": "MIT",
   "repository": {

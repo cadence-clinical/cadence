@@ -7,6 +7,9 @@ export const SITE_DESCRIPTION =
 // The canonical origin. Registry URLs are built from it, so it is set in one place.
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.cadenceclinical.dev";
 
+// Storybook, where every component's stories run. A separate Vercel project.
+export const STORYBOOK_URL = "https://storybook.cadenceclinical.dev";
+
 export const DOCS_ROUTE = "/docs";
 export const DOCS_IMAGE_ROUTE = "/og/docs";
 export const DOCS_CONTENT_ROUTE = "/llms.mdx/docs";

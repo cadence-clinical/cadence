@@ -1,6 +1,6 @@
 {
   "name": "@cadence-clinical/clinical",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Clinical components for Cadence Clinical: render-only displays of observations and medicines, built on the ui primitives.",
   "license": "MIT",
   "repository": {
