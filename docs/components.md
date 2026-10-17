@@ -90,7 +90,7 @@ Layouts filled with synthetic content. They live in the example apps and are not
 
 ## Clinical components
 
-Subject-matter components in `packages/clinical`, built on the general ones above. Each is render-only: it displays an interpretation it is given and holds no threshold ([decision 0002](decisions/0002-clinical-logic-boundary.md)). Each arrives with its view model in `core` and its FHIR transform in `fhir`, and is agreed one at a time. The grading matrix comes before the first one ships.
+Subject-matter components in `packages/clinical`, built on the general ones above. Each is render-only: it displays an interpretation it is given and holds no threshold ([decision 0002](decisions/0002-clinical-logic-boundary.md)). Each arrives with its view model in `core` and its FHIR transform in `fhir`, and is agreed one at a time. Each is graded under the matrix in [decision 0004](decisions/0004-component-grading.md).
 
 | Component         | Status | Level     | Built on                                          | Shows                                                                                                                                                                                                      |
 | ----------------- | ------ | --------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

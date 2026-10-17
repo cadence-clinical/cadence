@@ -9,7 +9,7 @@ supersedes an earlier one.
 | [0001](0001-one-public-monorepo.md)     | One public monorepo                                                                | Accepted                              |
 | [0002](0002-clinical-logic-boundary.md) | Components display an interpretation and never make one                            | Accepted                              |
 | [0003](0003-region-contract.md)         | Regional conventions are supplied through a Region contract                        | Accepted                              |
-| [0004](0004-component-grading.md)       | Every component carries a grade tied to a version                                  | Accepted, matrix pending              |
+| [0004](0004-component-grading.md)       | Every component carries a grade tied to a version                                  | Accepted                              |
 | [0005](0005-distribution.md)            | Distribute as npm packages and a shadcn registry from one source                   | Accepted                              |
 | [0006](0006-theming.md)                 | Fixed status colours, solved accents                                               | Accepted                              |
 | [0007](0007-unit-conversion.md)         | Units convert in the FHIR transform layer, by default                              | Accepted                              |

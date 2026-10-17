@@ -5,7 +5,8 @@ import Link from "next/link";
 const LABELS: Record<string, string> = {
   draft: "Draft",
   tested: "Tested",
-  "clinician-verified": "Verified by clinicians",
+  "usability-tested": "Usability tested",
+  "safety-assessed": "Safety assessed",
   "in-production": "Used in production",
 };
 

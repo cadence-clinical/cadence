@@ -35,5 +35,5 @@ Cadence will hold components of very different weight: a button, a field, a data
 ## Consequences
 
 - `meta.category` becomes `meta.level` and `meta.domain`. The published `meta.json` changes shape before its first release.
-- The level says how much can go wrong. A pattern carries more clinical context than a primitive, so the grading matrix (0004) can ask more of it. Whether a component's grade may exceed the lowest grade among the components it imports is a question for that session.
+- The level says how much can go wrong. A pattern carries more clinical context than a primitive, so the grading matrix (0004) can ask more of it. Updated 2026-10-17: it may. The grade applies to the composition that was reviewed, and each part keeps its own (see 0004).
 - A component that is hard to place is usually two components.

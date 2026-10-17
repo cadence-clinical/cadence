@@ -29,7 +29,7 @@
         "level": "composite",
         "domain": "clinical",
         "grade": {
-          "level": "draft"
+          "level": "tested"
         }
       }
     },
@@ -59,7 +59,7 @@
         "level": "pattern",
         "domain": "clinical",
         "grade": {
-          "level": "draft"
+          "level": "tested"
         }
       }
     },
@@ -90,7 +90,7 @@
         "level": "pattern",
         "domain": "clinical",
         "grade": {
-          "level": "draft"
+          "level": "tested"
         }
       }
     }
