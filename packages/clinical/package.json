@@ -47,7 +47,7 @@
   "devDependencies": {
     "@base-ui/react": "^1.8.0",
     "@cadence-clinical/config": "workspace:*",
-    "@storybook/react-vite": "^10.6.0",
+    "@storybook/react-vite": "^10.6.1",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "class-variance-authority": "^0.7.1",
@@ -55,7 +55,7 @@
     "eslint": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
-    "storybook": "^10.6.0",
+    "storybook": "^10.6.1",
     "tailwind-merge": "^3.7.0",
     "tsdown": "catalog:",
     "typescript": "catalog:",
