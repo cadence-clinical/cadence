@@ -9,8 +9,10 @@ name: Release
 # because the pull request's status ignores runs it did not raise itself.
 #
 # Publishing uses npm trusted publishing (OIDC), so there is no npm token in this repository.
-# It stays switched off until the npm organisation exists and each package lists this workflow
-# as its trusted publisher. To switch it on, set the repository variable NPM_PUBLISH to "true".
+# Every package lists this workflow as its trusted publisher, but npm does not yet accept this
+# repository's OIDC tokens (npm/cli#9969: GitHub gives repositories created after 15 July 2026
+# an ID-based token subject). Until it does, NPM_PUBLISH is "false" and the maintainer publishes
+# by hand: see .changeset/README.md. Set NPM_PUBLISH to "true" when npm accepts the tokens.
 
 on:
   push:
