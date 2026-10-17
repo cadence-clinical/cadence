@@ -1,0 +1,229 @@
+{
+  "projectId": "6eafad55-cf60-4059-b5a1-a0c35ffd9efb",
+  "shape": "storybook",
+  "pkg": "@cadence-clinical/ui",
+  "globalName": "Cadence",
+  "storybookConfigDir": "apps/storybook/.storybook",
+  "storybookStatic": ".design-sync/sb-reference",
+  "buildCmd": "pnpm turbo run build --filter=./packages/* && node .design-sync/compile-css.mjs",
+  "extraEntries": [
+    "./dist/calendar.mjs",
+    "./dist/data-table.mjs",
+    "./dist/date-picker.mjs",
+    "../clinical/dist/index.mjs",
+    "../core/dist/index.mjs",
+    "../fhir/dist/index.mjs"
+  ],
+  "libOverrides": {
+    "dts.mjs": "tsdown emits .d.mts and the packages declare types only under exports[\".\"].types; the bundled dts.mjs reads only .d.ts and top-level types",
+    "preview-gen-storybook.mjs": "story and meta globals reach the story context and ride on the composed story as __dsGlobals, so the theme decorator can apply them",
+    "source-storybook.mjs": "the decorator bundle loads .css as empty (preview.css imports tailwindcss) and applies each story's __dsGlobals over the initial globals"
+  },
+  "titleMap": {
+    "Applicationshell": "AppShell",
+    "Datepicker": "DatePicker",
+    "Listanddetail": "ListDetail",
+    "Radiogroup": "RadioGroup",
+    "Trackchart": "TrackChart",
+    "Typeset": null,
+    "Medicationcard": "MedicationCard",
+    "Observationtable": "ObservationTable",
+    "Vitalschart": "VitalsChart"
+  },
+  "storyImports": {
+    "shim": ["/packages/ui/src/components/", "/packages/clinical/src/components/"]
+  },
+  "docsDir": "../../apps/site/content/docs/components",
+  "docsMap": {
+    "Badge": "../../apps/site/content/docs/components/badge/index.mdx",
+    "Button": "../../apps/site/content/docs/components/button/index.mdx",
+    "Input": "../../apps/site/content/docs/components/input/index.mdx",
+    "MedicationCard": "../../apps/site/content/docs/components/medication-card/index.mdx",
+    "ObservationTable": "../../apps/site/content/docs/components/observation-table/index.mdx",
+    "TrackChart": "../../apps/site/content/docs/components/track-chart/index.mdx",
+    "VitalsChart": "../../apps/site/content/docs/components/vitals-chart/index.mdx"
+  },
+  "cssEntry": "./dist/design-sync.css",
+  "extraFonts": [
+    "../../apps/storybook/node_modules/@fontsource-variable/geist/wght.css",
+    "../../apps/storybook/node_modules/@fontsource-variable/geist-mono/wght.css",
+    "../../apps/storybook/node_modules/@fontsource-variable/work-sans/wght.css",
+    "../../apps/storybook/node_modules/@fontsource-variable/figtree/wght.css",
+    "../../apps/storybook/node_modules/@fontsource-variable/source-sans-3/wght.css"
+  ],
+  "overrides": {
+    "AlertDialog": {
+      "cardMode": "single",
+      "primaryStory": "Open",
+      "skip": [
+        "composites-alertdialog--opens-on-the-safe-answer",
+        "composites-alertdialog--escape-cancels",
+        "composites-alertdialog--enter-keeps-the-medicine"
+      ]
+    },
+    "Dialog": {
+      "cardMode": "single",
+      "primaryStory": "Open",
+      "skip": [
+        "composites-dialog--opens-named-and-described",
+        "composites-dialog--closes-from-the-corner",
+        "composites-dialog--stays-open-on-a-press-outside"
+      ]
+    },
+    "Drawer": {
+      "cardMode": "single",
+      "primaryStory": "Open",
+      "skip": [
+        "composites-drawer--cancel-closes",
+        "composites-drawer--pressing-the-scrim-closes-it",
+        "composites-drawer--tall-content-scrolls"
+      ]
+    },
+    "DropdownMenu": {
+      "cardMode": "single",
+      "primaryStory": "Open"
+    },
+    "Popover": {
+      "cardMode": "single",
+      "primaryStory": "Open",
+      "skip": [
+        "composites-popover--opens-named-and-described",
+        "composites-popover--opens-at-once-from-the-keyboard"
+      ]
+    },
+    "Sheet": {
+      "cardMode": "single",
+      "primaryStory": "Open"
+    },
+    "Select": {
+      "cardMode": "single",
+      "primaryStory": "Default"
+    },
+    "Tooltip": {
+      "cardMode": "single",
+      "primaryStory": "Open"
+    },
+    "AppShell": {
+      "cardMode": "single",
+      "primaryStory": "Default",
+      "skip": [
+        "layouts-application-shell--skips-to-the-content",
+        "layouts-application-shell--on-a-phone"
+      ]
+    },
+    "Sidebar": {
+      "cardMode": "single",
+      "primaryStory": "Default"
+    },
+    "Tabs": {
+      "cardMode": "column",
+      "skip": [
+        "composites-tabs--shows-a-view-with-the-pointer",
+        "composites-tabs--shows-a-view-with-the-keyboard"
+      ]
+    },
+    "MedicationCard": {
+      "skip": ["composites-medication-card--dose-history"]
+    },
+    "Alert": {
+      "cardMode": "column"
+    },
+    "Field": {
+      "cardMode": "column",
+      "skip": ["composites-field--validates-itself"]
+    },
+    "ToggleGroup": {
+      "skip": [
+        "composites-togglegroup--one-at-a-time",
+        "composites-togglegroup--several-at-once",
+        "composites-togglegroup--arrow-keys-move-between-toggles"
+      ]
+    },
+    "RadioGroup": {
+      "skip": ["primitives-radio-group--chooses-one-with-pointer-and-arrow-keys"]
+    },
+    "Textarea": {
+      "skip": ["primitives-textarea--grows-with-what-is-typed"]
+    },
+    "Slider": {
+      "skip": ["primitives-slider--by-keyboard"]
+    },
+    "Collapsible": {
+      "skip": ["composites-collapsible--grows-to-its-height"]
+    },
+    "ListDetail": {
+      "skip": ["layouts-list-and-detail--choosing-opens-it"]
+    },
+    "Calendar": {
+      "skip": ["patterns-calendar--a-chosen-day", "patterns-calendar--with-month-and-year-menus"]
+    },
+    "DatePicker": {
+      "skip": [
+        "patterns-date-picker--typed-in-the-locales-order",
+        "patterns-date-picker--the-same-numbers-in-another-locale",
+        "patterns-date-picker--a-date-that-does-not-exist",
+        "patterns-date-picker--typed-in-words",
+        "patterns-date-picker--chosen-from-the-calendar",
+        "patterns-date-picker--down-opens-the-calendar",
+        "patterns-date-picker--a-date-and-a-time",
+        "patterns-date-picker--a-time-on-its-own"
+      ]
+    },
+    "Form": {
+      "skip": [
+        "patterns-form--a-summary-when-it-is-sent",
+        "patterns-form--a-link-moves-focus-to-its-field",
+        "patterns-form--a-link-points-at-its-control",
+        "patterns-form--a-fixed-problem-leaves-the-list",
+        "patterns-form--sent-again-focus-returns",
+        "patterns-form--sent-when-every-field-is-right",
+        "patterns-form--your-own-title",
+        "patterns-form--without-a-summary",
+        "patterns-form--errors-from-a-server",
+        "patterns-form--a-server-error-clears-when-the-value-changes",
+        "patterns-form--errors-that-arrive-late-leave-focus-alone",
+        "patterns-form--with-a-form-library",
+        "patterns-form--written-as-in-shadcns-guide",
+        "patterns-form--in-dark-mode",
+        "patterns-form--follows-comfortable-density",
+        "patterns-form--on-a-phone",
+        "patterns-form--clearing-the-form-hides-the-summary"
+      ]
+    },
+    "Toast": {
+      "cardMode": "single",
+      "primaryStory": "Default",
+      "skip": [
+        "patterns-toast--announced-when-it-appears",
+        "patterns-toast--each-type-has-its-own-mark",
+        "patterns-toast--an-urgent-toast",
+        "patterns-toast--with-an-action",
+        "patterns-toast--f-6-reaches-the-toasts",
+        "patterns-toast--follows-comfortable-density",
+        "patterns-toast--on-a-phone",
+        "patterns-toast--in-dark-mode"
+      ]
+    },
+    "DataTable": {
+      "skip": [
+        "patterns-datatable--sorts-from-the-heading",
+        "patterns-datatable--selects-rows",
+        "patterns-datatable--moves-between-pages",
+        "patterns-datatable--hides-a-column",
+        "patterns-datatable--with-row-actions"
+      ]
+    },
+    "VitalsChart": {
+      "skip": [
+        "patterns-vitals-chart--choose-the-span",
+        "patterns-vitals-chart--show-and-hide-tracks",
+        "patterns-vitals-chart--keyboard",
+        "patterns-vitals-chart--hover-a-value"
+      ]
+    },
+    "TrackChart": {
+      "skip": ["composites-track-chart--hover-a-mark", "composites-track-chart--pointer-time"]
+    }
+  },
+  "readmeHeader": ".design-sync/conventions.md"
+}

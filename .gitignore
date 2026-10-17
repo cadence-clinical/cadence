@@ -47,3 +47,11 @@ __screenshots__
 
 # Local data extracts. Never committed: they can hold real patient information.
 samples/
+
+# Claude Design sync: build output, staged scripts and verification state
+.design-sync/sb-reference/
+.design-sync/learnings/
+.design-sync/.cache/
+.design-sync/node_modules
+.ds-sync/
+ds-bundle/
