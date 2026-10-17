@@ -4,7 +4,7 @@
 
 Cadence is an open source design system for building apps for clinicians and patients.
 
-> **Pre-release.** The packages are not on npm yet and the API will change. Do not use Cadence for patient care.
+> **Pre-release.** The packages are on npm at 0.1, and the API will change before 1.0. Do not use Cadence for patient care.
 
 ## Why Cadence exists
 
@@ -36,8 +36,8 @@ Cadence is a presentation layer. It displays clinical information and does not m
 
 | Route                                        | Who it suits                                            | State             |
 | -------------------------------------------- | ------------------------------------------------------- | ----------------- |
-| Install the `@cadence-clinical/*` packages   | Teams who want versioned, graded components             | Not yet on npm    |
-| Copy components from a shadcn-style registry | Teams who need to own and change the source             | Waits on npm      |
+| Install the `@cadence-clinical/*` packages   | Teams who want versioned, graded components             | On npm            |
+| Copy components from a shadcn-style registry | Teams who need to own and change the source             | Available         |
 | Give a coding agent the Cadence skill        | Anyone building with an agent                           | Planned           |
 | Prototype with clinicians in Claude Design   | Designers and clinicians iterating on a screen together | Planned           |
 | Clone this repository and run it             | Anyone who wants to look today                          | Works – see below |
@@ -63,8 +63,6 @@ Take one row of an observation chart: a heart rate of 130.
 The reasoning behind each rule is in [docs/decisions](docs/decisions/README.md).
 
 ### The API so far
-
-The packages aren't published, so this is the shape of the API and not something you can install today.
 
 Import the styles after Tailwind CSS v4:
 

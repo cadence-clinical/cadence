@@ -31,11 +31,24 @@ cannot merge.
 
 2. When `CI passed` is green, merge it.
 
+3. Publish by hand. CI cannot publish yet, because npm does not accept this repository's OIDC
+   tokens ([npm/cli#9969](https://github.com/npm/cli/issues/9969)), so `NPM_PUBLISH` is `false`.
+   Pull first, so you publish the versions the pull request set:
+
+   ```bash
+   git switch main && git pull
+   npm login
+   pnpm release            # builds the packages, then publishes every version not yet on npm
+   git push --follow-tags  # the tags changeset publish created
+   ```
+
+   If npm holds a version as "validating", wait: it appears once npm's checks finish. When npm
+   accepts the OIDC tokens, set `NPM_PUBLISH` to `true` and merging the pull request publishes.
+
 The pull request is regenerated each time a changeset lands, so approve it when you are ready to
 release, not before.
 
-`core`, `tokens` and `ui` are versioned together, so a Cadence version number means one thing.
-`clinical` joins that group when it is created. `fhir` and the region packages will version
-independently, because they follow the publications they are built from.
+`core`, `tokens`, `ui`, `clinical` and `fhir` are versioned together, so a Cadence version number
+means one thing.
 
 Every package stays below 1.0.0 until the first clinical components have been verified.

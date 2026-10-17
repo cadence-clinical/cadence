@@ -15,13 +15,18 @@
   a visual change is intended, which is the decision the grade lifecycle depends on (see 0004).
 - **Release.** Changesets opens a version pull request, and merging it publishes to npm through
   trusted publishing (OIDC) with provenance, so the repository holds no npm token. `core`,
-  `tokens` and `ui` version together; `fhir` and Region packages will version independently.
+  `tokens`, `ui`, `clinical` and `fhir` version together (the maintainer chose this on
+  2026-09-23, so a Cadence version means one thing); Region packages will version independently.
   All packages stay below 1.0.0 until the first clinical components are verified.
 - **Licence.** MIT, with a clinical-use disclaimer in the README and the docs.
 
-## Not yet switched on
+## Publishing from CI is waiting on npm
 
-Publishing is off until the `cadence-clinical` npm organisation exists and each package lists
-the Release workflow as its trusted publisher. Set the repository variable `NPM_PUBLISH` to
-`true` to switch it on. The Chromatic workflow skips itself until the
-`CHROMATIC_PROJECT_TOKEN` secret exists.
+Updated 2026-10-17: 0.1.0 is on npm, published by the maintainer by hand, and each package lists
+the Release workflow as its trusted publisher. Publishing from CI is still off (`NPM_PUBLISH` is
+`false`), because npm refuses this repository's GitHub OIDC tokens: GitHub gives repositories
+created after 15 July 2026 an ID-based token subject, and npm's trusted publishing matches only
+the older `repo:owner/name` form ([npm/cli#9969](https://github.com/npm/cli/issues/9969)).
+Until npm accepts it, the maintainer publishes each release by hand, as `.changeset/README.md`
+describes, and the repository still holds no npm token. When npm does, set `NPM_PUBLISH` to
+`true`.
