@@ -1,6 +1,6 @@
 {
   "name": "@cadence-clinical/core",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Framework-free foundations for Cadence Clinical: the Region contract, view-model types and the component grade schema.",
   "license": "MIT",
   "repository": {
