@@ -5,19 +5,43 @@ description: How Cadence records how far each component has been verified.
 
 Every Cadence component carries a grade that tells you how far it has been verified. The grade is published with the package, shown on the component's documentation page and available to coding agents.
 
-<Callout type="warn" title="Provisional">
-  The grading matrix is still being designed. The level names and the criteria for each level will
-  change. The two rules under [What a grade applies to](#what-a-grade-applies-to) are settled.
-</Callout>
+No component is above Tested yet.
 
 ## Levels
 
-| Level                  | Meaning                                                                            |
-| ---------------------- | ---------------------------------------------------------------------------------- |
-| Draft                  | In development. No guarantees.                                                     |
-| Tested                 | Passes its interaction tests and automated accessibility checks in a real browser. |
-| Verified by clinicians | Reviewed by practising clinicians against a recorded protocol.                     |
-| Used in production     | In use in a live clinical system.                                                  |
+Each level includes everything the levels below it require.
+
+| Level              | Meaning                                                                                                    |
+| ------------------ | ---------------------------------------------------------------------------------------------------------- |
+| Draft              | In development. No guarantees.                                                                             |
+| Tested             | Passes its interaction tests and automated accessibility checks in Chromium and WebKit.                    |
+| Usability tested   | Practising clinicians have worked through a scenario script with it, including with a screen reader.       |
+| Safety assessed    | Every way it could be misread has been recorded as a hazard, with what prevents it or a stated limitation. |
+| Used in production | The graded version is in use in a live clinical system.                                                    |
+
+### Tested
+
+Every story runs as a test in Chromium and WebKit, checks its interactions, and fails on any automated accessibility violation. A person also checks it with the keyboard. Continuous integration checks this level on every change, so a component reaches Tested without a review record.
+
+### Usability tested
+
+At least two practising clinicians, in a discipline that would use the component, work through a written scenario script for it. The script covers what the component is for: reading a value, noticing a change, finding what is missing, and its empty, loading and error states. One run of the script uses VoiceOver and one uses NVDA. The record lists every finding, and any finding that could cause a misreading is resolved before the grade is given.
+
+### Safety assessed
+
+Each way the component could be misread or misused has a hazard record: what happens, what it could lead to, and what prevents it. The prevention is in the component, in a test, or in its guidance as a stated limitation. At least two practising clinicians review the hazard records. A safety assessment of a component is not a safety case for your product. Your product still needs its own.
+
+### Used in production
+
+A record states which version is in use in a live clinical system, since when, and who confirms it.
+
+## Who verifies
+
+A reviewer is a registered, practising clinician in a discipline that would use the component. The component's author may be one of the reviewers, as long as at least one other clinician also reviews it.
+
+## Grades and the components inside them
+
+A component's grade can be higher than the grades of the components it is built from. Reviewing the [Vitals chart](/docs/components/vitals-chart) exercises the [Track chart](/docs/components/track-chart) as the Vitals chart uses it, so that grade applies to that composition only. The Track chart keeps its own grade.
 
 ## What a grade applies to
 

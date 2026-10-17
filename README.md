@@ -14,7 +14,7 @@ A systematic review led from Macquarie University found that poor user interface
 
 Clinicians carry that cost as cognitive load. Patients carry it as harm.
 
-Cadence works on this in two ways. The first is an open source, accessible design system that clinicians can review. Each component carries a grade that records how far it has been verified – automated tests, review by practising clinicians, use in production – so "clinician-verified" is a claim you can check against a version and an evidence record. No component has reached the clinician-verified grade yet, and the review process is still being designed.
+Cadence works on this in two ways. The first is an open source, accessible design system that clinicians can review. Each component carries a grade that records how far it has been verified – automated tests, usability testing and hazard review with practising clinicians, use in production – so "usability tested" or "safety assessed" is a claim you can check against a version and an evidence record. No component is above tested yet.
 
 The second is preparing for agentic use. We expect more clinical software to be written by coding agents, often with a clinician in the room steering a prototype. An agent with no design system invents a new one on every screen. Cadence gives an agent the same constraints it gives a person: documentation served as markdown, grades it can read, and lint rules that keep regional rule sets and FHIR types out of components.
 
@@ -58,7 +58,7 @@ Take one row of an observation chart: a heart rate of 130.
 
 **Regional conventions are supplied, not built in.** Units, date formats, labels and published rule sets come from a `Region` object. Cadence is Australia-first, and a deployment in another health system swaps the Region and keeps the components. A state variant extends the national Region and states only what differs.
 
-**Every component carries a grade.** A grade above tested names the version that was reviewed and points at the evidence. A change to how the component looks or behaves sends it back to tested until it is reviewed again. The grading matrix is still being designed, so the level names are provisional.
+**Every component carries a grade.** A grade above tested names the version that was reviewed and points at the evidence. A change to how the component looks or behaves sends it back to tested until it is reviewed again. Clinicians verify a component in two steps: usability testing against a scenario script, then a hazard review.
 
 The reasoning behind each rule is in [docs/decisions](docs/decisions/README.md).
 
@@ -98,22 +98,21 @@ const css = generateAccentCss("brand", accent);
 
 ### Status
 
-| Package                      | What it does                                                                      | State                           |
-| ---------------------------- | --------------------------------------------------------------------------------- | ------------------------------- |
-| `@cadence-clinical/ui`       | Components on [Base UI](https://base-ui.com) and Tailwind CSS                     | 40 built, all graded tested     |
-| `@cadence-clinical/tokens`   | Colour modes, contrast, density, accents and the accent validator                 | Working                         |
-| `@cadence-clinical/core`     | The `Region` contract, the observation view model and the grade schema. No React. | First cut                       |
-| `@cadence-clinical/clinical` | Clinical components: vital signs, observation chart and others                    | First: Observation table, draft |
-| `@cadence-clinical/fhir`     | Turns verbose FHIR R4 resources into the concise props components take            | First cut: Observations         |
-| `@cadence-clinical/au`       | Australian conventions and cited clinical rule sets, as a Region                  | Planned                         |
+| Package                      | What it does                                                                      | State                                            |
+| ---------------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------ |
+| `@cadence-clinical/ui`       | Components on [Base UI](https://base-ui.com) and Tailwind CSS                     | 40 built, all graded tested                      |
+| `@cadence-clinical/tokens`   | Colour modes, contrast, density, accents and the accent validator                 | Working                                          |
+| `@cadence-clinical/core`     | The `Region` contract, the observation view model and the grade schema. No React. | First cut                                        |
+| `@cadence-clinical/clinical` | Clinical components: vital signs, observation chart and others                    | Observation table, Vitals chart, Medication card |
+| `@cadence-clinical/fhir`     | Turns verbose FHIR R4 resources into the concise props components take            | First cut: Observations                          |
+| `@cadence-clinical/au`       | Australian conventions and cited clinical rule sets, as a Region                  | Planned                                          |
 
 What comes next, in order:
 
-1. The rest of the primitives, one at a time.
-2. The grading matrix: what each level requires and who can verify.
-3. Clinical components, each built with the FHIR transform that feeds it.
-4. Australian rule sets, with Victoria as the first state variant.
-5. Screens and example apps, the agent skill and the Claude Design bundle.
+1. Clinical components, each built with the FHIR transform that feeds it.
+2. Usability testing and hazard review of the clinical components with practising clinicians.
+3. Australian rule sets, with Victoria as the first state variant.
+4. Screens and example apps, the agent skill and the Claude Design bundle.
 
 The documentation is at [www.cadenceclinical.dev](https://www.cadenceclinical.dev). Its source is in `apps/site`.
 

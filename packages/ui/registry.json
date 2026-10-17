@@ -1008,7 +1008,7 @@
         "level": "composite",
         "domain": "general",
         "grade": {
-          "level": "draft"
+          "level": "tested"
         }
       }
     }

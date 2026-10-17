@@ -1,14 +1,27 @@
 /**
- * Component grades. PROVISIONAL: the grading matrix has not been designed yet, so the level
- * names and their criteria will change. What is settled (docs/decisions/0004-component-grading.md):
+ * Component grades (docs/decisions/0004-component-grading.md). Each level includes the ones
+ * below it.
  *
- * - A grade above "tested" is a claim about one specific version. It names that version and
- *   points at the evidence. A visual or behavioural change drops the component back to "tested".
- * - A copy installed from the registry and then edited carries no grade.
+ * - "tested": interaction and axe tests pass in Chromium and WebKit. CI checks it.
+ * - "usability-tested": practising clinicians worked through a scenario script, with a screen
+ *   reader pass, and every finding that could cause a misreading is resolved.
+ * - "safety-assessed": each way the component could be misread has a hazard record and a
+ *   mitigation.
+ * - "in-production": the version is in use in a live clinical system.
+ *
+ * A grade above "tested" is a claim about one specific version. It names that version and
+ * points at the evidence. A visual or behavioural change drops the component back to "tested".
+ * A copy installed from the registry and then edited carries no grade.
  */
 
-/** The grade levels, lowest first. Provisional until the grading matrix is agreed. */
-export const GRADE_LEVELS = ["draft", "tested", "clinician-verified", "in-production"] as const;
+/** The grade levels, lowest first. */
+export const GRADE_LEVELS = [
+  "draft",
+  "tested",
+  "usability-tested",
+  "safety-assessed",
+  "in-production",
+] as const;
 
 /** How far a component has been verified. */
 export type GradeLevel = (typeof GRADE_LEVELS)[number];

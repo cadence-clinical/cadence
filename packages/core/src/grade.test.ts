@@ -6,7 +6,8 @@ describe("compareGrades", () => {
   // The sign is the contract: -1 below, 0 equal, 1 above.
   it.each<[GradeLevel, GradeLevel, -1 | 0 | 1]>([
     ["draft", "tested", -1],
-    ["in-production", "clinician-verified", 1],
+    ["in-production", "safety-assessed", 1],
+    ["usability-tested", "safety-assessed", -1],
     ["tested", "tested", 0],
   ])("ranks %s against %s with the sign %i", (a, b, sign) => {
     expect(Math.sign(compareGrades(a, b))).toBe(sign);
@@ -17,16 +18,16 @@ describe("validateGrade", () => {
   it.each<[string, ComponentGrade, number]>([
     ["draft without a version or evidence", { level: "draft" }, 0],
     ["tested without a version or evidence", { level: "tested" }, 0],
-    ["clinician-verified without a version or evidence", { level: "clinician-verified" }, 2],
+    ["usability-tested without a version or evidence", { level: "usability-tested" }, 2],
     [
-      "clinician-verified with a version and no evidence",
-      { level: "clinician-verified", version: "0.3.0" },
+      "usability-tested with a version and no evidence",
+      { level: "usability-tested", version: "0.3.0" },
       1,
     ],
     [
-      "clinician-verified with a version and evidence",
+      "usability-tested with a version and evidence",
       {
-        level: "clinician-verified",
+        level: "usability-tested",
         version: "0.3.0",
         evidence: ["docs/evidence/vital-signs/2026-10-01.md"],
       },

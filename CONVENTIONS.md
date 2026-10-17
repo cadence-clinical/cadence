@@ -92,7 +92,7 @@ A rule a tool can enforce is enforced by the tool. This file records the rest, a
 - **Targets are at least 24px, and 44px when comfortable.** `test`
 - **Content reflows at 320px wide** with no sideways scroll. The smoke tests check the website at phone width; components at 320px are `review`.
 - **Honour `prefers-reduced-motion`, `prefers-contrast` and `forced-colors`.** `review`
-- **axe runs on every story and a violation fails the build.** Automated checks find only some problems, so a keyboard pass is part of done. A screen reader pass is not yet a condition of any grade; the grading matrix will revisit it. `test` and `review`
+- **axe runs on every story and a violation fails the build.** Automated checks find only some problems, so a keyboard pass is part of done. A screen reader pass, with VoiceOver and NVDA, is a condition of the usability-tested grade. `test` and `review`
 
 ## 7. Clinical data
 
