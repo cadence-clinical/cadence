@@ -44,6 +44,9 @@ Run `pnpm check` and `pnpm test:browser` before you say a change is done.
 
 - **No clinical thresholds or scoring in components.** A component displays the interpretation
   it is given. Rule sets belong in a Region package, with a citation.
+- **AI-drafted content is always marked and linked to its source**, in the draft, after review and
+  in the signed record. A component displays the provenance it is given and never infers it. See
+  `docs/decisions/0017-ai-provenance.md`.
 - **Never state a clinical value from memory**, in code, docs or fixtures. It needs its published
   source, checked.
 - **`ui` and `clinical` never import a Region package or FHIR types.** `core`, `tokens`, `fhir`

@@ -101,6 +101,7 @@ A rule a tool can enforce is enforced by the tool. This file records the rest, a
 - **Never parse a display string back into a number**, and never round for display without a documented rule per analyte. Comparators such as `<0.5` survive every transform. `test`
 - **Time is ISO 8601 with an offset in data, and formatted with an explicit time zone for display.** Components never call `new Date()` for the current time: it is passed in. `review`
 - **Converted values keep their original value and unit.** Unknown analytes and units pass through flagged. `test`
+- **AI-drafted content is always marked and linked to its source**: in the draft, after review and in the signed record, never by colour alone. A statement with no source is shown as having none. Components display the provenance they are given (decision 0017). `review`
 - **A clinical value, threshold or rule is never written from memory.** It needs its published source, checked, and the citation lives beside it. Medicines display follows the [national on-screen display guidelines](https://www.safetyandquality.gov.au/resources/national-guidelines-screen-display-medicines-information). `review`
 
 ## 8. Testing
