@@ -12,3 +12,6 @@ packages/tokens/registry.json
 .claude/skills
 skills-lock.json
 CHANGELOG.md
+# Converter modules copied from the design-sync skill. Their bytes are part of the sync's
+# verification key, so formatting them would force a full re-verify.
+.design-sync/overrides
