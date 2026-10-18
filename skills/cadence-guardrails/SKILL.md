@@ -63,3 +63,8 @@ the maintainer's words.
    it doesn't decide how a product would store, host or integrate its data. Where a design depends
    on such a question, record it as an assumption for whoever builds the product, and design for
    the answer either way.
+
+   Technology is researched only far enough to know a design is feasible: "we do not need to
+   concern ourselves with editors libraries etc. just only research enough to see if it's
+   technical feasible". Don't choose libraries, servers or sync engines for a product, and don't
+   let a library's limits shape a design unless they make it infeasible.
