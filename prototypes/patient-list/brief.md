@@ -122,6 +122,12 @@ phone support is useful for fast moving ward rounds and to reference on the go".
 - **Round 1, Q3 (audits and searches):** quoted under "Kinds of list".
 - **Round 1, Q4 (what is shared live):** the list's jobs, comments and marks are "independent of
   Oracle as not actual medical records". (A7)
+- **Round 5 (from the flows):** an unregistered patient can be "an 'expect' which will be a
+  'contained' patient on the list - a placeholder that needs a UR + encounter attached"; "Someone
+  needs to own and close/decline that referral", and referrals arrive "directly manually entered or
+  via a separate referral system that we can query an API for basic details"; "my jobs" is a
+  filter, "via a segmented control or combobox"; the after-hours team "can add jobs, complete jobs,
+  adjust as necessary".
 - **Round 4:** shift handover, quoted under "Shift handover to the after-hours team", and the end of
   a patient's lifecycle, under "Out of scope".
 - **Round 3:** devices, flags and audit lists as the defaults offered; personal lists; and shift
