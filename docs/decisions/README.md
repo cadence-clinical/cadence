@@ -23,5 +23,8 @@ supersedes an earlier one.
 | [0015](0015-charts.md)                  | Cadence draws its charts in SVG, on d3-scale                                       | Accepted                              |
 | [0016](0016-fhir-transforms.md)         | FHIR transforms are written by hand, and a schema interprets outside the component | Accepted                              |
 | [0017](0017-ai-provenance.md)           | AI-drafted content is always marked and linked to its source                       | Accepted                              |
+| [0018](0018-real-time-collaboration.md) | The example apps sync in real time, on Yjs                                         | Accepted                              |
+| [0019](0019-synthetic-ward-data.md)     | Synthetic ward data is adapted from Synthea, within what Oracle Health serves      | Accepted                              |
+| [0020](0020-document-editor.md)         | The Document editor is built on Tiptap, with Cadence's own toolbar                 | Proposed                              |
 
 To add a record, copy the structure of an existing one, take the next number and add a row here.

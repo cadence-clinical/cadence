@@ -17,7 +17,7 @@ Text that an AI drafted is always marked as AI-drafted wherever Cadence shows it
 
 Each drafted statement links to the source it was drawn from, such as a note, a result or an observation, so a reviewer can check it. A statement with no source is shown as having none.
 
-A component displays the provenance you give it and never infers it, in the same way that it displays an interpretation and never makes one. You supply which text was drafted and what its sources are. In FHIR, that comes from `Provenance` resources. Cadence has no component that displays provenance yet.
+A component displays the provenance you give it and never infers it, in the same way that it displays an interpretation and never makes one. You supply which text was drafted and what its sources are. In FHIR, a `Provenance` resource can carry it, but not every clinical system records it there, so your app may need to hold it. Cadence has no component that displays provenance yet.
 
 ## Regional rule sets are opt-in and cited
 

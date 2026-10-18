@@ -22,8 +22,9 @@ evidence only if they can find that evidence.
    none. It is neither hidden nor presented as sourced.
 3. **Components display the provenance they are given and never infer it**, as they display an
    interpretation and never make one (0002). Whether text was drafted by an AI, and what its
-   sources are, arrive as data. In FHIR they come from `Provenance` resources, which name the
-   agent and the entities a record was derived from.
+   sources are, arrive as data. In FHIR, a `Provenance` resource can carry them where the source
+   system records it. Where it doesn't, as with Oracle Health's documented API (0019), the app
+   records them itself.
 4. **The rule covers everything Cadence publishes**: its components, stories, example apps,
    skills and documentation. Software built with Cadence supplies the provenance its components
    display.
@@ -33,7 +34,7 @@ evidence only if they can find that evidence.
 - The AI provenance and Section review components proposed in [docs/components.md](../components.md)
   show the mark and record each review, and Diff view shows what a reviewer changed.
 - The `fhir` package will need a transform for `Provenance`, and the synthetic ward data needs
-  provenance for every drafted section.
+  provenance for every drafted section, held as app data where the source system can't record it.
 - A summary that loses its mark or its sources when it is exported, printed or copied breaks the
   rule, so exports carry both.
 - The guardrails skill states the rule, and so does the conventions header that the next Claude
