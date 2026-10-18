@@ -33,6 +33,11 @@ them.
 - **Record answers as given.** Quote the maintainer's words where they carry the meaning, and
   keep their uncertainty ("probably", "for now"). A paraphrase that sounds firmer than the answer
   turns a guess into a requirement.
+- **When an answer opens a new area, capture it, then ask about it next round.** Answers often add
+  a flow or a role nobody asked about (on the patient list, a referral flow arrived with the answer
+  about "done"). Write it into the brief straight away with the maintainer's words, and put its
+  questions in the next round, rather than chasing it mid-round or leaving it until it surfaces
+  in a prototype.
 - **Every claim has a status.** In the artefacts, a statement is either confirmed (by whom,
   when), an assumption (open until someone confirms it) or a question. Nothing sits in between.
 - **A new rule goes to the guardrails.** When the maintainer states a rule that would hold for
