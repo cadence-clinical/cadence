@@ -27,6 +27,13 @@ _Round 1 asks._
 
 _Not yet discussed._
 
+## Answers so far
+
+- **What defines a list (round 1, Q2):** "we will manage the list independently of oracle". (A6)
+- **What is shared live (round 1, Q4):** the list's jobs, comments and marks are "independent of
+  Oracle as not actual medical records". (A7)
+
 ## Open questions
 
-See round 1.
+Round 1, questions 1, 3 and 5: who uses it and edits during a round, what audits and searches
+mean, and what done looks like.

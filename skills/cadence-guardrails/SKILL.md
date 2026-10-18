@@ -42,12 +42,24 @@ offer a design that keeps it. A rule changes only when the maintainer changes it
 
 7. **Synthetic data only.** No real patient information anywhere: not in prototypes, fixtures,
    screenshots or examples. Identifiers must look obviously fake.
-8. **Data comes from FHIR R4**, shaped by what the resources can actually carry. A design that
-   needs a field no resource holds is a finding to raise, not a field to invent.
+8. **Clinical data comes from FHIR R4**, shaped by what a real system serves: Cadence's
+   reference is Oracle Health's Millennium FHIR R4 APIs (`docs/research/oracle-millennium-fhir-r4.md`
+   in the Cadence repository). A design that shows a clinical field no resource holds is a finding
+   to raise, not a field to invent. Data that isn't a medical record, such as a list's membership
+   or a ward round's jobs and comments, belongs to the app and is designed freely.
 
 ## The maintainer's rules
 
 Rules the maintainer adds as they come up. Each records the date and, where given, the reason in
 the maintainer's words.
 
-_None yet._
+9. **Cadence designs the interface and the flows, not the solution.** (2026-10-18) "This is a
+   design (UI/UX/system) repo, we are not building the solution, but trying to create the best UI
+   and flows possible." And: "the outputs of this repo will only be UI/UX/flows/prototypes to
+   demonstrate (not actually connected to anything, but merely show how it could work). the goal
+   is to rapidly create consistent prototypes and flows to validate ideas with users." So a
+   prototype shows how the work could look, feel and behave, including every state it must
+   handle, using synthetic data and simulated behaviour. It never connects to a real system, and
+   it doesn't decide how a product would store, host or integrate its data. Where a design depends
+   on such a question, record it as an assumption for whoever builds the product, and design for
+   the answer either way.

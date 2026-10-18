@@ -9,16 +9,22 @@ description: The shared process for prototyping a clinical feature with Cadence 
 > we actually work; change it when we find a better way, and note the change in the feature's
 > `iterations.md`.
 
-The aim is a prototype the team can trust, and a record of why it looks the way it does. A
-prototype built on an unchecked assumption looks just as convincing as one built on a checked
-fact, so this process keeps every assumption, requirement and decision visible, and gets each one
-confirmed by the person who can confirm it.
+The aim is to rapidly create consistent prototypes and flows that validate ideas with users. A
+prototype demonstrates how the work could look and behave: it uses synthetic data and simulated
+behaviour, and connects to nothing. Consistency comes from running every feature through the same
+stages and leaving the same artefacts, so prototypes from different features can be compared and
+trusted. A prototype built on an unchecked assumption looks just as convincing as one built on a
+checked fact, so this process keeps every assumption, requirement and decision visible, and gets
+each one confirmed by the person who can confirm it.
 
 **Load `cadence-guardrails` first.** Its rules hold at every stage, and a critique checks against
 them.
 
 ## How we work
 
+- **Design the interface and the flows, not the solution.** The goal is the best possible UI and
+  flow, demonstrated, not connected. Questions about storage, hosting or integration become
+  assumptions for whoever builds the product, never design work (guardrail 9).
 - **The maintainer decides; you propose.** Bring a recommendation with its reason, and the
   maintainer confirms, corrects or rejects it. Don't present your guesses as requirements.
 - **Ask in rounds.** Up to five questions a round, each with why it matters and the default you'd
