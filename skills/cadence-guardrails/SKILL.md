@@ -23,7 +23,9 @@ offer a design that keeps it. A rule changes only when the maintainer changes it
 2. **AI-drafted content is always marked and linked to its source**: in the draft, after a
    clinician accepts or edits it, and in the signed record. The mark says what drafted the text
    and, once reviewed, who reviewed it. Each drafted statement links to the note, result or
-   observation it came from. A statement with no source is shown as having none. Fluent drafted
+   observation it came from. A statement with no source is shown as having none. A note that began as an AI
+   draft stays marked after a clinician confirms it and it enters the record: "it should remain
+   marked for transparency and auditing" (maintainer, 2026-10-18). Fluent drafted
    text looks as authoritative as text a clinician checked, and a reviewer can only check what
    they can trace.
 3. **Never state a clinical value from memory.** A threshold, reference interval, dose
@@ -68,3 +70,9 @@ the maintainer's words.
    concern ourselves with editors libraries etc. just only research enough to see if it's
    technical feasible". Don't choose libraries, servers or sync engines for a product, and don't
    let a library's limits shape a design unless they make it infeasible.
+
+10. **Every screen identifies a patient the same way.** (2026-10-18) "first last name, age and
+    gender (DOB on mouse over), if there are similar patients on the list, they should be
+    indicated in some way, plus URN". The date of birth must also appear on keyboard focus and on
+    tap, so it never depends on a mouse. Showing too little invites the wrong patient being
+    chosen, and two similar patients side by side are where that happens.
