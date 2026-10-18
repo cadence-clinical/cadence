@@ -23,8 +23,7 @@ the reference for which resources and fields a real system serves.
      standalone `PractitionerRole` or `Medication`, none of which Oracle exposes;
    - notes are a `DocumentReference` whose content is a `Binary`;
    - locations run facility, building, nursing unit, room, bed, linked by `partOf`;
-   - codes are given twice where Oracle gives a standard and a proprietary coding;
-   - medication administrations are read-only, and writes are limited to what Oracle accepts.
+   - codes are given twice where Oracle gives a standard and a proprietary coding.
 3. **Data a feature needs that Oracle doesn't serve is app data, kept apart.** A patient list's
    membership, the jobs and comments of a ward round, and whether text was drafted by an AI have
    no home in Oracle's APIs. The dataset ships them separately and labels them as data the app

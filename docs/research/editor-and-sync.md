@@ -1,4 +1,4 @@
-<!-- Research for decisions 0018 and 0020, 2026-10-18. Facts cite their source or were measured as described; judgement is labelled as such. Versions and prices change: re-check before relying on them. -->
+<!-- Feasibility research for decision 0018, 2026-10-18. Cadence doesn't choose an editor library or a sync technology: this report shows that a real product could build rich-text editing with section review and live collaboration with mature, open-source tools. Its recommendations are one reasonable route, not a Cadence decision. Facts cite their source or were measured as described; versions and prices change. -->
 
 # Rich-text editor and real-time sync for the Document editor and the example apps
 
