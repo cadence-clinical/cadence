@@ -4,20 +4,19 @@ Status: complete for stage 1, awaiting the maintainer's read (2026-10-18)
 
 ## In the maintainer's words
 
-> patient list (collaborative, real time) used for ward rounds, audits, searches
+> patient list (collaborative, real time) used for ward rounds, handovers, audits, searches
 
-From the distribution plan, 2026-10-17. On 2026-10-18 the maintainer decided the example app has a
-working real-time sync layer, not only the presence and change states.
+The patient list should have a real-time sync layer, not only the presence and change states for clinical collaboration
 
 ## Who uses it
 
-| Role                              | Setting                                          | What they need from it                                                                                         |
-| --------------------------------- | ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------- |
-| Interns, residents and registrars | Ward rounds, the working day                     | The patients they're responsible for, what's outstanding, and jobs to do and complete. "predominantly doctors" |
-| Admitting registrar               | Taking a referral call from ED or another source | To place the referred patient on the unit's list with the reason, a clinical summary and an initial plan       |
-| Consultants                       | Overseeing their team's patients                 | Oversight of the team's list ("consultants oversee")                                                           |
-| Head of unit                      | Running the unit                                 | "a view of the patient mix, acuity, and be able to distribute workflow effectively" across teams               |
-| Nurses and allied health          | Planning care and recording progress             | Use the list's outputs: "nurses/AH will often use outputs for planning, progress"                              |
+| Persona                           | Setting                                          | What they need from it                                                                                                                         |
+| --------------------------------- | ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| Interns, residents and registrars | Ward rounds, the working day                     | The patients they're responsible for, what's outstanding, and jobs to do and complete.                                                         |
+| Admitting registrar               | Taking a referral call from ED or another source | To place the referred patient on the unit's list with the reason, a clinical summary and an initial plan                                       |
+| Consultants                       | Overseeing their team's patients                 | Oversight of the team's list ("consultants oversee")                                                                                           |
+| Head of unit                      | Running the unit                                 | "a view of the patient mix, acuity, and be able to distribute workflow effectively" across teams. Also to run audits/quality and safety checks |
+| Nurses and allied health          | Planning care and recording progress             | Use the list's outputs: "nurses/AH will often use outputs for planning, progress"                                                              |
 
 ## Kinds of list
 
@@ -36,7 +35,7 @@ working real-time sync layer, not only the presence and change states.
 
 - **The referral.** The admitting registrar records the source, referring clinician, urgency,
   reason, clinical summary and initial plan. A referral is received, then accepted and assigned to
-  a team, or declined with a reason. (Round 2, Q1: "yes that correct")
+  a team, or declined with a reason.
 - **Assignment.** "either consultant, clinicial nurse and rarely admitting registrar" assign a
   patient to a team.
 - **Transfer.** "receiving team should accept to add to their team list and this also closes the
@@ -67,7 +66,7 @@ important, have jobs etc. and ideally carry over the day team's synopsis and pro
   from "deterioration in clinical status/vitals or eventually an AI model in the background". To be
   refined "with further discovery".
 - **Handing back in the morning.** "handover in the same way; the day team marks as read/ack
-  rather than 'accepts' - they are there patients, so can't refuse (don't hard code this tho)".
+  rather than 'accepts' - they are there patients, so can't refuse (don't hard code this though)".
   Whether a handover is accepted or acknowledged is a setting, not a fixed rule.
 
 ## On a ward round
@@ -91,6 +90,7 @@ important, have jobs etc. and ideally carry over the day team's synopsis and pro
 - On a ward round, each patient is marked complete: "yes patients will be marked as complete".
 - Work is tracked in a job list: "we will have a task management/job list, potential for
   assignment".
+- When an active patient has discharged, and all pending jobs are complete, the patient can be suggested to the team to be removed (not automatic by default)
 
 ## Devices and density
 
