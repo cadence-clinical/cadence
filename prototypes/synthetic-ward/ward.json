@@ -1,0 +1,1938 @@
+{
+  "about": "A small, hand-made synthetic ward for prototyping the patient list and later features. Every person, identifier, time and value is invented and is not clinical advice. Shape follows decision 0019; a Synthea-based generator replaces it later.",
+  "now": "2026-10-19T08:00:00+11:00",
+  "timeZone": "Australia/Melbourne",
+  "sources": {
+    "fhir": [
+      "urn",
+      "firstName",
+      "lastName",
+      "age",
+      "gender",
+      "birthDate",
+      "bed",
+      "admittedAt",
+      "conditions",
+      "latestObservations",
+      "latestResults",
+      "medicines",
+      "leftHospital"
+    ],
+    "app": [
+      "listState",
+      "team",
+      "workingProblem",
+      "referral",
+      "acuity",
+      "flags",
+      "jobs",
+      "comments",
+      "seenToday",
+      "overnight",
+      "expected",
+      "history"
+    ],
+    "supplied": ["deterioration"]
+  },
+  "unit": {
+    "id": "gen-med",
+    "name": "General Medicine"
+  },
+  "teams": [
+    {
+      "id": "team-a",
+      "name": "General Medicine A",
+      "consultant": "Dr Priya Raman",
+      "registrar": "Dr Tom Ellis",
+      "residents": ["Dr Mei Chen"],
+      "interns": ["Dr Josh Ward"]
+    },
+    {
+      "id": "team-b",
+      "name": "General Medicine B",
+      "consultant": "Dr Helen Brooks",
+      "registrar": "Dr Ravi Patel",
+      "residents": ["Dr Sophie Lane"],
+      "interns": ["Dr Liam Ortiz"]
+    },
+    {
+      "id": "team-c",
+      "name": "General Medicine C",
+      "consultant": "Dr Samuel Okafor",
+      "registrar": "Dr Grace Kim",
+      "residents": ["Dr Ben Hollis"],
+      "interns": ["Dr Ava Russo"]
+    }
+  ],
+  "afterHours": {
+    "id": "after-hours",
+    "name": "General Medicine after hours",
+    "registrar": "Dr Nadia Haddad",
+    "resident": "Dr Owen Price"
+  },
+  "nurses": [
+    "RN Kate Morgan (nurse unit manager)",
+    "RN Daniel Reyes (clinical nurse)",
+    "RN Aisha Malik"
+  ],
+  "flagsDefined": {
+    "unit": [
+      "For discharge",
+      "Isolation",
+      "Falls precautions",
+      "Awaiting placement",
+      "Review overnight"
+    ],
+    "team-a": ["Family meeting"],
+    "team-b": ["Awaiting imaging"],
+    "team-c": ["Procedure today"]
+  },
+  "patients": [
+    {
+      "id": "patient-01",
+      "urn": "SYN-100201",
+      "listState": "on-team",
+      "seenToday": false,
+      "flags": ["Falls precautions"],
+      "jobs": [
+        {
+          "id": "job-1",
+          "text": "Chase sputum culture",
+          "assignee": "Dr Josh Ward",
+          "createdBy": "Dr Josh Ward",
+          "status": "open",
+          "due": null,
+          "completableBy": ["doctor"]
+        },
+        {
+          "id": "job-2",
+          "text": "Repeat chest X-ray tomorrow",
+          "assignee": "team-a",
+          "createdBy": "Dr Josh Ward",
+          "status": "open",
+          "due": "2026-10-19T21:00:00.000Z",
+          "completableBy": ["doctor"]
+        }
+      ],
+      "comments": [],
+      "history": [],
+      "firstName": "Margaret",
+      "lastName": "Holloway",
+      "age": 84,
+      "gender": "female",
+      "birthDate": "1942-03-11",
+      "bed": {
+        "facility": "Synthetic General Hospital",
+        "ward": "4 North",
+        "room": "401",
+        "bed": "A"
+      },
+      "admittedAt": "2026-10-14T21:00:00.000Z",
+      "team": "team-a",
+      "workingProblem": "Community-acquired pneumonia",
+      "conditions": ["Pneumonia", "Atrial fibrillation"],
+      "acuity": {
+        "level": "medium",
+        "scale": "placeholder: high, medium, low",
+        "setBy": "Dr Tom Ellis",
+        "setAt": "2026-10-18T01:00:00.000Z"
+      },
+      "latestObservations": {
+        "at": "2026-10-18T19:00:00.000Z",
+        "values": [
+          {
+            "code": "respiratory rate",
+            "value": 20,
+            "unit": "/min"
+          },
+          {
+            "code": "heart rate",
+            "value": 92,
+            "unit": "/min"
+          },
+          {
+            "code": "blood pressure",
+            "value": "128/74",
+            "unit": "mm[Hg]"
+          },
+          {
+            "code": "oxygen saturation",
+            "value": 94,
+            "unit": "%"
+          },
+          {
+            "code": "body temperature",
+            "value": 37.6,
+            "unit": "Cel"
+          }
+        ]
+      },
+      "medicines": ["ceftriaxone", "apixaban"]
+    },
+    {
+      "id": "patient-02",
+      "urn": "SYN-100202",
+      "listState": "on-team",
+      "seenToday": false,
+      "flags": [],
+      "jobs": [
+        {
+          "id": "job-3",
+          "text": "Mark cellulitis margin and photograph",
+          "assignee": "RN Aisha Malik",
+          "createdBy": "Dr Mei Chen",
+          "status": "open",
+          "due": null,
+          "completableBy": ["doctor", "nurse"]
+        }
+      ],
+      "comments": [],
+      "history": [],
+      "firstName": "Chris",
+      "lastName": "Taylor",
+      "age": 67,
+      "gender": "male",
+      "birthDate": "1959-08-02",
+      "bed": {
+        "facility": "Synthetic General Hospital",
+        "ward": "4 North",
+        "room": "401",
+        "bed": "B"
+      },
+      "admittedAt": "2026-10-16T19:00:00.000Z",
+      "team": "team-a",
+      "workingProblem": "Cellulitis, left leg",
+      "conditions": ["Cellulitis", "Type 2 diabetes"],
+      "acuity": {
+        "level": "low",
+        "scale": "placeholder: high, medium, low",
+        "setBy": "Dr Tom Ellis",
+        "setAt": "2026-10-17T19:00:00.000Z"
+      },
+      "similarTo": ["patient-03"],
+      "latestObservations": {
+        "at": "2026-10-18T18:00:00.000Z",
+        "values": [
+          {
+            "code": "respiratory rate",
+            "value": 16,
+            "unit": "/min"
+          },
+          {
+            "code": "heart rate",
+            "value": 78,
+            "unit": "/min"
+          },
+          {
+            "code": "blood pressure",
+            "value": "136/82",
+            "unit": "mm[Hg]"
+          },
+          {
+            "code": "oxygen saturation",
+            "value": 98,
+            "unit": "%"
+          },
+          {
+            "code": "body temperature",
+            "value": 37.1,
+            "unit": "Cel"
+          }
+        ]
+      },
+      "medicines": ["cefazolin", "metformin"]
+    },
+    {
+      "id": "patient-03",
+      "urn": "SYN-100203",
+      "listState": "on-team",
+      "seenToday": false,
+      "flags": ["Falls precautions", "Family meeting"],
+      "jobs": [
+        {
+          "id": "job-4",
+          "text": "Collateral history from daughter",
+          "assignee": "Dr Mei Chen",
+          "createdBy": "Dr Josh Ward",
+          "status": "open",
+          "due": null,
+          "completableBy": ["doctor"]
+        },
+        {
+          "id": "job-5",
+          "text": "Urine microscopy and culture",
+          "assignee": "Dr Josh Ward",
+          "createdBy": "Dr Josh Ward",
+          "status": "done",
+          "due": null,
+          "completableBy": ["doctor"],
+          "completedBy": "Dr Josh Ward",
+          "completedAt": "2026-10-18T17:00:00.000Z"
+        }
+      ],
+      "comments": [],
+      "history": [],
+      "firstName": "Kris",
+      "lastName": "Taylor",
+      "age": 71,
+      "gender": "female",
+      "birthDate": "1955-01-19",
+      "bed": {
+        "facility": "Synthetic General Hospital",
+        "ward": "4 North",
+        "room": "402",
+        "bed": "A"
+      },
+      "admittedAt": "2026-10-17T15:00:00.000Z",
+      "team": "team-a",
+      "workingProblem": "Delirium, cause under investigation",
+      "conditions": ["Delirium", "Dementia"],
+      "acuity": {
+        "level": "high",
+        "scale": "placeholder: high, medium, low",
+        "setBy": "Dr Priya Raman",
+        "setAt": "2026-10-18T15:00:00.000Z"
+      },
+      "similarTo": ["patient-02"],
+      "latestObservations": {
+        "at": "2026-10-18T20:00:00.000Z",
+        "values": [
+          {
+            "code": "respiratory rate",
+            "value": 18,
+            "unit": "/min"
+          },
+          {
+            "code": "heart rate",
+            "value": 88,
+            "unit": "/min"
+          },
+          {
+            "code": "blood pressure",
+            "value": "142/80",
+            "unit": "mm[Hg]"
+          },
+          {
+            "code": "oxygen saturation",
+            "value": 96,
+            "unit": "%"
+          },
+          {
+            "code": "body temperature",
+            "value": 37.4,
+            "unit": "Cel"
+          }
+        ]
+      },
+      "medicines": ["quetiapine"]
+    },
+    {
+      "id": "patient-04",
+      "urn": "SYN-100204",
+      "listState": "on-team",
+      "seenToday": false,
+      "flags": ["For discharge"],
+      "jobs": [
+        {
+          "id": "job-6",
+          "text": "Discharge medication reconciliation",
+          "assignee": "Dr Mei Chen",
+          "createdBy": "Dr Josh Ward",
+          "status": "open",
+          "due": null,
+          "completableBy": ["doctor"]
+        },
+        {
+          "id": "job-7",
+          "text": "Book heart failure clinic",
+          "assignee": "team-a",
+          "createdBy": "Dr Josh Ward",
+          "status": "open",
+          "due": null,
+          "completableBy": ["doctor"]
+        }
+      ],
+      "comments": [],
+      "history": [],
+      "firstName": "Ahmed",
+      "lastName": "Karimi",
+      "age": 58,
+      "gender": "male",
+      "birthDate": "1968-05-27",
+      "bed": {
+        "facility": "Synthetic General Hospital",
+        "ward": "4 North",
+        "room": "402",
+        "bed": "B"
+      },
+      "admittedAt": "2026-10-13T01:00:00.000Z",
+      "team": "team-a",
+      "workingProblem": "Heart failure, decompensated",
+      "conditions": ["Heart failure", "Chronic kidney disease"],
+      "acuity": {
+        "level": "medium",
+        "scale": "placeholder: high, medium, low",
+        "setBy": "Dr Tom Ellis",
+        "setAt": "2026-10-17T15:00:00.000Z"
+      },
+      "latestObservations": {
+        "at": "2026-10-18T17:00:00.000Z",
+        "values": [
+          {
+            "code": "respiratory rate",
+            "value": 16,
+            "unit": "/min"
+          },
+          {
+            "code": "heart rate",
+            "value": 74,
+            "unit": "/min"
+          },
+          {
+            "code": "blood pressure",
+            "value": "118/70",
+            "unit": "mm[Hg]"
+          },
+          {
+            "code": "oxygen saturation",
+            "value": 97,
+            "unit": "%"
+          },
+          {
+            "code": "body temperature",
+            "value": 36.8,
+            "unit": "Cel"
+          }
+        ]
+      },
+      "latestResults": [
+        {
+          "code": "potassium",
+          "value": 5.4,
+          "unit": "mmol/L",
+          "at": "2026-10-18T11:00:00.000Z"
+        },
+        {
+          "code": "creatinine",
+          "value": 168,
+          "unit": "umol/L",
+          "at": "2026-10-18T11:00:00.000Z"
+        }
+      ],
+      "medicines": ["furosemide", "spironolactone"]
+    },
+    {
+      "id": "patient-05",
+      "urn": "SYN-100205",
+      "listState": "on-team",
+      "seenToday": false,
+      "flags": [],
+      "jobs": [],
+      "comments": [],
+      "history": [],
+      "firstName": "Lena",
+      "lastName": "Fischer",
+      "age": 45,
+      "gender": "female",
+      "birthDate": "1981-09-14",
+      "bed": {
+        "facility": "Synthetic General Hospital",
+        "ward": "4 North",
+        "room": "403",
+        "bed": "A"
+      },
+      "admittedAt": "2026-10-17T23:00:00.000Z",
+      "team": "team-a",
+      "workingProblem": "Pyelonephritis",
+      "conditions": ["Pyelonephritis"],
+      "acuity": {
+        "level": "low",
+        "scale": "placeholder: high, medium, low",
+        "setBy": "Dr Mei Chen",
+        "setAt": "2026-10-18T03:00:00.000Z"
+      },
+      "latestObservations": {
+        "at": "2026-10-18T19:00:00.000Z",
+        "values": [
+          {
+            "code": "respiratory rate",
+            "value": 14,
+            "unit": "/min"
+          },
+          {
+            "code": "heart rate",
+            "value": 84,
+            "unit": "/min"
+          },
+          {
+            "code": "blood pressure",
+            "value": "122/76",
+            "unit": "mm[Hg]"
+          },
+          {
+            "code": "oxygen saturation",
+            "value": 99,
+            "unit": "%"
+          },
+          {
+            "code": "body temperature",
+            "value": 37.9,
+            "unit": "Cel"
+          }
+        ]
+      },
+      "medicines": ["gentamicin"]
+    },
+    {
+      "id": "patient-06",
+      "urn": "SYN-100206",
+      "listState": "on-team",
+      "seenToday": false,
+      "flags": ["Awaiting placement", "Falls precautions"],
+      "jobs": [
+        {
+          "id": "job-8",
+          "text": "Aged care assessment follow-up",
+          "assignee": "team-a",
+          "createdBy": "Dr Josh Ward",
+          "status": "open",
+          "due": null,
+          "completableBy": ["doctor"]
+        }
+      ],
+      "comments": [],
+      "history": [],
+      "firstName": "Robert",
+      "lastName": "Achterberg",
+      "age": 78,
+      "gender": "male",
+      "birthDate": "1947-12-03",
+      "bed": {
+        "facility": "Synthetic General Hospital",
+        "ward": "4 North",
+        "room": "403",
+        "bed": "B"
+      },
+      "admittedAt": "2026-10-10T13:00:00.000Z",
+      "team": "team-a",
+      "workingProblem": "Fall with reduced mobility",
+      "conditions": ["Fall", "Parkinson disease"],
+      "acuity": {
+        "level": "low",
+        "scale": "placeholder: high, medium, low",
+        "setBy": "Dr Tom Ellis",
+        "setAt": "2026-10-16T21:00:00.000Z"
+      },
+      "latestObservations": {
+        "at": "2026-10-18T16:00:00.000Z",
+        "values": [
+          {
+            "code": "respiratory rate",
+            "value": 16,
+            "unit": "/min"
+          },
+          {
+            "code": "heart rate",
+            "value": 70,
+            "unit": "/min"
+          },
+          {
+            "code": "blood pressure",
+            "value": "130/72",
+            "unit": "mm[Hg]"
+          },
+          {
+            "code": "oxygen saturation",
+            "value": 96,
+            "unit": "%"
+          },
+          {
+            "code": "body temperature",
+            "value": 36.6,
+            "unit": "Cel"
+          }
+        ]
+      },
+      "medicines": ["levodopa with carbidopa"]
+    },
+    {
+      "id": "patient-07",
+      "urn": "SYN-100207",
+      "listState": "on-team",
+      "seenToday": false,
+      "flags": [],
+      "jobs": [
+        {
+          "id": "job-9",
+          "text": "Repeat troponin at 0900",
+          "assignee": "Dr Josh Ward",
+          "createdBy": "Dr Josh Ward",
+          "status": "open",
+          "due": "2026-10-18T22:00:00.000Z",
+          "completableBy": ["doctor"]
+        }
+      ],
+      "comments": [],
+      "history": [],
+      "firstName": "Tui",
+      "lastName": "Ngata",
+      "age": 62,
+      "gender": "female",
+      "birthDate": "1964-06-21",
+      "bed": {
+        "facility": "Synthetic General Hospital",
+        "ward": "4 North",
+        "room": "404",
+        "bed": "A"
+      },
+      "admittedAt": "2026-10-18T09:00:00.000Z",
+      "team": "team-a",
+      "workingProblem": "Chest pain, cause under investigation",
+      "conditions": ["Chest pain"],
+      "acuity": {
+        "level": "medium",
+        "scale": "placeholder: high, medium, low",
+        "setBy": "Dr Tom Ellis",
+        "setAt": "2026-10-18T10:00:00.000Z"
+      },
+      "latestObservations": {
+        "at": "2026-10-18T20:00:00.000Z",
+        "values": [
+          {
+            "code": "respiratory rate",
+            "value": 16,
+            "unit": "/min"
+          },
+          {
+            "code": "heart rate",
+            "value": 80,
+            "unit": "/min"
+          },
+          {
+            "code": "blood pressure",
+            "value": "140/86",
+            "unit": "mm[Hg]"
+          },
+          {
+            "code": "oxygen saturation",
+            "value": 98,
+            "unit": "%"
+          },
+          {
+            "code": "body temperature",
+            "value": 36.9,
+            "unit": "Cel"
+          }
+        ]
+      },
+      "medicines": ["aspirin"]
+    },
+    {
+      "id": "patient-08",
+      "urn": "SYN-100208",
+      "listState": "on-team",
+      "seenToday": false,
+      "flags": ["Review overnight"],
+      "jobs": [
+        {
+          "id": "job-10",
+          "text": "Blood gas if drowsier",
+          "assignee": "after-hours",
+          "createdBy": "Dr Josh Ward",
+          "status": "open",
+          "due": null,
+          "completableBy": ["doctor"]
+        }
+      ],
+      "comments": [],
+      "history": [],
+      "firstName": "Graham",
+      "lastName": "Whitlock",
+      "age": 73,
+      "gender": "male",
+      "birthDate": "1953-02-08",
+      "bed": {
+        "facility": "Synthetic General Hospital",
+        "ward": "4 North",
+        "room": "405",
+        "bed": "A"
+      },
+      "admittedAt": "2026-10-15T23:00:00.000Z",
+      "team": "team-b",
+      "workingProblem": "Exacerbation of COPD",
+      "conditions": ["COPD"],
+      "acuity": {
+        "level": "high",
+        "scale": "placeholder: high, medium, low",
+        "setBy": "Dr Ravi Patel",
+        "setAt": "2026-10-18T18:00:00.000Z"
+      },
+      "latestObservations": {
+        "at": "2026-10-18T20:00:00.000Z",
+        "values": [
+          {
+            "code": "respiratory rate",
+            "value": 26,
+            "unit": "/min"
+          },
+          {
+            "code": "heart rate",
+            "value": 104,
+            "unit": "/min"
+          },
+          {
+            "code": "blood pressure",
+            "value": "150/88",
+            "unit": "mm[Hg]"
+          },
+          {
+            "code": "oxygen saturation",
+            "value": 89,
+            "unit": "%"
+          },
+          {
+            "code": "body temperature",
+            "value": 37.8,
+            "unit": "Cel"
+          }
+        ]
+      },
+      "medicines": ["prednisolone", "salbutamol"],
+      "overnight": {
+        "important": true,
+        "reason": "Increasing oxygen requirement over the afternoon",
+        "todo": ["Blood gas if drowsier", "Review at 2200"],
+        "synopsis": "COPD exacerbation, day 3, on oxygen. Oxygen requirement rose this afternoon.",
+        "progress": "Steroids and nebulisers continued. Chest X-ray unchanged.",
+        "aiDrafted": {
+          "drafted": true,
+          "sources": [
+            "Progress note 18 Oct 1600",
+            "Observations 18 Oct 1400 to 1800",
+            "Chest X-ray report 18 Oct"
+          ],
+          "reviewedBy": null
+        }
+      }
+    },
+    {
+      "id": "patient-09",
+      "urn": "SYN-100209",
+      "listState": "on-team",
+      "seenToday": false,
+      "flags": ["Falls precautions"],
+      "jobs": [],
+      "comments": [],
+      "history": [],
+      "firstName": "Mary",
+      "lastName": "Oduya",
+      "age": 88,
+      "gender": "female",
+      "birthDate": "1938-07-30",
+      "bed": {
+        "facility": "Synthetic General Hospital",
+        "ward": "4 North",
+        "room": "405",
+        "bed": "B"
+      },
+      "admittedAt": "2026-10-14T07:00:00.000Z",
+      "team": "team-b",
+      "workingProblem": "Urinary tract infection with delirium",
+      "conditions": ["Urinary tract infection", "Delirium"],
+      "acuity": {
+        "level": "medium",
+        "scale": "placeholder: high, medium, low",
+        "setBy": "Dr Ravi Patel",
+        "setAt": "2026-10-17T17:00:00.000Z"
+      },
+      "latestObservations": {
+        "at": "2026-10-18T18:00:00.000Z",
+        "values": [
+          {
+            "code": "respiratory rate",
+            "value": 18,
+            "unit": "/min"
+          },
+          {
+            "code": "heart rate",
+            "value": 82,
+            "unit": "/min"
+          },
+          {
+            "code": "blood pressure",
+            "value": "124/70",
+            "unit": "mm[Hg]"
+          },
+          {
+            "code": "oxygen saturation",
+            "value": 95,
+            "unit": "%"
+          },
+          {
+            "code": "body temperature",
+            "value": 37.2,
+            "unit": "Cel"
+          }
+        ]
+      },
+      "medicines": ["amoxicillin with clavulanic acid"]
+    },
+    {
+      "id": "patient-10",
+      "urn": "SYN-100210",
+      "listState": "on-team",
+      "seenToday": false,
+      "flags": [],
+      "jobs": [
+        {
+          "id": "job-11",
+          "text": "Diabetes educator review",
+          "assignee": "team-b",
+          "createdBy": "Dr Josh Ward",
+          "status": "open",
+          "due": null,
+          "completableBy": ["doctor", "nurse"]
+        }
+      ],
+      "comments": [],
+      "history": [],
+      "firstName": "Jake",
+      "lastName": "Bromley",
+      "age": 34,
+      "gender": "male",
+      "birthDate": "1992-04-16",
+      "bed": {
+        "facility": "Synthetic General Hospital",
+        "ward": "4 North",
+        "room": "406",
+        "bed": "A"
+      },
+      "admittedAt": "2026-10-18T03:00:00.000Z",
+      "team": "team-b",
+      "workingProblem": "Diabetic ketoacidosis, resolving",
+      "conditions": ["Type 1 diabetes"],
+      "acuity": {
+        "level": "medium",
+        "scale": "placeholder: high, medium, low",
+        "setBy": "Dr Ravi Patel",
+        "setAt": "2026-10-18T12:00:00.000Z"
+      },
+      "latestObservations": {
+        "at": "2026-10-18T19:00:00.000Z",
+        "values": [
+          {
+            "code": "respiratory rate",
+            "value": 16,
+            "unit": "/min"
+          },
+          {
+            "code": "heart rate",
+            "value": 90,
+            "unit": "/min"
+          },
+          {
+            "code": "blood pressure",
+            "value": "118/74",
+            "unit": "mm[Hg]"
+          },
+          {
+            "code": "oxygen saturation",
+            "value": 99,
+            "unit": "%"
+          },
+          {
+            "code": "body temperature",
+            "value": 36.7,
+            "unit": "Cel"
+          }
+        ]
+      },
+      "latestResults": [
+        {
+          "code": "potassium",
+          "value": 3.4,
+          "unit": "mmol/L",
+          "at": "2026-10-18T16:00:00.000Z"
+        }
+      ],
+      "medicines": ["insulin glargine"]
+    },
+    {
+      "id": "patient-11",
+      "urn": "SYN-100211",
+      "listState": "on-team",
+      "seenToday": false,
+      "flags": ["Awaiting placement"],
+      "jobs": [],
+      "comments": [],
+      "history": [],
+      "firstName": "Evelyn",
+      "lastName": "Marsh",
+      "age": 76,
+      "gender": "female",
+      "birthDate": "1950-10-05",
+      "bed": {
+        "facility": "Synthetic General Hospital",
+        "ward": "4 North",
+        "room": "406",
+        "bed": "B"
+      },
+      "admittedAt": "2026-10-12T05:00:00.000Z",
+      "team": "team-b",
+      "workingProblem": "Stroke rehabilitation planning",
+      "conditions": ["Stroke"],
+      "acuity": {
+        "level": "low",
+        "scale": "placeholder: high, medium, low",
+        "setBy": "Dr Sophie Lane",
+        "setAt": "2026-10-16T19:00:00.000Z"
+      },
+      "latestObservations": {
+        "at": "2026-10-18T15:00:00.000Z",
+        "values": [
+          {
+            "code": "respiratory rate",
+            "value": 16,
+            "unit": "/min"
+          },
+          {
+            "code": "heart rate",
+            "value": 72,
+            "unit": "/min"
+          },
+          {
+            "code": "blood pressure",
+            "value": "134/78",
+            "unit": "mm[Hg]"
+          },
+          {
+            "code": "oxygen saturation",
+            "value": 97,
+            "unit": "%"
+          },
+          {
+            "code": "body temperature",
+            "value": 36.5,
+            "unit": "Cel"
+          }
+        ]
+      },
+      "medicines": ["clopidogrel", "atorvastatin"]
+    },
+    {
+      "id": "patient-12",
+      "urn": "SYN-100212",
+      "listState": "on-team",
+      "seenToday": false,
+      "flags": ["Awaiting imaging"],
+      "jobs": [
+        {
+          "id": "job-12",
+          "text": "Check haemoglobin at 1400",
+          "assignee": "Dr Liam Ortiz",
+          "createdBy": "Dr Josh Ward",
+          "status": "open",
+          "due": "2026-10-19T03:00:00.000Z",
+          "completableBy": ["doctor"]
+        }
+      ],
+      "comments": [],
+      "history": [],
+      "firstName": "Daniel",
+      "lastName": "Ferreira",
+      "age": 51,
+      "gender": "male",
+      "birthDate": "1974-11-23",
+      "bed": {
+        "facility": "Synthetic General Hospital",
+        "ward": "4 North",
+        "room": "407",
+        "bed": "A"
+      },
+      "admittedAt": "2026-10-17T05:00:00.000Z",
+      "team": "team-b",
+      "workingProblem": "Gastrointestinal bleed",
+      "conditions": ["Upper gastrointestinal bleed"],
+      "acuity": {
+        "level": "high",
+        "scale": "placeholder: high, medium, low",
+        "setBy": "Dr Helen Brooks",
+        "setAt": "2026-10-18T13:00:00.000Z"
+      },
+      "latestObservations": {
+        "at": "2026-10-18T20:00:00.000Z",
+        "values": [
+          {
+            "code": "respiratory rate",
+            "value": 18,
+            "unit": "/min"
+          },
+          {
+            "code": "heart rate",
+            "value": 98,
+            "unit": "/min"
+          },
+          {
+            "code": "blood pressure",
+            "value": "112/66",
+            "unit": "mm[Hg]"
+          },
+          {
+            "code": "oxygen saturation",
+            "value": 97,
+            "unit": "%"
+          },
+          {
+            "code": "body temperature",
+            "value": 36.8,
+            "unit": "Cel"
+          }
+        ]
+      },
+      "latestResults": [
+        {
+          "code": "haemoglobin",
+          "value": 92,
+          "unit": "g/L",
+          "at": "2026-10-18T15:00:00.000Z"
+        }
+      ],
+      "medicines": ["pantoprazole"]
+    },
+    {
+      "id": "patient-13",
+      "urn": "SYN-100213",
+      "listState": "on-team",
+      "seenToday": false,
+      "flags": [],
+      "jobs": [],
+      "comments": [],
+      "history": [],
+      "firstName": "Ivy",
+      "lastName": "Chandler",
+      "age": 66,
+      "gender": "female",
+      "birthDate": "1960-01-12",
+      "bed": {
+        "facility": "Synthetic General Hospital",
+        "ward": "4 North",
+        "room": "407",
+        "bed": "B"
+      },
+      "admittedAt": "2026-10-17T17:00:00.000Z",
+      "team": "team-b",
+      "workingProblem": "Hyponatraemia",
+      "conditions": ["Hyponatraemia"],
+      "acuity": {
+        "level": "medium",
+        "scale": "placeholder: high, medium, low",
+        "setBy": "Dr Ravi Patel",
+        "setAt": "2026-10-18T07:00:00.000Z"
+      },
+      "latestResults": [
+        {
+          "code": "sodium",
+          "value": 124,
+          "unit": "mmol/L",
+          "at": "2026-10-18T14:00:00.000Z"
+        }
+      ],
+      "latestObservations": {
+        "at": "2026-10-18T17:00:00.000Z",
+        "values": [
+          {
+            "code": "respiratory rate",
+            "value": 14,
+            "unit": "/min"
+          },
+          {
+            "code": "heart rate",
+            "value": 76,
+            "unit": "/min"
+          },
+          {
+            "code": "blood pressure",
+            "value": "128/74",
+            "unit": "mm[Hg]"
+          },
+          {
+            "code": "oxygen saturation",
+            "value": 98,
+            "unit": "%"
+          },
+          {
+            "code": "body temperature",
+            "value": 36.6,
+            "unit": "Cel"
+          }
+        ]
+      },
+      "medicines": []
+    },
+    {
+      "id": "patient-14",
+      "urn": "SYN-100214",
+      "listState": "on-team",
+      "seenToday": false,
+      "flags": [],
+      "jobs": [],
+      "comments": [],
+      "history": [],
+      "firstName": "Patrick",
+      "lastName": "O'Shea",
+      "age": 81,
+      "gender": "male",
+      "birthDate": "1945-05-04",
+      "bed": {
+        "facility": "Synthetic General Hospital",
+        "ward": "4 North",
+        "room": "408",
+        "bed": "A"
+      },
+      "admittedAt": "2026-10-15T03:00:00.000Z",
+      "team": "team-b",
+      "workingProblem": "Aspiration pneumonia",
+      "conditions": ["Aspiration pneumonia", "Dementia"],
+      "acuity": {
+        "level": "medium",
+        "scale": "placeholder: high, medium, low",
+        "setBy": "Dr Ravi Patel",
+        "setAt": "2026-10-17T23:00:00.000Z"
+      },
+      "latestObservations": {
+        "at": "2026-10-18T19:00:00.000Z",
+        "values": [
+          {
+            "code": "respiratory rate",
+            "value": 20,
+            "unit": "/min"
+          },
+          {
+            "code": "heart rate",
+            "value": 86,
+            "unit": "/min"
+          },
+          {
+            "code": "blood pressure",
+            "value": "120/70",
+            "unit": "mm[Hg]"
+          },
+          {
+            "code": "oxygen saturation",
+            "value": 95,
+            "unit": "%"
+          },
+          {
+            "code": "body temperature",
+            "value": 37.3,
+            "unit": "Cel"
+          }
+        ]
+      },
+      "medicines": ["piperacillin with tazobactam"]
+    },
+    {
+      "id": "patient-15",
+      "urn": "SYN-100215",
+      "listState": "on-team",
+      "seenToday": false,
+      "flags": ["Procedure today"],
+      "jobs": [],
+      "comments": [],
+      "history": [],
+      "firstName": "Sofia",
+      "lastName": "Marino",
+      "age": 59,
+      "gender": "female",
+      "birthDate": "1967-03-29",
+      "bed": {
+        "facility": "Synthetic General Hospital",
+        "ward": "4 North",
+        "room": "408",
+        "bed": "B"
+      },
+      "admittedAt": "2026-10-16T09:00:00.000Z",
+      "team": "team-c",
+      "workingProblem": "Pulmonary embolism",
+      "conditions": ["Pulmonary embolism"],
+      "acuity": {
+        "level": "medium",
+        "scale": "placeholder: high, medium, low",
+        "setBy": "Dr Grace Kim",
+        "setAt": "2026-10-17T21:00:00.000Z"
+      },
+      "latestObservations": {
+        "at": "2026-10-18T19:00:00.000Z",
+        "values": [
+          {
+            "code": "respiratory rate",
+            "value": 18,
+            "unit": "/min"
+          },
+          {
+            "code": "heart rate",
+            "value": 94,
+            "unit": "/min"
+          },
+          {
+            "code": "blood pressure",
+            "value": "126/80",
+            "unit": "mm[Hg]"
+          },
+          {
+            "code": "oxygen saturation",
+            "value": 95,
+            "unit": "%"
+          },
+          {
+            "code": "body temperature",
+            "value": 36.9,
+            "unit": "Cel"
+          }
+        ]
+      },
+      "medicines": ["enoxaparin"]
+    },
+    {
+      "id": "patient-16",
+      "urn": "SYN-100216",
+      "listState": "on-team",
+      "seenToday": false,
+      "flags": [],
+      "jobs": [
+        {
+          "id": "job-13",
+          "text": "Renal ultrasound result",
+          "assignee": "Dr Ben Hollis",
+          "createdBy": "Dr Josh Ward",
+          "status": "open",
+          "due": null,
+          "completableBy": ["doctor"]
+        }
+      ],
+      "comments": [],
+      "history": [],
+      "firstName": "Wei",
+      "lastName": "Zhang",
+      "age": 70,
+      "gender": "male",
+      "birthDate": "1956-08-17",
+      "bed": {
+        "facility": "Synthetic General Hospital",
+        "ward": "4 North",
+        "room": "409",
+        "bed": "A"
+      },
+      "admittedAt": "2026-10-17T09:00:00.000Z",
+      "team": "team-c",
+      "workingProblem": "Acute kidney injury",
+      "conditions": ["Acute kidney injury"],
+      "acuity": {
+        "level": "medium",
+        "scale": "placeholder: high, medium, low",
+        "setBy": "Dr Grace Kim",
+        "setAt": "2026-10-18T09:00:00.000Z"
+      },
+      "latestResults": [
+        {
+          "code": "creatinine",
+          "value": 245,
+          "unit": "umol/L",
+          "at": "2026-10-18T12:00:00.000Z"
+        },
+        {
+          "code": "potassium",
+          "value": 5.8,
+          "unit": "mmol/L",
+          "at": "2026-10-18T12:00:00.000Z"
+        }
+      ],
+      "latestObservations": {
+        "at": "2026-10-18T18:00:00.000Z",
+        "values": [
+          {
+            "code": "respiratory rate",
+            "value": 16,
+            "unit": "/min"
+          },
+          {
+            "code": "heart rate",
+            "value": 82,
+            "unit": "/min"
+          },
+          {
+            "code": "blood pressure",
+            "value": "146/88",
+            "unit": "mm[Hg]"
+          },
+          {
+            "code": "oxygen saturation",
+            "value": 97,
+            "unit": "%"
+          },
+          {
+            "code": "body temperature",
+            "value": 36.7,
+            "unit": "Cel"
+          }
+        ]
+      },
+      "medicines": []
+    },
+    {
+      "id": "patient-17",
+      "urn": "SYN-100217",
+      "listState": "on-team",
+      "seenToday": false,
+      "flags": [],
+      "jobs": [],
+      "comments": [],
+      "history": [],
+      "firstName": "Hannah",
+      "lastName": "Lindqvist",
+      "age": 40,
+      "gender": "female",
+      "birthDate": "1985-12-01",
+      "bed": {
+        "facility": "Synthetic General Hospital",
+        "ward": "4 North",
+        "room": "409",
+        "bed": "B"
+      },
+      "admittedAt": "2026-10-18T05:00:00.000Z",
+      "team": "team-c",
+      "workingProblem": "Asthma exacerbation",
+      "conditions": ["Asthma"],
+      "acuity": {
+        "level": "low",
+        "scale": "placeholder: high, medium, low",
+        "setBy": "Dr Ben Hollis",
+        "setAt": "2026-10-18T06:00:00.000Z"
+      },
+      "latestObservations": {
+        "at": "2026-10-18T19:00:00.000Z",
+        "values": [
+          {
+            "code": "respiratory rate",
+            "value": 18,
+            "unit": "/min"
+          },
+          {
+            "code": "heart rate",
+            "value": 96,
+            "unit": "/min"
+          },
+          {
+            "code": "blood pressure",
+            "value": "120/74",
+            "unit": "mm[Hg]"
+          },
+          {
+            "code": "oxygen saturation",
+            "value": 97,
+            "unit": "%"
+          },
+          {
+            "code": "body temperature",
+            "value": 36.8,
+            "unit": "Cel"
+          }
+        ]
+      },
+      "medicines": ["prednisolone", "budesonide with formoterol"]
+    },
+    {
+      "id": "patient-18",
+      "urn": "SYN-100218",
+      "listState": "on-team",
+      "seenToday": false,
+      "flags": ["Falls precautions"],
+      "jobs": [],
+      "comments": [],
+      "history": [],
+      "firstName": "George",
+      "lastName": "Papadakis",
+      "age": 85,
+      "gender": "male",
+      "birthDate": "1941-04-09",
+      "bed": {
+        "facility": "Synthetic General Hospital",
+        "ward": "4 North",
+        "room": "410",
+        "bed": "A"
+      },
+      "admittedAt": "2026-10-13T11:00:00.000Z",
+      "team": "team-c",
+      "workingProblem": "Frailty and recurrent falls",
+      "conditions": ["Frailty"],
+      "acuity": {
+        "level": "low",
+        "scale": "placeholder: high, medium, low",
+        "setBy": "Dr Grace Kim",
+        "setAt": "2026-10-17T05:00:00.000Z"
+      },
+      "latestObservations": {
+        "at": "2026-10-18T20:00:00.000Z",
+        "values": [
+          {
+            "code": "respiratory rate",
+            "value": 16,
+            "unit": "/min"
+          },
+          {
+            "code": "heart rate",
+            "value": 68,
+            "unit": "/min"
+          },
+          {
+            "code": "blood pressure",
+            "value": "108/64",
+            "unit": "mm[Hg]"
+          },
+          {
+            "code": "oxygen saturation",
+            "value": 96,
+            "unit": "%"
+          },
+          {
+            "code": "body temperature",
+            "value": 36.4,
+            "unit": "Cel"
+          }
+        ]
+      },
+      "medicines": [],
+      "overnight": {
+        "important": false,
+        "synopsis": "Frailty and recurrent falls, awaiting a physiotherapy plan.",
+        "progress": "Stable today."
+      },
+      "deterioration": {
+        "at": "2026-10-19T11:00:00.000Z",
+        "source": "Early warning system at the hospital (a synthetic source)",
+        "text": "Observations outside this patient's set limits at 2200: the early warning system raised a review.",
+        "note": "Supplied by a source system. The list shows it; it does not detect deterioration."
+      }
+    },
+    {
+      "id": "patient-19",
+      "urn": "SYN-100219",
+      "listState": "on-team",
+      "seenToday": false,
+      "flags": ["Isolation"],
+      "jobs": [
+        {
+          "id": "job-14",
+          "text": "Blood cultures before next antibiotic dose",
+          "assignee": "Dr Ava Russo",
+          "createdBy": "Dr Josh Ward",
+          "status": "open",
+          "due": "2026-10-18T23:00:00.000Z",
+          "completableBy": ["doctor"]
+        }
+      ],
+      "comments": [],
+      "history": [],
+      "firstName": "Amira",
+      "lastName": "Saleh",
+      "age": 29,
+      "gender": "female",
+      "birthDate": "1997-09-08",
+      "bed": {
+        "facility": "Synthetic General Hospital",
+        "ward": "4 North",
+        "room": "410",
+        "bed": "B"
+      },
+      "admittedAt": "2026-10-18T01:00:00.000Z",
+      "team": "team-c",
+      "workingProblem": "Pyrexia, cause under investigation",
+      "conditions": ["Fever"],
+      "acuity": {
+        "level": "medium",
+        "scale": "placeholder: high, medium, low",
+        "setBy": "Dr Grace Kim",
+        "setAt": "2026-10-18T11:00:00.000Z"
+      },
+      "latestObservations": {
+        "at": "2026-10-18T20:00:00.000Z",
+        "values": [
+          {
+            "code": "respiratory rate",
+            "value": 20,
+            "unit": "/min"
+          },
+          {
+            "code": "heart rate",
+            "value": 108,
+            "unit": "/min"
+          },
+          {
+            "code": "blood pressure",
+            "value": "110/68",
+            "unit": "mm[Hg]"
+          },
+          {
+            "code": "oxygen saturation",
+            "value": 97,
+            "unit": "%"
+          },
+          {
+            "code": "body temperature",
+            "value": 38.6,
+            "unit": "Cel"
+          }
+        ]
+      },
+      "medicines": []
+    },
+    {
+      "id": "patient-20",
+      "urn": "SYN-100220",
+      "listState": "on-team",
+      "seenToday": false,
+      "flags": ["Procedure today"],
+      "jobs": [
+        {
+          "id": "job-15",
+          "text": "Ascitic tap this morning",
+          "assignee": "Dr Grace Kim",
+          "createdBy": "Dr Josh Ward",
+          "status": "open",
+          "due": "2026-10-19T00:00:00.000Z",
+          "completableBy": ["doctor"]
+        }
+      ],
+      "comments": [],
+      "history": [],
+      "firstName": "Brian",
+      "lastName": "Kowalczyk",
+      "age": 64,
+      "gender": "male",
+      "birthDate": "1962-02-25",
+      "bed": {
+        "facility": "Synthetic General Hospital",
+        "ward": "4 North",
+        "room": "411",
+        "bed": "A"
+      },
+      "admittedAt": "2026-10-15T13:00:00.000Z",
+      "team": "team-c",
+      "workingProblem": "Cirrhosis with ascites",
+      "conditions": ["Cirrhosis"],
+      "acuity": {
+        "level": "medium",
+        "scale": "placeholder: high, medium, low",
+        "setBy": "Dr Samuel Okafor",
+        "setAt": "2026-10-17T15:00:00.000Z"
+      },
+      "latestObservations": {
+        "at": "2026-10-18T19:00:00.000Z",
+        "values": [
+          {
+            "code": "respiratory rate",
+            "value": 16,
+            "unit": "/min"
+          },
+          {
+            "code": "heart rate",
+            "value": 86,
+            "unit": "/min"
+          },
+          {
+            "code": "blood pressure",
+            "value": "104/62",
+            "unit": "mm[Hg]"
+          },
+          {
+            "code": "oxygen saturation",
+            "value": 97,
+            "unit": "%"
+          },
+          {
+            "code": "body temperature",
+            "value": 36.6,
+            "unit": "Cel"
+          }
+        ]
+      },
+      "medicines": ["spironolactone"],
+      "overnight": {
+        "important": true,
+        "reason": "Post-procedure check",
+        "todo": ["Check the tap site at 2100"],
+        "synopsis": "Cirrhosis with ascites. Therapeutic tap today.",
+        "progress": "Tap planned this morning.",
+        "aiDrafted": {
+          "drafted": true,
+          "sources": ["Progress note 18 Oct 1100", "Procedure plan 18 Oct"],
+          "reviewedBy": "Dr Grace Kim"
+        }
+      }
+    },
+    {
+      "id": "patient-21",
+      "urn": "SYN-100221",
+      "listState": "received",
+      "seenToday": false,
+      "flags": [],
+      "jobs": [],
+      "comments": [],
+      "history": [],
+      "firstName": "Noah",
+      "lastName": "Bennett",
+      "age": 55,
+      "gender": "male",
+      "birthDate": "1971-06-30",
+      "bed": {
+        "facility": "Synthetic General Hospital",
+        "ward": "Emergency",
+        "room": "Cubicle",
+        "bed": "12"
+      },
+      "admittedAt": null,
+      "team": null,
+      "workingProblem": "Syncope",
+      "referral": {
+        "via": "phone",
+        "source": "Emergency department",
+        "referrer": "Dr Imogen Hart (emergency registrar)",
+        "urgency": "Within 2 hours",
+        "reason": "Syncope with a new murmur",
+        "summary": "Collapsed at home, brief loss of consciousness, no injury. New murmur on examination.",
+        "plan": "Echocardiogram, telemetry, repeat electrocardiogram",
+        "owner": "Dr Tom Ellis",
+        "receivedAt": "2026-10-18T20:00:00.000Z"
+      },
+      "conditions": [],
+      "medicines": []
+    },
+    {
+      "id": "patient-22",
+      "urn": "SYN-100222",
+      "listState": "received",
+      "seenToday": false,
+      "flags": [],
+      "jobs": [],
+      "comments": [],
+      "history": [],
+      "firstName": "Olivia",
+      "lastName": "Grant",
+      "age": 76,
+      "gender": "female",
+      "birthDate": "1949-11-18",
+      "bed": {
+        "facility": "Synthetic General Hospital",
+        "ward": "Emergency",
+        "room": "Cubicle",
+        "bed": "4"
+      },
+      "admittedAt": null,
+      "team": null,
+      "workingProblem": "Weakness and reduced intake",
+      "referral": {
+        "via": "referral system",
+        "system": "Synthetic referral system",
+        "source": "General practitioner",
+        "referrer": "Dr Lucas Byrne (general practitioner)",
+        "urgency": "Today",
+        "reason": "Weakness and reduced oral intake over a week",
+        "summary": "Lives alone, family concerned. Basic details imported from the referral system.",
+        "plan": null,
+        "owner": null,
+        "receivedAt": "2026-10-18T20:30:00.000Z"
+      },
+      "conditions": [],
+      "medicines": []
+    },
+    {
+      "id": "patient-23",
+      "urn": null,
+      "listState": "received",
+      "seenToday": false,
+      "flags": [],
+      "jobs": [],
+      "comments": [],
+      "history": [],
+      "firstName": "Unknown",
+      "lastName": "Expected patient",
+      "age": null,
+      "gender": "male",
+      "birthDate": null,
+      "bed": null,
+      "admittedAt": null,
+      "team": null,
+      "expected": {
+        "placeholder": true,
+        "description": "Man in his 60s, arriving by ambulance",
+        "linked": false
+      },
+      "workingProblem": "Shortness of breath",
+      "referral": {
+        "via": "phone",
+        "source": "Ambulance service",
+        "referrer": "Paramedic team (synthetic)",
+        "urgency": "On arrival",
+        "reason": "Shortness of breath, known heart failure",
+        "summary": "Placeholder until the patient is registered and has an encounter.",
+        "plan": "Review on arrival",
+        "owner": "Dr Tom Ellis",
+        "receivedAt": "2026-10-18T20:42:00.000Z"
+      },
+      "conditions": [],
+      "medicines": []
+    },
+    {
+      "id": "patient-24",
+      "urn": "SYN-100224",
+      "listState": "incoming",
+      "seenToday": false,
+      "flags": [],
+      "jobs": [],
+      "comments": [],
+      "history": [],
+      "firstName": "Carmen",
+      "lastName": "Delgado",
+      "age": 69,
+      "gender": "female",
+      "birthDate": "1957-07-07",
+      "bed": {
+        "facility": "Synthetic General Hospital",
+        "ward": "4 North",
+        "room": "411",
+        "bed": "B"
+      },
+      "admittedAt": "2026-10-16T09:00:00.000Z",
+      "team": "team-a",
+      "transfer": {
+        "from": "team-c",
+        "to": "team-a",
+        "note": "Cardiac issues now lead: transferring to Team A for ongoing management.",
+        "clinicalSummary": "Admitted with dyspnoea, found to have new atrial fibrillation.",
+        "sentBy": "Dr Grace Kim",
+        "sentAt": "2026-10-18T19:00:00.000Z"
+      },
+      "workingProblem": "New atrial fibrillation",
+      "conditions": ["Atrial fibrillation"],
+      "acuity": {
+        "level": "medium",
+        "scale": "placeholder: high, medium, low",
+        "setBy": "Dr Grace Kim",
+        "setAt": "2026-10-18T09:00:00.000Z"
+      },
+      "latestObservations": {
+        "at": "2026-10-18T20:00:00.000Z",
+        "values": [
+          {
+            "code": "respiratory rate",
+            "value": 18,
+            "unit": "/min"
+          },
+          {
+            "code": "heart rate",
+            "value": 112,
+            "unit": "/min"
+          },
+          {
+            "code": "blood pressure",
+            "value": "124/78",
+            "unit": "mm[Hg]"
+          },
+          {
+            "code": "oxygen saturation",
+            "value": 96,
+            "unit": "%"
+          },
+          {
+            "code": "body temperature",
+            "value": 36.8,
+            "unit": "Cel"
+          }
+        ]
+      },
+      "medicines": ["metoprolol"]
+    },
+    {
+      "id": "patient-25",
+      "urn": "SYN-100225",
+      "listState": "left-hospital",
+      "seenToday": false,
+      "flags": [],
+      "jobs": [
+        {
+          "id": "job-16",
+          "text": "Send discharge summary to general practitioner",
+          "assignee": "Dr Sophie Lane",
+          "createdBy": "Dr Josh Ward",
+          "status": "open",
+          "due": null,
+          "completableBy": ["doctor"]
+        }
+      ],
+      "comments": [],
+      "history": [],
+      "firstName": "Stanley",
+      "lastName": "Ruiz",
+      "age": 74,
+      "gender": "male",
+      "birthDate": "1952-03-15",
+      "bed": null,
+      "admittedAt": "2026-10-11T19:00:00.000Z",
+      "team": "team-b",
+      "leftHospital": {
+        "how": "discharged",
+        "at": "2026-10-18T07:00:00.000Z"
+      },
+      "workingProblem": "Pneumonia, recovered",
+      "conditions": ["Pneumonia"],
+      "medicines": []
+    },
+    {
+      "id": "patient-26",
+      "urn": "SYN-100226",
+      "listState": "left-hospital",
+      "seenToday": false,
+      "flags": [],
+      "jobs": [
+        {
+          "id": "job-17",
+          "text": "Handover to rehabilitation team",
+          "assignee": "Dr Ben Hollis",
+          "createdBy": "Dr Josh Ward",
+          "status": "done",
+          "due": null,
+          "completableBy": ["doctor"],
+          "completedBy": "Dr Ben Hollis",
+          "completedAt": "2026-10-18T03:00:00.000Z"
+        }
+      ],
+      "comments": [],
+      "history": [],
+      "firstName": "Ruth",
+      "lastName": "Abernathy",
+      "age": 90,
+      "gender": "female",
+      "birthDate": "1936-08-22",
+      "bed": null,
+      "admittedAt": "2026-10-09T17:00:00.000Z",
+      "team": "team-c",
+      "leftHospital": {
+        "how": "transferred out",
+        "at": "2026-10-18T01:00:00.000Z"
+      },
+      "workingProblem": "Transferred to a rehabilitation hospital",
+      "conditions": [],
+      "suggestArchive": true,
+      "medicines": []
+    }
+  ],
+  "auditLists": [
+    {
+      "id": "audit-1",
+      "name": "Potassium above my chosen limit, last 24 hours",
+      "owner": "Dr Helen Brooks",
+      "sharing": "view-only",
+      "criteria": [
+        {
+          "field": "latest result: potassium",
+          "operator": "above",
+          "value": "chosen by the list owner",
+          "window": "24 hours"
+        }
+      ],
+      "note": "Every criterion value is the owner's choice: the list builder offers no defaults.",
+      "removed": [
+        {
+          "patient": "patient-04",
+          "by": "Dr Helen Brooks",
+          "at": "2026-10-18T18:00:00.000Z",
+          "reason": "Sample haemolysed; repeat sample sent"
+        }
+      ]
+    },
+    {
+      "id": "audit-2",
+      "name": "Falls precautions, aged 75 and over",
+      "owner": "Dr Samuel Okafor",
+      "sharing": "editing",
+      "criteria": [
+        {
+          "field": "flag",
+          "operator": "is",
+          "value": "Falls precautions"
+        },
+        {
+          "field": "age",
+          "operator": "at least",
+          "value": 75
+        }
+      ],
+      "removed": []
+    }
+  ],
+  "personalLists": [
+    {
+      "owner": "Dr Grace Kim",
+      "name": "My procedures",
+      "patients": ["patient-15", "patient-20"],
+      "private": true
+    }
+  ],
+  "simulation": [
+    {
+      "t": 0,
+      "actor": "Dr Mei Chen",
+      "action": "opens the list",
+      "note": "presence"
+    },
+    {
+      "t": 1,
+      "actor": "Dr Priya Raman",
+      "action": "opens patient",
+      "patient": "patient-03",
+      "note": "presence on a patient"
+    },
+    {
+      "t": 3,
+      "actor": "Dr Mei Chen",
+      "action": "adds job",
+      "patient": "patient-01",
+      "detail": "Repeat full blood count tomorrow"
+    },
+    {
+      "t": 4,
+      "actor": "RN Aisha Malik",
+      "action": "completes job",
+      "patient": "patient-02",
+      "detail": "job-3"
+    },
+    {
+      "t": 6,
+      "actor": "Dr Priya Raman",
+      "action": "edits job",
+      "patient": "patient-03",
+      "detail": "job-4",
+      "note": "conflicts if the participant edits job-4 at the same time"
+    },
+    {
+      "t": 7,
+      "actor": "Admitting list",
+      "action": "new referral",
+      "patient": "patient-22",
+      "note": "arrives while the participant is reading"
+    },
+    {
+      "t": 9,
+      "actor": "Connection",
+      "action": "drops for 40 seconds",
+      "note": "offline state; the participant keeps working"
+    },
+    {
+      "t": 12,
+      "actor": "Early warning system (synthetic source)",
+      "action": "raises a review",
+      "patient": "patient-18",
+      "note": "a collapsed overnight patient becomes active"
+    }
+  ]
+}

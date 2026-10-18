@@ -113,7 +113,13 @@ at, and the questions that would tell users' preferences apart. Recommend one, w
 ### 6. Prototype
 
 Build the chosen option, or each option, in Claude Design with Cadence's components and the
-synthetic ward data. Wherever the prototype falls back on generic markup, record the gap in
+synthetic ward data. Write a prompt pack for each option in `prompts/`: a self-contained prompt
+the maintainer pastes into a new design in the Cadence Clinical project, with the synthetic ward
+(`prototypes/synthetic-ward/ward.json`) attached. Each pack carries the guardrails that bear on
+its screens, the screens to build, the flows (F#) and states to demonstrate, and the moments in
+the ward's `simulation` that trigger them. Check every patient, job and minute a pack names
+against the ward before handing it over, since a prompt that names the wrong patient wastes a run.
+Add to the synthetic ward, through its generator, any case a feature needs that it doesn't cover. Wherever the prototype falls back on generic markup, record the gap in
 `gaps.md`, matched to a proposed component in `docs/components.md` or as a new proposal. That's
 how prototyping decides which components get built.
 
