@@ -1,6 +1,6 @@
 # Patient list: brief
 
-Status: draft
+Status: complete for stage 1, awaiting the maintainer's read (2026-10-18)
 
 ## In the maintainer's words
 
@@ -52,6 +52,24 @@ function effectively as well. essentially multiples teams lists combine and ther
 (large) list that the after hours team needs to be manage, so we need to mark what patients are
 important, have jobs etc. and ideally carry over the day team's synopsis and progress"
 
+- **Ownership overnight.** "the unit's afterhours team inherits ownership for all patients within
+  the teams of that unit. this is a lot of patients, so generally, only a few patients from each
+  team will have pending tasks/clinical reviews/checks. this could be facilitated in handover by
+  flagging, assigning jobs or marking priority."
+- **The after-hours list.** "should be able to see all the unit's patients, but collapsed away are
+  the patient's who are stable, aren't marked for any follow up etc, but if there is a
+  deterioration these patients could be active".
+- **What carries over:** the day team's synopsis, today's progress, outstanding jobs, and things to
+  do overnight, each with a reason. An escalation plan or resuscitation status, if shown, is shown
+  as given, with its source.
+- **Marking a patient important.** "initially could be priority level or flagging (noting that we
+  will have different flags and would select one for this purpose)". Importance can also come
+  from "deterioration in clinical status/vitals or eventually an AI model in the background". To be
+  refined "with further discovery".
+- **Handing back in the morning.** "handover in the same way; the day team marks as read/ack
+  rather than 'accepts' - they are there patients, so can't refuse (don't hard code this tho)".
+  Whether a handover is accepted or acknowledged is a setting, not a fixed rule.
+
 ## On a ward round
 
 - **Each row shows** bed, name, age, the working problem, days since admission, outstanding jobs
@@ -90,6 +108,9 @@ phone support is useful for fast moving ward rounds and to reference on the go".
 ## Out of scope
 
 - **Custom columns**: "this is another feature".
+- **Discharge** is its own feature. But "if a patient leaves the hospital, we will still need to
+  complete the patient's lifecycle within the patient list feature".
+- **Printing a list.**
 - **The head of unit's view** of patient mix, acuity and workload belongs to the unit dashboard
   feature, built on the same unit, team and patient relationships (A9).
 
@@ -101,6 +122,8 @@ phone support is useful for fast moving ward rounds and to reference on the go".
 - **Round 1, Q3 (audits and searches):** quoted under "Kinds of list".
 - **Round 1, Q4 (what is shared live):** the list's jobs, comments and marks are "independent of
   Oracle as not actual medical records". (A7)
+- **Round 4:** shift handover, quoted under "Shift handover to the after-hours team", and the end of
+  a patient's lifecycle, under "Out of scope".
 - **Round 3:** devices, flags and audit lists as the defaults offered; personal lists; and shift
   handover brought into scope.
 - **Round 2:** quoted under "Referral, assignment and transfer" and "On a ward round".
@@ -109,4 +132,7 @@ phone support is useful for fast moving ward rounds and to reference on the go".
 
 ## Open questions
 
-See round 4: shift handover.
+- How the end of a patient's lifecycle in the list works when they leave hospital: the states,
+  and what happens to their open jobs. (A17)
+- How importance and deterioration are signalled: priority, a chosen flag, a deterioration signal
+  from a source system, or an AI model. To refine with further discovery. (A16)
