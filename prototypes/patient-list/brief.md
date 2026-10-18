@@ -1,6 +1,6 @@
 # Patient list: brief
 
-Status: complete for stage 1, awaiting the maintainer's read (2026-10-18)
+Status: agreed (2026-10-18), after the maintainer's edits
 
 ## In the maintainer's words
 
