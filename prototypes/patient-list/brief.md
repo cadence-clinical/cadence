@@ -30,6 +30,28 @@ working real-time sync layer, not only the presence and change states.
   and more, "so that it is easy to find the right cohort to treat/observe with greater sensitivity
   or for quality/safety".
 
+## Referral, assignment and transfer
+
+- **The referral.** The admitting registrar records the source, referring clinician, urgency,
+  reason, clinical summary and initial plan. A referral is received, then accepted and assigned to
+  a team, or declined with a reason. (Round 2, Q1: "yes that correct")
+- **Assignment.** "either consultant, clinicial nurse and rarely admitting registrar" assign a
+  patient to a team.
+- **Transfer.** "receiving team should accept to add to their team list and this also closes the
+  loop. it should carry over a brief handover note and the clinical summary that was written on
+  the admitting registar's admission list."
+- **History.** "the history of the patient from entering our patient list system should also be
+  accessible".
+
+## On a ward round
+
+- **Each row shows** bed, name, age, the working problem, days since admission, outstanding jobs
+  and whether the patient has been seen, "plus flags (that can be unit or team set), actions".
+- **Rows are in bed order by default**, and can be reordered by dragging.
+- **Acuity:** "clinican sets acuity".
+- **Jobs:** doctors create jobs and assign them to a person or the team, with an optional due
+  time. "nurses can complete if within their scope".
+
 ## What starts it
 
 - **A referral.** "when they are referred by ED or other source, a admitting registrar takes that
@@ -45,7 +67,9 @@ working real-time sync layer, not only the presence and change states.
 
 ## Out of scope
 
-_Not yet discussed._
+- **Custom columns**: "this is another feature".
+- **The head of unit's view** of patient mix, acuity and workload belongs to the unit dashboard
+  feature, built on the same unit, team and patient relationships (A9).
 
 ## Answers so far
 
@@ -55,9 +79,10 @@ _Not yet discussed._
 - **Round 1, Q3 (audits and searches):** quoted under "Kinds of list".
 - **Round 1, Q4 (what is shared live):** the list's jobs, comments and marks are "independent of
   Oracle as not actual medical records". (A7)
+- **Round 2:** quoted under "Referral, assignment and transfer" and "On a ward round".
 - **Round 1, Q5 (done):** quoted under "What done looks like". The referral flow and the head of
   unit's view were added in the same answer.
 
 ## Open questions
 
-See round 2.
+See round 3.
