@@ -30,6 +30,9 @@ them.
 - **Ask in rounds.** Up to five questions a round, each with why it matters and the default you'd
   assume if there's no answer. Short rounds keep answers considered. After each round, write the
   answers into the artefacts and show what changed before asking the next round.
+- **Check every answer landed.** After writing up a round, list each assumption with its status
+  and compare it against the answers given. On the patient list, three confirmations were lost
+  to a failed edit and only this check caught them.
 - **Record answers as given.** Quote the maintainer's words where they carry the meaning, and
   keep their uncertainty ("probably", "for now"). A paraphrase that sounds firmer than the answer
   turns a guess into a requirement.
