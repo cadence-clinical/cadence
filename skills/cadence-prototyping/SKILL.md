@@ -97,6 +97,13 @@ Write the happy path first, then what interrupts it: a page, a handover, a secon
 Then cover every state a screen can be in: empty, loading, partial, error, offline, stale and
 conflict. A flow that only works when nothing goes wrong hasn't been designed yet.
 
+Draw each flow as a Mermaid flowchart beneath its steps, so it can be read at a glance and renders
+on GitHub. When the feature moves things through states (a patient through a list, a document
+through review), add a state diagram of the whole lifecycle at the top: it's often the clearest
+single picture of the feature. Keep the wording of each box the same as the steps it draws, and
+render every diagram before committing, because a syntax error shows on GitHub as a broken
+block.
+
 ### 5. Options
 
 Design two or three options that differ in kind, not in styling: different ways of organising the

@@ -1,6 +1,6 @@
 # Patient list: options
 
-Status: draft for the maintainer's review (2026-10-18)
+Status: decided (2026-10-18): prototype all three
 
 Three ways of organising the work, different in kind. Each meets the requirements; they differ in
 what they put first. Each is checked against the brief's hardest moments: the ward round on a
@@ -49,6 +49,7 @@ and archiving. Jobs, acuity and flags show on each card.
 - **How it organises the work:** around the patient's movement between owners.
 - **Assumes:** the hardest part of the work is handoffs, not the round itself.
 - **Good at:** making ownership visible, so an unaccepted referral or transfer stands out (S13, S16);
+  showing barriers to care and to discharge, as what holds a card in its lane;
   the admitting registrar's and head of unit's view of the unit; a transfer or handover as one
   action.
 - **Bad at:** density, with fewer patients per screen; the ward round's detail; a drag-first design,
@@ -59,11 +60,15 @@ and archiving. Jobs, acuity and flags show on each card.
 
 ## Recommendation
 
-**Prototype Option A with Option B's round mode built on the same lists, and test them against each
-other.** The brief has five kinds of list and a single large after-hours list, which need A's
-overview; the ward round on a phone needs B's focus. Testing the two side by side answers the
-questions above with users rather than by assumption.
+Prototype Option A with Option B's round mode built on the same lists, and test them against each
+other, with Option C's ownership shown inside A as an incoming section at the top of each list.
 
-Keep Option C's strength inside A: incoming referrals and transfers, and their owners, as a section
-at the top of each list rather than a separate board. If testing shows handoffs are the real pain,
-prototype C next.
+## Decision (2026-10-18)
+
+**Prototype all three.** The maintainer: "agree A is stongest, and we'd have to prototye B. Journey
+board might be useful to highlight barriers to care/discharge as well. we need to prototype C to see
+how it'd work for handovers".
+
+- **A** is the base: every list, with the patient's detail beside it.
+- **B** is the round mode on A's lists, tested against A for the ward round.
+- **C** is prototyped for handovers, and to show barriers to care and to discharge.
