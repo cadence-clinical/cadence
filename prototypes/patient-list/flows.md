@@ -9,20 +9,33 @@ brief doesn't answer yet. Teammates' actions in the prototype are simulated (dec
 
 ### F1. A referral arrives
 
-1. The admitting registrar takes a call from ED or another source and opens the unit's admitting
-   list (on a phone, a drawer; on a desktop, a sheet).
-2. They find the patient by name or URN. Each result shows first and last name, age, gender and
-   URN, and similar patients are indicated (S10).
-   **Question:** can a referral be made for a patient who isn't registered yet, with no URN?
-3. They record the source, referring clinician, urgency, reason, clinical summary and initial
-   plan, and save. The referral appears on the admitting list as received, live for everyone on
-   the list (C1).
-4. A consultant, a clinical nurse or, rarely, the admitting registrar accepts the referral and
-   assigns it to a team, or declines it with a reason.
-5. The patient appears on the team's list as incoming. The team accepts, and the patient joins
-   their list. Until then the patient stays on the admitting list, so they are never without a
-   team (S13).
-   **Question:** what happens to a referral nobody has accepted by the end of the day?
+1. A referral arrives in one of two ways: the admitting registrar takes a call from ED or another
+   source and enters it by hand, or it comes from a separate referral system with its basic details
+   filled in. An imported referral says which system it came from.
+2. The admitting registrar opens the unit's admitting list (on a phone, a drawer; on a desktop, a
+   sheet) and finds the patient by name or URN. Each result shows first and last name, age, gender
+   and URN, and similar patients are indicated (S10).
+3. If the patient isn't registered yet, they're added as **expected**: a placeholder on the list,
+   clearly marked, that "needs a UR + encounter attached" (F1a).
+4. They record the source, referring clinician, urgency, reason, clinical summary and initial plan,
+   and save. The referral appears on the admitting list as received, live for everyone on the list
+   (C1).
+5. **Every referral has an owner**, who accepts it and assigns it to a team, or declines it with a
+   reason: "Someone needs to own and close/decline that referral". It can't be left without one.
+   A consultant, a clinical nurse or, rarely, the admitting registrar assigns it.
+6. The patient appears on the team's list as incoming. The team accepts, and the patient joins their
+   list. Until then the patient stays on the admitting list, so they are never without a team (S13).
+
+### F1a. Linking an expected patient
+
+1. An expected patient's row says they are expected and not yet linked, in place of a URN, so no one
+   mistakes the placeholder for a registered patient.
+2. When the patient is registered, someone links the placeholder to their URN and encounter: they
+   search, check the identifiers against the placeholder (S10), and confirm.
+3. The row then shows the patient's identifiers and record data, and the history records who linked
+   them and when.
+   **Question:** what does a placeholder hold before it's linked (a name, an approximate age, where
+   the patient is now), and who may link it?
 
 ### F2. A patient moves to another team or unit
 
@@ -48,8 +61,8 @@ brief doesn't answer yet. Teammates' actions in the prototype are simulated (dec
 
 ### F4. Jobs through the day
 
-1. A doctor sees their jobs across every list they're on, with the patient each belongs to.
-   **Question:** is "my jobs" its own view, or a filter on each list?
+1. A doctor narrows the jobs on a list to their own with a filter, a segmented control or a
+   combobox, rather than a separate view, and sees the patient each job belongs to.
 2. A nurse sees the jobs within their scope and completes them; the others are visible but can't
    be completed by them (S11).
 3. A completed job updates live for everyone (C1), with who completed it and when.
@@ -63,7 +76,8 @@ brief doesn't answer yet. Teammates' actions in the prototype are simulated (dec
 3. The after-hours registrar opens one list of the whole unit. Patients marked important come
    first, grouped by team. Stable patients with nothing marked are collapsed, with a count, and
    expand with the keyboard (D4).
-4. They accept each team's handover, then work through the important patients.
+4. They accept each team's handover, then work through the important patients. They can add,
+   complete and adjust jobs, flags and acuity as necessary.
 5. A collapsed patient who deteriorates, or is marked important, becomes active and visible (S12).
    The reason is shown with its source: a clinician, a source system's deterioration signal, or an
    AI model, which is labelled as AI (S2, S3).
@@ -131,8 +145,4 @@ brief doesn't answer yet. Teammates' actions in the prototype are simulated (dec
 
 ## Open questions
 
-- Can a referral be made for a patient who isn't registered yet? (F1)
-- What happens to a referral nobody has accepted by the end of the day? (F1)
-- Is "my jobs" its own view, or a filter on each list? (F4)
-- Can the after-hours team change the day team's flags, acuity and jobs, or only add their own?
-  (F5)
+- What does an expected patient's placeholder hold before it's linked, and who may link it? (F1a)
