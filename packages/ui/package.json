@@ -60,7 +60,7 @@
     "@tanstack/react-table": "^9.2.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-day-picker": "^10.0.1"
+    "react-day-picker": "^10.0.2"
   },
   "devDependencies": {
     "@cadence-clinical/config": "workspace:*",
@@ -70,7 +70,7 @@
     "@types/react-dom": "catalog:",
     "eslint": "catalog:",
     "react": "catalog:",
-    "react-day-picker": "^10.0.1",
+    "react-day-picker": "^10.0.2",
     "react-dom": "catalog:",
     "storybook": "^10.6.1",
     "tsdown": "catalog:",

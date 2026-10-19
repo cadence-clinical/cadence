@@ -45,7 +45,7 @@
     "eslint-config-next": "^16.4.0",
     "eslint-config-prettier": "^10.1.8",
     "postcss": "^8.5.28",
-    "react-day-picker": "^10.0.1",
+    "react-day-picker": "^10.0.2",
     "shadcn": "^4.21.0",
     "tailwindcss": "catalog:",
     "typescript": "catalog:"
