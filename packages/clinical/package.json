@@ -45,7 +45,7 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "@base-ui/react": "^1.8.0",
+    "@base-ui/react": "^1.9.0",
     "@cadence-clinical/config": "workspace:*",
     "@storybook/react-vite": "^10.6.1",
     "@types/react": "catalog:",
