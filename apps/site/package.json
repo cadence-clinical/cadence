@@ -10,7 +10,7 @@
     "build": "pnpm registry && next build",
     "registry": "node scripts/build-registry.mjs",
     "start": "next start",
-    "lint": "eslint . --max-warnings 0",
+    "lint": "next typegen && eslint . --max-warnings 0",
     "typecheck": "next typegen && tsc --noEmit",
     "test:e2e": "playwright test"
   },
