@@ -2,6 +2,6 @@ import { docsLlms } from "@/lib/source";
 
 export const revalidate = false;
 
-export async function GET(): Promise<Response> {
-  return new Response(await docsLlms.index());
+export function GET(): Response {
+  return new Response(docsLlms.index());
 }

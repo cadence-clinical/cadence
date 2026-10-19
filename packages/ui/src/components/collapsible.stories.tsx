@@ -155,8 +155,11 @@ export const Disabled: Story = {
   args: { disabled: true },
   play: async ({ canvasElement }) => {
     const trigger = within(canvasElement).getByRole("button", { name: "Earlier entries" });
-    // It stays focusable, so it can be found, and says it is disabled.
-    await expect(trigger).toHaveAttribute("aria-disabled", "true");
+    // A native button trigger is disabled natively (Base UI 1.9): it says it is disabled, and Tab
+    // passes over it, as any disabled button.
+    await expect(trigger).toBeDisabled();
+    await userEvent.tab();
+    await expect(trigger).not.toHaveFocus();
     // A disabled button takes no pointer events, which user-event would refuse to press through.
     // The check is off so the press reaches the trigger, which must ignore it.
     await userEvent.click(trigger, { pointerEventsCheck: 0 });
