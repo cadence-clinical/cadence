@@ -1,0 +1,69 @@
+---
+title: Description list code
+description: How to install Description list, its parts and props, and how it lays its pairs out.
+---
+
+## Installation
+
+From npm:
+
+```tsx
+import {
+  DescriptionDetails,
+  DescriptionItem,
+  DescriptionList,
+  DescriptionTerm,
+} from "@cadence-clinical/ui";
+```
+
+From the shadcn registry:
+
+```bash
+pnpm dlx shadcn@latest add @cadence/description-list
+```
+
+[Installation](/docs/installation) covers both routes and the styles each one needs.
+
+## Usage
+
+```tsx
+<DescriptionList>
+  <DescriptionItem>
+    <DescriptionTerm>Working problem</DescriptionTerm>
+    <DescriptionDetails>Community-acquired pneumonia</DescriptionDetails>
+  </DescriptionItem>
+</DescriptionList>
+```
+
+## API
+
+shadcn has no description list. Cadence names the parts after the HTML elements they render, as shadcn names Table's parts:
+
+| Part                 | Renders | `data-slot`           |
+| -------------------- | ------- | --------------------- |
+| `DescriptionList`    | `dl`    | `description-list`    |
+| `DescriptionItem`    | `div`   | `description-item`    |
+| `DescriptionTerm`    | `dt`    | `description-term`    |
+| `DescriptionDetails` | `dd`    | `description-details` |
+
+Each part spreads the rest of its props onto its element. `DescriptionList` also carries `data-orientation`. Description list is a [primitive](/docs/levels): it uses no other component.
+
+## Props
+
+| Prop          | On                | Type                                         | Default        |
+| ------------- | ----------------- | -------------------------------------------- | -------------- |
+| `orientation` | `DescriptionList` | `"responsive" \| "horizontal" \| "vertical"` | `"responsive"` |
+
+## Layout
+
+The list is a two-column grid. The terms' column is as wide as the widest term, up to 40% of the list, and a longer term wraps. Each `DescriptionItem` spans both columns and shares them with CSS subgrid, so every term and every detail lines up across the items.
+
+With `orientation="responsive"`, the list is a container (`@container/description-list`), and each term sits beside its details while the container is 18rem (`@2xs`) wide or more. Below that, the term and its details each take the whole width. Because the list measures its own width, it needs one: it fills a block, and inside a box that shrinks to fit its content, such as a flex row or a popover, give it a width such as `w-full`.
+
+A `DescriptionItem` is optional. Terms and details placed straight in the list take the same columns, but a stacked pair is then no further from the next pair than from its own term, so use an item for each pair.
+
+## Accessibility
+
+- A `dl` with `dt` and `dd` elements is announced as a list of terms and their descriptions, and the `div` around each pair is allowed by HTML and has no role of its own.
+- The terms use `muted-foreground`, which holds 4.5:1 against the page and a card.
+- Nothing is cut short: terms and details wrap, breaking a long word only when it would otherwise run past the edge.

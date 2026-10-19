@@ -1,0 +1,170 @@
+---
+title: Avatar examples
+description: Initials, a picture, the three sizes, a badge, a group and an avatar beside a name, each with its code.
+---
+
+import { Check } from "lucide-react";
+import {
+  Avatar,
+  AvatarBadge,
+  AvatarFallback,
+  AvatarGroup,
+  AvatarGroupCount,
+  AvatarImage,
+} from "@cadence-clinical/ui";
+
+## Initials
+
+The default. Most people in clinical software have no picture, so this is what most people see.
+
+<ComponentPreview>
+  <Avatar>
+    <AvatarFallback>TE</AvatarFallback>
+  </Avatar>
+</ComponentPreview>
+
+```tsx
+import { Avatar, AvatarFallback } from "@cadence-clinical/ui";
+
+<Avatar>
+  <AvatarFallback>TE</AvatarFallback>
+</Avatar>;
+```
+
+## With a picture
+
+Put an `AvatarImage` before the fallback. The initials show until the picture has loaded, and stay if it does not load. This picture is a drawn pattern.
+
+<ComponentPreview>
+  <Avatar>
+    <AvatarImage
+      src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22%235b7fa6%22%2F%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2214%22%20r%3D%229%22%20fill%3D%22%239fb9d6%22%2F%3E%3Cpath%20d%3D%22M0%2040%20L22%2018%20L40%2034%20L40%2040%20Z%22%20fill%3D%22%232f4a6b%22%2F%3E%3C%2Fsvg%3E"
+      alt="Dr Tom Ellis"
+    />
+    <AvatarFallback>TE</AvatarFallback>
+  </Avatar>
+</ComponentPreview>
+
+```tsx
+<Avatar>
+  <AvatarImage src="/staff/tom-ellis.jpg" alt="Dr Tom Ellis" />
+  <AvatarFallback>TE</AvatarFallback>
+</Avatar>
+```
+
+## Sizes
+
+`sm`, `default` and `lg` are the small, default and large control heights, so each follows the density.
+
+<ComponentPreview>
+  <Avatar size="sm">
+    <AvatarFallback>TE</AvatarFallback>
+  </Avatar>
+  <Avatar>
+    <AvatarFallback>TE</AvatarFallback>
+  </Avatar>
+  <Avatar size="lg">
+    <AvatarFallback>TE</AvatarFallback>
+  </Avatar>
+</ComponentPreview>
+
+```tsx
+<Avatar size="sm">
+  <AvatarFallback>TE</AvatarFallback>
+</Avatar>
+<Avatar>
+  <AvatarFallback>TE</AvatarFallback>
+</Avatar>
+<Avatar size="lg">
+  <AvatarFallback>TE</AvatarFallback>
+</Avatar>
+```
+
+## Beside a name
+
+Hide the avatar from screen readers with `aria-hidden` when the name is beside it, so the initials are not read before the name.
+
+<ComponentPreview>
+  <div className="flex items-center gap-2 text-control">
+    <Avatar aria-hidden>
+      <AvatarFallback>TE</AvatarFallback>
+    </Avatar>
+    <span className="flex flex-col leading-tight">
+      <span className="font-medium">Dr Tom Ellis</span>
+      <span className="text-control-sm text-muted-foreground">Registrar · GMU A</span>
+    </span>
+  </div>
+</ComponentPreview>
+
+```tsx
+<div className="flex items-center gap-2 text-control">
+  <Avatar aria-hidden>
+    <AvatarFallback>TE</AvatarFallback>
+  </Avatar>
+  <span className="flex flex-col leading-tight">
+    <span className="font-medium">Dr Tom Ellis</span>
+    <span className="text-control-sm text-muted-foreground">Registrar · GMU A</span>
+  </span>
+</div>
+```
+
+## With a badge
+
+An `AvatarBadge` is a dot on the lower edge. Say what it means in words inside it, because a dot is colour alone.
+
+<ComponentPreview>
+  <Avatar size="lg">
+    <AvatarFallback>TE</AvatarFallback>
+    <AvatarBadge>
+      <Check aria-hidden />
+      <span className="sr-only">On shift</span>
+    </AvatarBadge>
+  </Avatar>
+</ComponentPreview>
+
+```tsx
+import { Check } from "lucide-react";
+
+<Avatar size="lg">
+  <AvatarFallback>TE</AvatarFallback>
+  <AvatarBadge>
+    <Check aria-hidden />
+    <span className="sr-only">On shift</span>
+  </AvatarBadge>
+</Avatar>;
+```
+
+## A group
+
+`AvatarGroup` overlaps its avatars, and `AvatarGroupCount` counts the people it does not show. Name the group, and say what the count counts.
+
+<ComponentPreview>
+  <AvatarGroup role="list" aria-label="GMU A team">
+    <Avatar role="listitem">
+      <AvatarFallback>TE</AvatarFallback>
+    </Avatar>
+    <Avatar role="listitem">
+      <AvatarFallback>AS</AvatarFallback>
+    </Avatar>
+    <Avatar role="listitem">
+      <AvatarFallback>MK</AvatarFallback>
+    </Avatar>
+    <AvatarGroupCount role="listitem">
+      +4<span className="sr-only"> more people</span>
+    </AvatarGroupCount>
+  </AvatarGroup>
+</ComponentPreview>
+
+```tsx
+<AvatarGroup role="list" aria-label="GMU A team">
+  <Avatar role="listitem">
+    <AvatarFallback>TE</AvatarFallback>
+  </Avatar>
+  <Avatar role="listitem">
+    <AvatarFallback>AS</AvatarFallback>
+  </Avatar>
+  <AvatarGroupCount role="listitem">
+    +4<span className="sr-only"> more people</span>
+  </AvatarGroupCount>
+</AvatarGroup>
+```

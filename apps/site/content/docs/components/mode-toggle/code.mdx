@@ -1,0 +1,117 @@
+---
+title: Mode toggle code
+description: How to install Mode toggle, its props, the useMode hook, and the script that applies a remembered mode before the page paints.
+---
+
+## Installation
+
+From npm:
+
+```tsx
+import { ModeToggle } from "@cadence-clinical/ui";
+```
+
+From the shadcn registry:
+
+```bash
+pnpm dlx shadcn@latest add @cadence/mode-toggle
+```
+
+[Installation](/docs/installation) covers both routes and the styles each one needs.
+
+## Usage
+
+```tsx
+import { ModeToggle } from "@cadence-clinical/ui";
+
+<ModeToggle />;
+```
+
+Add the script in [Avoid a flash of the other mode](#avoid-a-flash-of-the-other-mode) to the page's `<head>`.
+
+## API
+
+Mode toggle is shadcn's [mode toggle](https://ui.shadcn.com/docs/dark-mode): a [Button](/docs/components/button) with a sun or a moon that opens a [Dropdown menu](/docs/components/dropdown-menu) of Light, Dark and System. The rest of its props go to the Button, so it takes `variant`, `size`, `className` and the Base UI Button's props. The button carries `data-slot="mode-toggle"` and `data-mode` with the mode chosen.
+
+Choosing Light or Dark sets `data-mode` on `<html>`, which the [tokens](/docs/theming#mode) follow, and stores the mode in `localStorage` under `cadence-mode`. Choosing System removes both, so the page follows the device's `prefers-color-scheme`. If storage is blocked, as in some private windows, the mode still changes, for that page only.
+
+## Props
+
+| Prop            | Type                            | Default          |
+| --------------- | ------------------------------- | ---------------- |
+| `value`         | `"light" \| "dark" \| "system"` | The page's mode  |
+| `onValueChange` | `(mode: Mode) => void`          |                  |
+| `storageKey`    | `string`                        | `"cadence-mode"` |
+| `labels`        | `Partial<ModeToggleLabels>`     | en-AU words      |
+| `align`         | `"start" \| "center" \| "end"`  | `"end"`          |
+| `variant`       | A Button variant                | `"outline"`      |
+
+`labels` takes `trigger` (the button's name and the menu's heading, "Colour mode"), `light`, `dark` and `system`.
+
+## The mode outside the toggle
+
+`useMode` gives any component the page's mode. Every component that uses it shows the same mode and follows a change made anywhere: by the toggle, by another tab, or by the device under System.
+
+```tsx
+"use client";
+
+import { useMode } from "@cadence-clinical/ui";
+
+export function ChartBackground() {
+  const { mode, resolvedMode, setMode } = useMode();
+  // mode: "light", "dark" or "system". resolvedMode: the mode the page is shown in.
+  return null;
+}
+```
+
+On the server `useMode` returns `system` and `light`, and the page takes the real mode once it is running.
+
+`setMode(mode)` sets and remembers a mode from outside React. `getMode()` and `getResolvedMode()` read the page's mode. Each reads the document, so call them only in the browser.
+
+## Avoid a flash of the other mode
+
+The toggle sets the mode once your app is running, which is after the browser first paints the page. To apply a remembered mode before that paint, run `MODE_SCRIPT` in the page's `<head>`. It sets only `light` or `dark`, and does nothing when storage is blocked.
+
+In a static HTML page, put it before the stylesheets:
+
+```html
+<script>
+  try {
+    var m = localStorage.getItem("cadence-mode");
+    if (m === "light" || m === "dark") document.documentElement.setAttribute("data-mode", m);
+  } catch (e) {}
+</script>
+```
+
+In a Next.js root layout:
+
+```tsx
+import { MODE_SCRIPT } from "@cadence-clinical/ui";
+
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en-AU" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: MODE_SCRIPT }} />
+      </head>
+      <body>{children}</body>
+    </html>
+  );
+}
+```
+
+`MODE_SCRIPT` is a fixed string with no input in it. If you pass `storageKey`, write the same key in the script.
+
+## What Cadence changes
+
+- **The menu ticks the mode chosen.** shadcn's items are plain actions. Cadence's are radio items, so a reader can see which mode is set without the colour of the page.
+- **No `next-themes`, and no provider.** The mode lives on `<html>` as `data-mode`, and `useMode` reads it from there, so the toggle works in any React app.
+- **The icon does not animate.** shadcn turns the sun into the moon with `dark:` classes. Cadence components have no `dark:` overrides, so the toggle shows the icon for the mode the page is in.
+- **The button has a name in words**, "Colour mode", where shadcn's says "Toggle theme". In Cadence a theme is a brand, which this does not choose.
+
+## Accessibility
+
+- The button's words are its accessible name and are hidden from sight. It has `aria-haspopup="menu"`.
+- The menu is a group named "Colour mode". Each mode is a radio item, so a screen reader hears which one is checked.
+- The arrow keys move through the modes, Enter chooses one, and the menu closes and returns focus to the button. Escape closes it without a change.
+- The button is the height of a control, so it is a 44px target when the density is comfortable.

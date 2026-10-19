@@ -1,0 +1,39 @@
+{
+  "name": "@cadence-clinical/prototypes",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Cadence Clinical prototypes: features demonstrated with Cadence's components and synthetic data, for testing with clinicians. Connected to nothing.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 3001",
+    "build": "vite build",
+    "preview": "vite preview --port 3001",
+    "lint": "eslint . --max-warnings 0",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@cadence-clinical/clinical": "workspace:*",
+    "@cadence-clinical/core": "workspace:*",
+    "@cadence-clinical/tokens": "workspace:*",
+    "@cadence-clinical/ui": "workspace:*",
+    "@dagrejs/dagre": "^3.1.1",
+    "@tanstack/react-table": "^9.2.0",
+    "lucide-react": "^1.46.0",
+    "react": "catalog:",
+    "react-day-picker": "^10.0.1",
+    "react-dom": "catalog:"
+  },
+  "devDependencies": {
+    "@cadence-clinical/config": "workspace:*",
+    "@tailwindcss/vite": "catalog:",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@vitejs/plugin-react": "^6.1.0",
+    "eslint": "catalog:",
+    "tailwindcss": "catalog:",
+    "typescript": "catalog:",
+    "vite": "^8.3.0"
+  }
+}

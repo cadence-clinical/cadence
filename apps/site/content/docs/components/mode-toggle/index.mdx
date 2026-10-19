@@ -1,0 +1,46 @@
+---
+title: Mode toggle
+description: Lets a reader choose light mode, dark mode or their device's setting, and remembers the choice.
+---
+
+<GradeBadge component="mode-toggle" />
+
+<ModeTogglePreview />
+
+## Use it for
+
+- Letting a reader choose light or dark mode for the whole app, or follow their device's setting.
+- An app header, beside the reader's other controls.
+
+## Do not use it for
+
+- **Choosing a brand, an accent, a contrast level or a density.** Each is its own attribute on `<html>`, as [Theming](/docs/theming) describes. Offer them in a settings page with a [Radio group](/docs/components/radio-group) or a [Select](/docs/components/select).
+- **Showing one part of a page in the other mode.** Cadence themes the whole page from `<html>` and does not support a differently themed subtree.
+- **A setting inside a form.** Use a [Radio group](/docs/components/radio-group), which shows every choice at once.
+
+## Keep System as the default
+
+With nothing chosen, the page follows the device's `prefers-color-scheme`, and the toggle shows System. A reader who has set their device to dark at night gets dark without doing anything. Do not choose a mode for the reader.
+
+## Put it at the end of the header
+
+Readers look for the toggle in the top corner, beside their account. Put one toggle in the header of each screen, not one in each panel. Every toggle on a page shows the same mode, so a second one is never out of step, but it is clutter.
+
+## Load the remembered mode before the page paints
+
+The toggle remembers a choice in `localStorage`. Run Mode toggle's script in the page's `<head>`, so a reader who chose dark does not see a flash of light on every load. [Code](/docs/components/mode-toggle/code#avoid-a-flash-of-the-other-mode) has the script.
+
+## Force a mode only to print
+
+A page that prints, such as a set of A4 sheets, can set light mode while it is open, because paper is light. Put the reader's choice back when they leave the page. Do not force a mode anywhere else: the reader chose theirs, and dark mode can be an accessibility need.
+
+## Write the labels
+
+- **Name the button for what it sets**: "Colour mode". The name stays the same whatever the mode, and the menu says which one is chosen.
+- **Name the modes in one word each**: Light, Dark and System.
+- **Use sentence case.**
+
+## Accessibility
+
+- **Keep the button's name.** It is an icon button, so its words are its only name. Pass other words through `labels`, never as an `aria-label` alone.
+- **Check every screen in both modes.** The tokens hold their contrast in both, but a raw colour or an image with a light background does not.

@@ -64,8 +64,8 @@ type ListDetailProps = ComponentProps<"div"> & {
  *
  * From `md` up the two sit side by side, and each scrolls on its own. Inside an Application shell
  * it fills the height under the header. On a phone one shows at a time: the record replaces the
- * list while `open`, focus moves to it, and `ListDetailBack` brings the list back with focus where
- * it was.
+ * list while `open`, focus moves to it and it is scrolled to its top, below a sticky header, and
+ * `ListDetailBack` brings the list back with focus where it was.
  */
 function ListDetail({ open = false, onBack, className, ...props }: ListDetailProps) {
   const isPhone = useIsPhone();
@@ -80,7 +80,11 @@ function ListDetail({ open = false, onBack, className, ...props }: ListDetailPro
     // Beside each other, both panes are in view, and focus stays where the user put it.
     if (!isPhone) return;
     if (open) {
-      detailRef.current?.focus();
+      // The record starts at its top, just below a sticky header, however far down the list was
+      // scrolled when it was chosen.
+      const detail = detailRef.current;
+      detail?.focus({ preventScroll: true });
+      detail?.scrollIntoView({ block: "start" });
     } else {
       const last = lastInListRef.current;
       (last?.isConnected ? last : listRef.current)?.focus();
@@ -127,7 +131,8 @@ function ListDetailList({ className, ...props }: ComponentProps<"section">) {
       data-slot="list-detail-list"
       tabIndex={-1}
       className={cn(
-        "flex min-h-0 min-w-0 flex-col outline-none md:overflow-y-auto md:overscroll-contain md:border-r",
+        // Focus scrolls the list into view below a sticky header, not under it.
+        "flex min-h-0 min-w-0 scroll-mt-(--header-height,0px) flex-col outline-none md:overflow-y-auto md:overscroll-contain md:border-r",
         "group-data-open/list-detail:hidden md:group-data-open/list-detail:flex",
         className,
       )}
@@ -145,7 +150,8 @@ function ListDetailDetail({ className, ...props }: ComponentProps<"section">) {
       data-slot="list-detail-detail"
       tabIndex={-1}
       className={cn(
-        "hidden min-h-0 min-w-0 flex-col outline-none group-data-open/list-detail:flex md:flex md:overflow-y-auto md:overscroll-contain",
+        // Focus scrolls the record into view below a sticky header, not under it.
+        "hidden min-h-0 min-w-0 scroll-mt-(--header-height,0px) flex-col outline-none group-data-open/list-detail:flex md:flex md:overflow-y-auto md:overscroll-contain",
         className,
       )}
       {...props}

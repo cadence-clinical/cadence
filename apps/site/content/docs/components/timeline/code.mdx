@@ -1,0 +1,90 @@
+---
+title: Timeline code
+description: How to install Timeline, its parts and props, how it lays an item out, and how a screen reader reads it.
+---
+
+## Installation
+
+From npm:
+
+```tsx
+import {
+  Timeline,
+  TimelineContent,
+  TimelineHeader,
+  TimelineIcon,
+  TimelineItem,
+  TimelineTime,
+  TimelineTitle,
+} from "@cadence-clinical/ui";
+```
+
+From the shadcn registry:
+
+```bash
+pnpm dlx shadcn@latest add @cadence/timeline
+```
+
+[Installation](/docs/installation) covers both routes and the styles each one needs.
+
+## Usage
+
+```tsx
+<Timeline aria-label="Activity, newest first">
+  <TimelineItem>
+    <TimelineIcon>
+      <PencilLine />
+    </TimelineIcon>
+    <TimelineHeader>
+      <TimelineTitle>Change</TimelineTitle>
+      <span>Dr Tom Ellis</span>
+      <TimelineTime dateTime="2026-10-19T08:03:00+11:00">08:03</TimelineTime>
+    </TimelineHeader>
+    <TimelineContent>Marked seen today.</TimelineContent>
+  </TimelineItem>
+</Timeline>
+```
+
+## API
+
+shadcn has no timeline. Timeline's parts follow the shape of Cadence's [Comment](/docs/components/comment): a header of parts with a middle dot between them, then the content.
+
+| Part              | Renders | `data-slot`        |
+| ----------------- | ------- | ------------------ |
+| `Timeline`        | `ol`    | `timeline`         |
+| `TimelineItem`    | `li`    | `timeline-item`    |
+| `TimelineIcon`    | `span`  | `timeline-icon`    |
+| `TimelineHeader`  | `div`   | `timeline-header`  |
+| `TimelineTitle`   | `span`  | `timeline-title`   |
+| `TimelineTime`    | `time`  | `timeline-time`    |
+| `TimelineContent` | `div`   | `timeline-content` |
+
+Each part spreads the rest of its props onto its element. `TimelineItem` and `TimelineTitle` take the Base UI [render prop](https://base-ui.com/react/utils/use-render) to become another element, such as a heading for the title. `Timeline` carries `data-variant`. Timeline is a [composite](/docs/levels): a group of parts that works as one unit, built on no other component.
+
+## Props
+
+| Prop       | On              | Type                       | Default     |
+| ---------- | --------------- | -------------------------- | ----------- |
+| `variant`  | `Timeline`      | `"default" \| "connected"` | `"default"` |
+| `render`   | `TimelineItem`  | An element or a function   | An `li`     |
+| `render`   | `TimelineTitle` | An element or a function   | A `span`    |
+| `dateTime` | `TimelineTime`  | `string`, ISO 8601         |             |
+
+`timelineVariants` returns the classes for a variant.
+
+## Layout
+
+An item is a grid. The `TimelineIcon` sits in a column of its own, in a circle 1.5 times a control's icon, so it follows the [density](/docs/theming#density): 24px when compact and 30px when comfortable. The header's first line is centred on the circle. The `TimelineHeader` and `TimelineContent` sit beside the icon, or take the whole width when the item has no icon.
+
+With `variant="connected"`, each item but the last draws a 1px rule in `border`, from under its icon to above the next item's icon, across the gap between items. Items are a container's padding apart (`gap-container`).
+
+The header wraps between its parts, and the content wraps, breaking a long word only when it would otherwise run past the edge. Nothing is cut short.
+
+## Accessibility
+
+- The timeline is an `ol`, so a screen reader says how many items it holds. Name it with `aria-label`.
+- In each item the header comes before the content in the page, so a screen reader reads the kind, who and when before what happened.
+- `TimelineIcon` has `aria-hidden`. The middle dots between the header's parts are hidden too, and a screen reader pauses between the parts instead.
+- `TimelineTime` is a `time` element: give `dateTime` the moment in ISO 8601 with its offset.
+- An item can take focus when you give it `tabIndex={-1}`, such as to move focus to a comment once it is revoked. Draw its focus ring with `focus-visible:ring-2 focus-visible:ring-ring`.
+- Timeline has no motion.

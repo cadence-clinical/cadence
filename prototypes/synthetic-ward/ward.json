@@ -1,5 +1,5 @@
 {
-  "about": "A small, hand-made synthetic ward for prototyping the patient list and later features. Every person, identifier, time and value is invented and is not clinical advice. Shape follows decision 0019; a Synthea-based generator replaces it later.",
+  "about": "A small, hand-made synthetic ward for prototyping the patient list and later features. Every person, identifier, time and value is invented and is not clinical advice. Shape follows decision 0019; a Synthea-based generator replaces it later. Comments, allied health, discharge barriers and the list's other app data are kept apart in `sources.app`; `directory` holds registered patients on no list.",
   "now": "2026-10-19T08:00:00+11:00",
   "timeZone": "Australia/Melbourne",
   "sources": {
@@ -15,6 +15,7 @@
       "conditions",
       "latestObservations",
       "latestResults",
+      "latestNote",
       "medicines",
       "leftHospital"
     ],
@@ -30,9 +31,19 @@
       "seenToday",
       "overnight",
       "expected",
+      "expectedDischarge",
+      "alliedHealth",
+      "dischargeBarriers",
       "history"
     ],
-    "supplied": ["deterioration"]
+    "supplied": ["deterioration"],
+    "notes": {
+      "latestNote": "A DocumentReference: its type, author and date. The summary is the note's opening line as written, read from its Binary content. Nothing generates it.",
+      "alliedHealth": "A referral to physiotherapy (PT), social work (SW) or occupational therapy (OT) could be a ServiceRequest, which Oracle serves. Whether the patient has been seen, or cleared for discharge, is held by the list.",
+      "dischargeBarriers": "Short labels the team writes. They match the unit's flags where one fits.",
+      "comments": "The team's comments on a patient. A transfer's handover is its first comment.",
+      "directory": "Patients registered at the hospital and on no list, as a Patient search returns them: by identifier, or by family and given name with birthdate and gender."
+    }
   },
   "unit": {
     "id": "gen-med",
@@ -41,7 +52,7 @@
   "teams": [
     {
       "id": "team-a",
-      "name": "General Medicine A",
+      "name": "GMU A",
       "consultant": "Dr Priya Raman",
       "registrar": "Dr Tom Ellis",
       "residents": ["Dr Mei Chen"],
@@ -49,7 +60,7 @@
     },
     {
       "id": "team-b",
-      "name": "General Medicine B",
+      "name": "GMU B",
       "consultant": "Dr Helen Brooks",
       "registrar": "Dr Ravi Patel",
       "residents": ["Dr Sophie Lane"],
@@ -57,7 +68,7 @@
     },
     {
       "id": "team-c",
-      "name": "General Medicine C",
+      "name": "GMU C",
       "consultant": "Dr Samuel Okafor",
       "registrar": "Dr Grace Kim",
       "residents": ["Dr Ben Hollis"],
@@ -74,6 +85,20 @@
     "RN Kate Morgan (nurse unit manager)",
     "RN Daniel Reyes (clinical nurse)",
     "RN Aisha Malik"
+  ],
+  "alliedHealthStaff": [
+    {
+      "name": "Sam Okoro",
+      "role": "Physiotherapist"
+    },
+    {
+      "name": "Leah Brandt",
+      "role": "Social worker"
+    },
+    {
+      "name": "Nina Petrov",
+      "role": "Occupational therapist"
+    }
   ],
   "flagsDefined": {
     "unit": [
@@ -100,6 +125,7 @@
           "text": "Chase sputum culture",
           "assignee": "Dr Josh Ward",
           "createdBy": "Dr Josh Ward",
+          "createdAt": "2026-10-18T01:00:00.000Z",
           "status": "open",
           "due": null,
           "completableBy": ["doctor"]
@@ -109,12 +135,28 @@
           "text": "Repeat chest X-ray tomorrow",
           "assignee": "team-a",
           "createdBy": "Dr Josh Ward",
+          "createdAt": "2026-10-18T15:00:00.000Z",
           "status": "open",
           "due": "2026-10-19T21:00:00.000Z",
           "completableBy": ["doctor"]
         }
       ],
-      "comments": [],
+      "comments": [
+        {
+          "id": "comment-01",
+          "author": "Sam Okoro",
+          "role": "Physiotherapist",
+          "at": "2026-10-18T01:00:00.000Z",
+          "text": "Walked 20 m with a frame. Will review tomorrow."
+        },
+        {
+          "id": "comment-02",
+          "author": "RN Kate Morgan",
+          "role": "Nurse unit manager",
+          "at": "2026-10-18T18:00:00.000Z",
+          "text": "Daughter visiting at 1100, keen to talk about going home."
+        }
+      ],
       "history": [],
       "firstName": "Margaret",
       "lastName": "Holloway",
@@ -142,32 +184,73 @@
         "values": [
           {
             "code": "respiratory rate",
+            "abbreviation": "RR",
             "value": 20,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "heart rate",
+            "abbreviation": "HR",
             "value": 92,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "blood pressure",
+            "abbreviation": "BP",
             "value": "128/74",
-            "unit": "mm[Hg]"
+            "unit": "mm[Hg]",
+            "unitDisplay": "mmHg"
           },
           {
             "code": "oxygen saturation",
+            "abbreviation": "SpO₂",
             "value": 94,
-            "unit": "%"
+            "unit": "%",
+            "unitDisplay": "%"
           },
           {
             "code": "body temperature",
+            "abbreviation": "T",
             "value": 37.6,
-            "unit": "Cel"
+            "unit": "Cel",
+            "unitDisplay": "°C"
           }
         ]
       },
-      "medicines": ["ceftriaxone", "apixaban"]
+      "medicines": ["ceftriaxone", "apixaban"],
+      "expectedDischarge": "2026-10-21",
+      "latestNote": {
+        "type": "Ward round note",
+        "author": "Dr Mei Chen",
+        "at": "2026-10-17T22:00:00.000Z",
+        "summary": "Improving on IV antibiotics. Plan to switch to oral tomorrow."
+      },
+      "alliedHealth": {
+        "pt": "seen",
+        "sw": "not-needed",
+        "ot": "referred"
+      },
+      "dischargeBarriers": ["Home assessment"],
+      "latestResults": [
+        {
+          "code": "haemoglobin",
+          "abbreviation": "Hb",
+          "unitDisplay": "g/L",
+          "unit": "g/L",
+          "value": 118,
+          "at": "2026-10-18T10:00:00.000Z"
+        },
+        {
+          "code": "creatinine",
+          "abbreviation": "Cr",
+          "unitDisplay": "µmol/L",
+          "unit": "umol/L",
+          "value": 74,
+          "at": "2026-10-18T10:00:00.000Z"
+        }
+      ]
     },
     {
       "id": "patient-02",
@@ -181,12 +264,21 @@
           "text": "Mark cellulitis margin and photograph",
           "assignee": "RN Aisha Malik",
           "createdBy": "Dr Mei Chen",
+          "createdAt": "2026-10-17T19:00:00.000Z",
           "status": "open",
           "due": null,
           "completableBy": ["doctor", "nurse"]
         }
       ],
-      "comments": [],
+      "comments": [
+        {
+          "id": "comment-03",
+          "author": "Dr Mei Chen",
+          "role": "Resident, GMU A",
+          "at": "2026-10-18T02:00:00.000Z",
+          "text": "Check the URN before giving anything: Kris Taylor is in 402 A."
+        }
+      ],
       "history": [],
       "firstName": "Chris",
       "lastName": "Taylor",
@@ -215,32 +307,55 @@
         "values": [
           {
             "code": "respiratory rate",
+            "abbreviation": "RR",
             "value": 16,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "heart rate",
+            "abbreviation": "HR",
             "value": 78,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "blood pressure",
+            "abbreviation": "BP",
             "value": "136/82",
-            "unit": "mm[Hg]"
+            "unit": "mm[Hg]",
+            "unitDisplay": "mmHg"
           },
           {
             "code": "oxygen saturation",
+            "abbreviation": "SpO₂",
             "value": 98,
-            "unit": "%"
+            "unit": "%",
+            "unitDisplay": "%"
           },
           {
             "code": "body temperature",
+            "abbreviation": "T",
             "value": 37.1,
-            "unit": "Cel"
+            "unit": "Cel",
+            "unitDisplay": "°C"
           }
         ]
       },
-      "medicines": ["cefazolin", "metformin"]
+      "medicines": ["cefazolin", "metformin"],
+      "expectedDischarge": "2026-10-20",
+      "latestNote": {
+        "type": "Progress note",
+        "author": "Dr Josh Ward",
+        "at": "2026-10-18T00:00:00.000Z",
+        "summary": "Cellulitis margin receding. Continue IV cefazolin."
+      },
+      "alliedHealth": {
+        "pt": "not-needed",
+        "sw": "not-needed",
+        "ot": "not-needed"
+      },
+      "dischargeBarriers": []
     },
     {
       "id": "patient-03",
@@ -254,6 +369,7 @@
           "text": "Collateral history from daughter",
           "assignee": "Dr Mei Chen",
           "createdBy": "Dr Josh Ward",
+          "createdAt": "2026-10-18T03:00:00.000Z",
           "status": "open",
           "due": null,
           "completableBy": ["doctor"]
@@ -263,6 +379,7 @@
           "text": "Urine microscopy and culture",
           "assignee": "Dr Josh Ward",
           "createdBy": "Dr Josh Ward",
+          "createdAt": "2026-10-18T11:00:00.000Z",
           "status": "done",
           "due": null,
           "completableBy": ["doctor"],
@@ -270,7 +387,22 @@
           "completedAt": "2026-10-18T17:00:00.000Z"
         }
       ],
-      "comments": [],
+      "comments": [
+        {
+          "id": "comment-04",
+          "author": "Dr Priya Raman",
+          "role": "Consultant, GMU A",
+          "at": "2026-10-17T23:00:00.000Z",
+          "text": "Please organise a family meeting for Thursday."
+        },
+        {
+          "id": "comment-05",
+          "author": "Leah Brandt",
+          "role": "Social worker",
+          "at": "2026-10-18T15:00:00.000Z",
+          "text": "Daughter called back. She can come in on Thursday afternoon."
+        }
+      ],
       "history": [],
       "firstName": "Kris",
       "lastName": "Taylor",
@@ -299,32 +431,65 @@
         "values": [
           {
             "code": "respiratory rate",
+            "abbreviation": "RR",
             "value": 18,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "heart rate",
+            "abbreviation": "HR",
             "value": 88,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "blood pressure",
+            "abbreviation": "BP",
             "value": "142/80",
-            "unit": "mm[Hg]"
+            "unit": "mm[Hg]",
+            "unitDisplay": "mmHg"
           },
           {
             "code": "oxygen saturation",
+            "abbreviation": "SpO₂",
             "value": 96,
-            "unit": "%"
+            "unit": "%",
+            "unitDisplay": "%"
           },
           {
             "code": "body temperature",
+            "abbreviation": "T",
             "value": 37.4,
-            "unit": "Cel"
+            "unit": "Cel",
+            "unitDisplay": "°C"
           }
         ]
       },
-      "medicines": ["quetiapine"]
+      "medicines": ["quetiapine"],
+      "expectedDischarge": "2026-10-23",
+      "latestNote": {
+        "type": "Ward round note",
+        "author": "Dr Priya Raman",
+        "at": "2026-10-17T23:00:00.000Z",
+        "summary": "Remains delirious overnight. Collateral history still needed."
+      },
+      "alliedHealth": {
+        "pt": "referred",
+        "sw": "referred",
+        "ot": "referred"
+      },
+      "dischargeBarriers": ["Family meeting", "Cognitive assessment"],
+      "latestResults": [
+        {
+          "code": "sodium",
+          "abbreviation": "Na",
+          "unitDisplay": "mmol/L",
+          "unit": "mmol/L",
+          "value": 136,
+          "at": "2026-10-18T12:00:00.000Z"
+        }
+      ]
     },
     {
       "id": "patient-04",
@@ -338,6 +503,7 @@
           "text": "Discharge medication reconciliation",
           "assignee": "Dr Mei Chen",
           "createdBy": "Dr Josh Ward",
+          "createdAt": "2026-10-18T13:00:00.000Z",
           "status": "open",
           "due": null,
           "completableBy": ["doctor"]
@@ -347,12 +513,35 @@
           "text": "Book heart failure clinic",
           "assignee": "team-a",
           "createdBy": "Dr Josh Ward",
+          "createdAt": "2026-10-18T13:00:00.000Z",
           "status": "open",
           "due": null,
           "completableBy": ["doctor"]
         }
       ],
-      "comments": [],
+      "comments": [
+        {
+          "id": "comment-06",
+          "author": "Nina Petrov",
+          "role": "Occupational therapist",
+          "at": "2026-10-17T19:00:00.000Z",
+          "text": "Cleared for discharge. Shower chair delivered."
+        },
+        {
+          "id": "comment-07",
+          "author": "Dr Tom Ellis",
+          "role": "Registrar, GMU A",
+          "at": "2026-10-18T17:00:00.000Z",
+          "text": "Pharmacy have the discharge medicines. Aim for a 1400 discharge."
+        },
+        {
+          "id": "comment-08",
+          "author": "RN Daniel Reyes",
+          "role": "Clinical nurse",
+          "at": "2026-10-18T20:00:00.000Z",
+          "text": "Wife picking him up after lunch."
+        }
+      ],
       "history": [],
       "firstName": "Ahmed",
       "lastName": "Karimi",
@@ -380,46 +569,73 @@
         "values": [
           {
             "code": "respiratory rate",
+            "abbreviation": "RR",
             "value": 16,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "heart rate",
+            "abbreviation": "HR",
             "value": 74,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "blood pressure",
+            "abbreviation": "BP",
             "value": "118/70",
-            "unit": "mm[Hg]"
+            "unit": "mm[Hg]",
+            "unitDisplay": "mmHg"
           },
           {
             "code": "oxygen saturation",
+            "abbreviation": "SpO₂",
             "value": 97,
-            "unit": "%"
+            "unit": "%",
+            "unitDisplay": "%"
           },
           {
             "code": "body temperature",
+            "abbreviation": "T",
             "value": 36.8,
-            "unit": "Cel"
+            "unit": "Cel",
+            "unitDisplay": "°C"
           }
         ]
       },
       "latestResults": [
         {
           "code": "potassium",
-          "value": 5.4,
+          "abbreviation": "K",
+          "unitDisplay": "mmol/L",
           "unit": "mmol/L",
+          "value": 5.4,
           "at": "2026-10-18T11:00:00.000Z"
         },
         {
           "code": "creatinine",
-          "value": 168,
+          "abbreviation": "Cr",
+          "unitDisplay": "µmol/L",
           "unit": "umol/L",
+          "value": 168,
           "at": "2026-10-18T11:00:00.000Z"
         }
       ],
-      "medicines": ["furosemide", "spironolactone"]
+      "medicines": ["furosemide", "spironolactone"],
+      "expectedDischarge": "2026-10-19",
+      "latestNote": {
+        "type": "Discharge planning note",
+        "author": "Dr Mei Chen",
+        "at": "2026-10-18T16:00:00.000Z",
+        "summary": "Euvolaemic. Discharge today once medicines are reconciled."
+      },
+      "alliedHealth": {
+        "pt": "cleared",
+        "sw": "not-needed",
+        "ot": "cleared"
+      },
+      "dischargeBarriers": ["Clinic booking"]
     },
     {
       "id": "patient-05",
@@ -456,32 +672,73 @@
         "values": [
           {
             "code": "respiratory rate",
+            "abbreviation": "RR",
             "value": 14,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "heart rate",
+            "abbreviation": "HR",
             "value": 84,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "blood pressure",
+            "abbreviation": "BP",
             "value": "122/76",
-            "unit": "mm[Hg]"
+            "unit": "mm[Hg]",
+            "unitDisplay": "mmHg"
           },
           {
             "code": "oxygen saturation",
+            "abbreviation": "SpO₂",
             "value": 99,
-            "unit": "%"
+            "unit": "%",
+            "unitDisplay": "%"
           },
           {
             "code": "body temperature",
+            "abbreviation": "T",
             "value": 37.9,
-            "unit": "Cel"
+            "unit": "Cel",
+            "unitDisplay": "°C"
           }
         ]
       },
-      "medicines": ["gentamicin"]
+      "medicines": ["gentamicin"],
+      "expectedDischarge": "2026-10-20",
+      "latestNote": {
+        "type": "Admission note",
+        "author": "Dr Tom Ellis",
+        "at": "2026-10-17T23:00:00.000Z",
+        "summary": "Pyelonephritis. IV gentamicin, levels with tomorrow's bloods."
+      },
+      "alliedHealth": {
+        "pt": "not-needed",
+        "sw": "not-needed",
+        "ot": "not-needed"
+      },
+      "dischargeBarriers": [],
+      "latestResults": [
+        {
+          "code": "creatinine",
+          "abbreviation": "Cr",
+          "unitDisplay": "µmol/L",
+          "unit": "umol/L",
+          "value": 82,
+          "at": "2026-10-18T13:00:00.000Z"
+        },
+        {
+          "code": "potassium",
+          "abbreviation": "K",
+          "unitDisplay": "mmol/L",
+          "unit": "mmol/L",
+          "value": 4.1,
+          "at": "2026-10-18T13:00:00.000Z"
+        }
+      ]
     },
     {
       "id": "patient-06",
@@ -495,12 +752,28 @@
           "text": "Aged care assessment follow-up",
           "assignee": "team-a",
           "createdBy": "Dr Josh Ward",
+          "createdAt": "2026-10-17T15:00:00.000Z",
           "status": "open",
           "due": null,
           "completableBy": ["doctor"]
         }
       ],
-      "comments": [],
+      "comments": [
+        {
+          "id": "comment-09",
+          "author": "Leah Brandt",
+          "role": "Social worker",
+          "at": "2026-10-17T17:00:00.000Z",
+          "text": "Two facilities have offered a bed. Family visiting both this week."
+        },
+        {
+          "id": "comment-10",
+          "author": "Sam Okoro",
+          "role": "Physiotherapist",
+          "at": "2026-10-18T14:00:00.000Z",
+          "text": "Transfers with one person. No change to the plan."
+        }
+      ],
       "history": [],
       "firstName": "Robert",
       "lastName": "Achterberg",
@@ -528,32 +801,55 @@
         "values": [
           {
             "code": "respiratory rate",
+            "abbreviation": "RR",
             "value": 16,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "heart rate",
+            "abbreviation": "HR",
             "value": 70,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "blood pressure",
+            "abbreviation": "BP",
             "value": "130/72",
-            "unit": "mm[Hg]"
+            "unit": "mm[Hg]",
+            "unitDisplay": "mmHg"
           },
           {
             "code": "oxygen saturation",
+            "abbreviation": "SpO₂",
             "value": 96,
-            "unit": "%"
+            "unit": "%",
+            "unitDisplay": "%"
           },
           {
             "code": "body temperature",
+            "abbreviation": "T",
             "value": 36.6,
-            "unit": "Cel"
+            "unit": "Cel",
+            "unitDisplay": "°C"
           }
         ]
       },
-      "medicines": ["levodopa with carbidopa"]
+      "medicines": ["levodopa with carbidopa"],
+      "expectedDischarge": "2026-10-17",
+      "latestNote": {
+        "type": "Discharge planning note",
+        "author": "Dr Josh Ward",
+        "at": "2026-10-17T15:00:00.000Z",
+        "summary": "Medically ready. Waiting for a residential aged care bed."
+      },
+      "alliedHealth": {
+        "pt": "seen",
+        "sw": "seen",
+        "ot": "cleared"
+      },
+      "dischargeBarriers": ["Awaiting placement", "Aged care assessment"]
     },
     {
       "id": "patient-07",
@@ -567,12 +863,21 @@
           "text": "Repeat troponin at 0900",
           "assignee": "Dr Josh Ward",
           "createdBy": "Dr Josh Ward",
+          "createdAt": "2026-10-18T14:00:00.000Z",
           "status": "open",
           "due": "2026-10-18T22:00:00.000Z",
           "completableBy": ["doctor"]
         }
       ],
-      "comments": [],
+      "comments": [
+        {
+          "id": "comment-11",
+          "author": "Dr Josh Ward",
+          "role": "Intern, GMU A",
+          "at": "2026-10-18T19:00:00.000Z",
+          "text": "Second troponin sent at 0700."
+        }
+      ],
       "history": [],
       "firstName": "Tui",
       "lastName": "Ngata",
@@ -600,32 +905,55 @@
         "values": [
           {
             "code": "respiratory rate",
+            "abbreviation": "RR",
             "value": 16,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "heart rate",
+            "abbreviation": "HR",
             "value": 80,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "blood pressure",
+            "abbreviation": "BP",
             "value": "140/86",
-            "unit": "mm[Hg]"
+            "unit": "mm[Hg]",
+            "unitDisplay": "mmHg"
           },
           {
             "code": "oxygen saturation",
+            "abbreviation": "SpO₂",
             "value": 98,
-            "unit": "%"
+            "unit": "%",
+            "unitDisplay": "%"
           },
           {
             "code": "body temperature",
+            "abbreviation": "T",
             "value": 36.9,
-            "unit": "Cel"
+            "unit": "Cel",
+            "unitDisplay": "°C"
           }
         ]
       },
-      "medicines": ["aspirin"]
+      "medicines": ["aspirin"],
+      "expectedDischarge": "2026-10-19",
+      "latestNote": {
+        "type": "Admission note",
+        "author": "Dr Tom Ellis",
+        "at": "2026-10-18T10:00:00.000Z",
+        "summary": "Chest pain settled. Serial troponins and an ECG this morning."
+      },
+      "alliedHealth": {
+        "pt": "not-needed",
+        "sw": "not-needed",
+        "ot": "not-needed"
+      },
+      "dischargeBarriers": ["Awaiting results"]
     },
     {
       "id": "patient-08",
@@ -639,12 +967,28 @@
           "text": "Blood gas if drowsier",
           "assignee": "after-hours",
           "createdBy": "Dr Josh Ward",
+          "createdAt": "2026-10-18T18:00:00.000Z",
           "status": "open",
           "due": null,
           "completableBy": ["doctor"]
         }
       ],
-      "comments": [],
+      "comments": [
+        {
+          "id": "comment-12",
+          "author": "Dr Ravi Patel",
+          "role": "Registrar, GMU B",
+          "at": "2026-10-18T06:00:00.000Z",
+          "text": "Important overnight: review at 2200, blood gas if drowsier."
+        },
+        {
+          "id": "comment-13",
+          "author": "Dr Owen Price",
+          "role": "Resident, after hours",
+          "at": "2026-10-18T12:00:00.000Z",
+          "text": "Reviewed at 2200. Comfortable, no gas needed."
+        }
+      ],
       "history": [],
       "firstName": "Graham",
       "lastName": "Whitlock",
@@ -672,28 +1016,38 @@
         "values": [
           {
             "code": "respiratory rate",
+            "abbreviation": "RR",
             "value": 26,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "heart rate",
+            "abbreviation": "HR",
             "value": 104,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "blood pressure",
+            "abbreviation": "BP",
             "value": "150/88",
-            "unit": "mm[Hg]"
+            "unit": "mm[Hg]",
+            "unitDisplay": "mmHg"
           },
           {
             "code": "oxygen saturation",
+            "abbreviation": "SpO₂",
             "value": 89,
-            "unit": "%"
+            "unit": "%",
+            "unitDisplay": "%"
           },
           {
             "code": "body temperature",
+            "abbreviation": "T",
             "value": 37.8,
-            "unit": "Cel"
+            "unit": "Cel",
+            "unitDisplay": "°C"
           }
         ]
       },
@@ -713,7 +1067,20 @@
           ],
           "reviewedBy": null
         }
-      }
+      },
+      "expectedDischarge": "2026-10-22",
+      "latestNote": {
+        "type": "Progress note",
+        "author": "Dr Ravi Patel",
+        "at": "2026-10-18T05:00:00.000Z",
+        "summary": "Oxygen requirement rose this afternoon. Chest X-ray unchanged."
+      },
+      "alliedHealth": {
+        "pt": "referred",
+        "sw": "not-needed",
+        "ot": "not-needed"
+      },
+      "dischargeBarriers": ["Needs home oxygen"]
     },
     {
       "id": "patient-09",
@@ -722,7 +1089,15 @@
       "seenToday": false,
       "flags": ["Falls precautions"],
       "jobs": [],
-      "comments": [],
+      "comments": [
+        {
+          "id": "comment-14",
+          "author": "Leah Brandt",
+          "role": "Social worker",
+          "at": "2026-10-17T22:00:00.000Z",
+          "text": "Referral to community services sent. Waiting on a start date."
+        }
+      ],
       "history": [],
       "firstName": "Mary",
       "lastName": "Oduya",
@@ -750,32 +1125,55 @@
         "values": [
           {
             "code": "respiratory rate",
+            "abbreviation": "RR",
             "value": 18,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "heart rate",
+            "abbreviation": "HR",
             "value": 82,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "blood pressure",
+            "abbreviation": "BP",
             "value": "124/70",
-            "unit": "mm[Hg]"
+            "unit": "mm[Hg]",
+            "unitDisplay": "mmHg"
           },
           {
             "code": "oxygen saturation",
+            "abbreviation": "SpO₂",
             "value": 95,
-            "unit": "%"
+            "unit": "%",
+            "unitDisplay": "%"
           },
           {
             "code": "body temperature",
+            "abbreviation": "T",
             "value": 37.2,
-            "unit": "Cel"
+            "unit": "Cel",
+            "unitDisplay": "°C"
           }
         ]
       },
-      "medicines": ["amoxicillin with clavulanic acid"]
+      "medicines": ["amoxicillin with clavulanic acid"],
+      "expectedDischarge": "2026-10-21",
+      "latestNote": {
+        "type": "Ward round note",
+        "author": "Dr Sophie Lane",
+        "at": "2026-10-17T21:00:00.000Z",
+        "summary": "Less confused today. Eating and drinking well."
+      },
+      "alliedHealth": {
+        "pt": "seen",
+        "sw": "referred",
+        "ot": "seen"
+      },
+      "dischargeBarriers": ["Community services"]
     },
     {
       "id": "patient-10",
@@ -789,6 +1187,7 @@
           "text": "Diabetes educator review",
           "assignee": "team-b",
           "createdBy": "Dr Josh Ward",
+          "createdAt": "2026-10-18T09:00:00.000Z",
           "status": "open",
           "due": null,
           "completableBy": ["doctor", "nurse"]
@@ -822,40 +1221,65 @@
         "values": [
           {
             "code": "respiratory rate",
+            "abbreviation": "RR",
             "value": 16,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "heart rate",
+            "abbreviation": "HR",
             "value": 90,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "blood pressure",
+            "abbreviation": "BP",
             "value": "118/74",
-            "unit": "mm[Hg]"
+            "unit": "mm[Hg]",
+            "unitDisplay": "mmHg"
           },
           {
             "code": "oxygen saturation",
+            "abbreviation": "SpO₂",
             "value": 99,
-            "unit": "%"
+            "unit": "%",
+            "unitDisplay": "%"
           },
           {
             "code": "body temperature",
+            "abbreviation": "T",
             "value": 36.7,
-            "unit": "Cel"
+            "unit": "Cel",
+            "unitDisplay": "°C"
           }
         ]
       },
       "latestResults": [
         {
           "code": "potassium",
-          "value": 3.4,
+          "abbreviation": "K",
+          "unitDisplay": "mmol/L",
           "unit": "mmol/L",
+          "value": 3.4,
           "at": "2026-10-18T16:00:00.000Z"
         }
       ],
-      "medicines": ["insulin glargine"]
+      "medicines": ["insulin glargine"],
+      "expectedDischarge": "2026-10-20",
+      "latestNote": {
+        "type": "Progress note",
+        "author": "Dr Liam Ortiz",
+        "at": "2026-10-18T15:00:00.000Z",
+        "summary": "Ketoacidosis resolved. Back on subcutaneous insulin."
+      },
+      "alliedHealth": {
+        "pt": "not-needed",
+        "sw": "not-needed",
+        "ot": "not-needed"
+      },
+      "dischargeBarriers": ["Diabetes education"]
     },
     {
       "id": "patient-11",
@@ -864,7 +1288,15 @@
       "seenToday": false,
       "flags": ["Awaiting placement"],
       "jobs": [],
-      "comments": [],
+      "comments": [
+        {
+          "id": "comment-15",
+          "author": "RN Kate Morgan",
+          "role": "Nurse unit manager",
+          "at": "2026-10-17T15:00:00.000Z",
+          "text": "Rehabilitation hospital may have a bed on Wednesday."
+        }
+      ],
       "history": [],
       "firstName": "Evelyn",
       "lastName": "Marsh",
@@ -892,32 +1324,55 @@
         "values": [
           {
             "code": "respiratory rate",
+            "abbreviation": "RR",
             "value": 16,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "heart rate",
+            "abbreviation": "HR",
             "value": 72,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "blood pressure",
+            "abbreviation": "BP",
             "value": "134/78",
-            "unit": "mm[Hg]"
+            "unit": "mm[Hg]",
+            "unitDisplay": "mmHg"
           },
           {
             "code": "oxygen saturation",
+            "abbreviation": "SpO₂",
             "value": 97,
-            "unit": "%"
+            "unit": "%",
+            "unitDisplay": "%"
           },
           {
             "code": "body temperature",
+            "abbreviation": "T",
             "value": 36.5,
-            "unit": "Cel"
+            "unit": "Cel",
+            "unitDisplay": "°C"
           }
         ]
       },
-      "medicines": ["clopidogrel", "atorvastatin"]
+      "medicines": ["clopidogrel", "atorvastatin"],
+      "expectedDischarge": null,
+      "latestNote": {
+        "type": "Discharge planning note",
+        "author": "Dr Sophie Lane",
+        "at": "2026-10-17T05:00:00.000Z",
+        "summary": "Rehabilitation goals met on the ward. Waiting for a bed."
+      },
+      "alliedHealth": {
+        "pt": "seen",
+        "sw": "seen",
+        "ot": "seen"
+      },
+      "dischargeBarriers": ["Awaiting placement"]
     },
     {
       "id": "patient-12",
@@ -931,12 +1386,28 @@
           "text": "Check haemoglobin at 1400",
           "assignee": "Dr Liam Ortiz",
           "createdBy": "Dr Josh Ward",
+          "createdAt": "2026-10-18T12:00:00.000Z",
           "status": "open",
           "due": "2026-10-19T03:00:00.000Z",
           "completableBy": ["doctor"]
         }
       ],
-      "comments": [],
+      "comments": [
+        {
+          "id": "comment-16",
+          "author": "Dr Liam Ortiz",
+          "role": "Intern, GMU B",
+          "at": "2026-10-18T14:00:00.000Z",
+          "text": "Fasting from midnight for endoscopy."
+        },
+        {
+          "id": "comment-17",
+          "author": "RN Aisha Malik",
+          "role": "Nurse",
+          "at": "2026-10-18T19:00:00.000Z",
+          "text": "Endoscopy want him at 1000."
+        }
+      ],
       "history": [],
       "firstName": "Daniel",
       "lastName": "Ferreira",
@@ -964,40 +1435,65 @@
         "values": [
           {
             "code": "respiratory rate",
+            "abbreviation": "RR",
             "value": 18,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "heart rate",
+            "abbreviation": "HR",
             "value": 98,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "blood pressure",
+            "abbreviation": "BP",
             "value": "112/66",
-            "unit": "mm[Hg]"
+            "unit": "mm[Hg]",
+            "unitDisplay": "mmHg"
           },
           {
             "code": "oxygen saturation",
+            "abbreviation": "SpO₂",
             "value": 97,
-            "unit": "%"
+            "unit": "%",
+            "unitDisplay": "%"
           },
           {
             "code": "body temperature",
+            "abbreviation": "T",
             "value": 36.8,
-            "unit": "Cel"
+            "unit": "Cel",
+            "unitDisplay": "°C"
           }
         ]
       },
       "latestResults": [
         {
           "code": "haemoglobin",
-          "value": 92,
+          "abbreviation": "Hb",
+          "unitDisplay": "g/L",
           "unit": "g/L",
+          "value": 92,
           "at": "2026-10-18T15:00:00.000Z"
         }
       ],
-      "medicines": ["pantoprazole"]
+      "medicines": ["pantoprazole"],
+      "expectedDischarge": "2026-10-21",
+      "latestNote": {
+        "type": "Progress note",
+        "author": "Dr Helen Brooks",
+        "at": "2026-10-18T13:00:00.000Z",
+        "summary": "No further bleeding. Endoscopy booked for today."
+      },
+      "alliedHealth": {
+        "pt": "not-needed",
+        "sw": "not-needed",
+        "ot": "not-needed"
+      },
+      "dischargeBarriers": ["Awaiting imaging"]
     },
     {
       "id": "patient-13",
@@ -1032,8 +1528,10 @@
       "latestResults": [
         {
           "code": "sodium",
-          "value": 124,
+          "abbreviation": "Na",
+          "unitDisplay": "mmol/L",
           "unit": "mmol/L",
+          "value": 124,
           "at": "2026-10-18T14:00:00.000Z"
         }
       ],
@@ -1042,32 +1540,55 @@
         "values": [
           {
             "code": "respiratory rate",
+            "abbreviation": "RR",
             "value": 14,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "heart rate",
+            "abbreviation": "HR",
             "value": 76,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "blood pressure",
+            "abbreviation": "BP",
             "value": "128/74",
-            "unit": "mm[Hg]"
+            "unit": "mm[Hg]",
+            "unitDisplay": "mmHg"
           },
           {
             "code": "oxygen saturation",
+            "abbreviation": "SpO₂",
             "value": 98,
-            "unit": "%"
+            "unit": "%",
+            "unitDisplay": "%"
           },
           {
             "code": "body temperature",
+            "abbreviation": "T",
             "value": 36.6,
-            "unit": "Cel"
+            "unit": "Cel",
+            "unitDisplay": "°C"
           }
         ]
       },
-      "medicines": []
+      "medicines": [],
+      "expectedDischarge": "2026-10-22",
+      "latestNote": {
+        "type": "Progress note",
+        "author": "Dr Ravi Patel",
+        "at": "2026-10-18T14:00:00.000Z",
+        "summary": "Fluid restriction continued. Repeat sodium this afternoon."
+      },
+      "alliedHealth": {
+        "pt": "not-needed",
+        "sw": "not-needed",
+        "ot": "not-needed"
+      },
+      "dischargeBarriers": []
     },
     {
       "id": "patient-14",
@@ -1076,7 +1597,15 @@
       "seenToday": false,
       "flags": [],
       "jobs": [],
-      "comments": [],
+      "comments": [
+        {
+          "id": "comment-18",
+          "author": "Dr Helen Brooks",
+          "role": "Consultant, GMU B",
+          "at": "2026-10-18T00:00:00.000Z",
+          "text": "Goals of care conversation with his son tomorrow."
+        }
+      ],
       "history": [],
       "firstName": "Patrick",
       "lastName": "O'Shea",
@@ -1104,32 +1633,55 @@
         "values": [
           {
             "code": "respiratory rate",
+            "abbreviation": "RR",
             "value": 20,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "heart rate",
+            "abbreviation": "HR",
             "value": 86,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "blood pressure",
+            "abbreviation": "BP",
             "value": "120/70",
-            "unit": "mm[Hg]"
+            "unit": "mm[Hg]",
+            "unitDisplay": "mmHg"
           },
           {
             "code": "oxygen saturation",
+            "abbreviation": "SpO₂",
             "value": 95,
-            "unit": "%"
+            "unit": "%",
+            "unitDisplay": "%"
           },
           {
             "code": "body temperature",
+            "abbreviation": "T",
             "value": 37.3,
-            "unit": "Cel"
+            "unit": "Cel",
+            "unitDisplay": "°C"
           }
         ]
       },
-      "medicines": ["piperacillin with tazobactam"]
+      "medicines": ["piperacillin with tazobactam"],
+      "expectedDischarge": "2026-10-23",
+      "latestNote": {
+        "type": "Ward round note",
+        "author": "Dr Ravi Patel",
+        "at": "2026-10-17T23:00:00.000Z",
+        "summary": "Improving. Speech pathology have modified his diet."
+      },
+      "alliedHealth": {
+        "pt": "seen",
+        "sw": "referred",
+        "ot": "not-needed"
+      },
+      "dischargeBarriers": ["Family meeting"]
     },
     {
       "id": "patient-15",
@@ -1138,7 +1690,15 @@
       "seenToday": false,
       "flags": ["Procedure today"],
       "jobs": [],
-      "comments": [],
+      "comments": [
+        {
+          "id": "comment-19",
+          "author": "Sam Okoro",
+          "role": "Physiotherapist",
+          "at": "2026-10-18T02:00:00.000Z",
+          "text": "Cleared for discharge from a mobility point of view."
+        }
+      ],
       "history": [],
       "firstName": "Sofia",
       "lastName": "Marino",
@@ -1166,32 +1726,55 @@
         "values": [
           {
             "code": "respiratory rate",
+            "abbreviation": "RR",
             "value": 18,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "heart rate",
+            "abbreviation": "HR",
             "value": 94,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "blood pressure",
+            "abbreviation": "BP",
             "value": "126/80",
-            "unit": "mm[Hg]"
+            "unit": "mm[Hg]",
+            "unitDisplay": "mmHg"
           },
           {
             "code": "oxygen saturation",
+            "abbreviation": "SpO₂",
             "value": 95,
-            "unit": "%"
+            "unit": "%",
+            "unitDisplay": "%"
           },
           {
             "code": "body temperature",
+            "abbreviation": "T",
             "value": 36.9,
-            "unit": "Cel"
+            "unit": "Cel",
+            "unitDisplay": "°C"
           }
         ]
       },
-      "medicines": ["enoxaparin"]
+      "medicines": ["enoxaparin"],
+      "expectedDischarge": "2026-10-21",
+      "latestNote": {
+        "type": "Progress note",
+        "author": "Dr Ben Hollis",
+        "at": "2026-10-18T01:00:00.000Z",
+        "summary": "Stable on enoxaparin. Planned for discharge in two days."
+      },
+      "alliedHealth": {
+        "pt": "cleared",
+        "sw": "not-needed",
+        "ot": "not-needed"
+      },
+      "dischargeBarriers": []
     },
     {
       "id": "patient-16",
@@ -1205,12 +1788,21 @@
           "text": "Renal ultrasound result",
           "assignee": "Dr Ben Hollis",
           "createdBy": "Dr Josh Ward",
+          "createdAt": "2026-10-18T01:00:00.000Z",
           "status": "open",
           "due": null,
           "completableBy": ["doctor"]
         }
       ],
-      "comments": [],
+      "comments": [
+        {
+          "id": "comment-20",
+          "author": "Dr Ben Hollis",
+          "role": "Resident, GMU C",
+          "at": "2026-10-18T13:00:00.000Z",
+          "text": "Ultrasound booked for 1100."
+        }
+      ],
       "history": [],
       "firstName": "Wei",
       "lastName": "Zhang",
@@ -1236,14 +1828,18 @@
       "latestResults": [
         {
           "code": "creatinine",
-          "value": 245,
+          "abbreviation": "Cr",
+          "unitDisplay": "µmol/L",
           "unit": "umol/L",
+          "value": 245,
           "at": "2026-10-18T12:00:00.000Z"
         },
         {
           "code": "potassium",
-          "value": 5.8,
+          "abbreviation": "K",
+          "unitDisplay": "mmol/L",
           "unit": "mmol/L",
+          "value": 5.8,
           "at": "2026-10-18T12:00:00.000Z"
         }
       ],
@@ -1252,32 +1848,55 @@
         "values": [
           {
             "code": "respiratory rate",
+            "abbreviation": "RR",
             "value": 16,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "heart rate",
+            "abbreviation": "HR",
             "value": 82,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "blood pressure",
+            "abbreviation": "BP",
             "value": "146/88",
-            "unit": "mm[Hg]"
+            "unit": "mm[Hg]",
+            "unitDisplay": "mmHg"
           },
           {
             "code": "oxygen saturation",
+            "abbreviation": "SpO₂",
             "value": 97,
-            "unit": "%"
+            "unit": "%",
+            "unitDisplay": "%"
           },
           {
             "code": "body temperature",
+            "abbreviation": "T",
             "value": 36.7,
-            "unit": "Cel"
+            "unit": "Cel",
+            "unitDisplay": "°C"
           }
         ]
       },
-      "medicines": []
+      "medicines": [],
+      "expectedDischarge": "2026-10-22",
+      "latestNote": {
+        "type": "Progress note",
+        "author": "Dr Grace Kim",
+        "at": "2026-10-18T12:00:00.000Z",
+        "summary": "Creatinine still rising. Renal ultrasound requested."
+      },
+      "alliedHealth": {
+        "pt": "not-needed",
+        "sw": "not-needed",
+        "ot": "not-needed"
+      },
+      "dischargeBarriers": ["Awaiting results"]
     },
     {
       "id": "patient-17",
@@ -1314,32 +1933,55 @@
         "values": [
           {
             "code": "respiratory rate",
+            "abbreviation": "RR",
             "value": 18,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "heart rate",
+            "abbreviation": "HR",
             "value": 96,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "blood pressure",
+            "abbreviation": "BP",
             "value": "120/74",
-            "unit": "mm[Hg]"
+            "unit": "mm[Hg]",
+            "unitDisplay": "mmHg"
           },
           {
             "code": "oxygen saturation",
+            "abbreviation": "SpO₂",
             "value": 97,
-            "unit": "%"
+            "unit": "%",
+            "unitDisplay": "%"
           },
           {
             "code": "body temperature",
+            "abbreviation": "T",
             "value": 36.8,
-            "unit": "Cel"
+            "unit": "Cel",
+            "unitDisplay": "°C"
           }
         ]
       },
-      "medicines": ["prednisolone", "budesonide with formoterol"]
+      "medicines": ["prednisolone", "budesonide with formoterol"],
+      "expectedDischarge": "2026-10-20",
+      "latestNote": {
+        "type": "Admission note",
+        "author": "Dr Ben Hollis",
+        "at": "2026-10-18T06:00:00.000Z",
+        "summary": "Asthma exacerbation, improving on prednisolone."
+      },
+      "alliedHealth": {
+        "pt": "not-needed",
+        "sw": "not-needed",
+        "ot": "not-needed"
+      },
+      "dischargeBarriers": []
     },
     {
       "id": "patient-18",
@@ -1348,7 +1990,22 @@
       "seenToday": false,
       "flags": ["Falls precautions"],
       "jobs": [],
-      "comments": [],
+      "comments": [
+        {
+          "id": "comment-21",
+          "author": "Dr Grace Kim",
+          "role": "Registrar, GMU C",
+          "at": "2026-10-17T20:00:00.000Z",
+          "text": "Waiting on the physiotherapy plan before talking about discharge."
+        },
+        {
+          "id": "comment-22",
+          "author": "Nina Petrov",
+          "role": "Occupational therapist",
+          "at": "2026-10-18T17:00:00.000Z",
+          "text": "Home visit pencilled in for Wednesday."
+        }
+      ],
       "history": [],
       "firstName": "George",
       "lastName": "Papadakis",
@@ -1376,28 +2033,38 @@
         "values": [
           {
             "code": "respiratory rate",
+            "abbreviation": "RR",
             "value": 16,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "heart rate",
+            "abbreviation": "HR",
             "value": 68,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "blood pressure",
+            "abbreviation": "BP",
             "value": "108/64",
-            "unit": "mm[Hg]"
+            "unit": "mm[Hg]",
+            "unitDisplay": "mmHg"
           },
           {
             "code": "oxygen saturation",
+            "abbreviation": "SpO₂",
             "value": 96,
-            "unit": "%"
+            "unit": "%",
+            "unitDisplay": "%"
           },
           {
             "code": "body temperature",
+            "abbreviation": "T",
             "value": 36.4,
-            "unit": "Cel"
+            "unit": "Cel",
+            "unitDisplay": "°C"
           }
         ]
       },
@@ -1412,7 +2079,20 @@
         "source": "Early warning system at the hospital (a synthetic source)",
         "text": "Observations outside this patient's set limits at 2200: the early warning system raised a review.",
         "note": "Supplied by a source system. The list shows it; it does not detect deterioration."
-      }
+      },
+      "expectedDischarge": "2026-10-24",
+      "latestNote": {
+        "type": "Physiotherapy note",
+        "author": "Sam Okoro",
+        "at": "2026-10-17T19:00:00.000Z",
+        "summary": "Assessed. Plan to follow once the falls review is done."
+      },
+      "alliedHealth": {
+        "pt": "referred",
+        "sw": "seen",
+        "ot": "referred"
+      },
+      "dischargeBarriers": ["Physiotherapy plan", "Home assessment"]
     },
     {
       "id": "patient-19",
@@ -1426,12 +2106,21 @@
           "text": "Blood cultures before next antibiotic dose",
           "assignee": "Dr Ava Russo",
           "createdBy": "Dr Josh Ward",
+          "createdAt": "2026-10-18T17:00:00.000Z",
           "status": "open",
           "due": "2026-10-18T23:00:00.000Z",
           "completableBy": ["doctor"]
         }
       ],
-      "comments": [],
+      "comments": [
+        {
+          "id": "comment-23",
+          "author": "RN Aisha Malik",
+          "role": "Nurse",
+          "at": "2026-10-18T16:00:00.000Z",
+          "text": "In isolation room 410 B. Gown and gloves."
+        }
+      ],
       "history": [],
       "firstName": "Amira",
       "lastName": "Saleh",
@@ -1459,32 +2148,55 @@
         "values": [
           {
             "code": "respiratory rate",
+            "abbreviation": "RR",
             "value": 20,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "heart rate",
+            "abbreviation": "HR",
             "value": 108,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "blood pressure",
+            "abbreviation": "BP",
             "value": "110/68",
-            "unit": "mm[Hg]"
+            "unit": "mm[Hg]",
+            "unitDisplay": "mmHg"
           },
           {
             "code": "oxygen saturation",
+            "abbreviation": "SpO₂",
             "value": 97,
-            "unit": "%"
+            "unit": "%",
+            "unitDisplay": "%"
           },
           {
             "code": "body temperature",
+            "abbreviation": "T",
             "value": 38.6,
-            "unit": "Cel"
+            "unit": "Cel",
+            "unitDisplay": "°C"
           }
         ]
       },
-      "medicines": []
+      "medicines": [],
+      "expectedDischarge": "2026-10-22",
+      "latestNote": {
+        "type": "Progress note",
+        "author": "Dr Ava Russo",
+        "at": "2026-10-18T11:00:00.000Z",
+        "summary": "Febrile overnight. Blood cultures before the next dose."
+      },
+      "alliedHealth": {
+        "pt": "not-needed",
+        "sw": "not-needed",
+        "ot": "not-needed"
+      },
+      "dischargeBarriers": ["Awaiting results"]
     },
     {
       "id": "patient-20",
@@ -1498,12 +2210,21 @@
           "text": "Ascitic tap this morning",
           "assignee": "Dr Grace Kim",
           "createdBy": "Dr Josh Ward",
+          "createdAt": "2026-10-18T07:00:00.000Z",
           "status": "open",
           "due": "2026-10-19T00:00:00.000Z",
           "completableBy": ["doctor"]
         }
       ],
-      "comments": [],
+      "comments": [
+        {
+          "id": "comment-24",
+          "author": "Dr Grace Kim",
+          "role": "Registrar, GMU C",
+          "at": "2026-10-18T18:00:00.000Z",
+          "text": "Tap at 0900 in the procedure room."
+        }
+      ],
       "history": [],
       "firstName": "Brian",
       "lastName": "Kowalczyk",
@@ -1531,28 +2252,38 @@
         "values": [
           {
             "code": "respiratory rate",
+            "abbreviation": "RR",
             "value": 16,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "heart rate",
+            "abbreviation": "HR",
             "value": 86,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "blood pressure",
+            "abbreviation": "BP",
             "value": "104/62",
-            "unit": "mm[Hg]"
+            "unit": "mm[Hg]",
+            "unitDisplay": "mmHg"
           },
           {
             "code": "oxygen saturation",
+            "abbreviation": "SpO₂",
             "value": 97,
-            "unit": "%"
+            "unit": "%",
+            "unitDisplay": "%"
           },
           {
             "code": "body temperature",
+            "abbreviation": "T",
             "value": 36.6,
-            "unit": "Cel"
+            "unit": "Cel",
+            "unitDisplay": "°C"
           }
         ]
       },
@@ -1568,7 +2299,20 @@
           "sources": ["Progress note 18 Oct 1100", "Procedure plan 18 Oct"],
           "reviewedBy": "Dr Grace Kim"
         }
-      }
+      },
+      "expectedDischarge": "2026-10-21",
+      "latestNote": {
+        "type": "Procedure plan",
+        "author": "Dr Grace Kim",
+        "at": "2026-10-17T21:00:00.000Z",
+        "summary": "Therapeutic ascitic tap this morning."
+      },
+      "alliedHealth": {
+        "pt": "not-needed",
+        "sw": "seen",
+        "ot": "not-needed"
+      },
+      "dischargeBarriers": []
     },
     {
       "id": "patient-21",
@@ -1664,16 +2408,16 @@
       "team": null,
       "expected": {
         "placeholder": true,
-        "description": "Man in his 60s, arriving by ambulance",
+        "description": "60M referred by HITH for APO",
         "linked": false
       },
-      "workingProblem": "Shortness of breath",
+      "workingProblem": "Acute pulmonary oedema",
       "referral": {
         "via": "phone",
-        "source": "Ambulance service",
-        "referrer": "Paramedic team (synthetic)",
+        "source": "Hospital in the Home (HITH)",
+        "referrer": "HITH nurse (synthetic)",
         "urgency": "On arrival",
-        "reason": "Shortness of breath, known heart failure",
+        "reason": "Acute pulmonary oedema, known heart failure",
         "summary": "Placeholder until the patient is registered and has an encounter.",
         "plan": "Review on arrival",
         "owner": "Dr Tom Ellis",
@@ -1689,7 +2433,15 @@
       "seenToday": false,
       "flags": [],
       "jobs": [],
-      "comments": [],
+      "comments": [
+        {
+          "id": "comment-25",
+          "author": "Dr Grace Kim",
+          "role": "Registrar, GMU C",
+          "at": "2026-10-18T19:00:00.000Z",
+          "text": "Cardiac issues now lead: transferring to Team A for ongoing management."
+        }
+      ],
       "history": [],
       "firstName": "Carmen",
       "lastName": "Delgado",
@@ -1707,7 +2459,6 @@
       "transfer": {
         "from": "team-c",
         "to": "team-a",
-        "note": "Cardiac issues now lead: transferring to Team A for ongoing management.",
         "clinicalSummary": "Admitted with dyspnoea, found to have new atrial fibrillation.",
         "sentBy": "Dr Grace Kim",
         "sentAt": "2026-10-18T19:00:00.000Z"
@@ -1725,32 +2476,55 @@
         "values": [
           {
             "code": "respiratory rate",
+            "abbreviation": "RR",
             "value": 18,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "heart rate",
+            "abbreviation": "HR",
             "value": 112,
-            "unit": "/min"
+            "unit": "/min",
+            "unitDisplay": "/min"
           },
           {
             "code": "blood pressure",
+            "abbreviation": "BP",
             "value": "124/78",
-            "unit": "mm[Hg]"
+            "unit": "mm[Hg]",
+            "unitDisplay": "mmHg"
           },
           {
             "code": "oxygen saturation",
+            "abbreviation": "SpO₂",
             "value": 96,
-            "unit": "%"
+            "unit": "%",
+            "unitDisplay": "%"
           },
           {
             "code": "body temperature",
+            "abbreviation": "T",
             "value": 36.8,
-            "unit": "Cel"
+            "unit": "Cel",
+            "unitDisplay": "°C"
           }
         ]
       },
-      "medicines": ["metoprolol"]
+      "medicines": ["metoprolol"],
+      "expectedDischarge": "2026-10-22",
+      "latestNote": {
+        "type": "Progress note",
+        "author": "Dr Ben Hollis",
+        "at": "2026-10-18T07:00:00.000Z",
+        "summary": "New atrial fibrillation, rate controlled overnight."
+      },
+      "alliedHealth": {
+        "pt": "not-needed",
+        "sw": "not-needed",
+        "ot": "not-needed"
+      },
+      "dischargeBarriers": []
     },
     {
       "id": "patient-25",
@@ -1764,6 +2538,7 @@
           "text": "Send discharge summary to general practitioner",
           "assignee": "Dr Sophie Lane",
           "createdBy": "Dr Josh Ward",
+          "createdAt": "2026-10-17T15:00:00.000Z",
           "status": "open",
           "due": null,
           "completableBy": ["doctor"]
@@ -1799,6 +2574,7 @@
           "text": "Handover to rehabilitation team",
           "assignee": "Dr Ben Hollis",
           "createdBy": "Dr Josh Ward",
+          "createdAt": "2026-10-17T05:00:00.000Z",
           "status": "done",
           "due": null,
           "completableBy": ["doctor"],
@@ -1824,6 +2600,103 @@
       "conditions": [],
       "suggestArchive": true,
       "medicines": []
+    }
+  ],
+  "directory": [
+    {
+      "id": "directory-01",
+      "urn": "SYN-200301",
+      "age": 47,
+      "firstName": "Lena",
+      "lastName": "Fisher",
+      "gender": "female",
+      "birthDate": "1979-02-11",
+      "similarTo": ["directory-02", "patient-05"]
+    },
+    {
+      "id": "directory-02",
+      "urn": "SYN-200302",
+      "age": 34,
+      "firstName": "Lina",
+      "lastName": "Fischer",
+      "gender": "female",
+      "birthDate": "1992-06-03",
+      "similarTo": ["directory-01", "patient-05"]
+    },
+    {
+      "id": "directory-03",
+      "urn": "SYN-200303",
+      "age": 76,
+      "firstName": "Peter",
+      "lastName": "Osei",
+      "gender": "male",
+      "birthDate": "1950-09-12"
+    },
+    {
+      "id": "directory-04",
+      "urn": "SYN-200304",
+      "age": 81,
+      "firstName": "Joan",
+      "lastName": "McAllister",
+      "gender": "female",
+      "birthDate": "1944-12-30"
+    },
+    {
+      "id": "directory-05",
+      "urn": "SYN-200305",
+      "age": 38,
+      "firstName": "Arjun",
+      "lastName": "Mehta",
+      "gender": "male",
+      "birthDate": "1988-03-17"
+    },
+    {
+      "id": "directory-06",
+      "urn": "SYN-200306",
+      "age": 66,
+      "firstName": "Rosa",
+      "lastName": "Delgado",
+      "gender": "female",
+      "birthDate": "1960-07-07",
+      "similarTo": ["patient-24"]
+    },
+    {
+      "id": "directory-07",
+      "urn": "SYN-200307",
+      "age": 54,
+      "firstName": "Thomas",
+      "lastName": "Brennan",
+      "gender": "male",
+      "birthDate": "1971-11-02",
+      "similarTo": ["directory-10"]
+    },
+    {
+      "id": "directory-08",
+      "urn": "SYN-200308",
+      "age": 43,
+      "firstName": "Mei Lin",
+      "lastName": "Wong",
+      "gender": "female",
+      "birthDate": "1983-05-25"
+    },
+    {
+      "id": "directory-09",
+      "urn": "SYN-200309",
+      "age": 87,
+      "firstName": "Harold",
+      "lastName": "Finch",
+      "gender": "male",
+      "birthDate": "1939-01-08"
+    },
+    {
+      "id": "directory-10",
+      "urn": "SYN-200310",
+      "age": 52,
+      "firstName": "Tomas",
+      "lastName": "Brennan",
+      "gender": "male",
+      "birthDate": "1974-04-21",
+      "similarTo": ["directory-07"]
     }
   ],
   "auditLists": [

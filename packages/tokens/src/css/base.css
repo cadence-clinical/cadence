@@ -10,6 +10,22 @@
 @custom-variant more-contrast (&:where([data-contrast="more"], [data-contrast="more"] *));
 @custom-variant comfortable (&:where([data-density="comfortable"], [data-density="comfortable"] *));
 
+/*
+ * The browser's own parts (scrollbars, form controls, autofill, a search field's clear button)
+ * follow the mode too: both schemes under the operating system's setting, one when a mode is set.
+ */
+:root {
+  color-scheme: light dark;
+}
+
+:root:where(.light, [data-mode="light"]) {
+  color-scheme: light;
+}
+
+:root:where(.dark, [data-mode="dark"]) {
+  color-scheme: dark;
+}
+
 :root {
   --radius: 0.375rem;
 

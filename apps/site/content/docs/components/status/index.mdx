@@ -1,0 +1,71 @@
+---
+title: Status
+description: Shows the state something is in, such as "Referred" or "Cleared", as an icon and a word with no surface around it.
+---
+
+import { Status } from "@cadence-clinical/ui";
+import { CircleCheck, Clock, Eye, Minus } from "lucide-react";
+
+<GradeBadge component="status" />
+
+<ComponentPreview>
+  <Status tone="neutral">
+    <Minus aria-hidden data-icon="inline-start" />
+    Not needed
+  </Status>
+  <Status tone="warning">
+    <Clock aria-hidden data-icon="inline-start" />
+    Referred
+  </Status>
+  <Status tone="info">
+    <Eye aria-hidden data-icon="inline-start" />
+    Seen
+  </Status>
+  <Status tone="success">
+    <CircleCheck aria-hidden data-icon="inline-start" />
+    Cleared
+  </Status>
+</ComponentPreview>
+
+## Use it for
+
+- The state of a step in a process, such as a referral that is referred, seen or cleared.
+- Several states side by side in a table cell, where a filled badge for each would be too heavy.
+- A state beside a name in a list or a summary.
+
+## Do not use it for
+
+- **A label that should stand out from the text around it.** Use a [Badge](/docs/components/badge), which has a fill and a border.
+- **A message someone needs to read or act on.** Use an [Alert](/docs/components/alert).
+- **Working out a state.** Status shows a state it is given. Whether a value is abnormal or a patient is ready for discharge is decided outside Cadence, as [Clinical safety](/docs/clinical-safety) explains.
+
+## Choose a tone
+
+| Tone       | Use it for                                                       |
+| ---------- | ---------------------------------------------------------------- |
+| `neutral`  | The default. A state that is not a status, such as "Not needed". |
+| `info`     | A state to know about, such as "Seen" with a follow-up to come.  |
+| `warning`  | A state that is waiting on something, such as "Referred".        |
+| `success`  | A state that is complete, such as "Cleared".                     |
+| `critical` | A state that has failed or been refused, such as "Declined".     |
+
+[Examples](/docs/components/status/examples) shows each tone.
+
+## Give each state its own icon and its own word
+
+The tone colours only the icon, and some people cannot tell the status colours apart. So two states never share an icon, and the words always say what the state is. Where there is room for only an abbreviation, such as "PT", put the state in words in the control's accessible name and in a [Tooltip](/docs/components/tooltip), and in full where the record is read.
+
+## Use the same state for the same word everywhere
+
+If a referral is "Cleared" in a list, it is not "Done" in its summary, and it has the same tone and icon in both.
+
+## Write the words
+
+- **Use a past participle or an adjective**: "Referred", "Cleared", "Not needed".
+- **Use sentence case.**
+- **Keep it to a word or two.** A state that needs a sentence is an [Alert](/docs/components/alert).
+
+## Accessibility
+
+- **Say the state in words**, visibly or in an accessible name, never by colour alone.
+- **Announce a state that changes while someone is looking at it.** A status does not announce itself.

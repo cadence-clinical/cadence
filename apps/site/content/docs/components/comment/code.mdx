@@ -1,0 +1,104 @@
+---
+title: Comment code
+description: How to install Comment, its parts and props, how it shows an edited or revoked comment, and how it marks a comment an AI drafted.
+---
+
+## Installation
+
+From npm:
+
+```tsx
+import {
+  Comment,
+  CommentActions,
+  CommentAuthor,
+  CommentEdited,
+  CommentHeader,
+  CommentList,
+  CommentProvenance,
+  CommentRevoked,
+  CommentRole,
+  CommentText,
+  CommentTime,
+} from "@cadence-clinical/ui";
+```
+
+From the shadcn registry:
+
+```bash
+pnpm dlx shadcn@latest add @cadence/comment
+```
+
+[Installation](/docs/installation) covers both routes and the styles each one needs.
+
+## Usage
+
+```tsx
+<Comment>
+  <CommentHeader>
+    <CommentAuthor>Dr Grace Kim</CommentAuthor>
+    <CommentRole>Registrar, GMU C</CommentRole>
+    <CommentTime dateTime="2026-10-19T06:00:00+11:00">Mon 19 Oct, 06:00</CommentTime>
+  </CommentHeader>
+  <CommentText>Transferring to Team A for ongoing management.</CommentText>
+</Comment>
+```
+
+## API
+
+shadcn has no comment component. Comment is built from plain elements, in the shape of shadcn's [Item](https://ui.shadcn.com/docs/components/item): a root and named parts, each with a `data-slot`. `Comment` renders a `div` and takes the Base UI [render prop](https://base-ui.com/react/utils/use-render), so in a thread it can be an `li`.
+
+| Part                | Element | What it holds                                                                                   |
+| ------------------- | ------- | ----------------------------------------------------------------------------------------------- |
+| `Comment`           | `div`   | The comment. `data-size` is `default` or `compact`, and `data-status` is `active` or `revoked`. |
+| `CommentList`       | `ol`    | A thread.                                                                                       |
+| `CommentHeader`     | `div`   | The author, role and time, with a middle dot between each.                                      |
+| `CommentAuthor`     | `span`  | Who wrote it. Never cut short.                                                                  |
+| `CommentRole`       | `span`  | Their role. Hidden in a compact comment.                                                        |
+| `CommentTime`       | `time`  | When, as words you format. Give `dateTime` in ISO 8601.                                         |
+| `CommentText`       | `p`     | What it says. It wraps in a thread, and is one line when compact.                               |
+| `CommentEdited`     | `span`  | "Edited", in the header.                                                                        |
+| `CommentRevoked`    | `p`     | Who revoked it and when, with an icon. "Revoked" when compact.                                  |
+| `CommentActions`    | `div`   | The author's actions. Hidden in a compact comment.                                              |
+| `CommentProvenance` | `div`   | What drafted it, who reviewed it and its sources.                                               |
+
+## Props
+
+| Prop         | On                  | Type                                    | Default            |
+| ------------ | ------------------- | --------------------------------------- | ------------------ |
+| `size`       | `Comment`           | `"default" \| "compact"`                | `"default"`        |
+| `status`     | `Comment`           | `"active" \| "revoked"`                 | `"active"`         |
+| `lines`      | `Comment`           | `1 \| 2`, for a compact comment's text  | `1`                |
+| `by`         | `CommentRevoked`    | `string`                                |                    |
+| `time`       | `CommentRevoked`    | `ReactNode`: when, as words             |                    |
+| `dateTime`   | `CommentRevoked`    | `string`, ISO 8601                      |                    |
+| `label`      | `CommentRevoked`    | `ReactNode`                             | `"Revoked by"`     |
+| `render`     | `Comment`           | An element or a function, as in Base UI | A `div`            |
+| `drafter`    | `CommentProvenance` | `string`                                |                    |
+| `reviewedBy` | `CommentProvenance` | `string`                                | Not reviewed yet   |
+| `sources`    | `CommentProvenance` | `{ label: string; href?: string }[]`    |                    |
+| `label`      | `CommentProvenance` | `ReactNode`                             | `"Drafted by AI:"` |
+
+## Compact
+
+With `size="compact"`, `CommentText` is cut to one line with an ellipsis, and `CommentHeader` stays on one line. Put the text first and the header second for the two lines of a table cell. The whole text is still in the page for a screen reader.
+
+## Edited and revoked
+
+Cadence shows the state it is given and never decides who may edit or revoke a comment, or for how long: the app does, and passes the result as props and children.
+
+`CommentEdited` is a header part that says "Edited", or its children. With `status="revoked"`, `CommentText` is struck through, in `text-muted-foreground`, and starts with "Revoked: " in a visually hidden span, because a screen reader does not read a line through the words. `CommentRevoked` says "Revoked by", who, a comma and a `time` element, after a `Ban` icon. In a compact comment it is the icon and "Revoked", for the header.
+
+`CommentActions` lays out buttons and words on a line that wraps, in `text-muted-foreground`. It is hidden in a compact comment.
+
+## AI provenance
+
+`CommentProvenance` shows what it is given: Cadence never works out whether text was drafted. It works in an edited or revoked comment as in any other. In a thread it is a bordered box with a sparkles icon, "Drafted by AI:", the drafter and who reviewed it, then "Sources:" with each source, a link where it has an `href`, or "No source". In a compact comment it is the icon and "AI draft".
+
+## Accessibility
+
+- `CommentList` is an ordered list, so a screen reader says how many comments it holds. Name it with `aria-label`.
+- The middle dots between the header's parts are hidden from a screen reader.
+- `CommentTime` is a `time` element. Its words are what is read, and `dateTime` is what a machine reads.
+- The provenance icon is hidden from a screen reader. Its words carry the meaning.
+- A revoked comment's text starts with "Revoked: " for a screen reader, and `CommentRevoked` says who revoked it and when in words. The strikethrough and the icon are for the eye.

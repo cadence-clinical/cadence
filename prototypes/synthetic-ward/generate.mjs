@@ -21,6 +21,7 @@ const SOURCES = {
     "conditions",
     "latestObservations",
     "latestResults",
+    "latestNote",
     "medicines",
     "leftHospital",
   ],
@@ -36,15 +37,29 @@ const SOURCES = {
     "seenToday",
     "overnight",
     "expected",
+    "expectedDischarge",
+    "alliedHealth",
+    "dischargeBarriers",
     "history",
   ],
   supplied: ["deterioration"],
+  // Notes on fields whose source needs a sentence.
+  notes: {
+    latestNote:
+      "A DocumentReference: its type, author and date. The summary is the note's opening line as written, read from its Binary content. Nothing generates it.",
+    alliedHealth:
+      "A referral to physiotherapy (PT), social work (SW) or occupational therapy (OT) could be a ServiceRequest, which Oracle serves. Whether the patient has been seen, or cleared for discharge, is held by the list.",
+    dischargeBarriers: "Short labels the team writes. They match the unit's flags where one fits.",
+    comments: "The team's comments on a patient. A transfer's handover is its first comment.",
+    directory:
+      "Patients registered at the hospital and on no list, as a Patient search returns them: by identifier, or by family and given name with birthdate and gender.",
+  },
 };
 
 const teams = [
   {
     id: "team-a",
-    name: "General Medicine A",
+    name: "GMU A",
     consultant: "Dr Priya Raman",
     registrar: "Dr Tom Ellis",
     residents: ["Dr Mei Chen"],
@@ -52,7 +67,7 @@ const teams = [
   },
   {
     id: "team-b",
-    name: "General Medicine B",
+    name: "GMU B",
     consultant: "Dr Helen Brooks",
     registrar: "Dr Ravi Patel",
     residents: ["Dr Sophie Lane"],
@@ -60,7 +75,7 @@ const teams = [
   },
   {
     id: "team-c",
-    name: "General Medicine C",
+    name: "GMU C",
     consultant: "Dr Samuel Okafor",
     registrar: "Dr Grace Kim",
     residents: ["Dr Ben Hollis"],
@@ -99,11 +114,13 @@ const acuity = (level, by, hoursAgo) => ({
   setBy: by,
   setAt: at(hoursAgo),
 });
-const job = (id, text, assignee, fields = {}) => ({
+// A job says when it was made, so a patient's timeline can show it: `createdHoursAgo`, 12 by default.
+const job = (id, text, assignee, { createdHoursAgo = 12, ...fields } = {}) => ({
   id: `job-${id}`,
   text,
   assignee,
   createdBy: fields.createdBy ?? "Dr Josh Ward",
+  createdAt: at(createdHoursAgo),
   status: fields.status ?? "open",
   due: fields.due ?? null,
   completableBy: fields.completableBy ?? ["doctor"],
@@ -112,13 +129,47 @@ const job = (id, text, assignee, fields = {}) => ({
 const obs = (rr, hr, sbp, dbp, spo2, temp, hoursAgo) => ({
   at: at(hoursAgo),
   values: [
-    { code: "respiratory rate", value: rr, unit: "/min" },
-    { code: "heart rate", value: hr, unit: "/min" },
-    { code: "blood pressure", value: `${sbp}/${dbp}`, unit: "mm[Hg]" },
-    { code: "oxygen saturation", value: spo2, unit: "%" },
-    { code: "body temperature", value: temp, unit: "Cel" },
+    // The abbreviation and the unit as the ward writes them, beside the UCUM unit.
+    { code: "respiratory rate", abbreviation: "RR", value: rr, unit: "/min", unitDisplay: "/min" },
+    { code: "heart rate", abbreviation: "HR", value: hr, unit: "/min", unitDisplay: "/min" },
+    {
+      code: "blood pressure",
+      abbreviation: "BP",
+      value: `${sbp}/${dbp}`,
+      unit: "mm[Hg]",
+      unitDisplay: "mmHg",
+    },
+    { code: "oxygen saturation", abbreviation: "SpO₂", value: spo2, unit: "%", unitDisplay: "%" },
+    { code: "body temperature", abbreviation: "T", value: temp, unit: "Cel", unitDisplay: "°C" },
   ],
 });
+
+// A result as the laboratory system gives it, with the abbreviation and unit the ward writes.
+const RESULT_NAMES = {
+  potassium: { abbreviation: "K", unitDisplay: "mmol/L", unit: "mmol/L" },
+  sodium: { abbreviation: "Na", unitDisplay: "mmol/L", unit: "mmol/L" },
+  creatinine: { abbreviation: "Cr", unitDisplay: "µmol/L", unit: "umol/L" },
+  haemoglobin: { abbreviation: "Hb", unitDisplay: "g/L", unit: "g/L" },
+};
+const result = (code, value, hoursAgo) => ({
+  code,
+  ...RESULT_NAMES[code],
+  value,
+  at: at(hoursAgo),
+});
+
+// A comment on a patient, by someone in the ward, hours before NOW (app data, decision 0019).
+let commentCount = 0;
+const comment = (author, role, hoursAgo, text) => {
+  commentCount += 1;
+  return {
+    id: `comment-${String(commentCount).padStart(2, "0")}`,
+    author,
+    role,
+    at: at(hoursAgo),
+    text,
+  };
+};
 
 let n = 0;
 // Ages are worked out from the birth date and NOW, so the two can never disagree.
@@ -172,8 +223,8 @@ const patients = [
     acuity: acuity("medium", "Dr Tom Ellis", 20),
     flags: ["Falls precautions"],
     jobs: [
-      job(1, "Chase sputum culture", "Dr Josh Ward"),
-      job(2, "Repeat chest X-ray tomorrow", "team-a", { due: at(-24) }),
+      job(1, "Chase sputum culture", "Dr Josh Ward", { createdHoursAgo: 20 }),
+      job(2, "Repeat chest X-ray tomorrow", "team-a", { createdHoursAgo: 6, due: at(-24) }),
     ],
     latestObservations: obs(20, 92, 128, 74, 94, 37.6, 2),
     medicines: ["ceftriaxone", "apixaban"],
@@ -193,6 +244,7 @@ const patients = [
     similarTo: ["patient-03"],
     jobs: [
       job(3, "Mark cellulitis margin and photograph", "RN Aisha Malik", {
+        createdHoursAgo: 26,
         completableBy: ["doctor", "nurse"],
         createdBy: "Dr Mei Chen",
       }),
@@ -215,8 +267,9 @@ const patients = [
     similarTo: ["patient-02"],
     flags: ["Falls precautions", "Family meeting"],
     jobs: [
-      job(4, "Collateral history from daughter", "Dr Mei Chen"),
+      job(4, "Collateral history from daughter", "Dr Mei Chen", { createdHoursAgo: 18 }),
       job(5, "Urine microscopy and culture", "Dr Josh Ward", {
+        createdHoursAgo: 10,
         status: "done",
         completedBy: "Dr Josh Ward",
         completedAt: at(4),
@@ -239,14 +292,11 @@ const patients = [
     acuity: acuity("medium", "Dr Tom Ellis", 30),
     flags: ["For discharge"],
     jobs: [
-      job(6, "Discharge medication reconciliation", "Dr Mei Chen"),
-      job(7, "Book heart failure clinic", "team-a"),
+      job(6, "Discharge medication reconciliation", "Dr Mei Chen", { createdHoursAgo: 8 }),
+      job(7, "Book heart failure clinic", "team-a", { createdHoursAgo: 8 }),
     ],
     latestObservations: obs(16, 74, 118, 70, 97, 36.8, 4),
-    latestResults: [
-      { code: "potassium", value: 5.4, unit: "mmol/L", at: at(10) },
-      { code: "creatinine", value: 168, unit: "umol/L", at: at(10) },
-    ],
+    latestResults: [result("potassium", 5.4, 10), result("creatinine", 168, 10)],
     medicines: ["furosemide", "spironolactone"],
   }),
   P({
@@ -277,7 +327,7 @@ const patients = [
     conditions: ["Fall", "Parkinson disease"],
     acuity: acuity("low", "Dr Tom Ellis", 48),
     flags: ["Awaiting placement", "Falls precautions"],
-    jobs: [job(8, "Aged care assessment follow-up", "team-a")],
+    jobs: [job(8, "Aged care assessment follow-up", "team-a", { createdHoursAgo: 30 })],
     latestObservations: obs(16, 70, 130, 72, 96, 36.6, 5),
     medicines: ["levodopa with carbidopa"],
   }),
@@ -293,7 +343,7 @@ const patients = [
     workingProblem: "Chest pain, cause under investigation",
     conditions: ["Chest pain"],
     acuity: acuity("medium", "Dr Tom Ellis", 11),
-    jobs: [job(9, "Repeat troponin at 0900", "Dr Josh Ward", { due: at(-1) })],
+    jobs: [job(9, "Repeat troponin at 0900", "Dr Josh Ward", { createdHoursAgo: 7, due: at(-1) })],
     latestObservations: obs(16, 80, 140, 86, 98, 36.9, 1),
     medicines: ["aspirin"],
   }),
@@ -311,7 +361,7 @@ const patients = [
     conditions: ["COPD"],
     acuity: acuity("high", "Dr Ravi Patel", 3),
     flags: ["Review overnight"],
-    jobs: [job(10, "Blood gas if drowsier", "after-hours")],
+    jobs: [job(10, "Blood gas if drowsier", "after-hours", { createdHoursAgo: 3 })],
     latestObservations: obs(26, 104, 150, 88, 89, 37.8, 1),
     medicines: ["prednisolone", "salbutamol"],
     overnight: {
@@ -359,9 +409,14 @@ const patients = [
     workingProblem: "Diabetic ketoacidosis, resolving",
     conditions: ["Type 1 diabetes"],
     acuity: acuity("medium", "Dr Ravi Patel", 9),
-    jobs: [job(11, "Diabetes educator review", "team-b", { completableBy: ["doctor", "nurse"] })],
+    jobs: [
+      job(11, "Diabetes educator review", "team-b", {
+        createdHoursAgo: 12,
+        completableBy: ["doctor", "nurse"],
+      }),
+    ],
     latestObservations: obs(16, 90, 118, 74, 99, 36.7, 2),
-    latestResults: [{ code: "potassium", value: 3.4, unit: "mmol/L", at: at(5) }],
+    latestResults: [result("potassium", 3.4, 5)],
     medicines: ["insulin glargine"],
   }),
   P({
@@ -393,9 +448,11 @@ const patients = [
     conditions: ["Upper gastrointestinal bleed"],
     acuity: acuity("high", "Dr Helen Brooks", 8),
     flags: ["Awaiting imaging"],
-    jobs: [job(12, "Check haemoglobin at 1400", "Dr Liam Ortiz", { due: at(-6) })],
+    jobs: [
+      job(12, "Check haemoglobin at 1400", "Dr Liam Ortiz", { createdHoursAgo: 9, due: at(-6) }),
+    ],
     latestObservations: obs(18, 98, 112, 66, 97, 36.8, 1),
-    latestResults: [{ code: "haemoglobin", value: 92, unit: "g/L", at: at(6) }],
+    latestResults: [result("haemoglobin", 92, 6)],
     medicines: ["pantoprazole"],
   }),
   P({
@@ -410,7 +467,7 @@ const patients = [
     workingProblem: "Hyponatraemia",
     conditions: ["Hyponatraemia"],
     acuity: acuity("medium", "Dr Ravi Patel", 14),
-    latestResults: [{ code: "sodium", value: 124, unit: "mmol/L", at: at(7) }],
+    latestResults: [result("sodium", 124, 7)],
     latestObservations: obs(14, 76, 128, 74, 98, 36.6, 4),
     medicines: [],
   }),
@@ -458,11 +515,8 @@ const patients = [
     workingProblem: "Acute kidney injury",
     conditions: ["Acute kidney injury"],
     acuity: acuity("medium", "Dr Grace Kim", 12),
-    jobs: [job(13, "Renal ultrasound result", "Dr Ben Hollis")],
-    latestResults: [
-      { code: "creatinine", value: 245, unit: "umol/L", at: at(9) },
-      { code: "potassium", value: 5.8, unit: "mmol/L", at: at(9) },
-    ],
+    jobs: [job(13, "Renal ultrasound result", "Dr Ben Hollis", { createdHoursAgo: 20 })],
+    latestResults: [result("creatinine", 245, 9), result("potassium", 5.8, 9)],
     latestObservations: obs(16, 82, 146, 88, 97, 36.7, 3),
     medicines: [],
   }),
@@ -521,7 +575,12 @@ const patients = [
     conditions: ["Fever"],
     acuity: acuity("medium", "Dr Grace Kim", 10),
     flags: ["Isolation"],
-    jobs: [job(14, "Blood cultures before next antibiotic dose", "Dr Ava Russo", { due: at(-2) })],
+    jobs: [
+      job(14, "Blood cultures before next antibiotic dose", "Dr Ava Russo", {
+        createdHoursAgo: 4,
+        due: at(-2),
+      }),
+    ],
     latestObservations: obs(20, 108, 110, 68, 97, 38.6, 1),
     medicines: [],
   }),
@@ -538,7 +597,9 @@ const patients = [
     conditions: ["Cirrhosis"],
     acuity: acuity("medium", "Dr Samuel Okafor", 30),
     flags: ["Procedure today"],
-    jobs: [job(15, "Ascitic tap this morning", "Dr Grace Kim", { due: at(-3) })],
+    jobs: [
+      job(15, "Ascitic tap this morning", "Dr Grace Kim", { createdHoursAgo: 14, due: at(-3) }),
+    ],
     latestObservations: obs(16, 86, 104, 62, 97, 36.6, 2),
     medicines: ["spironolactone"],
     overnight: {
@@ -620,16 +681,16 @@ const patients = [
     listState: "received",
     expected: {
       placeholder: true,
-      description: "Man in his 60s, arriving by ambulance",
+      description: "60M referred by HITH for APO",
       linked: false,
     },
-    workingProblem: "Shortness of breath",
+    workingProblem: "Acute pulmonary oedema",
     referral: {
       via: "phone",
-      source: "Ambulance service",
-      referrer: "Paramedic team (synthetic)",
+      source: "Hospital in the Home (HITH)",
+      referrer: "HITH nurse (synthetic)",
       urgency: "On arrival",
-      reason: "Shortness of breath, known heart failure",
+      reason: "Acute pulmonary oedema, known heart failure",
       summary: "Placeholder until the patient is registered and has an encounter.",
       plan: "Review on arrival",
       owner: "Dr Tom Ellis",
@@ -652,7 +713,6 @@ const patients = [
     transfer: {
       from: "team-c",
       to: "team-a",
-      note: "Cardiac issues now lead: transferring to Team A for ongoing management.",
       clinicalSummary: "Admitted with dyspnoea, found to have new atrial fibrillation.",
       sentBy: "Dr Grace Kim",
       sentAt: at(2),
@@ -676,7 +736,11 @@ const patients = [
     leftHospital: { how: "discharged", at: at(14) },
     workingProblem: "Pneumonia, recovered",
     conditions: ["Pneumonia"],
-    jobs: [job(16, "Send discharge summary to general practitioner", "Dr Sophie Lane")],
+    jobs: [
+      job(16, "Send discharge summary to general practitioner", "Dr Sophie Lane", {
+        createdHoursAgo: 30,
+      }),
+    ],
     medicines: [],
   }),
   P({
@@ -694,6 +758,7 @@ const patients = [
     conditions: [],
     jobs: [
       job(17, "Handover to rehabilitation team", "Dr Ben Hollis", {
+        createdHoursAgo: 40,
         status: "done",
         completedBy: "Dr Ben Hollis",
         completedAt: at(18),
@@ -701,6 +766,472 @@ const patients = [
     ],
     suggestArchive: true,
     medicines: [],
+  }),
+];
+
+// Expected dates of discharge, in days from NOW, as the team set them (app data, decision 0019).
+// null is a patient without one yet, and a negative number is a date that has passed.
+const edd = {
+  "patient-01": 2,
+  "patient-02": 1,
+  "patient-03": 4,
+  "patient-04": 0,
+  "patient-05": 1,
+  "patient-06": -2,
+  "patient-07": 0,
+  "patient-08": 3,
+  "patient-09": 2,
+  "patient-10": 1,
+  "patient-11": null,
+  "patient-12": 2,
+  "patient-13": 3,
+  "patient-14": 4,
+  "patient-15": 2,
+  "patient-16": 3,
+  "patient-17": 1,
+  "patient-18": 5,
+  "patient-19": 3,
+  "patient-20": 2,
+  "patient-24": 3,
+};
+for (const patient of patients) {
+  if (!(patient.id in edd)) continue;
+  const days = edd[patient.id];
+  patient.expectedDischarge =
+    days === null
+      ? null
+      : new Date(Date.parse(`${NOW.slice(0, 10)}T00:00:00Z`) + days * 86_400_000)
+          .toISOString()
+          .slice(0, 10);
+}
+
+// Allied health staff on the ward. Invented, like everyone else.
+const alliedHealthStaff = [
+  { name: "Sam Okoro", role: "Physiotherapist" },
+  { name: "Leah Brandt", role: "Social worker" },
+  { name: "Nina Petrov", role: "Occupational therapist" },
+];
+
+const note = (type, author, hoursAgo, summary) => ({ type, author, at: at(hoursAgo), summary });
+// PT, SW and OT: "not-needed", "referred" (waiting), "seen" (with follow-up), "cleared" (for discharge).
+const ah = (pt, sw, ot) => ({ pt, sw, ot });
+const NONE = ah("not-needed", "not-needed", "not-needed");
+
+// What the review needs for each patient on a team: the latest note, allied health, discharge
+// barriers, the team's comments (newest last), and results where the ward has them.
+const round3 = {
+  "patient-01": {
+    latestNote: note(
+      "Ward round note",
+      "Dr Mei Chen",
+      23,
+      "Improving on IV antibiotics. Plan to switch to oral tomorrow.",
+    ),
+    alliedHealth: ah("seen", "not-needed", "referred"),
+    dischargeBarriers: ["Home assessment"],
+    latestResults: [result("haemoglobin", 118, 11), result("creatinine", 74, 11)],
+    comments: [
+      comment(
+        "Sam Okoro",
+        "Physiotherapist",
+        20,
+        "Walked 20 m with a frame. Will review tomorrow.",
+      ),
+      comment(
+        "RN Kate Morgan",
+        "Nurse unit manager",
+        3,
+        "Daughter visiting at 1100, keen to talk about going home.",
+      ),
+    ],
+  },
+  "patient-02": {
+    latestNote: note(
+      "Progress note",
+      "Dr Josh Ward",
+      21,
+      "Cellulitis margin receding. Continue IV cefazolin.",
+    ),
+    alliedHealth: NONE,
+    dischargeBarriers: [],
+    comments: [
+      comment(
+        "Dr Mei Chen",
+        "Resident, GMU A",
+        19,
+        "Check the URN before giving anything: Kris Taylor is in 402 A.",
+      ),
+    ],
+  },
+  "patient-03": {
+    latestNote: note(
+      "Ward round note",
+      "Dr Priya Raman",
+      22,
+      "Remains delirious overnight. Collateral history still needed.",
+    ),
+    alliedHealth: ah("referred", "referred", "referred"),
+    dischargeBarriers: ["Family meeting", "Cognitive assessment"],
+    latestResults: [result("sodium", 136, 9)],
+    comments: [
+      comment(
+        "Dr Priya Raman",
+        "Consultant, GMU A",
+        22,
+        "Please organise a family meeting for Thursday.",
+      ),
+      comment(
+        "Leah Brandt",
+        "Social worker",
+        6,
+        "Daughter called back. She can come in on Thursday afternoon.",
+      ),
+    ],
+  },
+  "patient-04": {
+    latestNote: note(
+      "Discharge planning note",
+      "Dr Mei Chen",
+      5,
+      "Euvolaemic. Discharge today once medicines are reconciled.",
+    ),
+    alliedHealth: ah("cleared", "not-needed", "cleared"),
+    dischargeBarriers: ["Clinic booking"],
+    comments: [
+      comment(
+        "Nina Petrov",
+        "Occupational therapist",
+        26,
+        "Cleared for discharge. Shower chair delivered.",
+      ),
+      comment(
+        "Dr Tom Ellis",
+        "Registrar, GMU A",
+        4,
+        "Pharmacy have the discharge medicines. Aim for a 1400 discharge.",
+      ),
+      comment("RN Daniel Reyes", "Clinical nurse", 1, "Wife picking him up after lunch."),
+    ],
+  },
+  "patient-05": {
+    latestNote: note(
+      "Admission note",
+      "Dr Tom Ellis",
+      22,
+      "Pyelonephritis. IV gentamicin, levels with tomorrow's bloods.",
+    ),
+    alliedHealth: NONE,
+    dischargeBarriers: [],
+    latestResults: [result("creatinine", 82, 8), result("potassium", 4.1, 8)],
+    comments: [],
+  },
+  "patient-06": {
+    latestNote: note(
+      "Discharge planning note",
+      "Dr Josh Ward",
+      30,
+      "Medically ready. Waiting for a residential aged care bed.",
+    ),
+    alliedHealth: ah("seen", "seen", "cleared"),
+    dischargeBarriers: ["Awaiting placement", "Aged care assessment"],
+    comments: [
+      comment(
+        "Leah Brandt",
+        "Social worker",
+        28,
+        "Two facilities have offered a bed. Family visiting both this week.",
+      ),
+      comment(
+        "Sam Okoro",
+        "Physiotherapist",
+        7,
+        "Transfers with one person. No change to the plan.",
+      ),
+    ],
+  },
+  "patient-07": {
+    latestNote: note(
+      "Admission note",
+      "Dr Tom Ellis",
+      11,
+      "Chest pain settled. Serial troponins and an ECG this morning.",
+    ),
+    alliedHealth: NONE,
+    dischargeBarriers: ["Awaiting results"],
+    comments: [comment("Dr Josh Ward", "Intern, GMU A", 2, "Second troponin sent at 0700.")],
+  },
+  "patient-08": {
+    latestNote: note(
+      "Progress note",
+      "Dr Ravi Patel",
+      16,
+      "Oxygen requirement rose this afternoon. Chest X-ray unchanged.",
+    ),
+    alliedHealth: ah("referred", "not-needed", "not-needed"),
+    dischargeBarriers: ["Needs home oxygen"],
+    comments: [
+      comment(
+        "Dr Ravi Patel",
+        "Registrar, GMU B",
+        15,
+        "Important overnight: review at 2200, blood gas if drowsier.",
+      ),
+      comment(
+        "Dr Owen Price",
+        "Resident, after hours",
+        9,
+        "Reviewed at 2200. Comfortable, no gas needed.",
+      ),
+    ],
+  },
+  "patient-09": {
+    latestNote: note(
+      "Ward round note",
+      "Dr Sophie Lane",
+      24,
+      "Less confused today. Eating and drinking well.",
+    ),
+    alliedHealth: ah("seen", "referred", "seen"),
+    dischargeBarriers: ["Community services"],
+    comments: [
+      comment(
+        "Leah Brandt",
+        "Social worker",
+        23,
+        "Referral to community services sent. Waiting on a start date.",
+      ),
+    ],
+  },
+  "patient-10": {
+    latestNote: note(
+      "Progress note",
+      "Dr Liam Ortiz",
+      6,
+      "Ketoacidosis resolved. Back on subcutaneous insulin.",
+    ),
+    alliedHealth: NONE,
+    dischargeBarriers: ["Diabetes education"],
+    comments: [],
+  },
+  "patient-11": {
+    latestNote: note(
+      "Discharge planning note",
+      "Dr Sophie Lane",
+      40,
+      "Rehabilitation goals met on the ward. Waiting for a bed.",
+    ),
+    alliedHealth: ah("seen", "seen", "seen"),
+    dischargeBarriers: ["Awaiting placement"],
+    comments: [
+      comment(
+        "RN Kate Morgan",
+        "Nurse unit manager",
+        30,
+        "Rehabilitation hospital may have a bed on Wednesday.",
+      ),
+    ],
+  },
+  "patient-12": {
+    latestNote: note(
+      "Progress note",
+      "Dr Helen Brooks",
+      8,
+      "No further bleeding. Endoscopy booked for today.",
+    ),
+    alliedHealth: NONE,
+    dischargeBarriers: ["Awaiting imaging"],
+    comments: [
+      comment("Dr Liam Ortiz", "Intern, GMU B", 7, "Fasting from midnight for endoscopy."),
+      comment("RN Aisha Malik", "Nurse", 2, "Endoscopy want him at 1000."),
+    ],
+  },
+  "patient-13": {
+    latestNote: note(
+      "Progress note",
+      "Dr Ravi Patel",
+      7,
+      "Fluid restriction continued. Repeat sodium this afternoon.",
+    ),
+    alliedHealth: NONE,
+    dischargeBarriers: [],
+    comments: [],
+  },
+  "patient-14": {
+    latestNote: note(
+      "Ward round note",
+      "Dr Ravi Patel",
+      22,
+      "Improving. Speech pathology have modified his diet.",
+    ),
+    alliedHealth: ah("seen", "referred", "not-needed"),
+    dischargeBarriers: ["Family meeting"],
+    comments: [
+      comment(
+        "Dr Helen Brooks",
+        "Consultant, GMU B",
+        21,
+        "Goals of care conversation with his son tomorrow.",
+      ),
+    ],
+  },
+  "patient-15": {
+    latestNote: note(
+      "Progress note",
+      "Dr Ben Hollis",
+      20,
+      "Stable on enoxaparin. Planned for discharge in two days.",
+    ),
+    alliedHealth: ah("cleared", "not-needed", "not-needed"),
+    dischargeBarriers: [],
+    comments: [
+      comment(
+        "Sam Okoro",
+        "Physiotherapist",
+        19,
+        "Cleared for discharge from a mobility point of view.",
+      ),
+    ],
+  },
+  "patient-16": {
+    latestNote: note(
+      "Progress note",
+      "Dr Grace Kim",
+      9,
+      "Creatinine still rising. Renal ultrasound requested.",
+    ),
+    alliedHealth: NONE,
+    dischargeBarriers: ["Awaiting results"],
+    comments: [comment("Dr Ben Hollis", "Resident, GMU C", 8, "Ultrasound booked for 1100.")],
+  },
+  "patient-17": {
+    latestNote: note(
+      "Admission note",
+      "Dr Ben Hollis",
+      15,
+      "Asthma exacerbation, improving on prednisolone.",
+    ),
+    alliedHealth: NONE,
+    dischargeBarriers: [],
+    comments: [],
+  },
+  "patient-18": {
+    latestNote: note(
+      "Physiotherapy note",
+      "Sam Okoro",
+      26,
+      "Assessed. Plan to follow once the falls review is done.",
+    ),
+    alliedHealth: ah("referred", "seen", "referred"),
+    dischargeBarriers: ["Physiotherapy plan", "Home assessment"],
+    comments: [
+      comment(
+        "Dr Grace Kim",
+        "Registrar, GMU C",
+        25,
+        "Waiting on the physiotherapy plan before talking about discharge.",
+      ),
+      comment("Nina Petrov", "Occupational therapist", 4, "Home visit pencilled in for Wednesday."),
+    ],
+  },
+  "patient-19": {
+    latestNote: note(
+      "Progress note",
+      "Dr Ava Russo",
+      10,
+      "Febrile overnight. Blood cultures before the next dose.",
+    ),
+    alliedHealth: NONE,
+    dischargeBarriers: ["Awaiting results"],
+    comments: [comment("RN Aisha Malik", "Nurse", 5, "In isolation room 410 B. Gown and gloves.")],
+  },
+  "patient-20": {
+    latestNote: note("Procedure plan", "Dr Grace Kim", 24, "Therapeutic ascitic tap this morning."),
+    alliedHealth: ah("not-needed", "seen", "not-needed"),
+    dischargeBarriers: [],
+    comments: [
+      comment("Dr Grace Kim", "Registrar, GMU C", 3, "Tap at 0900 in the procedure room."),
+    ],
+  },
+  // The incoming transfer: its handover is the first comment, from the team sending the patient.
+  "patient-24": {
+    latestNote: note(
+      "Progress note",
+      "Dr Ben Hollis",
+      14,
+      "New atrial fibrillation, rate controlled overnight.",
+    ),
+    alliedHealth: NONE,
+    dischargeBarriers: [],
+    comments: [
+      comment(
+        "Dr Grace Kim",
+        "Registrar, GMU C",
+        2,
+        "Cardiac issues now lead: transferring to Team A for ongoing management.",
+      ),
+    ],
+  },
+};
+for (const patient of patients) {
+  const extra = round3[patient.id];
+  if (!extra) continue;
+  Object.assign(patient, extra);
+  // Where the round adds results to a patient who had none, they are the latest results.
+  if (extra.latestResults) patient.latestResults = extra.latestResults;
+}
+
+// Registered at the hospital and on no list: who "Add patient" finds (a Patient search, decision
+// 0019). Two pairs of similar names, marked `similarTo`, show the similar-patient marking.
+let d = 0;
+const R = (fields) => {
+  d += 1;
+  return {
+    id: `directory-${String(d).padStart(2, "0")}`,
+    urn: `SYN-${String(200300 + d).padStart(6, "0")}`,
+    age: ageOn(fields.birthDate),
+    ...fields,
+  };
+};
+const directory = [
+  R({
+    firstName: "Lena",
+    lastName: "Fisher",
+    gender: "female",
+    birthDate: "1979-02-11",
+    similarTo: ["directory-02", "patient-05"],
+  }),
+  R({
+    firstName: "Lina",
+    lastName: "Fischer",
+    gender: "female",
+    birthDate: "1992-06-03",
+    similarTo: ["directory-01", "patient-05"],
+  }),
+  R({ firstName: "Peter", lastName: "Osei", gender: "male", birthDate: "1950-09-12" }),
+  R({ firstName: "Joan", lastName: "McAllister", gender: "female", birthDate: "1944-12-30" }),
+  R({ firstName: "Arjun", lastName: "Mehta", gender: "male", birthDate: "1988-03-17" }),
+  R({
+    firstName: "Rosa",
+    lastName: "Delgado",
+    gender: "female",
+    birthDate: "1960-07-07",
+    similarTo: ["patient-24"],
+  }),
+  R({
+    firstName: "Thomas",
+    lastName: "Brennan",
+    gender: "male",
+    birthDate: "1971-11-02",
+    similarTo: ["directory-10"],
+  }),
+  R({ firstName: "Mei Lin", lastName: "Wong", gender: "female", birthDate: "1983-05-25" }),
+  R({ firstName: "Harold", lastName: "Finch", gender: "male", birthDate: "1939-01-08" }),
+  R({
+    firstName: "Tomas",
+    lastName: "Brennan",
+    gender: "male",
+    birthDate: "1974-04-21",
+    similarTo: ["directory-07"],
   }),
 ];
 
@@ -806,7 +1337,7 @@ const simulation = [
 
 const ward = {
   about:
-    "A small, hand-made synthetic ward for prototyping the patient list and later features. Every person, identifier, time and value is invented and is not clinical advice. Shape follows decision 0019; a Synthea-based generator replaces it later.",
+    "A small, hand-made synthetic ward for prototyping the patient list and later features. Every person, identifier, time and value is invented and is not clinical advice. Shape follows decision 0019; a Synthea-based generator replaces it later. Comments, allied health, discharge barriers and the list's other app data are kept apart in `sources.app`; `directory` holds registered patients on no list.",
   now: NOW,
   timeZone: "Australia/Melbourne",
   sources: SOURCES,
@@ -814,12 +1345,14 @@ const ward = {
   teams,
   afterHours,
   nurses,
+  alliedHealthStaff,
   flagsDefined,
   patients,
+  directory,
   auditLists,
   personalLists,
   simulation,
 };
 
 writeFileSync(new URL("./ward.json", import.meta.url), JSON.stringify(ward, null, 2) + "\n");
-console.log(`ward.json: ${patients.length} patients`);
+console.log(`ward.json: ${patients.length} patients, ${directory.length} in the directory`);

@@ -1,0 +1,65 @@
+---
+title: Avatar
+description: Shows who a person is at a glance, with their picture or their initials, such as the signed-in clinician in a sidebar's footer.
+---
+
+import { Avatar, AvatarFallback } from "@cadence-clinical/ui";
+
+<GradeBadge component="avatar" />
+
+<ComponentPreview>
+  <Avatar size="sm">
+    <AvatarFallback>TE</AvatarFallback>
+  </Avatar>
+  <Avatar>
+    <AvatarFallback>TE</AvatarFallback>
+  </Avatar>
+  <Avatar size="lg">
+    <AvatarFallback>TE</AvatarFallback>
+  </Avatar>
+</ComponentPreview>
+
+## Use it for
+
+- The signed-in clinician, in the user menu at the foot of a [Sidebar](/docs/components/sidebar).
+- The author of a note or the person a task is assigned to, beside their name.
+- The members of a team, as a group with a count of the rest.
+
+## Do not use it for
+
+- **Identifying a patient.** Use the patient's name and identifiers in words. A picture or initials are not enough to tell two patients apart, and a photo of a patient is health information.
+- **A status**, such as whether someone is on shift. Say it in words, or use a [Badge](/docs/components/badge).
+- **An icon for a thing rather than a person.** Use the icon on its own, or an [Item](/docs/components/item)'s media.
+
+## Always give a fallback
+
+Give every `Avatar` an `AvatarFallback` with the person's initials. The picture shows only once it has loaded, and the fallback shows until then, when there is no picture, and when the picture does not load. In clinical software most people have no picture, so the initials are what most people see.
+
+## Write the initials as the person writes them
+
+Use the initials of the name the person goes by, in the case they write it: "TE" for Tom Ellis. Do not change their case with CSS. Two letters fit every size.
+
+## Put the name beside it
+
+Initials are not a name. Two clinicians on a ward can share them. Show the person's name beside the avatar wherever someone needs to know who it is, and use the avatar on its own only where the name is a hover or a tap away, such as in a group.
+
+## Use a picture only with consent
+
+A picture of a staff member is personal information. Use one only where the person has chosen it. Never show a photo of a patient in an avatar.
+
+## Choose a size
+
+| Size      | Use it for                                                     |
+| --------- | -------------------------------------------------------------- |
+| `sm`      | A dense list, or a menu's heading.                             |
+| `default` | Beside a name in a sidebar, a menu button or an item.          |
+| `lg`      | A heading for one person, such as at the top of their profile. |
+
+Each size follows the [density](/docs/theming#density). [Examples](/docs/components/avatar/examples) shows each one.
+
+## Accessibility
+
+- **Hide the avatar beside a name** with `aria-hidden`, so a screen reader does not read the initials and then the name.
+- **Give a picture `alt`** with the person's name where the avatar stands alone, and an empty `alt` where the name is beside it.
+- **Say what an `AvatarBadge` means in words** inside it with `sr-only`. A dot is colour alone.
+- **Name a group**, and say what its count counts, such as "4 more people".

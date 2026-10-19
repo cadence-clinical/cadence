@@ -43,7 +43,7 @@ Mark the row of the open record with `aria-current="true"`, so a screen reader s
 
 From the `md` breakpoint up, the list and the record sit side by side, and each scrolls on its own. The list is between 16rem and 22rem wide, and the record takes the rest. Inside an [Application shell](/docs/components/app-shell), the layout fills the height under the header. Elsewhere, set its height with `className`.
 
-On a phone, one shows at a time. While `open`, the record takes the list's place and focus moves to it. `ListDetailBack` brings the list back, with focus on the row that had it.
+On a phone, one shows at a time. While `open`, the record takes the list's place, focus moves to it, and the page scrolls to the record's top, below a sticky header such as the [Application shell](/docs/components/app-shell)'s, however far down the list was scrolled. `ListDetailBack` brings the list back, with focus on the row that had it.
 
 ## Accessibility
 

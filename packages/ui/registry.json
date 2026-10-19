@@ -81,7 +81,7 @@
       "name": "app-shell",
       "type": "registry:component",
       "title": "Application shell",
-      "description": "The frame of an application, as shadcn's sidebar-16 lays it out: a header across the top, and a sidebar beside the content below it. It starts with a link that skips to the content.",
+      "description": "The frame of an application: a header across the top and a sidebar beside the content below it, as shadcn's sidebar-16, or an inset sidebar the full height with the header inside the page's panel, as sidebar-08. It starts with a link that skips to the content.",
       "registryDependencies": [
         "@cadence/theme",
         "@cadence/cn",
@@ -95,9 +95,32 @@
           "target": "components/cadence/app-shell.tsx"
         }
       ],
-      "docs": "Put AppShellHeader first, then AppShellBody holding AppShellSidebar and AppShellContent. The header's first button opens the sidebar. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "docs": "Put AppShellHeader first, then AppShellBody holding AppShellSidebar and AppShellContent. With variant=\"inset\", put AppShellSidebar and AppShellContent in the AppShell, and AppShellHeader first inside AppShellContent. The header's first button opens the sidebar. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
       "meta": {
         "level": "layout",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
+      "name": "avatar",
+      "type": "registry:component",
+      "title": "Avatar",
+      "description": "A person's picture, or their initials when there is none or it does not load, in three sizes that follow the density. With a badge, and a group with a count.",
+      "dependencies": ["@base-ui/react"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/avatar.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/avatar.tsx"
+        }
+      ],
+      "docs": "Always give an Avatar an AvatarFallback. Beside the person's name, hide it from screen readers with aria-hidden. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "primitive",
         "domain": "general",
         "grade": {
           "level": "tested"
@@ -119,6 +142,29 @@
         }
       ],
       "docs": "A status badge's text must say what the status is. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "primitive",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
+      "name": "breadcrumb",
+      "type": "registry:component",
+      "title": "Breadcrumb",
+      "description": "The trail of pages above the one shown. It wraps when it runs out of room, marks the page shown with aria-current, and can stand an ellipsis in for the middle of a long trail.",
+      "dependencies": ["@base-ui/react", "lucide-react"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/breadcrumb.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/breadcrumb.tsx"
+        }
+      ],
+      "docs": "End the trail with a BreadcrumbPage for the page shown. Put a BreadcrumbEllipsis in a DropdownMenuTrigger that links to the pages it stands for. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
       "meta": {
         "level": "primitive",
         "domain": "general",
@@ -243,10 +289,33 @@
       }
     },
     {
+      "name": "comment",
+      "type": "registry:component",
+      "title": "Comment",
+      "description": "One comment: who wrote it, their role, when, and what they said. A thread form and a compact form for a table cell, marked when it is edited or revoked, with a place for its author's actions.",
+      "dependencies": ["@base-ui/react", "lucide-react"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/comment.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/comment.tsx"
+        }
+      ],
+      "docs": "In a thread, render each Comment as an li inside a CommentList. A compact comment cuts its text to one line, so show the whole comment one step away. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "composite",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "data-table",
       "type": "registry:component",
       "title": "Data table",
-      "description": "Renders a TanStack table: sorting, selection, paging and column visibility, with the state in words as well as marks.",
+      "description": "Renders a TanStack table: sorting, selection, paging, column visibility, pinned columns, grouped rows, rows of two or three lines and cells edited in place, with the state in words as well as marks.",
       "dependencies": ["@tanstack/react-table", "@base-ui/react", "lucide-react"],
       "registryDependencies": [
         "@cadence/theme",
@@ -254,6 +323,8 @@
         "@cadence/button",
         "@cadence/checkbox",
         "@cadence/dropdown-menu",
+        "@cadence/input",
+        "@cadence/popover",
         "@cadence/select",
         "@cadence/table"
       ],
@@ -264,7 +335,7 @@
           "target": "components/cadence/data-table.tsx"
         }
       ],
-      "docs": "Pass dataTableFeatures to useTable, and name the table with aria-label. Cadence grades what it renders, not TanStack Table. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "docs": "Pass dataTableFeatures to useTable, and name the table with aria-label. Keep the columns stable, so an edited cell keeps its place. Cadence grades what it renders, not TanStack Table. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
       "meta": {
         "level": "pattern",
         "domain": "general",
@@ -297,6 +368,29 @@
       "docs": "Put it in a Field, whose label names it, and pass a locale from react-day-picker/locale. mode asks for a date, a date and a time, or a time. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
       "meta": {
         "level": "pattern",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
+      "name": "description-list",
+      "type": "registry:component",
+      "title": "Description list",
+      "description": "Pairs of a term and its details, such as a working problem or an expected discharge, side by side where there is room and stacked where there is not.",
+      "dependencies": [],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/description-list.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/description-list.tsx"
+        }
+      ],
+      "docs": "Put each pair in a DescriptionItem, with a DescriptionTerm and one or more DescriptionDetails. The list stacks below 18rem, measuring its own width, so give it a width inside a box that shrinks to fit. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "primitive",
         "domain": "general",
         "grade": {
           "level": "tested"
@@ -564,6 +658,34 @@
       }
     },
     {
+      "name": "mode-toggle",
+      "type": "registry:component",
+      "title": "Mode toggle",
+      "description": "Chooses the colour mode, light, dark or the device's setting, from an icon button and a menu, and remembers the choice.",
+      "dependencies": ["lucide-react"],
+      "registryDependencies": [
+        "@cadence/theme",
+        "@cadence/cn",
+        "@cadence/button",
+        "@cadence/dropdown-menu"
+      ],
+      "files": [
+        {
+          "path": "src/components/mode-toggle.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/mode-toggle.tsx"
+        }
+      ],
+      "docs": "Run MODE_SCRIPT in a script in the page's head, so a remembered mode is applied before the first paint. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "composite",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "popover",
       "type": "registry:component",
       "title": "Popover",
@@ -783,6 +905,29 @@
       }
     },
     {
+      "name": "status",
+      "type": "registry:component",
+      "title": "Status",
+      "description": "A state shown as an icon and a word, such as Referred or Cleared, with the icon in one of the fixed status colours.",
+      "dependencies": ["@base-ui/react", "class-variance-authority"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/status.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/status.tsx"
+        }
+      ],
+      "docs": "Pass the icon as a child with data-icon=\"inline-start\", and the words beside it. The words say the state, so it is never shown by colour alone. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "primitive",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
       "name": "switch",
       "type": "registry:component",
       "title": "Switch",
@@ -868,6 +1013,29 @@
       "docs": "Give every Textarea a Label or an aria-label, or put it in a Field. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
       "meta": {
         "level": "primitive",
+        "domain": "general",
+        "grade": {
+          "level": "tested"
+        }
+      }
+    },
+    {
+      "name": "timeline",
+      "type": "registry:component",
+      "title": "Timeline",
+      "description": "Things that happened, in order, each with its kind, who, when and what, such as a patient's comments, notes, results and changes, newest first.",
+      "dependencies": ["@base-ui/react", "class-variance-authority"],
+      "registryDependencies": ["@cadence/theme", "@cadence/cn"],
+      "files": [
+        {
+          "path": "src/components/timeline.tsx",
+          "type": "registry:component",
+          "target": "components/cadence/timeline.tsx"
+        }
+      ],
+      "docs": "Put the TimelineHeader before the TimelineContent, so a screen reader hears the kind, who and when before what happened. The icon is hidden from a screen reader: say the kind in words. Cadence grades the component it publishes. A copy you have edited carries no Cadence grade: see https://www.cadenceclinical.dev/docs/grades.",
+      "meta": {
+        "level": "composite",
         "domain": "general",
         "grade": {
           "level": "tested"

@@ -1,0 +1,93 @@
+---
+title: Breadcrumb code
+description: How to install Breadcrumb, its parts and props, and how it differs from the shadcn Breadcrumb.
+---
+
+## Installation
+
+From npm:
+
+```tsx
+import {
+  Breadcrumb,
+  BreadcrumbEllipsis,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@cadence-clinical/ui";
+```
+
+From the shadcn registry:
+
+```bash
+pnpm dlx shadcn@latest add @cadence/breadcrumb
+```
+
+[Installation](/docs/installation) covers both routes and the styles each one needs.
+
+## Usage
+
+```tsx
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@cadence-clinical/ui";
+
+<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/lists">Lists</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbPage>GMU A</BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>;
+```
+
+## API
+
+Breadcrumb follows the shadcn [Breadcrumb](https://ui.shadcn.com/docs/components/breadcrumb) and keeps its part names. Base UI has no breadcrumb, so the parts are plain elements. `BreadcrumbLink` takes the Base UI [render prop](https://base-ui.com/react/utils/use-render) to become a router's link.
+
+| Part                  | Renders                                  | Accepts                                                    |
+| --------------------- | ---------------------------------------- | ---------------------------------------------------------- |
+| `Breadcrumb`          | `nav`, named "Breadcrumb"                | Every `nav` attribute. `aria-label` replaces the name.     |
+| `BreadcrumbList`      | `ol`                                     | Every `ol` attribute                                       |
+| `BreadcrumbItem`      | `li`                                     | Every `li` attribute                                       |
+| `BreadcrumbLink`      | `a`                                      | Every `a` attribute, and `render`                          |
+| `BreadcrumbPage`      | `span` with `aria-current="page"`        | Every `span` attribute                                     |
+| `BreadcrumbSeparator` | `li`, hidden from assistive technology   | Every `li` attribute. Its children replace the chevron.    |
+| `BreadcrumbEllipsis`  | `span` holding an icon and a hidden name | Every `span` attribute. Its children are its name: "More". |
+
+## Props
+
+| Prop       | On                    | Type                                    | Default   |
+| ---------- | --------------------- | --------------------------------------- | --------- |
+| `render`   | `BreadcrumbLink`      | An element or a function, as in Base UI | An `a`    |
+| `children` | `BreadcrumbSeparator` | `ReactNode`                             | A chevron |
+| `children` | `BreadcrumbEllipsis`  | `ReactNode`                             | `"More"`  |
+
+## What Cadence changes
+
+- **Links and the page shown are as tall as a control**, so they follow the [density](/docs/theming#density): 32px compact and 44px comfortable. shadcn's are as tall as their text. The text is the control text size, where shadcn sets 14px.
+- **The page shown is not given `role="link"` or `aria-disabled`.** shadcn gives it both, so a screen reader announces a link that cannot be followed. Cadence's is plain text with `aria-current="page"`, set in medium weight.
+- **The ellipsis has a name a screen reader can hear.** shadcn hides the whole ellipsis from assistive technology, so a trigger built around it has no name. Cadence's names itself with its children, or "More", and hides only the icon.
+- **A link shows a focus ring** and an underline on hover. shadcn's has neither, so focus falls to the browser's default.
+- **The trail's name is "Breadcrumb"**, in sentence case. shadcn's is "breadcrumb".
+
+Code written for the shadcn Breadcrumb works unchanged: it takes the same parts and props.
+
+## Accessibility
+
+- `Breadcrumb` is a navigation landmark named "Breadcrumb". Give each a different `aria-label` when a page has more than one.
+- The trail is an ordered list, so a screen reader announces how many pages it holds and where each one is.
+- `BreadcrumbPage` carries `aria-current="page"`. It is not a link and is not in the tab order.
+- `BreadcrumbSeparator` is hidden from assistive technology.
+- Each link shows a focus ring that holds 3:1. The colour transition on hover is removed when the user asks for reduced motion.

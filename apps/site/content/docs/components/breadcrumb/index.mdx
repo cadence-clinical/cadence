@@ -1,0 +1,75 @@
+---
+title: Breadcrumb
+description: Shows where the page sits in the application, as a trail of links to the pages above it, such as "Lists › Team › GMU A".
+---
+
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@cadence-clinical/ui";
+
+<GradeBadge component="breadcrumb" />
+
+<ComponentPreview>
+  <Breadcrumb>
+    <BreadcrumbList>
+      <BreadcrumbItem>
+        <BreadcrumbLink href="#lists">Lists</BreadcrumbLink>
+      </BreadcrumbItem>
+      <BreadcrumbSeparator />
+      <BreadcrumbItem>
+        <BreadcrumbLink href="#team">Team</BreadcrumbLink>
+      </BreadcrumbItem>
+      <BreadcrumbSeparator />
+      <BreadcrumbItem>
+        <BreadcrumbPage>GMU A</BreadcrumbPage>
+      </BreadcrumbItem>
+    </BreadcrumbList>
+  </Breadcrumb>
+</ComponentPreview>
+
+## Use it for
+
+- The page's place in an application with more than two levels, such as a team's list inside the lists.
+- A way back up to a page above, such as from one patient list to all the lists.
+- The header of an [Application shell](/docs/components/app-shell), beside the button that opens the sidebar.
+
+## Do not use it for
+
+- **The main navigation.** Use a [Sidebar](/docs/components/sidebar). A breadcrumb shows where the page sits and does not list everything a person can reach.
+- **The steps of a task**, such as the pages of a form. A breadcrumb shows where a page is, not how far through a task someone has got.
+- **Switching between views of the same record.** Use [Tabs](/docs/components/tabs).
+- **An application with one level.** A trail of one page says nothing the page's heading does not.
+
+## End the trail with the page shown
+
+The last item is the page being read, as a `BreadcrumbPage`. It is not a link, because a link to the page someone is on goes nowhere. It carries `aria-current="page"`, so a screen reader announces it as the current page.
+
+## Show the levels above, not the history
+
+Each item is a page above the one after it. Do not add the pages someone visited on the way: the browser's back button does that. A trail that changes with the route someone took cannot be learned.
+
+## Shorten a long trail on a phone
+
+A breadcrumb wraps onto another line when it runs out of room. It never cuts a page's name short, because a ward or list name cut short can be misread. On a phone, a trail of more than three pages takes several lines. Shorten it in one of two ways:
+
+- **Keep only the page shown**, and hide the pages above it below the `md` breakpoint. The sidebar is still there to move up the levels. shadcn's `sidebar-08` block does this.
+- **Stand an ellipsis in for the middle pages**, and keep the first page and the page shown. Put the `BreadcrumbEllipsis` in a [Dropdown menu](/docs/components/dropdown-menu) that links to the pages it stands for, so they can still be reached.
+
+[Examples](/docs/components/breadcrumb/examples) shows both.
+
+## Write the names
+
+- **Use each page's name as its heading gives it**: "GMU A", not "General medicine unit A list".
+- **Use sentence case**: "Team lists", not "Team Lists".
+- **Do not repeat the level above in a name.** "Lists › Team › GMU A", not "Lists › Team lists › Team GMU A".
+
+## Accessibility
+
+- **Keep the page's own heading.** A breadcrumb is navigation, and it does not replace the page's `h1`.
+- **Name the trail** with `aria-label` if the page has another breadcrumb. Each one is a navigation landmark named "Breadcrumb" by default.
+- **Link the pages a shortened trail hides** from somewhere a phone user can reach, such as the ellipsis's menu or the sidebar.

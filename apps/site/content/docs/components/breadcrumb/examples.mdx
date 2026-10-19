@@ -1,0 +1,290 @@
+---
+title: Breadcrumb examples
+description: A trail of pages, another separator, a long trail that wraps, and two ways to shorten a trail on a phone, each with its code.
+---
+
+import { Slash } from "lucide-react";
+import {
+  Breadcrumb,
+  BreadcrumbEllipsis,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@cadence-clinical/ui";
+
+## Default
+
+Links to the pages above, separated by chevrons, and the page shown at the end.
+
+<ComponentPreview>
+  <Breadcrumb>
+    <BreadcrumbList>
+      <BreadcrumbItem>
+        <BreadcrumbLink href="#default">Lists</BreadcrumbLink>
+      </BreadcrumbItem>
+      <BreadcrumbSeparator />
+      <BreadcrumbItem>
+        <BreadcrumbLink href="#default">Team</BreadcrumbLink>
+      </BreadcrumbItem>
+      <BreadcrumbSeparator />
+      <BreadcrumbItem>
+        <BreadcrumbPage>GMU A</BreadcrumbPage>
+      </BreadcrumbItem>
+    </BreadcrumbList>
+  </Breadcrumb>
+</ComponentPreview>
+
+```tsx
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@cadence-clinical/ui";
+
+<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/lists">Lists</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/lists/team">Team</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbPage>GMU A</BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>;
+```
+
+## Another separator
+
+Give `BreadcrumbSeparator` children to use another mark. It is hidden from screen readers either way.
+
+<ComponentPreview>
+  <Breadcrumb>
+    <BreadcrumbList>
+      <BreadcrumbItem>
+        <BreadcrumbLink href="#another-separator">Lists</BreadcrumbLink>
+      </BreadcrumbItem>
+      <BreadcrumbSeparator>
+        <Slash />
+      </BreadcrumbSeparator>
+      <BreadcrumbItem>
+        <BreadcrumbPage>GMU A</BreadcrumbPage>
+      </BreadcrumbItem>
+    </BreadcrumbList>
+  </Breadcrumb>
+</ComponentPreview>
+
+```tsx
+import { Slash } from "lucide-react";
+
+<BreadcrumbSeparator>
+  <Slash />
+</BreadcrumbSeparator>;
+```
+
+## A long trail wraps
+
+A trail wider than its room wraps onto another line. No page's name is cut short.
+
+<ComponentPreview>
+  <div className="w-56">
+    <Breadcrumb>
+      <BreadcrumbList>
+        <BreadcrumbItem>
+          <BreadcrumbLink href="#a-long-trail-wraps">Lists</BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>
+          <BreadcrumbLink href="#a-long-trail-wraps">General medicine</BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>
+          <BreadcrumbPage>Pre-admission clinic follow-up</BreadcrumbPage>
+        </BreadcrumbItem>
+      </BreadcrumbList>
+    </Breadcrumb>
+  </div>
+</ComponentPreview>
+
+```tsx
+<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/lists">Lists</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/lists/medicine">General medicine</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbPage>Pre-admission clinic follow-up</BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>
+```
+
+## Only the page shown on a phone
+
+Hide the pages above below the `md` breakpoint, with their separators, so a phone shows only the page shown. Use it where a sidebar is there to move up the levels, as in an [Application shell](/docs/components/app-shell).
+
+<ComponentPreview>
+  <Breadcrumb>
+    <BreadcrumbList>
+      <BreadcrumbItem className="hidden md:inline-flex">
+        <BreadcrumbLink href="#only-the-page-shown-on-a-phone">Lists</BreadcrumbLink>
+      </BreadcrumbItem>
+      <BreadcrumbSeparator className="hidden md:inline-flex" />
+      <BreadcrumbItem className="hidden md:inline-flex">
+        <BreadcrumbLink href="#only-the-page-shown-on-a-phone">Team</BreadcrumbLink>
+      </BreadcrumbItem>
+      <BreadcrumbSeparator className="hidden md:inline-flex" />
+      <BreadcrumbItem>
+        <BreadcrumbPage>GMU A</BreadcrumbPage>
+      </BreadcrumbItem>
+    </BreadcrumbList>
+  </Breadcrumb>
+</ComponentPreview>
+
+```tsx
+<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem className="hidden md:inline-flex">
+      <BreadcrumbLink href="/lists">Lists</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator className="hidden md:inline-flex" />
+    <BreadcrumbItem className="hidden md:inline-flex">
+      <BreadcrumbLink href="/lists/team">Team</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator className="hidden md:inline-flex" />
+    <BreadcrumbItem>
+      <BreadcrumbPage>GMU A</BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>
+```
+
+## An ellipsis for the middle on a phone
+
+Below the `md` breakpoint, an ellipsis stands in for the middle pages. It is the trigger of a menu that links to them. Its children are its name, which a screen reader announces: "Earlier pages" here.
+
+<ComponentPreview>
+  <Breadcrumb>
+    <BreadcrumbList>
+      <BreadcrumbItem>
+        <BreadcrumbLink href="#an-ellipsis-for-the-middle-on-a-phone">Lists</BreadcrumbLink>
+      </BreadcrumbItem>
+      <BreadcrumbSeparator />
+      <BreadcrumbItem className="md:hidden">
+        <DropdownMenu>
+          <DropdownMenuTrigger className="rounded-sm outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring">
+            <BreadcrumbEllipsis>Earlier pages</BreadcrumbEllipsis>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuGroup>
+              <DropdownMenuItem render={<a href="#an-ellipsis-for-the-middle-on-a-phone" />}>
+                General medicine
+              </DropdownMenuItem>
+              <DropdownMenuItem render={<a href="#an-ellipsis-for-the-middle-on-a-phone" />}>
+                Team
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </BreadcrumbItem>
+      <BreadcrumbSeparator className="md:hidden" />
+      <BreadcrumbItem className="hidden md:inline-flex">
+        <BreadcrumbLink href="#an-ellipsis-for-the-middle-on-a-phone">
+          General medicine
+        </BreadcrumbLink>
+      </BreadcrumbItem>
+      <BreadcrumbSeparator className="hidden md:inline-flex" />
+      <BreadcrumbItem className="hidden md:inline-flex">
+        <BreadcrumbLink href="#an-ellipsis-for-the-middle-on-a-phone">Team</BreadcrumbLink>
+      </BreadcrumbItem>
+      <BreadcrumbSeparator className="hidden md:inline-flex" />
+      <BreadcrumbItem>
+        <BreadcrumbPage>GMU A</BreadcrumbPage>
+      </BreadcrumbItem>
+    </BreadcrumbList>
+  </Breadcrumb>
+</ComponentPreview>
+
+```tsx
+import {
+  Breadcrumb,
+  BreadcrumbEllipsis,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@cadence-clinical/ui";
+
+<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/lists">Lists</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem className="md:hidden">
+      <DropdownMenu>
+        <DropdownMenuTrigger className="rounded-sm outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring">
+          <BreadcrumbEllipsis>Earlier pages</BreadcrumbEllipsis>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuGroup>
+            <DropdownMenuItem render={<a href="/lists/medicine" />}>
+              General medicine
+            </DropdownMenuItem>
+            <DropdownMenuItem render={<a href="/lists/medicine/team" />}>Team</DropdownMenuItem>
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator className="md:hidden" />
+    <BreadcrumbItem className="hidden md:inline-flex">
+      <BreadcrumbLink href="/lists/medicine">General medicine</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator className="hidden md:inline-flex" />
+    <BreadcrumbItem className="hidden md:inline-flex">
+      <BreadcrumbLink href="/lists/medicine/team">Team</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator className="hidden md:inline-flex" />
+    <BreadcrumbItem>
+      <BreadcrumbPage>GMU A</BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>;
+```
+
+## With a router's link
+
+Pass the router's link to `render`, so a page change does not reload the page.
+
+```tsx
+import Link from "next/link";
+
+<BreadcrumbItem>
+  <BreadcrumbLink render={<Link href="/lists" />}>Lists</BreadcrumbLink>
+</BreadcrumbItem>;
+```

@@ -7,7 +7,7 @@ import { createColumnHelper, useTable } from "@tanstack/react-table";
 import registry from "../registry.json";
 import { Calendar } from "./calendar";
 import { DatePicker } from "./date-picker";
-import { DataTable, dataTableFeatures } from "./data-table";
+import { DataTable, DataTableEditableCell, dataTableFeatures } from "./data-table";
 import {
   Alert,
   AlertDescription,
@@ -20,16 +20,36 @@ import {
   AppShellBody,
   AppShellContent,
   AppShellHeader,
+  AppShellSidebar,
+  Avatar,
+  AvatarFallback,
   Badge,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
   Button,
   Card,
   CardContent,
   CardHeader,
   CardTitle,
   Checkbox,
+  Comment,
+  CommentAuthor,
+  CommentHeader,
+  CommentProvenance,
+  CommentRole,
+  CommentText,
+  CommentTime,
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
+  DescriptionDetails,
+  DescriptionItem,
+  DescriptionList,
+  DescriptionTerm,
   Dialog,
   DialogContent,
   DialogTitle,
@@ -63,6 +83,7 @@ import {
   ListDetailList,
   Marker,
   MarkerContent,
+  ModeToggle,
   Popover,
   PopoverContent,
   PopoverTitle,
@@ -88,6 +109,7 @@ import {
   Skeleton,
   Slider,
   Spinner,
+  Status,
   Switch,
   Table,
   TableBody,
@@ -98,6 +120,12 @@ import {
   TabsList,
   TabsTrigger,
   Textarea,
+  Timeline,
+  TimelineContent,
+  TimelineHeader,
+  TimelineItem,
+  TimelineTime,
+  TimelineTitle,
   ToastProvider,
   ToastViewport,
   Toggle,
@@ -119,15 +147,37 @@ import {
  */
 // The data table has its own entry point and a TanStack table from a hook, which renders on the
 // server like any other hook.
-const helper = createColumnHelper<typeof dataTableFeatures, { clinic: string }>();
-const COLUMNS = helper.columns([helper.accessor("clinic", { header: "Clinic" })]);
+const helper = createColumnHelper<typeof dataTableFeatures, { clinic: string; note: string }>();
+// A pinned column with a size, and a cell edited in place: neither measures until it is in a page.
+const COLUMNS = helper.columns([
+  helper.accessor("clinic", { header: "Clinic", size: 160 }),
+  helper.accessor("note", {
+    header: "Note",
+    cell: ({ getValue }) => (
+      <DataTableEditableCell
+        label="Note for Review clinic"
+        value={getValue()}
+        onValueChange={() => undefined}
+      />
+    ),
+  }),
+]);
 function ServerDataTable() {
   const table = useTable({
     features: dataTableFeatures,
-    data: [{ clinic: "Review clinic" }],
+    data: [{ clinic: "Review clinic", note: "Interpreter booked" }],
     columns: COLUMNS,
+    state: { columnPinning: { start: ["clinic"], end: [] } },
   });
-  return <DataTable table={table} aria-label="Appointments" />;
+  // Grouped, so a group's heading row renders on the server too.
+  return (
+    <DataTable
+      table={table}
+      aria-label="Appointments"
+      groups={[{ id: "review", label: "Review clinics" }]}
+      getGroupId={() => "review"}
+    />
+  );
 }
 
 const RENDERS: Record<string, ReactElement> = {
@@ -139,9 +189,38 @@ const RENDERS: Record<string, ReactElement> = {
       </AppShellBody>
     </AppShell>
   ),
+  avatar: (
+    <Avatar>
+      <AvatarFallback>TE</AvatarFallback>
+    </Avatar>
+  ),
   badge: <Badge variant="info">New</Badge>,
+  breadcrumb: (
+    <Breadcrumb>
+      <BreadcrumbList>
+        <BreadcrumbItem>
+          <BreadcrumbLink href="/lists">Lists</BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>
+          <BreadcrumbPage>GMU A</BreadcrumbPage>
+        </BreadcrumbItem>
+      </BreadcrumbList>
+    </Breadcrumb>
+  ),
   button: <Button>Save observation</Button>,
   checkbox: <Checkbox aria-label="Interpreter needed" />,
+  comment: (
+    <Comment>
+      <CommentHeader>
+        <CommentAuthor>Dr Grace Kim</CommentAuthor>
+        <CommentRole>Registrar</CommentRole>
+        <CommentTime dateTime="2026-10-19T06:00:00+11:00">06:00</CommentTime>
+      </CommentHeader>
+      <CommentText>Transferring for ongoing management.</CommentText>
+      <CommentProvenance drafter="Handover assistant" sources={[]} />
+    </Comment>
+  ),
   collapsible: (
     <Collapsible defaultOpen>
       <CollapsibleTrigger>Earlier entries</CollapsibleTrigger>
@@ -176,8 +255,31 @@ const RENDERS: Record<string, ReactElement> = {
   skeleton: <Skeleton className="h-4 w-40" />,
   slider: <Slider aria-label="Text size" defaultValue={100} min={80} max={150} />,
   spinner: <Spinner />,
+  // The server cannot know the mode, so it renders System with the light icon.
+  "mode-toggle": <ModeToggle />,
+  status: <Status tone="success">Cleared</Status>,
   switch: <Switch aria-label="Appointment reminders" />,
   textarea: <Textarea aria-label="Notes" />,
+  timeline: (
+    <Timeline aria-label="Activity, newest first">
+      <TimelineItem>
+        <TimelineHeader>
+          <TimelineTitle>Comment</TimelineTitle>
+          <span>Dr Grace Kim</span>
+          <TimelineTime dateTime="2026-10-19T06:00:00+11:00">06:00</TimelineTime>
+        </TimelineHeader>
+        <TimelineContent>Transferring for ongoing management.</TimelineContent>
+      </TimelineItem>
+    </Timeline>
+  ),
+  "description-list": (
+    <DescriptionList>
+      <DescriptionItem>
+        <DescriptionTerm>Working problem</DescriptionTerm>
+        <DescriptionDetails>Community-acquired pneumonia</DescriptionDetails>
+      </DescriptionItem>
+    </DescriptionList>
+  ),
   // The Toaster renders its toasts through a portal, which the server does not reach.
   toast: (
     <ToastProvider>
@@ -392,6 +494,69 @@ describe("Sidebar", () => {
   });
 });
 
+describe("Avatar", () => {
+  // The picture shows once it has loaded in the browser, so the server sends the initials.
+  it("renders the fallback before any picture has loaded", () => {
+    const html = renderToString(
+      <Avatar size="lg">
+        <AvatarFallback>TE</AvatarFallback>
+      </Avatar>,
+    );
+
+    expect(html).toMatch(
+      /data-slot="avatar"[^>]*data-size="lg"|data-size="lg"[^>]*data-slot="avatar"/,
+    );
+    expect(html).toMatch(/data-slot="avatar-fallback"[^>]*>TE<\/span>/);
+  });
+});
+
+describe("Breadcrumb", () => {
+  it("renders a named trail whose last page is current and not a link", () => {
+    const html = renderToString(
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/lists">Lists</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>GMU A</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>,
+    );
+
+    expect(html).toMatch(/<nav[^>]*aria-label="Breadcrumb"/);
+    expect(html).toMatch(/<a[^>]*href="\/lists"[^>]*>Lists<\/a>/);
+    expect(html).toMatch(/<span[^>]*aria-current="page"[^>]*>GMU A<\/span>/);
+    expect(html).toMatch(/<li[^>]*aria-hidden="true"/);
+  });
+});
+
+describe("AppShell", () => {
+  it("puts the inset layout's header inside the main panel, beside a full-height inset sidebar", () => {
+    const html = renderToString(
+      <AppShell variant="inset">
+        <AppShellSidebar>Lists</AppShellSidebar>
+        <AppShellContent>
+          <AppShellHeader>GMU A</AppShellHeader>
+          Patients
+        </AppShellContent>
+      </AppShell>,
+    );
+
+    expect(html).toMatch(
+      /data-slot="app-shell"[^>]*data-variant="inset"|data-variant="inset"[^>]*data-slot="app-shell"/,
+    );
+    expect(html).toMatch(
+      /data-slot="sidebar"[^>]*data-variant="inset"|data-variant="inset"[^>]*data-slot="sidebar"/,
+    );
+    expect(html).toMatch(
+      /<main[^>]*data-slot="app-shell-content"[^>]*>\s*<header[^>]*data-slot="app-shell-header"/,
+    );
+  });
+});
+
 describe("Form", () => {
   // The summary is read from the page after it renders, so the server sends a form without one,
   // even when it is given errors.
@@ -470,5 +635,16 @@ describe("Alert", () => {
 
     expect(html).toContain('role="status"');
     expect(html).not.toContain("<svg");
+  });
+});
+
+describe("ModeToggle", () => {
+  // The server cannot read the mode on <html>, so it renders System, with the light mode's icon,
+  // and reads no browser global while it does.
+  it("renders System with the sun", () => {
+    const html = renderToString(<ModeToggle />);
+    expect(html).toContain('data-mode="system"');
+    expect(html).toContain("lucide-sun");
+    expect(html).toContain("Colour mode");
   });
 });

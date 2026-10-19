@@ -1,0 +1,88 @@
+---
+title: Comment
+description: Shows one comment, with who wrote it, their role, when, and what they said, in a thread or a table cell, and whether it was edited or revoked.
+---
+
+import {
+  Comment,
+  CommentAuthor,
+  CommentHeader,
+  CommentRole,
+  CommentText,
+  CommentTime,
+} from "@cadence-clinical/ui";
+
+<GradeBadge component="comment" />
+
+<ComponentPreview>
+  <Comment className="max-w-md">
+    <CommentHeader>
+      <CommentAuthor>Dr Grace Kim</CommentAuthor>
+      <CommentRole>Registrar, GMU C</CommentRole>
+      <CommentTime dateTime="2026-10-19T06:00:00+11:00">Mon 19 Oct, 06:00</CommentTime>
+    </CommentHeader>
+    <CommentText>
+      Cardiac issues now lead: transferring to Team A for ongoing management.
+    </CommentText>
+  </Comment>
+</ComponentPreview>
+
+## Use it for
+
+- A thread of comments on a record, such as the notes a team leaves on a patient in a list.
+- The latest comment in a table cell, in two lines, with the thread one step away.
+- A handover written as a comment, which the receiving team reads before they accept.
+
+## Do not use it for
+
+- **A clinical note that belongs in the record.** A note is written and signed in the clinical system. Show its text in a [Typeset](/docs/components/typeset) container.
+- **A message about something that just happened**, such as a save. Use a [Toast](/docs/components/toast).
+- **An item in a list that is not something someone said.** Use an [Item](/docs/components/item).
+
+## Show who wrote it, their role and when
+
+A comment is read as clinical communication, so the reader needs to know who said it and when, to weigh it. Always give the author and the time. Give the role in a thread, where a reader may not know the author. Format the time in the time zone of the ward.
+
+## Put the newest comment first in a thread
+
+On a busy list the newest comment is the one most likely to change what happens next. Say the order in the thread's name, such as "Comments, newest first".
+
+## Show comments among other activity in a timeline
+
+Where a record's comments sit among its notes, results and changes, put each comment in an item of a [Timeline](/docs/components/timeline), newest first. The timeline's header says who and when, so leave the comment's own header out, and keep its text, its marks and its actions.
+
+## Show the whole comment one step away from a compact one
+
+The compact form cuts the text to one line so that every row stays the same height. Never let it be the only place the text is shown: open the whole thread from the row, such as in the record beside the list.
+
+## Let the author correct a comment for a moment, then only revoke it
+
+Comments are read by the team as they arrive, and someone may act on one within seconds. So let the author edit or delete a comment only briefly after posting it, such as for 10 seconds, and say how long is left beside the actions. After that, the comment cannot be edited or deleted, only revoked by its author.
+
+- **Show the actions to the author only**, in `CommentActions`: Edit and Delete while they may, then Revoke.
+- **Offer Undo where the comment was posted from**, such as in a [Toast](/docs/components/toast), for as long as Delete is offered.
+- **Ask before revoking**, in an [Alert dialog](/docs/components/alert-dialog). Revoking cannot be undone.
+- **Mark an edited comment** with `CommentEdited`, so readers know the words changed after they were posted.
+
+## Keep a revoked comment in the thread
+
+A revoked comment never disappears: someone may already have read it and acted on it, and the thread is the record of what the team was told. Set `status="revoked"`, and add a `CommentRevoked` that says who revoked it and when: "Revoked by Dr Tom Ellis, 08:14". The text is struck through and muted, and the word "Revoked" and an icon say the same, so the state never rests on a line through the words. A screen reader hears "Revoked:" before the text.
+
+In a table cell, show a revoked latest comment as revoked, rather than the comment before it: a reader who saw the original needs to learn it no longer stands.
+
+## Mark a comment an AI drafted
+
+If an AI drafted a comment, mark it with `CommentProvenance`: what drafted it, who reviewed it, and the sources it came from. The mark stays after a clinician reviews it, because a reader can only check what they can trace, and it stays when the comment is edited or revoked. A drafted comment with no source says so.
+
+## Write the comment
+
+- **Say what happened or what to do**, in a sentence or two: "Bed 411 B ready", "Happy to accept once the echo is booked".
+- **Use the names people use on the ward**, such as the team's name, not an internal code.
+
+## Accessibility
+
+- Put a thread in a `CommentList`, so a screen reader says how many comments there are, and name it.
+- Give `CommentTime` the moment as `dateTime`, in ISO 8601 with its offset, and `CommentRevoked` the moment it was revoked.
+- Name each action by the comment it acts on, such as "Edit your comment: Echo booked for 1400".
+- Do not announce a countdown as it changes. Give it `role="timer"`, which a screen reader reads when someone reaches it.
+- When an action goes, such as Edit when the time to edit runs out, move focus to what replaces it.

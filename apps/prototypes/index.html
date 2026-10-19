@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en-AU">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Cadence Clinical prototypes</title>
+    <!-- The chosen colour mode, before the first paint, so the page never flashes the other one. -->
+    <script>
+      try {
+        var m = localStorage.getItem("cadence-mode");
+        if (m === "light" || m === "dark") document.documentElement.setAttribute("data-mode", m);
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

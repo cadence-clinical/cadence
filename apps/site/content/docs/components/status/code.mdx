@@ -1,0 +1,57 @@
+---
+title: Status code
+description: How to install Status, its props, and how its tones use the status tokens.
+---
+
+## Installation
+
+From npm:
+
+```tsx
+import { Status } from "@cadence-clinical/ui";
+```
+
+From the shadcn registry:
+
+```bash
+pnpm dlx shadcn@latest add @cadence/status
+```
+
+[Installation](/docs/installation) covers both routes and the styles each one needs.
+
+## Usage
+
+```tsx
+import { Status } from "@cadence-clinical/ui";
+import { Clock } from "lucide-react";
+
+<Status tone="warning">
+  <Clock aria-hidden data-icon="inline-start" />
+  Referred
+</Status>;
+```
+
+## API
+
+Status renders a `span`, spreads the rest of its props onto it, and takes the Base UI [render prop](https://base-ui.com/react/utils/use-render) to become another element. It carries `data-slot="status"` and `data-tone`. shadcn has no Status component: Status takes Badge's shape, with `tone` in place of `variant` because it has no surface to vary.
+
+## Props
+
+| Prop     | Type                                                          | Default     |
+| -------- | ------------------------------------------------------------- | ----------- |
+| `tone`   | `"neutral" \| "info" \| "success" \| "warning" \| "critical"` | `"neutral"` |
+| `render` | An element or a function, as in Base UI                       | A `span`    |
+
+`statusVariants` returns the classes for a tone.
+
+## Tones
+
+A tone colours the icon with its status's text token, such as `warning-text`, which holds at least 3:1 against the page, a card and a popover, as an icon must. `neutral` uses `muted-foreground`. The words keep the colour of the text around them, so they hold their contrast on any row fill. The [status colours](/docs/theming#status-colours) are the same in every theme.
+
+The icon follows the [density](/docs/theming#density), a little smaller than a control's. Give it `data-icon="inline-start"` or `"inline-end"` and no size class.
+
+## Accessibility
+
+- Status has no role. A screen reader reads its words as part of the content around it, and the icon is hidden with `aria-hidden`.
+- A status does not announce a change. Put it in a live region, or announce the change another way.
+- Where only an abbreviation shows, give the control around it an accessible name with the state in words.
