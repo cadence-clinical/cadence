@@ -1,0 +1,104 @@
+---
+title: Status examples
+description: Each Status tone, several states in a cell, and an abbreviation with its words in a tooltip, each with its code.
+---
+
+import { Status } from "@cadence-clinical/ui";
+import { CircleCheck, Clock, Eye, Minus, OctagonAlert } from "lucide-react";
+
+## Neutral
+
+The default, for a state that is not a status.
+
+<ComponentPreview>
+  <Status>
+    <Minus aria-hidden data-icon="inline-start" />
+    Not needed
+  </Status>
+</ComponentPreview>
+
+```tsx
+import { Status } from "@cadence-clinical/ui";
+import { Minus } from "lucide-react";
+
+<Status>
+  <Minus aria-hidden data-icon="inline-start" />
+  Not needed
+</Status>;
+```
+
+## Tones
+
+Each tone colours its icon with one of the fixed status colours. Each state has its own icon.
+
+<ComponentPreview>
+  <Status tone="info">
+    <Eye aria-hidden data-icon="inline-start" />
+    Seen
+  </Status>
+  <Status tone="warning">
+    <Clock aria-hidden data-icon="inline-start" />
+    Referred
+  </Status>
+  <Status tone="success">
+    <CircleCheck aria-hidden data-icon="inline-start" />
+    Cleared
+  </Status>
+  <Status tone="critical">
+    <OctagonAlert aria-hidden data-icon="inline-start" />
+    Declined
+  </Status>
+</ComponentPreview>
+
+```tsx
+<Status tone="warning">
+  <Clock aria-hidden data-icon="inline-start" />
+  Referred
+</Status>
+```
+
+## Several in a cell
+
+Put the abbreviation first and the icon after it with `data-icon="inline-end"`. One button holds the tooltip with the states in words, so the cell is one tab stop, and its name says all three.
+
+<ComponentPreview>
+  <Status tone="success">
+    PT
+    <CircleCheck aria-hidden data-icon="inline-end" />
+  </Status>
+  <Status tone="warning">
+    SW
+    <Clock aria-hidden data-icon="inline-end" />
+  </Status>
+  <Status>
+    OT
+    <Minus aria-hidden data-icon="inline-end" />
+  </Status>
+</ComponentPreview>
+
+```tsx
+import { Status, Tooltip, TooltipContent, TooltipTrigger } from "@cadence-clinical/ui";
+import { CircleCheck, Clock, Minus } from "lucide-react";
+
+<Tooltip>
+  <TooltipTrigger
+    render={<button type="button" />}
+    aria-label="Allied health: PT cleared, SW referred, OT not needed"
+    className="inline-flex gap-2 rounded-sm"
+  >
+    <Status tone="success">
+      PT
+      <CircleCheck aria-hidden data-icon="inline-end" />
+    </Status>
+    <Status tone="warning">
+      SW
+      <Clock aria-hidden data-icon="inline-end" />
+    </Status>
+    <Status>
+      OT
+      <Minus aria-hidden data-icon="inline-end" />
+    </Status>
+  </TooltipTrigger>
+  <TooltipContent>PT cleared, SW referred, OT not needed</TooltipContent>
+</Tooltip>;
+```

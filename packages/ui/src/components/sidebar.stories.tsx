@@ -1,20 +1,41 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
+  Bell,
   CalendarClock,
   CalendarDays,
   ChartColumn,
+  ChevronRight,
   ChevronsUpDown,
+  CircleUser,
+  ClipboardList,
   Ellipsis,
   Hospital,
   Inbox,
+  LifeBuoy,
   LogOut,
   Mail,
   Plus,
+  Send,
   Settings,
+  Users,
   type LucideIcon,
 } from "lucide-react";
 import { expect, screen, userEvent, waitFor, within } from "storybook/test";
 
+import { Avatar, AvatarFallback } from "@/components/cadence/avatar";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/cadence/breadcrumb";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/cadence/collapsible";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -223,6 +244,163 @@ function ClinicLayout({
         </header>
         <div className="p-container text-body">
           <p>Four appointments are booked for this morning.</p>
+        </div>
+      </SidebarInset>
+    </SidebarProvider>
+  );
+}
+
+const TEAM_LISTS = ["Admitting", "GMU A", "GMU B", "GMU C"];
+
+/**
+ * shadcn's `sidebar-08` block, built from Cadence's parts: an inset sidebar with the application
+ * in its header, a list that opens to its sub-lists, secondary links at the bottom and the user's
+ * menu in its footer, beside a page whose header holds the trigger and a breadcrumb.
+ */
+function InsetLayout() {
+  return (
+    <SidebarProvider>
+      <Sidebar variant="inset">
+        <SidebarHeader>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton size="lg" render={<a href="#home" />}>
+                <span className="flex size-control shrink-0 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground">
+                  <Hospital aria-hidden />
+                </span>
+                <span className="flex flex-col leading-tight">
+                  <span className="font-medium">Clinical App</span>
+                  <span className="text-control-sm text-muted-foreground">Prototype</span>
+                </span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarHeader>
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarGroupLabel>Lists</SidebarGroupLabel>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton render={<a href="#my-patients" />}>
+                  <ClipboardList aria-hidden />
+                  <span>My patients</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <Collapsible defaultOpen render={<SidebarMenuItem />}>
+                <SidebarMenuButton render={<a href="#team" />}>
+                  <Users aria-hidden />
+                  <span>Team</span>
+                </SidebarMenuButton>
+                <CollapsibleTrigger
+                  render={<SidebarMenuAction className="aria-expanded:rotate-90" />}
+                >
+                  <ChevronRight aria-hidden />
+                  <span className="sr-only">Team lists</span>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <SidebarMenuSub>
+                    {TEAM_LISTS.map((list) => (
+                      <SidebarMenuSubItem key={list}>
+                        <SidebarMenuSubButton isActive={list === "GMU A"} href="#team-list">
+                          {list}
+                        </SidebarMenuSubButton>
+                      </SidebarMenuSubItem>
+                    ))}
+                  </SidebarMenuSub>
+                </CollapsibleContent>
+              </Collapsible>
+            </SidebarMenu>
+          </SidebarGroup>
+          <SidebarGroup className="mt-auto">
+            <SidebarGroupContent>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton size="sm" render={<a href="#support" />}>
+                    <LifeBuoy aria-hidden />
+                    <span>Support</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton size="sm" render={<a href="#feedback" />}>
+                    <Send aria-hidden />
+                    <span>Feedback</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
+        <SidebarFooter>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <DropdownMenu>
+                <DropdownMenuTrigger render={<SidebarMenuButton size="lg" />}>
+                  {/* The name is beside it, so the initials would only say it twice. */}
+                  <Avatar aria-hidden>
+                    <AvatarFallback>TE</AvatarFallback>
+                  </Avatar>
+                  <span className="flex flex-col leading-tight">
+                    <span className="font-medium">Dr Tom Ellis</span>
+                    <span className="text-control-sm text-muted-foreground">Registrar · GMU A</span>
+                  </span>
+                  <ChevronsUpDown aria-hidden className="ms-auto" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent side="right" align="end">
+                  <DropdownMenuGroup>
+                    <DropdownMenuLabel>
+                      <span className="flex items-center gap-2">
+                        <Avatar aria-hidden size="sm">
+                          <AvatarFallback>TE</AvatarFallback>
+                        </Avatar>
+                        <span className="flex flex-col leading-tight">
+                          <span className="font-medium text-foreground">Dr Tom Ellis</span>
+                          <span>Registrar · GMU A</span>
+                        </span>
+                      </span>
+                    </DropdownMenuLabel>
+                    <DropdownMenuItem>
+                      <CircleUser aria-hidden />
+                      Profile
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Bell aria-hidden />
+                      Notifications
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <LogOut aria-hidden />
+                    Sign out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
+      </Sidebar>
+      <SidebarInset>
+        <header className="flex shrink-0 items-center gap-2 border-b px-container py-container-sm">
+          <SidebarTrigger />
+          <Separator orientation="vertical" className="h-4 self-center" />
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem className="hidden md:inline-flex">
+                <BreadcrumbLink href="#lists">Lists</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator className="hidden md:inline-flex" />
+              <BreadcrumbItem className="hidden md:inline-flex">
+                <BreadcrumbLink href="#team">Team</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator className="hidden md:inline-flex" />
+              <BreadcrumbItem>
+                <BreadcrumbPage>GMU A</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+        </header>
+        <div className="flex flex-col gap-container p-container text-body">
+          <h1 className="text-title font-medium">GMU A</h1>
+          <p>Twelve patients are on this list.</p>
         </div>
       </SidebarInset>
     </SidebarProvider>
@@ -466,3 +644,92 @@ export const OnAPhoneItIsASheet: Story = {
     await expect(trigger).toHaveAttribute("aria-expanded", "false");
   },
 };
+
+// shadcn's sidebar-08: an inset sidebar beside a page framed as a rounded panel, whose header
+// holds the trigger, a rule and the breadcrumb. The list shown is marked in the sidebar and in
+// the breadcrumb.
+export const InsetWithBreadcrumb: Story = {
+  render: () => <InsetLayout />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trail = canvas.getByRole("navigation", { name: "Breadcrumb" });
+    await expect(within(trail).getByText("GMU A")).toHaveAttribute("aria-current", "page");
+    await expect(within(trail).getByRole("link", { name: "Team" })).toBeVisible();
+    await expect(canvas.getByRole("link", { name: "GMU A" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
+    await expect(sidebarOf(canvasElement)).toHaveAttribute("data-variant", "inset");
+
+    // The secondary links sit at the bottom of the sidebar, above the user's menu.
+    const support = canvas.getByRole("link", { name: "Support" }).getBoundingClientRect();
+    const user = canvas.getByRole("button", { name: /Dr Tom Ellis/ }).getBoundingClientRect();
+    await expect(user.top - support.bottom).toBeLessThan(80);
+  },
+};
+
+// The Team item opens and closes its sub-lists, and its trigger says which.
+export const InsetTeamListsCollapse: Story = {
+  render: () => <InsetLayout />,
+  parameters: { chromatic: { disableSnapshot: true } },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const toggle = canvas.getByRole("button", { name: "Team lists" });
+    await expect(toggle).toHaveAttribute("aria-expanded", "true");
+    await expect(canvas.getByRole("link", { name: "GMU B" })).toBeVisible();
+
+    await userEvent.click(toggle);
+    await expect(toggle).toHaveAttribute("aria-expanded", "false");
+    await waitFor(() => expect(canvas.queryByRole("link", { name: "GMU B" })).toBeNull());
+
+    await userEvent.click(toggle);
+    await waitFor(() => expect(canvas.getByRole("link", { name: "GMU B" })).toBeVisible());
+  },
+};
+
+// The footer's button opens the user's menu. The avatar beside the name is not announced.
+export const InsetUserMenu: Story = {
+  render: () => <InsetLayout />,
+  parameters: { chromatic: { disableSnapshot: true } },
+  play: async ({ canvasElement }) => {
+    const trigger = within(canvasElement).getByRole("button", {
+      name: "Dr Tom Ellis Registrar · GMU A",
+    });
+    await userEvent.click(trigger);
+    const menu = await screen.findByRole("menu");
+    await expect(within(menu).getByRole("menuitem", { name: "Sign out" })).toBeVisible();
+    await userEvent.keyboard("{Escape}");
+    await waitFor(() => expect(screen.queryByRole("menu")).toBeNull());
+    await waitFor(() => expect(trigger).toHaveFocus());
+  },
+};
+
+// On a phone the breadcrumb keeps only the page shown, and the sidebar is a sheet.
+export const InsetOnAPhone: Story = {
+  render: () => <InsetLayout />,
+  globals: { viewport: { value: "mobile1" } },
+  parameters: { chromatic: { viewports: [320] } },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trail = canvas.getByRole("navigation", { name: "Breadcrumb" });
+    await expect(within(trail).queryByRole("link")).toBeNull();
+    await expect(within(trail).getByText("GMU A")).toBeVisible();
+
+    await userEvent.click(canvas.getByRole("button", { name: "Toggle sidebar" }));
+    const sheet = await screen.findByRole("dialog", { name: "Sidebar" });
+    await expect(within(sheet).getByRole("link", { name: "GMU A" })).toBeVisible();
+  },
+};
+
+export const InsetFollowsComfortableDensity: Story = {
+  render: () => <InsetLayout />,
+  globals: { density: "comfortable" },
+  play: async ({ canvasElement }) => {
+    const trail = within(canvasElement).getByRole("navigation", { name: "Breadcrumb" });
+    await expect(
+      within(trail).getByRole("link", { name: "Lists" }).getBoundingClientRect().height,
+    ).toBe(44);
+  },
+};
+
+export const InsetInDarkMode: Story = { render: () => <InsetLayout />, globals: { mode: "dark" } };

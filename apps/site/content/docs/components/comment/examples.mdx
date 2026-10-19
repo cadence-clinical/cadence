@@ -1,0 +1,259 @@
+---
+title: Comment examples
+description: A Comment in a thread, in a table cell, with its author's actions, edited, revoked, and drafted by an AI, each with its code.
+---
+
+import { Pencil, Trash2 } from "lucide-react";
+import {
+  Button,
+  Comment,
+  CommentActions,
+  CommentAuthor,
+  CommentEdited,
+  CommentHeader,
+  CommentList,
+  CommentProvenance,
+  CommentRevoked,
+  CommentRole,
+  CommentText,
+  CommentTime,
+} from "@cadence-clinical/ui";
+
+## A thread
+
+Render each comment as an `li` in a `CommentList`, newest first. A rule parts the comments.
+
+<ComponentPreview>
+  <CommentList aria-label="Comments, newest first" className="w-full max-w-md">
+    <Comment render={<li />}>
+      <CommentHeader>
+        <CommentAuthor>Dr Tom Ellis</CommentAuthor>
+        <CommentRole>Registrar, GMU A</CommentRole>
+        <CommentTime dateTime="2026-10-19T07:40:00+11:00">07:40</CommentTime>
+      </CommentHeader>
+      <CommentText>Seen on arrival. Happy to accept once the echo is booked.</CommentText>
+    </Comment>
+    <Comment render={<li />}>
+      <CommentHeader>
+        <CommentAuthor>Dr Grace Kim</CommentAuthor>
+        <CommentRole>Registrar, GMU C</CommentRole>
+        <CommentTime dateTime="2026-10-19T06:00:00+11:00">06:00</CommentTime>
+      </CommentHeader>
+      <CommentText>
+        Cardiac issues now lead: transferring to Team A for ongoing management.
+      </CommentText>
+    </Comment>
+  </CommentList>
+</ComponentPreview>
+
+```tsx
+import {
+  Comment,
+  CommentAuthor,
+  CommentHeader,
+  CommentList,
+  CommentRole,
+  CommentText,
+  CommentTime,
+} from "@cadence-clinical/ui";
+
+<CommentList aria-label="Comments, newest first">
+  {comments.map((comment) => (
+    <Comment key={comment.id} render={<li />}>
+      <CommentHeader>
+        <CommentAuthor>{comment.author}</CommentAuthor>
+        <CommentRole>{comment.role}</CommentRole>
+        <CommentTime dateTime={comment.at}>{formatTime(comment.at)}</CommentTime>
+      </CommentHeader>
+      <CommentText>{comment.text}</CommentText>
+    </Comment>
+  ))}
+</CommentList>;
+```
+
+## In a table cell
+
+Set `size="compact"` and put the text first. It is cut to one line, and the author and time follow on a second. The role is left out.
+
+<ComponentPreview>
+  <div className="w-64 rounded-md border p-2">
+    <Comment size="compact">
+      <CommentText>
+        Cardiac issues now lead: transferring to Team A for ongoing management.
+      </CommentText>
+      <CommentHeader>
+        <CommentAuthor>Dr Grace Kim</CommentAuthor>
+        <CommentTime dateTime="2026-10-19T06:00:00+11:00">06:00</CommentTime>
+      </CommentHeader>
+    </Comment>
+  </div>
+</ComponentPreview>
+
+```tsx
+<Comment size="compact">
+  <CommentText>{latest.text}</CommentText>
+  <CommentHeader>
+    <CommentAuthor>{latest.author}</CommentAuthor>
+    <CommentTime dateTime={latest.at}>{formatTime(latest.at)}</CommentTime>
+  </CommentHeader>
+</Comment>
+```
+
+In a table row of three lines, set `lines={2}`, and the text takes two lines before it is cut.
+
+```tsx
+<Comment size="compact" lines={2}>
+  …
+</Comment>
+```
+
+## With its author's actions
+
+Put the author's actions in `CommentActions`, after the text: Edit and Delete for the few seconds they may, with the time left, then Revoke. A compact comment leaves them out.
+
+<ComponentPreview>
+  <Comment className="w-full max-w-md">
+    <CommentHeader>
+      <CommentAuthor>Dr Tom Ellis</CommentAuthor>
+      <CommentRole>Registrar, GMU A</CommentRole>
+      <CommentTime dateTime="2026-10-19T08:14:00+11:00">08:14</CommentTime>
+    </CommentHeader>
+    <CommentText>Echo booked for 1400. Happy to accept after it.</CommentText>
+    <CommentActions>
+      <Button variant="ghost" size="sm">
+        <Pencil aria-hidden data-icon="inline-start" />
+        Edit
+      </Button>
+      <Button variant="ghost" size="sm">
+        <Trash2 aria-hidden data-icon="inline-start" />
+        Delete
+      </Button>
+      <span role="timer">Editable for 8 s</span>
+    </CommentActions>
+  </Comment>
+</ComponentPreview>
+
+```tsx
+<Comment>
+  <CommentHeader>…</CommentHeader>
+  <CommentText>{comment.text}</CommentText>
+  <CommentActions>
+    <Button
+      variant="ghost"
+      size="sm"
+      aria-label={`Edit your comment: ${comment.text}`}
+      onClick={edit}
+    >
+      <Pencil aria-hidden data-icon="inline-start" />
+      Edit
+    </Button>
+    <Button
+      variant="ghost"
+      size="sm"
+      aria-label={`Delete your comment: ${comment.text}`}
+      onClick={remove}
+    >
+      <Trash2 aria-hidden data-icon="inline-start" />
+      Delete
+    </Button>
+    <span role="timer">{`Editable for ${secondsLeft} s`}</span>
+  </CommentActions>
+</Comment>
+```
+
+## Edited
+
+`CommentEdited` in the header says the words changed after they were posted.
+
+<ComponentPreview>
+  <Comment className="w-full max-w-md">
+    <CommentHeader>
+      <CommentAuthor>Dr Tom Ellis</CommentAuthor>
+      <CommentRole>Registrar, GMU A</CommentRole>
+      <CommentTime dateTime="2026-10-19T08:14:00+11:00">08:14</CommentTime>
+      <CommentEdited />
+    </CommentHeader>
+    <CommentText>Echo booked for 1400. Happy to accept after it.</CommentText>
+  </Comment>
+</ComponentPreview>
+
+```tsx
+<CommentHeader>
+  <CommentAuthor>{comment.author}</CommentAuthor>
+  <CommentTime dateTime={comment.at}>{formatTime(comment.at)}</CommentTime>
+  {comment.editedAt ? <CommentEdited /> : null}
+</CommentHeader>
+```
+
+## Revoked
+
+Set `status="revoked"` and add a `CommentRevoked` after the text. In a compact comment, put `CommentRevoked` in the header, where it is the icon and "Revoked".
+
+<ComponentPreview>
+  <div className="flex w-full max-w-md flex-col gap-container">
+    <Comment status="revoked">
+      <CommentHeader>
+        <CommentAuthor>Dr Tom Ellis</CommentAuthor>
+        <CommentRole>Registrar, GMU A</CommentRole>
+        <CommentTime dateTime="2026-10-19T07:40:00+11:00">07:40</CommentTime>
+      </CommentHeader>
+      <CommentText>Echo booked for 1400. Happy to accept after it.</CommentText>
+      <CommentRevoked by="Dr Tom Ellis" time="08:14" dateTime="2026-10-19T08:14:00+11:00" />
+    </Comment>
+    <div className="w-64 rounded-md border p-2">
+      <Comment size="compact" status="revoked">
+        <CommentText>Echo booked for 1400. Happy to accept after it.</CommentText>
+        <CommentHeader>
+          <CommentRevoked by="Dr Tom Ellis" time="08:14" dateTime="2026-10-19T08:14:00+11:00" />
+          <CommentAuthor>Dr Tom Ellis</CommentAuthor>
+          <CommentTime dateTime="2026-10-19T07:40:00+11:00">07:40</CommentTime>
+        </CommentHeader>
+      </Comment>
+    </div>
+  </div>
+</ComponentPreview>
+
+```tsx
+<Comment status={comment.revoked ? "revoked" : "active"}>
+  <CommentHeader>…</CommentHeader>
+  <CommentText>{comment.text}</CommentText>
+  {comment.revoked ? (
+    <CommentRevoked
+      by={comment.revoked.by}
+      time={formatTime(comment.revoked.at)}
+      dateTime={comment.revoked.at}
+    />
+  ) : null}
+</Comment>
+```
+
+## Drafted by an AI
+
+`CommentProvenance` says what drafted the comment, who reviewed it and what it came from. In a compact comment, put it in the header, where it is the icon and "AI draft".
+
+<ComponentPreview>
+  <Comment className="w-full max-w-md">
+    <CommentHeader>
+      <CommentAuthor>Dr Ravi Patel</CommentAuthor>
+      <CommentRole>Registrar, GMU B</CommentRole>
+      <CommentTime dateTime="2026-10-18T17:00:00+11:00">Sun 18 Oct, 17:00</CommentTime>
+    </CommentHeader>
+    <CommentText>Oxygen requirement rose this afternoon. Review at 2200.</CommentText>
+    <CommentProvenance
+      drafter="Handover assistant (synthetic)"
+      reviewedBy="Dr Ravi Patel"
+      sources={[
+        { label: "Progress note 18 Oct 1600" },
+        { label: "Observations 18 Oct 1400 to 1800" },
+      ]}
+    />
+  </Comment>
+</ComponentPreview>
+
+```tsx
+<CommentProvenance
+  drafter="Handover assistant"
+  reviewedBy="Dr Ravi Patel"
+  sources={[{ label: "Progress note 18 Oct 1600", href: "/notes/1600" }]}
+/>
+```

@@ -1,0 +1,272 @@
+---
+title: Data table code
+description: How to install Data table, its parts and props, pinned columns, column widths, grouped rows and cells edited in place, and how it differs from shadcn's data table.
+---
+
+## Installation
+
+The data table needs [TanStack Table](https://tanstack.com/table) 9, which most consumers of Cadence will never use. So it has its own entry point, and TanStack Table is an optional peer dependency: install it only if you use the data table.
+
+```bash
+pnpm add @tanstack/react-table
+```
+
+```tsx
+import { DataTable, dataTableFeatures } from "@cadence-clinical/ui/data-table";
+```
+
+From the shadcn registry, `pnpm dlx shadcn@latest add @cadence/data-table` installs TanStack Table with it.
+
+A cell edited in a calendar also needs the [Calendar](/docs/components/calendar), which has its own entry point and needs react-day-picker. The data table does not import it, so you install react-day-picker only if you use it.
+
+## Usage
+
+You own the table. Build it with `useTable` and Cadence's `dataTableFeatures`, keep its state where you keep the rest of your state, and pass the table to the parts:
+
+```tsx
+"use client";
+
+import { createColumnHelper, useTable, type SortingState } from "@tanstack/react-table";
+import { useState } from "react";
+import {
+  DataTable,
+  DataTableColumnHeader,
+  dataTableFeatures,
+} from "@cadence-clinical/ui/data-table";
+
+interface Appointment {
+  id: string;
+  clinic: string;
+}
+
+const helper = createColumnHelper<typeof dataTableFeatures, Appointment>();
+
+const columns = helper.columns([
+  helper.accessor("clinic", {
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Clinic" />,
+  }),
+]);
+
+export function Appointments({ data }: { data: Appointment[] }) {
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const table = useTable({
+    features: dataTableFeatures,
+    data,
+    columns,
+    getRowId: (row) => row.id,
+    state: { sorting },
+    onSortingChange: setSorting,
+  });
+  return <DataTable table={table} aria-label="Appointments" />;
+}
+```
+
+`dataTableFeatures` registers sorting, filtering, selection, paging, column visibility, column pinning and column sizing. TanStack Table 9 leaves out any feature that is not registered, so pass it as `features`, and use `typeof dataTableFeatures` as the first type argument of `createColumnHelper`, `ColumnDef` and the rest.
+
+Keep `columns` stable: define them outside the component, or make them once with `useState` or `useMemo`, as TanStack Table asks. TanStack Table renders a column's `cell` as a component, so a column made again on every render remounts its cells, and an editable cell loses focus after a save.
+
+Cadence renders what the table says and never decides it. Sort, filter and page on the server if that is where the rows are, and give the table the results: the parts read the table's state, not the rows.
+
+## API
+
+The data table follows shadcn's [data table guide](https://ui.shadcn.com/docs/components/data-table) and renders Cadence's [Table](/docs/components/table). Cadence does not wrap TanStack Table's API: every part takes the table or a column you made with it.
+
+- **`DataTable`** renders the table, and accepts every `table` attribute. Name it with `aria-label`. A sorted column's heading carries `aria-sort`, a chosen row is marked as selected, and a table with no rows says `emptyMessage` in its one row.
+- **`DataTableColumnHeader`** is a heading that sorts its column when pressed: ascending, then descending. A column that cannot be sorted is words only.
+- **`selectionColumn()`** is a column of checkboxes. The heading's checkbox selects every row on the page and is half-checked while only some are.
+- **`DataTablePagination`** says how many rows are selected and which page this is, offers the rows per page, and moves between pages. It wraps on a narrow screen.
+- **`DataTableViewOptions`** is a menu that shows or hides each column that can be hidden. A column is named by its `meta.label`, or by its `header` when that is a string.
+- **`DataTableEditableCell`** is a cell edited in place: text in an [Input](/docs/components/input), or any other value in a [Popover](/docs/components/popover) through `editor`.
+- **`DataTableCellText`** is text in a cell cut to the row's lines, in a table with `rowLines`.
+- **`useDataTableRowLines()`** returns the lines the table's rows hold, for a cell that lays itself out by them.
+
+Set `meta: { align: "end" }` on a column of numbers, and its heading and cells align to the end. Set `meta: { width }` to give a column a CSS width that follows the density.
+
+## Props
+
+| Prop              | On                      | Type                    | Default                |
+| ----------------- | ----------------------- | ----------------------- | ---------------------- |
+| `table`           | Every part but the cell | A table from `useTable` |                        |
+| `aria-label`      | `DataTable`             | `string`                |                        |
+| `emptyMessage`    | `DataTable`             | `ReactNode`             | `"Nothing to show."`   |
+| `onRowClick`      | `DataTable`             | `(row: Row) => void`    |                        |
+| `rowLines`        | `DataTable`             | `2 \| 3`                | Rows fit their content |
+| `column`, `title` | `DataTableColumnHeader` | A column and its words  |                        |
+| `rowLabel`        | `selectionColumn()`     | `(row) => string`       | The row's number       |
+| `pageSizes`       | `DataTablePagination`   | `number[]`              | `[10, 20, 50]`         |
+
+`DataTable` groups its rows with these:
+
+| Prop                      | Type                            | Default               |
+| ------------------------- | ------------------------------- | --------------------- |
+| `groups`                  | `DataTableGroup[]`              |                       |
+| `getGroupId`              | `(row) => string`               |                       |
+| `groupCount`              | `(count: number) => string`     | `"1 row"`, `"2 rows"` |
+| `collapsedGroups`         | `string[]`                      |                       |
+| `defaultCollapsedGroups`  | `string[]`                      | `[]`                  |
+| `onCollapsedGroupsChange` | `(collapsed: string[]) => void` |                       |
+
+A `DataTableGroup` is `{ id, label, tone?, collapsible?, description? }`. `tone` is `"default"` or `"info"`, and `collapsible` defaults to `true`.
+
+`DataTableEditableCell` takes these, and every `button` attribute but `type`:
+
+| Prop            | Type                                                | Default                  |
+| --------------- | --------------------------------------------------- | ------------------------ |
+| `label`         | `string`                                            |                          |
+| `value`         | `string`, or any type with `editor`                 |                          |
+| `onValueChange` | `(value) => void`                                   |                          |
+| `children`      | `ReactNode`: what the cell shows at rest            | The value, for text      |
+| `placeholder`   | `string`, for text                                  |                          |
+| `editor`        | `({ value, onValueChange, onCancel }) => ReactNode` | Text in an Input         |
+| `readOnly`      | `boolean`                                           | `false`                  |
+| `disabled`      | `boolean`: shown, faded, and not pressable          | `false`                  |
+| `announcement`  | `string`                                            | `` `${label} updated` `` |
+
+## Pinned columns
+
+Pin columns with TanStack Table's column pinning: set `columnPinning` in the table's state, or in `initialState`. `start` lists the columns that stay at the start, in order, and `end` those that stay at the end.
+
+```tsx
+const table = useTable({
+  features: dataTableFeatures,
+  data,
+  columns,
+  state: { columnPinning: { start: ["select", "clinic"], end: [] } },
+});
+```
+
+A pinned cell sticks to its side of the box that scrolls, with the background of the surface it is on, so nothing shows through, and the row's fill on hover and when the row is chosen. The table measures the pinned columns, so each one starts where the one before it ends, at either density and whatever is in it. The pinned column nearest the scrolling columns draws an edge in the border token once something has scrolled under it.
+
+Pinned columns stop sticking when together they would cover more than two thirds of the box, and scroll with the rest.
+
+## Column widths
+
+Give a column a width with TanStack Table's `size`, in pixels, or with `meta.width`, as any CSS length. A column with either keeps that width: its heading and cells take it as their width, minimum width and maximum width. `meta.width` takes the place of `size`. A column with neither fits its content.
+
+```tsx
+helper.accessor("clinic", { header: "Clinic", size: 180 });
+
+// 12.45em of text, 2px to spare, and the cell's padding on both sides.
+helper.accessor("patient", {
+  header: "Patient",
+  meta: { width: "calc(12.45em + 2px + 2 * var(--container-padding-sm))" },
+});
+```
+
+An `em` in a cell is the cell's text size, which follows the [density](/docs/theming#density), and `--container-padding-sm` is the cell's padding at the density. A width written in both grows with the text when the density is comfortable. Text that can wrap wraps inside the width. Text set not to wrap, such as a name, runs past the edge when the column is too narrow, so measure the longest value at each density.
+
+## Rows of two or three lines
+
+`rowLines` sets how many lines of text every row holds: `2` or `3`. Each data cell is given a height of that many line heights, a 2px gap between lines, and the cell's padding, so every row is that tall. A cell's height in a table is its least height, so keep each cell's content to the lines: a cell that holds more makes its row taller.
+
+```tsx
+<DataTable table={table} aria-label="Referrals" rowLines={lines} />
+```
+
+`DataTableCellText` is text that keeps to the row's lines. It wraps between words and is cut with an ellipsis after the row's last line. `reserveLines={1}` cuts it a line sooner, for text under a line of its own, such as who wrote it and when. Give it a width, such as `w-56`: in a table wider than its box, a column of wrapping text with no width narrows to its longest word. Outside a table with `rowLines`, it is not cut.
+
+```tsx
+<span className="flex w-56 flex-col gap-0.5">
+  <span className="whitespace-nowrap text-muted-foreground">{row.original.from}</span>
+  <DataTableCellText reserveLines={1}>{row.original.summary}</DataTableCellText>
+</span>
+```
+
+`DataTableEditableCell` cuts what it shows at rest to the row's lines in the same way. For a cell that lays out its content differently, such as an identifier on a line of its own in a three-line row, read the lines with `useDataTableRowLines()`, which returns `2`, `3` or `undefined`. The table also carries `data-row-lines`.
+
+## Cells edited in place
+
+`DataTableEditableCell` goes in a column's `cell`. It holds no value of its own: pass the row's value, and store the new one in `onValueChange`.
+
+```tsx
+helper.accessor("note", {
+  header: "Note",
+  cell: ({ row }) => (
+    <DataTableEditableCell
+      label={`Note for ${row.original.clinic}`}
+      value={row.original.note}
+      onValueChange={(note) => update(row.original.id, { note })}
+    />
+  ),
+});
+```
+
+Without `editor`, the value is text. Pressing the cell, or Enter when it has focus, puts an Input with the value in its place, with the value selected. Enter or leaving the Input saves, and `onValueChange` is called only if the value changed. Escape puts the value back and calls nothing. Enter and Escape return focus to the cell. The Input fills the cell's box, which is as tall as a small control and reaches into the cell's padding, so the row stays the same height.
+
+With `editor`, the cell opens a popover named by `label`, and renders what `editor` returns in it. Call the `onValueChange` it is given to save: the cell passes the value on, closes the popover and returns focus to the cell. `onCancel`, Escape and a press outside close it without saving. The value can be any type, such as a `Date` or `null` for a date that can be empty.
+
+## Grouped rows
+
+Group the rows with `groups` and `getGroupId`. `groups` lists the groups in the order they are shown, and `getGroupId` says which group a row is in. `groups` and `getGroupId` go together: neither works alone.
+
+```tsx
+<DataTable
+  table={table}
+  aria-label="Appointments by day"
+  groups={[
+    { id: "unconfirmed", label: "Unconfirmed", tone: "info", collapsible: false },
+    { id: "Monday", label: "Monday" },
+    { id: "Tuesday", label: "Tuesday" },
+  ]}
+  getGroupId={(row) => (row.isConfirmed ? row.day : "unconfirmed")}
+  groupCount={(count) => (count === 1 ? "1 appointment" : `${count} appointments`)}
+/>
+```
+
+Each group is its own `tbody`. Its first row is a heading: one `th` with `scope="rowgroup"` across every column, holding the group's `label`, its count from `groupCount` and its `description`. A collapsible group's label and count are a button with `aria-expanded`, which collapses and expands the group. A collapsed group keeps its heading and count, so no row is out of sight without the table saying so.
+
+The groups keep their order whatever the sort. Cadence splits the rows the table gives it, already sorted, filtered and paged, so a column's sort applies within each group, and a count is of the rows on the page. Group a table that shows all its rows on one page. A group with no rows is not shown. A row whose group is not in `groups` goes into a group of its own after the others, named by its id.
+
+The heading's fill is `bg-muted` and the group's rows take a lighter shade of it, so a heading and its rows read as one unit. The `info` tone uses `bg-info-subtle`, its border and `text-info-text`. Pinned columns stay pinned inside the groups, with the group's shade behind them, and a heading's words stay in view while the table scrolls sideways.
+
+Cadence does not use TanStack Table's grouped row model, which sorts the groups themselves and pages by group.
+
+Collapse state works controlled, with `collapsedGroups` and `onCollapsedGroupsChange`, or uncontrolled, with `defaultCollapsedGroups`.
+
+## Rows that open on a click
+
+`onRowClick` is called with the TanStack row when a row is clicked anywhere but on a control inside it. A control is a link, a button, a form field, a label, an element with a widget role such as `checkbox` or `switch`, or anything else that takes focus. A click that ends a selection of text does not count, nor does a click in a popover that a cell opened elsewhere on the page, whose events reach the row through React. The row gets `cursor-pointer` and `data-clickable`.
+
+```tsx
+<DataTable
+  table={table}
+  aria-label="Patients"
+  onRowClick={(row) => {
+    setOpenId(row.id);
+  }}
+/>
+```
+
+A selected row is marked by its fill and by a bar at the start of its first cell: 3px wide, in `primary-text`, as the [Sidebar](/docs/components/sidebar) marks its active item. In a pinned first cell the bar stays in view while the rest of the row scrolls.
+
+A row is not focusable, and `onRowClick` adds no keyboard handling. It is a shortcut for the pointer. Put a button in each row that calls the same function, so that the keyboard and a screen reader can open the row too. Cadence does not make the table a [grid](https://www.w3.org/WAI/ARIA/apg/patterns/grid/) for this. A grid moves focus from cell to cell with the arrow keys and changes how every key works in the table, and a list with one action per row does not need that: the button already gives the action a tab stop.
+
+## What Cadence changes
+
+shadcn's data table is a guide to copy, not a component. Here the parts are published and graded, and the differences are:
+
+- **The state is in words.** A sorted heading has `aria-sort`, the selected count and the page are announced when they change, and every checkbox and paging button is named.
+- **Nothing is cut short.** Cells wrap between words, as in [Table](/docs/components/table), and a table that is too wide scrolls inside its own focusable box.
+- **Pinned columns and widths are drawn for you.** shadcn's guide leaves column pinning and sizing to TanStack Table's examples.
+- **Cells can be edited in place**, which shadcn's guide does not cover.
+- **Rows can be grouped** under heading rows that count and collapse them.
+- **A row can open on a click** with `onRowClick`, which leaves the clicks of the controls in it alone. shadcn's guide and TanStack Table's examples put `onClick` on the row, which also fires for a press on a checkbox or a button in it.
+- **The column menu uses a column's name as written.** shadcn capitalises the column id.
+- **A chosen row is marked by more than its fill**: by a bar at the start of its first cell, and by its ticked checkbox where it has one.
+- **Every row can be one height**, of two or three lines, with `rowLines`.
+- **Rows follow the [density](/docs/theming#density)**: 44px targets when comfortable.
+- **The grade covers what Cadence renders.** It does not evaluate whether TanStack Table's sorting or filtering is right for a clinical purpose.
+
+## Accessibility
+
+- The table is named by its `aria-label`, and the box that scrolls sideways is a region with the same name, which takes focus so a keyboard can scroll it.
+- A sorted heading carries `aria-sort`. A chosen row carries `aria-selected`, and its checkbox is ticked. The bar at the start of a chosen row is drawn, not read: `aria-selected` says the same to a screen reader.
+- Text cut to the row's lines is still whole in the page, so a screen reader reads all of it.
+- An editable cell is a button named by its `label` and its value, such as "Working problem for Margaret Holloway: Pneumonia". Tab reaches it, and Enter or Space edits it.
+- At rest an editable cell reads as text. Pointed at or focused, it shows a boundary and a pencil, so being editable does not rest on colour. On a touch screen, which cannot point, the pencil always shows.
+- A row with `onRowClick` stays a `tr`, with no role, tab stop or key handling of its own. The control in the row that does the same is its keyboard path. The open row is marked with `aria-selected` when you select it.
+- A disabled editable cell is a disabled button. Give it `aria-describedby` for the reason it is disabled.
+- A group's heading is a `th` with `scope="rowgroup"`. Its collapse button is named by the group's label and count, such as "Today 2 patients", and carries `aria-expanded`.
+- The text editor is an Input named by `label`. The date editor is a popover named by `label`.
+- After a save, a screen reader hears `announcement` in a polite live region, such as "Working problem for Margaret Holloway updated".
+- The boundary and the pencil fade in over 100ms, and the pinned edge over 150ms. Both appear at once under reduced motion. Starting and ending a text edit does not animate. The calendar's popover opens as a [Popover](/docs/components/popover) does: with a short fade from the pointer, and at once from the keyboard.

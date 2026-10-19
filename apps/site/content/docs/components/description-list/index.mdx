@@ -1,0 +1,72 @@
+---
+title: Description list
+description: Shows pairs of a term and its details, such as a working problem or an expected discharge, side by side where there is room and stacked where there is not.
+---
+
+import {
+  Badge,
+  DescriptionDetails,
+  DescriptionItem,
+  DescriptionList,
+  DescriptionTerm,
+} from "@cadence-clinical/ui";
+
+<GradeBadge component="description-list" />
+
+<ComponentPreview>
+  <DescriptionList className="w-full max-w-md">
+    <DescriptionItem>
+      <DescriptionTerm>Working problem</DescriptionTerm>
+      <DescriptionDetails>Community-acquired pneumonia</DescriptionDetails>
+    </DescriptionItem>
+    <DescriptionItem>
+      <DescriptionTerm>Expected discharge</DescriptionTerm>
+      <DescriptionDetails>Wed 21 Oct</DescriptionDetails>
+    </DescriptionItem>
+    <DescriptionItem>
+      <DescriptionTerm>Discharge barriers</DescriptionTerm>
+      <DescriptionDetails className="flex flex-wrap gap-1">
+        <Badge variant="secondary">Home assessment</Badge>
+      </DescriptionDetails>
+    </DescriptionItem>
+  </DescriptionList>
+</ComponentPreview>
+
+## Use it for
+
+- A summary at a glance, such as a patient's working problem, expected discharge and barriers to discharge in a pane beside a list.
+- The facts about one record, each with a name, such as a referral's source, urgency and owner.
+- Settings or metadata that are read, not compared.
+
+## Do not use it for
+
+- **Values compared across records or over time.** Use a [Table](/docs/components/table), where a column lines the values up.
+- **Fields someone fills in.** Use a [Field](/docs/components/field), which ties a label to its control.
+- **Things that happened, with who and when.** Use a [Timeline](/docs/components/timeline).
+
+## Put the most useful pair first
+
+A reader scans the terms from the top and stops when they have what they came for. In a patient's summary, the working problem comes before the barriers to discharge.
+
+## Keep each term short and the same everywhere
+
+The terms sit in a column as wide as the widest of them, up to 40% of the list, so a long term pushes every detail to the right, and beyond 40% it wraps. Use the same term for the same thing on every screen: "Expected discharge" in the summary is not "EDD" in the header and "Discharge date" elsewhere, unless an abbreviation is spelt out where it is first used.
+
+## Say what is missing in words
+
+When a term has no details, say so: "Not set" or "None recorded". An empty details cell reads as a fault, and a reader cannot tell it from a value still loading. Say what is empty, not what it means: "None recorded" does not say there are no barriers.
+
+## Let it stack on a narrow screen
+
+By default the list puts each term beside its details while it is 18rem wide or more, and stacks the term over its details below that. It measures its own width, so it stacks in a narrow pane on a wide screen as well as on a phone. Choose `horizontal` or `vertical` only when the layout around it is fixed. [Examples](/docs/components/description-list/examples) shows each.
+
+## Write the terms
+
+- **Use a noun phrase in sentence case**: "Working problem", "Expected discharge".
+- **Leave out the colon.** The layout shows which details belong to which term.
+- **Spell an abbreviation out**, or say it in full once nearby, as in the header of a record.
+
+## Accessibility
+
+- **Give every pair a term.** A screen reader reads the term with its details, and a detail with no term has no name.
+- **Never show a clinical value without its unit**, in the details as anywhere else.

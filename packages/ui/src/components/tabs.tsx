@@ -1,5 +1,8 @@
+"use client";
+
 import { Tabs as TabsPrimitive } from "@base-ui/react/tabs";
 import { cva, type VariantProps } from "class-variance-authority";
+import { useEffect, useLayoutEffect, useRef, useState, type Ref } from "react";
 
 import { cn } from "@/lib/cn";
 
@@ -46,16 +49,88 @@ const tabsListVariants = cva(
 /** The Base UI Tabs List's props, plus `variant`. */
 type TabsListProps = TabsPrimitive.List.Props & VariantProps<typeof tabsListVariants>;
 
+/** How long the mark may slide after a tab is pressed: its 150ms move, with room to start. */
+const SLIDE_MS = 300;
+
+function assignRef<T>(ref: Ref<T> | undefined, value: T) {
+  if (typeof ref === "function") ref(value);
+  else if (ref) ref.current = value;
+}
+
+/**
+ * Renders the list again on the frame after its tabs move, so the mark is measured where the shown
+ * tab came to rest. Base UI measures when a tab or the list changes size. When the tabs rewrap, the
+ * last move can be a change of place alone, which it doesn't see, and the mark stayed beside the tab.
+ */
+function useRemeasureOnLayout(listRef: { current: HTMLDivElement | null }) {
+  const [, setLayout] = useState(0);
+  useLayoutEffect(() => {
+    const list = listRef.current;
+    if (!list || typeof ResizeObserver === "undefined") return;
+    let frame = 0;
+    const observer = new ResizeObserver(() => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        setLayout((count) => count + 1);
+      });
+    });
+    observer.observe(list);
+    for (const tab of list.children) observer.observe(tab);
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+    };
+  }, [listRef]);
+}
+
 /**
  * The row of tabs. `default` is a segmented control, and `line` underlines the tab that is shown.
- * The mark of the shown tab slides to the tab chosen with the pointer.
+ * Tabs that do not fit wrap onto another row, whole.
+ *
+ * The mark of the shown tab slides only to a tab chosen with the pointer. When anything else moves
+ * the tabs, such as a resize, a turned phone, a change of density or a web font arriving, the mark
+ * is simply where the shown tab now is, and never caught on its way there beside it.
  */
-function TabsList({ className, variant = "default", children, ...props }: TabsListProps) {
+function TabsList({
+  className,
+  variant = "default",
+  children,
+  onPointerDown,
+  ref,
+  ...props
+}: TabsListProps) {
+  const [isSliding, setIsSliding] = useState(false);
+  const slideTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  useEffect(
+    () => () => {
+      clearTimeout(slideTimer.current);
+    },
+    [],
+  );
+  const listRef = useRef<HTMLDivElement | null>(null);
+  useRemeasureOnLayout(listRef);
   return (
     <TabsPrimitive.List
+      ref={(element: HTMLDivElement | null) => {
+        listRef.current = element;
+        assignRef(ref, element);
+      }}
       data-slot="tabs-list"
       data-variant={variant}
+      data-sliding={isSliding ? "" : undefined}
       className={cn(tabsListVariants({ variant }), className)}
+      onPointerDown={(event) => {
+        onPointerDown?.(event);
+        // A press on a tab lets the mark slide to it. Base UI measures the tabs again whenever
+        // their size changes, and the mark would slide there too, visibly beside the shown tab.
+        if (!(event.target instanceof Element) || !event.target.closest("[data-slot=tabs-trigger]"))
+          return;
+        clearTimeout(slideTimer.current);
+        setIsSliding(true);
+        slideTimer.current = setTimeout(() => {
+          setIsSliding(false);
+        }, SLIDE_MS);
+      }}
       {...props}
     >
       <TabsIndicator />
@@ -67,6 +142,7 @@ function TabsList({ className, variant = "default", children, ...props }: TabsLi
 /**
  * The mark of the shown tab, which slides to the tab chosen with the pointer. Chosen from the
  * keyboard, or with reduced motion, it is simply there: the change is what matters, not the trip.
+ * When the tabs move for any other reason, it moves with them at once.
  *
  * Base UI hides it until it has measured the tab, and on the server it is hidden. Until then the
  * shown tab draws its own mark, and once the indicator is shown the tab's own mark gives way.
@@ -80,7 +156,10 @@ function TabsIndicator({ className, ...props }: TabsPrimitive.Indicator.Props) {
         "translate-x-(--active-tab-left) translate-y-(--active-tab-top)",
         // Movement is a transform. The size changes too, on an empty box that nothing flows
         // around, so it costs no layout elsewhere.
-        "transition-[translate,width,height] duration-150 ease-out-strong",
+        // It slides only while the list says a tab was just pressed, so a change of layout moves
+        // it at once.
+        "transition-none duration-150 ease-out-strong",
+        "motion-safe:group-data-[sliding]/tabs-list:transition-[translate,width,height]",
         "group-has-[:focus-visible]/tabs-list:transition-none motion-reduce:transition-none",
         "group-data-[variant=default]/tabs-list:h-(--active-tab-height) group-data-[variant=default]/tabs-list:w-(--active-tab-width) group-data-[variant=default]/tabs-list:rounded-md group-data-[variant=default]/tabs-list:border group-data-[variant=default]/tabs-list:border-input group-data-[variant=default]/tabs-list:bg-background",
         "group-data-[variant=line]/tabs-list:bg-primary-text",
@@ -102,7 +181,8 @@ function TabsTrigger({ className, ...props }: TabsPrimitive.Tab.Props) {
     <TabsPrimitive.Tab
       data-slot="tabs-trigger"
       className={cn(
-        "relative inline-flex min-h-control-sm flex-1 items-center justify-center gap-control-gap rounded-md border border-transparent px-control-x py-0.5 text-control leading-snug font-medium select-none",
+        "relative inline-flex min-h-control-sm flex-1 items-center justify-center gap-control-gap rounded-md border border-transparent px-control-x py-0.5 text-control leading-snug font-medium whitespace-nowrap select-none",
+        // Each tab keeps its label on one line: the list wraps whole tabs onto another row instead.
         "group-data-[orientation=vertical]/tabs:w-full group-data-[orientation=vertical]/tabs:justify-start group-data-[orientation=vertical]/tabs:text-left",
         "hover:text-foreground data-active:text-foreground",
         // Tabs are changed often and from the keyboard, so nothing animates.

@@ -115,6 +115,13 @@ function covers(box: DOMRect, tab: DOMRect) {
   return Math.abs(box.left - tab.left) <= 1 && Math.abs(box.width - tab.width) <= 1;
 }
 
+/** Whether a box sits exactly over a tab, within a pixel on every side. */
+function sitsBehind(box: DOMRect, tab: DOMRect) {
+  return (
+    covers(box, tab) && Math.abs(box.top - tab.top) <= 1 && Math.abs(box.height - tab.height) <= 1
+  );
+}
+
 /**
  * The mark of the shown tab, once Base UI has shown it and it has come to rest over `tab`.
  *
@@ -170,7 +177,7 @@ export const TheShownLineTabCarriesARule: Story = {
   },
 };
 
-// Chosen with the pointer, the mark slides to the new tab.
+// Chosen with the pointer, the mark slides to the new tab. A press on a tab is what lets it slide.
 export const TheMarkSlidesToTheTabChosenWithThePointer: Story = {
   parameters: { chromatic: { disableSnapshot: true } },
   play: async ({ canvasElement }) => {
@@ -179,15 +186,18 @@ export const TheMarkSlidesToTheTabChosenWithThePointer: Story = {
       canvasElement,
       canvas.getByRole("tab", { name: "Appointments" }),
     );
+    // At rest, nothing would make it slide.
+    await expect(getComputedStyle(mark).transitionProperty).toBe("none");
+
+    const contacts = canvas.getByRole("tab", { name: "Contacts" });
+    await userEvent.click(contacts);
+    // Checked straight after the press, while the mark may still slide.
     await expect(getComputedStyle(mark).transitionProperty.split(", ")).toEqual([
       "translate",
       "width",
       "height",
     ]);
     await expect(getComputedStyle(mark).transitionDuration).toBe("0.15s");
-
-    const contacts = canvas.getByRole("tab", { name: "Contacts" });
-    await userEvent.click(contacts);
     await settledOver(canvasElement, contacts);
   },
 };
@@ -288,5 +298,90 @@ export const MeetsTouchTargetWhenComfortable: Story = {
     // The target is a pseudo-element as high as a control, centred on the tab.
     await expect(parseFloat(getComputedStyle(tab, "::before").height)).toBeGreaterThanOrEqual(44);
     await expect(parseFloat(getComputedStyle(tab).fontSize)).toBe(15);
+  },
+};
+
+const VIEWS = ["Ward round", "Jobs", "Handover", "Review"];
+
+function ViewTabs(args: Story["args"]) {
+  return (
+    <Tabs {...args} defaultValue="Review">
+      <TabsList aria-label="View">
+        {VIEWS.map((name) => (
+          <TabsTrigger key={name} value={name}>
+            {name}
+          </TabsTrigger>
+        ))}
+      </TabsList>
+      {VIEWS.map((name) => (
+        <TabsContent key={name} value={name}>
+          {`The ${name.toLowerCase()} view.`}
+        </TabsContent>
+      ))}
+    </Tabs>
+  );
+}
+
+// On a phone, four views and the last one shown: the tabs stay on the screen, wrapping whole onto
+// another row if they must, and the mark sits behind the shown tab, not beside it.
+export const OnAPhone: Story = {
+  globals: { viewport: { value: "mobile1" }, density: "comfortable" },
+  parameters: { chromatic: { viewports: [320] } },
+  render: (args) => <ViewTabs {...args} />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const list = canvas.getByRole("tablist");
+    const shown = canvas.getByRole("tab", { name: "Review" });
+    const mark = await settledOver(canvasElement, shown);
+    await expect(sitsBehind(mark.getBoundingClientRect(), shown.getBoundingClientRect())).toBe(
+      true,
+    );
+    // Nothing runs past the edge of the screen.
+    const edge = document.documentElement.clientWidth;
+    for (const tab of canvas.getAllByRole("tab")) {
+      await expect(tab.getBoundingClientRect().right).toBeLessThanOrEqual(edge);
+    }
+    await expect(list.getBoundingClientRect().right).toBeLessThanOrEqual(edge);
+
+    // Chosen with the pointer, the mark comes to rest behind the new tab.
+    const jobs = canvas.getByRole("tab", { name: "Jobs" });
+    await userEvent.click(jobs);
+    await waitFor(
+      () =>
+        expect(sitsBehind(mark.getBoundingClientRect(), jobs.getBoundingClientRect())).toBe(true),
+      { timeout: 3000 },
+    );
+  },
+};
+
+// When the tabs move for any reason but a press, such as the screen narrowing until they wrap, the
+// mark moves with them at once. It does not slide, so it is never seen beside the shown tab.
+export const TheMarkFollowsTheTabWhenTheLayoutChanges: Story = {
+  render: (args) => (
+    <div data-testid="box" className="w-96">
+      <ViewTabs {...args} />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const box = canvas.getByTestId("box");
+    const shown = canvas.getByRole("tab", { name: "Review" });
+    const mark = await settledOver(canvasElement, shown);
+    const before = shown.getBoundingClientRect();
+
+    // Narrow enough that Review goes onto a row of its own.
+    box.style.width = "12rem";
+    await waitFor(() => expect(shown.getBoundingClientRect().top).toBeGreaterThan(before.top));
+    await expect(getComputedStyle(mark).transitionProperty).toBe("none");
+    await waitFor(() =>
+      expect(sitsBehind(mark.getBoundingClientRect(), shown.getBoundingClientRect())).toBe(true),
+    );
+
+    // And back again.
+    box.style.width = "";
+    await waitFor(() =>
+      expect(sitsBehind(mark.getBoundingClientRect(), shown.getBoundingClientRect())).toBe(true),
+    );
+    await expect(Math.round(shown.getBoundingClientRect().top)).toBe(Math.round(before.top));
   },
 };

@@ -57,7 +57,7 @@ Render each `SidebarMenuButton` as a link through `render`, with an icon before 
 
 Sidebar follows the shadcn [Sidebar](https://ui.shadcn.com/docs/components/sidebar) and keeps its part names, so a sidebar copied from a shadcn block works as written. Its sheet on a phone is built on the Base UI [Dialog](https://base-ui.com/react/components/dialog), and its tooltips on [Tooltip](/docs/components/tooltip).
 
-For a whole page, with a header across the top and the sidebar beside the content, use the [Application shell](/docs/components/app-shell).
+For a whole page, with a header across the top and the sidebar beside the content, use the [Application shell](/docs/components/app-shell). Its inset layout is shadcn's `sidebar-08`, with the page's header inside the inset panel.
 
 ## The parts
 
@@ -95,6 +95,18 @@ The sidebar starts open. Set `defaultOpen` on the provider to start it closed, o
 ## The page that is shown
 
 `isActive` fills the item, sets its words in medium weight and puts a bar at its start. The bar is 3px wide in the accent's text colour, which reaches 3:1 against the fill, so the item is marked by shape as well as colour. The item also carries `aria-current="page"`, which a screen reader announces.
+
+## An inset sidebar with a breadcrumb
+
+shadcn's [`sidebar-08`](https://ui.shadcn.com/blocks/sidebar#sidebar-08) block builds from these parts and three other components. Each piece maps to a Cadence part:
+
+- **The application at the top**: a `SidebarMenuButton` with `size="lg"` in the `SidebarHeader`, with a square tile in `bg-sidebar-primary` and `text-sidebar-primary-foreground` holding the icon.
+- **A list that opens to its sub-lists**: a [Collapsible](/docs/components/collapsible) rendered as the `SidebarMenuItem`, a `CollapsibleTrigger` rendered as a `SidebarMenuAction`, and a `SidebarMenuSub` in the `CollapsibleContent`. Name the trigger with words in a `span` with `sr-only`, such as "Team lists".
+- **Secondary links at the bottom**: a `SidebarGroup` with `className="mt-auto"` as the last group in `SidebarContent`, holding `SidebarMenuButton`s with `size="sm"`.
+- **The user's menu**: a [Dropdown menu](/docs/components/dropdown-menu) whose trigger is a `SidebarMenuButton` with `size="lg"` in the `SidebarFooter`, holding the person's [Avatar](/docs/components/avatar), their name and role, and a `ChevronsUpDown` icon. Hide the avatar with `aria-hidden`, because the name is beside it.
+- **The page's header**: the `SidebarTrigger`, a vertical [Separator](/docs/components/separator) and a [Breadcrumb](/docs/components/breadcrumb) whose pages above the one shown are hidden below `md`.
+
+Use the [Application shell](/docs/components/app-shell)'s inset layout for the frame, so the page keeps its skip link and its `main` landmark. Storybook's Sidebar stories include the whole block as "Inset with breadcrumb".
 
 ## On a phone
 

@@ -1,0 +1,110 @@
+---
+title: Timeline
+description: Shows things that happened, in order, each with its kind, who, when and what, such as a patient's comments, notes, results and changes, newest first.
+---
+
+import {
+  Timeline,
+  TimelineContent,
+  TimelineHeader,
+  TimelineIcon,
+  TimelineItem,
+  TimelineTime,
+  TimelineTitle,
+} from "@cadence-clinical/ui";
+import { MessageSquare, NotebookPen, PencilLine } from "lucide-react";
+
+<GradeBadge component="timeline" />
+
+<ComponentPreview>
+  <Timeline variant="connected" aria-label="Activity, newest first" className="w-full max-w-md">
+    <TimelineItem>
+      <TimelineIcon>
+        <PencilLine />
+      </TimelineIcon>
+      <TimelineHeader>
+        <TimelineTitle>Change</TimelineTitle>
+        <span>Dr Tom Ellis</span>
+        <TimelineTime dateTime="2026-10-19T08:03:00+11:00">08:03</TimelineTime>
+      </TimelineHeader>
+      <TimelineContent>
+        Changed the expected discharge to Wed 21 Oct, from Tue 20 Oct.
+      </TimelineContent>
+    </TimelineItem>
+    <TimelineItem>
+      <TimelineIcon>
+        <MessageSquare />
+      </TimelineIcon>
+      <TimelineHeader>
+        <TimelineTitle>Comment</TimelineTitle>
+        <span>RN Kate Morgan, Nurse unit manager</span>
+        <TimelineTime dateTime="2026-10-19T05:00:00+11:00">05:00</TimelineTime>
+      </TimelineHeader>
+      <TimelineContent>Daughter visiting at 1100, keen to talk about going home.</TimelineContent>
+    </TimelineItem>
+    <TimelineItem>
+      <TimelineIcon>
+        <NotebookPen />
+      </TimelineIcon>
+      <TimelineHeader>
+        <TimelineTitle>Note</TimelineTitle>
+        <span>Dr Mei Chen</span>
+        <TimelineTime dateTime="2026-10-18T09:00:00+11:00">Sun 09:00</TimelineTime>
+      </TimelineHeader>
+      <TimelineContent>
+        Ward round note: improving on IV antibiotics. Plan to switch to oral tomorrow.
+      </TimelineContent>
+    </TimelineItem>
+  </Timeline>
+</ComponentPreview>
+
+## Use it for
+
+- A record's activity, such as everything that happened to a patient: comments, notes, results, jobs and changes to their details.
+- An audit trail, where who changed what and when must be read in order.
+- The steps a request went through, such as a referral sent, seen and accepted.
+
+## Do not use it for
+
+- **The current state of a record.** Use a [Description list](/docs/components/description-list) for the facts as they stand, and keep the timeline for how they came to be.
+- **Values compared over time**, such as a run of observations. Use a [Table](/docs/components/table), or a chart such as the [Track chart](/docs/components/track-chart).
+- **A thread of comments alone.** Use a [Comment](/docs/components/comment) list, which counts the comments and holds their box.
+
+## Put the newest first in a record's activity
+
+On a ward the latest change is the one most likely to matter next. Say the order in the timeline's name, such as "Activity for Margaret Holloway, newest first", because a screen reader cannot see where the list starts.
+
+## Say the kind, who and when before what
+
+Every item answers four questions in the same order: what kind of thing happened, who did it, when, and what. The header comes first, so a reader scanning down the list, and a screen reader, meet the kind and the author before the detail.
+
+- **Say the kind in words** with `TimelineTitle`. The icon repeats it for the eye and is hidden from a screen reader.
+- **Give each kind its own icon**, used for that kind only.
+- **Give who in full**, with a role where the reader may not know them.
+- **Give the time in the time zone of the ward**, and the day when it is not today.
+
+## Show what is missing as missing
+
+When a source does not say who did something, such as a result with no performer, leave who out rather than guessing. Do not fill the gap with a department or a system name the data does not hold.
+
+## Filter by kind with a toggle group
+
+A long timeline needs a way to show one kind. Use a [Toggle group](/docs/components/toggle-group) above it, with All and one toggle a kind, and treat a released toggle as All, so one filter always shows as pressed. Do not use [Tabs](/docs/components/tabs): tabs switch between panels, and the filter narrows one list. [Examples](/docs/components/timeline/examples#filtered-by-kind) shows the filter.
+
+When an action adds an item the filter hides, such as posting a comment while Notes is pressed, show All, so the new item is in view.
+
+## Keep a comment's own behaviour in the timeline
+
+An item can hold a [Comment](/docs/components/comment): its text, its marks for an edit, a revocation or an AI draft, and its author's actions. The timeline's header carries who and when, so leave the comment's own header out.
+
+## Write what happened
+
+- **Start with a verb in the past tense**: "Changed the expected discharge to Wed 21 Oct, from Tue 20 Oct."
+- **Give the value before and after** a change, so the reader does not have to find the earlier item.
+- **Show values with their units**, as the source gives them, and never highlight one: the timeline holds no thresholds.
+
+## Accessibility
+
+- **Name the timeline** with `aria-label`, and say its order in the name.
+- **Say each item's kind in words.** The icon is hidden from a screen reader.
+- **Announce an item added while someone is reading**, such as a teammate's comment, in a live region. A timeline does not announce its changes.

@@ -32,7 +32,7 @@ const REFERRALS = Array.from({ length: 30 }, (_, index) => ({
 }));
 
 /** A clinic's referrals beside the one that is open. */
-function Referrals({ className }: { className?: string }) {
+function Referrals({ className, isLong = false }: { className?: string; isLong?: boolean }) {
   const [openId, setOpenId] = useState<string | null>(null);
   const open = REFERRALS.find((referral) => referral.id === openId);
   return (
@@ -75,6 +75,13 @@ function Referrals({ className }: { className?: string }) {
             <ListDetailBack>All referrals</ListDetailBack>
             <h2 className="text-title font-medium">{`Referral ${open.id}`}</h2>
             <p>{`From ${open.from}, to the ${open.clinic}.`}</p>
+            {isLong ? (
+              <ol className="flex flex-col gap-container">
+                {Array.from({ length: 30 }, (_, index) => (
+                  <li key={index}>{`Letter ${String(index + 1)} from the referrer.`}</li>
+                ))}
+              </ol>
+            ) : null}
           </div>
         ) : (
           <Empty>
@@ -181,6 +188,36 @@ export const OnAPhone: Story = {
     await waitFor(() =>
       expect(canvas.getByRole("button", { name: /Referral R1003/ })).toHaveFocus(),
     );
+  },
+};
+
+// On a phone inside the Application shell, a long record that takes focus is scrolled to just
+// below the sticky header, so its way back is never hidden under the header.
+export const OnAPhoneInTheApplicationShell: Story = {
+  globals: { viewport: { value: "mobile1" } },
+  parameters: { chromatic: { viewports: [320] } },
+  render: () => (
+    <AppShell>
+      <AppShellHeader>
+        <span className="font-medium">Cadence Clinic</span>
+      </AppShellHeader>
+      <AppShellBody>
+        <AppShellContent>
+          <Referrals isLong />
+        </AppShellContent>
+      </AppShellBody>
+    </AppShell>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const referral = canvas.getByRole("button", { name: /Referral R1020/ });
+    referral.scrollIntoView({ block: "center" });
+    await userEvent.click(referral);
+    const record = canvas.getByRole("region", { name: "Referral" });
+    await waitFor(() => expect(record).toHaveFocus());
+    const header = canvas.getByRole("banner").getBoundingClientRect();
+    const back = canvas.getByRole("button", { name: "All referrals" }).getBoundingClientRect();
+    await expect(back.top).toBeGreaterThanOrEqual(header.bottom);
   },
 };
 

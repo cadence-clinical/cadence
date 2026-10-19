@@ -1,6 +1,6 @@
 ---
 title: Application shell
-description: The frame of an application. A header across the top, and below it a sidebar beside the page's content, with a link that skips to the content.
+description: The frame of an application. A header across the top and a sidebar beside the page's content, or an inset sidebar the full height with the header inside the page's panel, with a link that skips to the content.
 ---
 
 <GradeBadge component="app-shell" />
@@ -38,22 +38,68 @@ The shell is a [layout](/docs/levels): it holds no content of its own. The heade
 
 ## The parts
 
-- **`AppShell`** is the Sidebar's `SidebarProvider`, arranged in a column, and takes its props, such as `defaultOpen`. It starts with a "Skip to content" link, hidden until it takes focus.
-- **`AppShellHeader`** is the `header` across the top. It stays in view as the page scrolls. It starts with the button that opens and closes the sidebar, followed by your content.
-- **`AppShellBody`** is the row under the header.
-- **`AppShellSidebar`** is a `Sidebar`, with all its props, starting under the header. On a phone it is the Sidebar's sheet, over the whole screen.
-- **`AppShellContent`** is the page's `main` landmark, where the skip link moves focus to.
+- **`AppShell`** is the Sidebar's `SidebarProvider`, and takes its props, such as `defaultOpen`. `variant` sets the layout: `header`, the default, or `inset`. It starts with a "Skip to content" link, hidden until it takes focus.
+- **`AppShellHeader`** is the `header` across the top. It stays in view as the page scrolls. It starts with the button that opens and closes the sidebar and a vertical rule, followed by your content. In the inset layout it goes inside `AppShellContent`.
+- **`AppShellBody`** is the row under the header. The inset layout does not need it.
+- **`AppShellSidebar`** is a `Sidebar`, with all its props, starting under the header. In the inset layout it is an inset Sidebar the full height of the window. On a phone it is the Sidebar's sheet, over the whole screen.
+- **`AppShellContent`** is the page's `main` landmark, where the skip link moves focus to. In the inset layout it is the rounded panel.
 
-The header is as tall as a control plus its padding, so it follows the [density](/docs/theming#density): 48px compact and 68px comfortable.
+The header is as tall as a control plus its padding, so it follows the [density](/docs/theming#density): 48px compact and 68px comfortable, in both layouts.
+
+## The inset layout
+
+<AppShellInsetPreview />
+
+```tsx
+import {
+  AppShell,
+  AppShellContent,
+  AppShellHeader,
+  AppShellSidebar,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbPage,
+  SidebarContent,
+} from "@cadence-clinical/ui";
+
+<AppShell variant="inset">
+  <AppShellSidebar>
+    <SidebarContent aria-label="Lists">...</SidebarContent>
+  </AppShellSidebar>
+  <AppShellContent>
+    <AppShellHeader>
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbPage>GMU A</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+    </AppShellHeader>
+    ...
+  </AppShellContent>
+</AppShell>;
+```
+
+`variant="inset"` lays the page out as shadcn's [`sidebar-08`](https://ui.shadcn.com/blocks/sidebar#sidebar-08) block does. The sidebar is an inset [Sidebar](/docs/components/sidebar) the full height of the window. The page is a rounded panel beside it, on the sidebar's colour, and the header is at the top of the panel, holding the sidebar's button and the page's [Breadcrumb](/docs/components/breadcrumb).
+
+- **Put `AppShellSidebar` and `AppShellContent` straight inside `AppShell`**, and `AppShellHeader` first inside `AppShellContent`. `AppShellBody` is not needed.
+- **From `md` up, the panel scrolls and the window does not.** The header stays at the top of the panel as its content scrolls. On a phone the panel has no margin, the window scrolls, and the header stays at the top of the window.
+- **`--header-height` includes the panel's margins**, so content sized as the window's height less the header fits the panel exactly. A [List and detail](/docs/components/list-detail) inside fills the panel under the header, with no page scroll.
+- **The header is inside the `main` landmark**, so it is the page's header rather than the banner.
+
+The sidebar-08 block's user menu is a [Dropdown menu](/docs/components/dropdown-menu) opened from a `SidebarMenuButton` in the `SidebarFooter`, with the person's [Avatar](/docs/components/avatar) beside their name.
 
 ## What Cadence changes
 
 - **A link skips to the content.** The first Tab on a page shows "Skip to content", which moves focus past the header and the sidebar. It moves focus without changing the page's address, so it does not upset a router.
 - **The header always has the sidebar's button.** On a phone, where the sidebar is a sheet, that button is the only way to reach it.
 - **The header's height follows the density**, where `sidebar-16` sets it to 56px.
+- **The inset layout is part of the shell.** shadcn ships `sidebar-08` as a block to copy. Cadence's `variant="inset"` gives the same frame with the skip link and the `main` landmark, and the panel scrolls on its own from `md` up, so its header stays in view.
 
 ## Accessibility
 
-- The frame gives the page its landmarks: the header is the banner, the Sidebar's content is navigation, and the content is the main landmark. Name the navigation with `aria-label` on `SidebarContent`.
+- The frame gives the page its landmarks: the header is the banner, the Sidebar's content is navigation, and the content is the main landmark. Name the navigation with `aria-label` on `SidebarContent`. In the inset layout the header is inside the main landmark, so it is not a banner.
 - The skip link is the first thing Tab reaches, and it appears when it has focus.
 - The header's button says whether the sidebar is open.

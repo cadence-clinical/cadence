@@ -30,8 +30,28 @@ export {
   AppShellHeader,
   AppShellSidebar,
 } from "@/components/cadence/app-shell";
+export type { AppShellProps } from "@/components/cadence/app-shell";
+export {
+  Avatar,
+  AvatarBadge,
+  AvatarFallback,
+  AvatarGroup,
+  AvatarGroupCount,
+  AvatarImage,
+} from "@/components/cadence/avatar";
+export type { AvatarProps } from "@/components/cadence/avatar";
 export { Badge, badgeVariants } from "@/components/cadence/badge";
 export type { BadgeProps } from "@/components/cadence/badge";
+export {
+  Breadcrumb,
+  BreadcrumbEllipsis,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/cadence/breadcrumb";
+export type { BreadcrumbLinkProps, BreadcrumbProps } from "@/components/cadence/breadcrumb";
 export { Button, buttonVariants } from "@/components/cadence/button";
 export type { ButtonProps } from "@/components/cadence/button";
 export {
@@ -56,6 +76,39 @@ export type {
   CollapsibleProps,
   CollapsibleTriggerProps,
 } from "@/components/cadence/collapsible";
+export {
+  Comment,
+  CommentActions,
+  CommentAuthor,
+  CommentEdited,
+  CommentHeader,
+  CommentList,
+  CommentProvenance,
+  CommentRevoked,
+  CommentRole,
+  CommentText,
+  CommentTime,
+} from "@/components/cadence/comment";
+export type {
+  CommentLines,
+  CommentProps,
+  CommentProvenanceProps,
+  CommentRevokedProps,
+  CommentSize,
+  CommentSource,
+  CommentStatus,
+  CommentTimeProps,
+} from "@/components/cadence/comment";
+export {
+  DescriptionDetails,
+  DescriptionItem,
+  DescriptionList,
+  DescriptionTerm,
+} from "@/components/cadence/description-list";
+export type {
+  DescriptionListOrientation,
+  DescriptionListProps,
+} from "@/components/cadence/description-list";
 export {
   Dialog,
   DialogClose,
@@ -167,6 +220,22 @@ export type { ListDetailProps } from "@/components/cadence/list-detail";
 export { Marker, MarkerContent, MarkerIcon, markerVariants } from "@/components/cadence/marker";
 export type { MarkerProps } from "@/components/cadence/marker";
 export {
+  getMode,
+  getResolvedMode,
+  MODE_SCRIPT,
+  MODE_STORAGE_KEY,
+  ModeToggle,
+  setMode,
+  useMode,
+} from "@/components/cadence/mode-toggle";
+export type {
+  Mode,
+  ModeToggleLabels,
+  ModeToggleProps,
+  ResolvedMode,
+  UseModeResult,
+} from "@/components/cadence/mode-toggle";
+export {
   Popover,
   PopoverContent,
   PopoverDescription,
@@ -245,6 +314,8 @@ export { Slider } from "@/components/cadence/slider";
 export type { SliderProps } from "@/components/cadence/slider";
 export { Spinner } from "@/components/cadence/spinner";
 export type { SpinnerProps } from "@/components/cadence/spinner";
+export { Status, statusVariants } from "@/components/cadence/status";
+export type { StatusProps, StatusTone } from "@/components/cadence/status";
 export { Switch } from "@/components/cadence/switch";
 export type { SwitchProps } from "@/components/cadence/switch";
 export {
@@ -268,6 +339,21 @@ export {
 export type { TabsListProps } from "@/components/cadence/tabs";
 export { Textarea } from "@/components/cadence/textarea";
 export type { TextareaProps } from "@/components/cadence/textarea";
+export {
+  Timeline,
+  TimelineContent,
+  TimelineHeader,
+  TimelineIcon,
+  TimelineItem,
+  TimelineTime,
+  TimelineTitle,
+  timelineVariants,
+} from "@/components/cadence/timeline";
+export type {
+  TimelineItemProps,
+  TimelineProps,
+  TimelineTitleProps,
+} from "@/components/cadence/timeline";
 export {
   createToastManager,
   toast,

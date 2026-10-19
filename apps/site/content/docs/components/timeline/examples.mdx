@@ -1,0 +1,245 @@
+---
+title: Timeline examples
+description: A Timeline plain and connected, without icons, with a Comment in an item, and filtered by kind with a toggle group, each with its code.
+---
+
+import {
+  Comment,
+  CommentRevoked,
+  CommentText,
+  Timeline,
+  TimelineContent,
+  TimelineHeader,
+  TimelineIcon,
+  TimelineItem,
+  TimelineTime,
+  TimelineTitle,
+} from "@cadence-clinical/ui";
+import { MessageSquare, PencilLine } from "lucide-react";
+
+## Default
+
+Items with an icon, the kind, who and when, and what happened.
+
+<ComponentPreview>
+  <Timeline aria-label="Activity, newest first" className="w-full max-w-md">
+    <TimelineItem>
+      <TimelineIcon>
+        <PencilLine />
+      </TimelineIcon>
+      <TimelineHeader>
+        <TimelineTitle>Change</TimelineTitle>
+        <span>Dr Tom Ellis</span>
+        <TimelineTime dateTime="2026-10-19T08:03:00+11:00">08:03</TimelineTime>
+      </TimelineHeader>
+      <TimelineContent>Marked seen today.</TimelineContent>
+    </TimelineItem>
+    <TimelineItem>
+      <TimelineIcon>
+        <MessageSquare />
+      </TimelineIcon>
+      <TimelineHeader>
+        <TimelineTitle>Comment</TimelineTitle>
+        <span>RN Kate Morgan, Nurse unit manager</span>
+        <TimelineTime dateTime="2026-10-19T05:00:00+11:00">05:00</TimelineTime>
+      </TimelineHeader>
+      <TimelineContent>Daughter visiting at 1100, keen to talk about going home.</TimelineContent>
+    </TimelineItem>
+  </Timeline>
+</ComponentPreview>
+
+```tsx
+import {
+  Timeline,
+  TimelineContent,
+  TimelineHeader,
+  TimelineIcon,
+  TimelineItem,
+  TimelineTime,
+  TimelineTitle,
+} from "@cadence-clinical/ui";
+import { MessageSquare, PencilLine } from "lucide-react";
+
+<Timeline aria-label="Activity, newest first">
+  <TimelineItem>
+    <TimelineIcon>
+      <PencilLine />
+    </TimelineIcon>
+    <TimelineHeader>
+      <TimelineTitle>Change</TimelineTitle>
+      <span>Dr Tom Ellis</span>
+      <TimelineTime dateTime="2026-10-19T08:03:00+11:00">08:03</TimelineTime>
+    </TimelineHeader>
+    <TimelineContent>Marked seen today.</TimelineContent>
+  </TimelineItem>
+  <TimelineItem>
+    <TimelineIcon>
+      <MessageSquare />
+    </TimelineIcon>
+    <TimelineHeader>
+      <TimelineTitle>Comment</TimelineTitle>
+      <span>RN Kate Morgan, Nurse unit manager</span>
+      <TimelineTime dateTime="2026-10-19T05:00:00+11:00">05:00</TimelineTime>
+    </TimelineHeader>
+    <TimelineContent>Daughter visiting at 1100, keen to talk about going home.</TimelineContent>
+  </TimelineItem>
+</Timeline>;
+```
+
+## Connected
+
+`variant="connected"` joins each icon to the next with a rule, so the items read as one sequence, such as the steps of a referral.
+
+<ComponentPreview>
+  <Timeline variant="connected" aria-label="Referral, newest first" className="w-full max-w-md">
+    <TimelineItem>
+      <TimelineIcon>
+        <PencilLine />
+      </TimelineIcon>
+      <TimelineHeader>
+        <TimelineTitle>Accepted</TimelineTitle>
+        <span>Dr Tom Ellis</span>
+        <TimelineTime dateTime="2026-10-19T08:10:00+11:00">08:10</TimelineTime>
+      </TimelineHeader>
+      <TimelineContent>Accepted onto GMU A.</TimelineContent>
+    </TimelineItem>
+    <TimelineItem>
+      <TimelineIcon>
+        <PencilLine />
+      </TimelineIcon>
+      <TimelineHeader>
+        <TimelineTitle>Sent</TimelineTitle>
+        <span>Dr Grace Kim</span>
+        <TimelineTime dateTime="2026-10-19T06:00:00+11:00">06:00</TimelineTime>
+      </TimelineHeader>
+      <TimelineContent>Transferred from GMU C to GMU A.</TimelineContent>
+    </TimelineItem>
+  </Timeline>
+</ComponentPreview>
+
+```tsx
+<Timeline variant="connected" aria-label="Referral, newest first">
+  {/* The same items */}
+</Timeline>
+```
+
+## Without icons
+
+Leave the `TimelineIcon` out, and the header and content take the whole width.
+
+<ComponentPreview>
+  <Timeline aria-label="Changes, newest first" className="w-full max-w-md">
+    <TimelineItem>
+      <TimelineHeader>
+        <TimelineTitle>Change</TimelineTitle>
+        <span>Dr Tom Ellis</span>
+        <TimelineTime dateTime="2026-10-19T08:03:00+11:00">08:03</TimelineTime>
+      </TimelineHeader>
+      <TimelineContent>Marked seen today.</TimelineContent>
+    </TimelineItem>
+  </Timeline>
+</ComponentPreview>
+
+```tsx
+<TimelineItem>
+  <TimelineHeader>
+    <TimelineTitle>Change</TimelineTitle>
+    <span>Dr Tom Ellis</span>
+    <TimelineTime dateTime="2026-10-19T08:03:00+11:00">08:03</TimelineTime>
+  </TimelineHeader>
+  <TimelineContent>Marked seen today.</TimelineContent>
+</TimelineItem>
+```
+
+## With a comment
+
+Put a [Comment](/docs/components/comment) in the content, without its header: the timeline's header says who and when. The comment keeps its marks, here a revocation.
+
+<ComponentPreview>
+  <Timeline aria-label="Activity, newest first" className="w-full max-w-md">
+    <TimelineItem>
+      <TimelineIcon>
+        <MessageSquare />
+      </TimelineIcon>
+      <TimelineHeader>
+        <TimelineTitle>Comment</TimelineTitle>
+        <span>Dr Tom Ellis, Registrar</span>
+        <TimelineTime dateTime="2026-10-19T08:02:00+11:00">08:02</TimelineTime>
+      </TimelineHeader>
+      <TimelineContent>
+        <Comment status="revoked">
+          <CommentText>Family meeting booked for 1400.</CommentText>
+          <CommentRevoked by="Dr Tom Ellis" time="08:14" dateTime="2026-10-19T08:14:00+11:00" />
+        </Comment>
+      </TimelineContent>
+    </TimelineItem>
+  </Timeline>
+</ComponentPreview>
+
+```tsx
+import { Comment, CommentRevoked, CommentText } from "@cadence-clinical/ui";
+
+<TimelineItem>
+  <TimelineIcon>
+    <MessageSquare />
+  </TimelineIcon>
+  <TimelineHeader>
+    <TimelineTitle>Comment</TimelineTitle>
+    <span>Dr Tom Ellis, Registrar</span>
+    <TimelineTime dateTime="2026-10-19T08:02:00+11:00">08:02</TimelineTime>
+  </TimelineHeader>
+  <TimelineContent>
+    <Comment status="revoked">
+      <CommentText>Family meeting booked for 1400.</CommentText>
+      <CommentRevoked by="Dr Tom Ellis" time="08:14" dateTime="2026-10-19T08:14:00+11:00" />
+    </Comment>
+  </TimelineContent>
+</TimelineItem>;
+```
+
+## Filtered by kind
+
+A [Toggle group](/docs/components/toggle-group) of kinds above the timeline. Pressing a kind shows only that kind. Pressing it again, or All, shows everything.
+
+<TimelineFilterPreview />
+
+```tsx
+"use client";
+
+import { ToggleGroup, ToggleGroupItem } from "@cadence-clinical/ui";
+import { useState } from "react";
+
+const FILTERS = [
+  { value: "all", label: "All" },
+  { value: "comments", label: "Comments" },
+  { value: "notes", label: "Notes" },
+] as const;
+
+type Filter = (typeof FILTERS)[number]["value"];
+
+export function Activity() {
+  const [filter, setFilter] = useState<Filter>("all");
+  return (
+    <>
+      <ToggleGroup
+        aria-label="Show in the timeline"
+        variant="outline"
+        size="sm"
+        spacing={0}
+        value={[filter]}
+        onValueChange={(value: string[]) => {
+          // Nothing pressed means the pressed kind was released: show everything.
+          setFilter(FILTERS.find((item) => item.value === value[0])?.value ?? "all");
+        }}
+      >
+        {FILTERS.map((item) => (
+          <ToggleGroupItem key={item.value} value={item.value}>
+            {item.label}
+          </ToggleGroupItem>
+        ))}
+      </ToggleGroup>
+      {/* A Timeline of the items whose kind matches the filter */}
+    </>
+  );
+}
+```

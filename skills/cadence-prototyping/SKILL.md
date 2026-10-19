@@ -102,7 +102,11 @@ on GitHub. When the feature moves things through states (a patient through a lis
 through review), add a state diagram of the whole lifecycle at the top: it's often the clearest
 single picture of the feature. Keep the wording of each box the same as the steps it draws, and
 render every diagram before committing, because a syntax error shows on GitHub as a broken
-block.
+block. The prototypes app also draws a feature's `flows.md` as a page, each
+diagram beside its steps in Cadence's own styling (`#/patient-list/flows`), for sharing with people
+who don't read Markdown. It reads the file directly, so it never drifts from it. Its printable
+version (`#/patient-list/flows/print`) puts one flow on each A4 landscape sheet, with the diagram
+scaled to fit, for printing or saving as a PDF to take into a review.
 
 ### 5. Options
 
@@ -112,16 +116,20 @@ at, and the questions that would tell users' preferences apart. Recommend one, w
 
 ### 6. Prototype
 
-Build the chosen option, or each option, in Claude Design with Cadence's components and the
-synthetic ward data. Write a prompt pack for each option in `prompts/`: a self-contained prompt
-the maintainer pastes into a new design in the Cadence Clinical project, with the synthetic ward
-(`prototypes/synthetic-ward/ward.json`) attached. Each pack carries the guardrails that bear on
-its screens, the screens to build, the flows (F#) and states to demonstrate, and the moments in
-the ward's `simulation` that trigger them. Check every patient, job and minute a pack names
-against the ward before handing it over, since a prompt that names the wrong patient wastes a run.
-Add to the synthetic ward, through its generator, any case a feature needs that it doesn't cover. Wherever the prototype falls back on generic markup, record the gap in
-`gaps.md`, matched to a proposed component in `docs/components.md` or as a new proposal. That's
-how prototyping decides which components get built.
+Build each option as a route in `apps/prototypes`, the prototypes app in the Cadence repository
+(decision 0020), from Cadence's own packages and the synthetic ward
+(`prototypes/synthetic-ward/ward.json`). Other people's activity plays from the ward's `simulation`
+timeline (decision 0018), and each flow (F#) and state from stage 4 is reachable on cue. The app is
+held to the repository's lint and type rules, and its screens follow the guardrails.
+
+Look at every screen as a tester would, on a desktop and on a phone, before calling it done.
+Wherever the prototype has to work around a component, or fall back on its own markup, record the
+gap in `gaps.md`, matched to a proposed component in `docs/components.md` or as a new proposal.
+That's how prototyping decides which components get built.
+
+The prompt packs in `prompts/` remain for exploring a quick variation in Claude Design. Check every
+patient, job and minute a pack names against the ward before handing it over. Add to the synthetic
+ward, through its generator, any case a feature needs that it doesn't cover.
 
 ### 7. Critique and iterate
 

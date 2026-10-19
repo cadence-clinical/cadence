@@ -1,0 +1,7 @@
+@import "tailwindcss";
+@import "@cadence-clinical/ui/styles.css";
+@import "@cadence-clinical/ui/typeset.css";
+@import "@cadence-clinical/clinical/styles.css";
+
+/* The prototypes' own screens use Tailwind utilities too. */
+@source "./";

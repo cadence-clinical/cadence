@@ -1,0 +1,65 @@
+---
+title: Mode toggle examples
+description: Mode toggle on its own, in a header, controlled and with other words, each with its code.
+---
+
+The previews on this page are controlled, so they show the mode you choose beside the toggle and leave this page as it is. This site has its own mode switch.
+
+## Default
+
+The toggle reads the page's mode from `<html>`, sets it, and remembers it.
+
+<ModeTogglePreview />
+
+```tsx
+import { ModeToggle } from "@cadence-clinical/ui";
+
+<ModeToggle />;
+```
+
+## In a header
+
+In a header with other icon buttons, use the `ghost` variant, as the header's own buttons do.
+
+<ModeTogglePreview variant="ghost" />
+
+```tsx
+import { AppShellHeader, ModeToggle } from "@cadence-clinical/ui";
+
+<AppShellHeader>
+  {/* The breadcrumb and the page's title come first. */}
+  <div className="ml-auto">
+    <ModeToggle variant="ghost" />
+  </div>
+</AppShellHeader>;
+```
+
+## Controlled
+
+With `value`, the toggle shows the mode it is given and calls `onValueChange` with the one chosen. It does not change the page or remember anything, so the mode is yours to apply. Use this when your app keeps its settings somewhere else, such as a reader's profile.
+
+<ModeTogglePreview />
+
+```tsx
+"use client";
+
+import { ModeToggle, type Mode } from "@cadence-clinical/ui";
+import { useState } from "react";
+
+export function ProfileModeToggle() {
+  const [mode, setMode] = useState<Mode>("system");
+  return <ModeToggle value={mode} onValueChange={setMode} />;
+}
+```
+
+## Other words
+
+`labels` replaces the button's name and the names of the modes. The words below are placeholders, not a translation.
+
+<ModeTogglePreview
+  labels={{ trigger: "Display mode", light: "Day", dark: "Night", system: "Device" }}
+/>
+
+```tsx
+<ModeToggle labels={{ trigger: "Display mode", light: "Day", dark: "Night", system: "Device" }} />
+```

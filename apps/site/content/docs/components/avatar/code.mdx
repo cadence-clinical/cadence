@@ -1,0 +1,86 @@
+---
+title: Avatar code
+description: How to install Avatar, its parts and props, and how it differs from the shadcn Avatar.
+---
+
+## Installation
+
+From npm:
+
+```tsx
+import {
+  Avatar,
+  AvatarBadge,
+  AvatarFallback,
+  AvatarGroup,
+  AvatarGroupCount,
+  AvatarImage,
+} from "@cadence-clinical/ui";
+```
+
+From the shadcn registry:
+
+```bash
+pnpm dlx shadcn@latest add @cadence/avatar
+```
+
+[Installation](/docs/installation) covers both routes and the styles each one needs.
+
+## Usage
+
+```tsx
+import { Avatar, AvatarFallback, AvatarImage } from "@cadence-clinical/ui";
+
+<Avatar>
+  <AvatarImage src="/staff/tom-ellis.jpg" alt="Dr Tom Ellis" />
+  <AvatarFallback>TE</AvatarFallback>
+</Avatar>;
+```
+
+## API
+
+Avatar follows the shadcn [Avatar](https://ui.shadcn.com/docs/components/avatar) and keeps its part names and its `size` prop. It is built on the Base UI [Avatar](https://base-ui.com/react/components/avatar).
+
+| Part               | Built on                          | Accepts                                                                                     |
+| ------------------ | --------------------------------- | ------------------------------------------------------------------------------------------- |
+| `Avatar`           | Base UI Avatar Root, a `span`     | Every Base UI Avatar Root prop, and `size`                                                  |
+| `AvatarImage`      | Base UI Avatar Image, an `img`    | Every Base UI Avatar Image prop, such as `onLoadingStatusChange`, and every `img` attribute |
+| `AvatarFallback`   | Base UI Avatar Fallback, a `span` | Every Base UI Avatar Fallback prop, such as `delay`                                         |
+| `AvatarBadge`      | A `span`                          | Every `span` attribute                                                                      |
+| `AvatarGroup`      | A `div`                           | Every `div` attribute                                                                       |
+| `AvatarGroupCount` | A `div`                           | Every `div` attribute                                                                       |
+
+## Props
+
+| Prop    | On               | Type                        | Default     |
+| ------- | ---------------- | --------------------------- | ----------- |
+| `size`  | `Avatar`         | `"sm" \| "default" \| "lg"` | `"default"` |
+| `delay` | `AvatarFallback` | `number`, in milliseconds   | `0`         |
+
+## Sizes
+
+Each size is a control height, so an avatar is as tall as the controls beside it.
+
+| Size      | Compact | Comfortable |
+| --------- | ------- | ----------- |
+| `sm`      | 28px    | 36px        |
+| `default` | 32px    | 44px        |
+| `lg`      | 36px    | 48px        |
+
+The initials, an `AvatarBadge` and an `AvatarGroupCount` follow the avatar's size.
+
+## What Cadence changes
+
+- **Sizes follow the [density](/docs/theming#density).** shadcn's are 24px, 32px and 40px at every density.
+- **The edge is the text colour at 10%**, so it shows in both modes without a `dark:` override. shadcn blends its border colour, with a different blend in dark mode.
+- **The initials are medium weight, at the control text size.** shadcn's are 14px at regular weight.
+- **`AvatarGroup` overlaps with a negative margin** on each avatar after the first. shadcn uses `-space-x-2`.
+
+Code written for the shadcn Avatar works unchanged: it takes the same parts and props.
+
+## Accessibility
+
+- `Avatar` has no role. The fallback's initials are read as text, and the picture is an `img` named by its `alt`.
+- Beside a name, hide the avatar with `aria-hidden`, so the initials are not read before the name.
+- The fallback's initials hold at least 4.5:1 against its fill, in every mode. The token tests check the pair.
+- `AvatarBadge` is a dot. Put its meaning in words inside it with `sr-only`.

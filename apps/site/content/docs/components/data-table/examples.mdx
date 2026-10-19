@@ -1,0 +1,443 @@
+---
+title: Data table examples
+description: Data table with sorting, selection, paging and row actions, with pinned columns and widths, with grouped rows, and with cells edited in place, each with its code.
+---
+
+## Sorting, selection and paging
+
+The common case: a heading that sorts, a column of checkboxes, the column menu and the paging controls. Every part reads the table you build with `useTable`.
+
+<DataTablePreview />
+
+```tsx
+"use client";
+
+import { createColumnHelper, useTable, type SortingState } from "@tanstack/react-table";
+import { useState } from "react";
+import {
+  DataTable,
+  DataTableColumnHeader,
+  dataTableFeatures,
+  DataTablePagination,
+  DataTableViewOptions,
+  selectionColumn,
+} from "@cadence-clinical/ui/data-table";
+
+interface Appointment {
+  id: string;
+  clinic: string;
+  minutes: number;
+}
+
+const helper = createColumnHelper<typeof dataTableFeatures, Appointment>();
+
+const columns = helper.columns([
+  selectionColumn<Appointment>({ rowLabel: (row) => row.clinic }),
+  helper.accessor("clinic", {
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Clinic" />,
+    meta: { label: "Clinic" },
+  }),
+  helper.accessor("minutes", {
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Minutes" />,
+    meta: { label: "Minutes", align: "end" },
+  }),
+]);
+
+export function Appointments({ data }: { data: Appointment[] }) {
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const table = useTable({
+    features: dataTableFeatures,
+    data,
+    columns,
+    getRowId: (row) => row.id,
+    state: { sorting },
+    onSortingChange: setSorting,
+  });
+  return (
+    <>
+      <DataTableViewOptions table={table} />
+      <DataTable table={table} aria-label="Appointments" />
+      <DataTablePagination table={table} />
+    </>
+  );
+}
+```
+
+## A column of actions
+
+Put a row's actions in a `display` column at the end. Name each control by its row, so a screen reader hears "Actions for General clinic, Monday" and not "Actions" ten times. A [Switch](/docs/components/switch) suits a setting that applies at once, and a [Dropdown menu](/docs/components/dropdown-menu) holds the rest. The preview above has this column.
+
+```tsx
+import {
+  Button,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+  Switch,
+} from "@cadence-clinical/ui";
+import { Ellipsis } from "lucide-react";
+
+helper.display({
+  id: "actions",
+  header: () => <span className="sr-only">Actions</span>,
+  meta: { label: "Actions", align: "end" },
+  cell: ({ row }) => (
+    <div className="flex items-center justify-end gap-control-gap">
+      <Switch
+        aria-label={`Send a reminder for ${row.original.clinic}`}
+        checked={row.original.reminder}
+        onCheckedChange={(checked) => setReminder(row.original.id, checked)}
+      />
+      <DropdownMenu>
+        <DropdownMenuTrigger render={<Button variant="ghost" size="sm" iconOnly />}>
+          <Ellipsis aria-hidden />
+          {`Actions for ${row.original.clinic}`}
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem onClick={() => reschedule(row.original.id)}>
+            Reschedule
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem variant="destructive" onClick={() => cancel(row.original.id)}>
+            Cancel appointment
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
+  ),
+});
+```
+
+The heading is `sr-only`: a column of controls needs no visible heading, but a screen reader still reads one. Acting on a row does not select it. Ask before an action that cannot be undone, in an [Alert dialog](/docs/components/alert-dialog).
+
+## Pinned columns and widths
+
+Pin the columns that say which record a row is, so they stay in view while the table scrolls sideways. Scroll the preview: the checkboxes and the clinic stay, and an edge shows where the rest scroll under them. The clinic column has a `size` of 180, so it keeps that width, and the long clinic name wraps inside it.
+
+<DataTablePinnedPreview />
+
+```tsx
+"use client";
+
+import { createColumnHelper, useTable, type ColumnPinningState } from "@tanstack/react-table";
+import { useState } from "react";
+import {
+  DataTable,
+  DataTableColumnHeader,
+  dataTableFeatures,
+  selectionColumn,
+} from "@cadence-clinical/ui/data-table";
+
+const helper = createColumnHelper<typeof dataTableFeatures, Booking>();
+
+const columns = helper.columns([
+  selectionColumn<Booking>({ rowLabel: (row) => `${row.clinic}, ${row.day}` }),
+  helper.accessor("clinic", {
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Clinic" />,
+    meta: { label: "Clinic" },
+    size: 180,
+  }),
+  helper.accessor("clinician", { header: "Clinician" }),
+  helper.accessor("day", { header: "Day" }),
+  helper.accessor("room", { header: "Room" }),
+  helper.accessor("note", { header: "Note" }),
+]);
+
+export function Bookings({ data }: { data: Booking[] }) {
+  const [columnPinning, setColumnPinning] = useState<ColumnPinningState>({
+    start: ["select", "clinic"],
+    end: [],
+  });
+  const table = useTable({
+    features: dataTableFeatures,
+    data,
+    columns,
+    getRowId: (row) => row.id,
+    state: { columnPinning },
+    onColumnPinningChange: setColumnPinning,
+  });
+  return <DataTable table={table} aria-label="Bookings" />;
+}
+```
+
+## Rows of two or three lines
+
+Set `rowLines` so every row is the same height. Choose three lines in the preview: each row is a line taller, the summary shows a line more, and the clinic's room and reference move onto lines of their own.
+
+<DataTableRowLinesPreview />
+
+```tsx
+"use client";
+
+import {
+  DataTable,
+  DataTableCellText,
+  dataTableFeatures,
+  useDataTableRowLines,
+  type DataTableRowLines,
+} from "@cadence-clinical/ui/data-table";
+import { createColumnHelper, useTable } from "@tanstack/react-table";
+
+function ClinicCell({ referral }: { referral: Referral }) {
+  const lines = useDataTableRowLines();
+  return (
+    <span className="flex flex-col gap-0.5 whitespace-nowrap">
+      <span className="font-medium">{referral.clinic}</span>
+      {lines === 3 ? (
+        <>
+          <span className="text-muted-foreground">{referral.room}</span>
+          <span className="text-muted-foreground">{referral.reference}</span>
+        </>
+      ) : (
+        <span className="text-muted-foreground">{`${referral.room} · ${referral.reference}`}</span>
+      )}
+    </span>
+  );
+}
+
+const helper = createColumnHelper<typeof dataTableFeatures, Referral>();
+
+const columns = helper.columns([
+  helper.accessor("clinic", {
+    header: "Clinic",
+    cell: ({ row }) => <ClinicCell referral={row.original} />,
+  }),
+  helper.accessor("summary", {
+    header: "Summary",
+    cell: ({ row }) => (
+      <span className="flex w-64 flex-col gap-0.5">
+        <span className="whitespace-nowrap text-muted-foreground">{row.original.from}</span>
+        <DataTableCellText reserveLines={1}>{row.original.summary}</DataTableCellText>
+      </span>
+    ),
+  }),
+]);
+
+export function Referrals({ data, lines }: { data: Referral[]; lines: DataTableRowLines }) {
+  const table = useTable({ features: dataTableFeatures, data, columns, getRowId: (row) => row.id });
+  return <DataTable table={table} aria-label="Referrals" rowLines={lines} />;
+}
+```
+
+## Grouped rows
+
+Group the rows under heading rows when people work through a list one part at a time. The unconfirmed appointments come first, in the info tone, and cannot be collapsed. The days follow in the week's order, and sorting by minutes sorts within each day. Press a day's heading to collapse it.
+
+<DataTableGroupedPreview />
+
+```tsx
+"use client";
+
+import {
+  DataTable,
+  DataTableColumnHeader,
+  dataTableFeatures,
+  type DataTableGroup,
+} from "@cadence-clinical/ui/data-table";
+import { createColumnHelper, useTable, type SortingState } from "@tanstack/react-table";
+import { useState } from "react";
+
+const GROUPS: DataTableGroup[] = [
+  {
+    id: "unconfirmed",
+    label: "Unconfirmed",
+    tone: "info",
+    collapsible: false,
+    description: "· waiting for the clinic to confirm",
+  },
+  { id: "Monday", label: "Monday" },
+  { id: "Tuesday", label: "Tuesday" },
+  { id: "Wednesday", label: "Wednesday" },
+];
+
+const helper = createColumnHelper<typeof dataTableFeatures, Slot>();
+
+const columns = helper.columns([
+  helper.accessor("clinic", {
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Clinic" />,
+  }),
+  helper.accessor("room", { header: "Room" }),
+  helper.accessor("minutes", {
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Minutes" />,
+    meta: { align: "end" },
+  }),
+]);
+
+export function AppointmentsByDay({ data }: { data: Slot[] }) {
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const table = useTable({
+    features: dataTableFeatures,
+    data,
+    columns,
+    getRowId: (row) => row.id,
+    state: { sorting },
+    onSortingChange: setSorting,
+  });
+  return (
+    <DataTable
+      table={table}
+      aria-label="Appointments by day"
+      groups={GROUPS}
+      getGroupId={(row) => (row.isConfirmed ? row.day : "unconfirmed")}
+      groupCount={(count) => (count === 1 ? "1 appointment" : `${count} appointments`)}
+    />
+  );
+}
+```
+
+## Cells edited in place
+
+Use `DataTableEditableCell` for one value that stands on its own. The note is text: press it, or reach it with Tab and press Enter, then type. Enter or moving on saves, and Escape puts the value back. The next visit is chosen from a [Calendar](/docs/components/calendar) in a popover, and Clear empties it.
+
+<DataTableEditablePreview />
+
+```tsx
+"use client";
+
+import { Button } from "@cadence-clinical/ui";
+import { Calendar } from "@cadence-clinical/ui/calendar";
+import {
+  DataTable,
+  DataTableEditableCell,
+  dataTableFeatures,
+} from "@cadence-clinical/ui/data-table";
+import { createColumnHelper, useTable } from "@tanstack/react-table";
+import { useState } from "react";
+import { enAU } from "react-day-picker/locale";
+
+interface Visit {
+  id: string;
+  clinic: string;
+  note: string;
+  next: Date | null;
+}
+
+const dayFormat = new Intl.DateTimeFormat("en-AU", {
+  day: "numeric",
+  month: "short",
+  year: "numeric",
+});
+const helper = createColumnHelper<typeof dataTableFeatures, Visit>();
+
+// Made once, so a save does not remount the cells.
+function visitColumns(update: (id: string, change: Partial<Visit>) => void) {
+  return helper.columns([
+    helper.accessor("clinic", { header: "Clinic" }),
+    helper.accessor("note", {
+      header: "Note",
+      cell: ({ row }) => (
+        <DataTableEditableCell
+          label={`Note for ${row.original.clinic}`}
+          value={row.original.note}
+          placeholder="No note"
+          onValueChange={(note) => update(row.original.id, { note })}
+        />
+      ),
+    }),
+    helper.accessor("next", {
+      header: "Next visit",
+      cell: ({ row }) => (
+        <DataTableEditableCell
+          label={`Next visit for ${row.original.clinic}`}
+          value={row.original.next}
+          onValueChange={(next) => update(row.original.id, { next })}
+          editor={({ value, onValueChange }) => (
+            <>
+              <Calendar
+                mode="single"
+                required
+                locale={enAU}
+                selected={value ?? undefined}
+                defaultMonth={value ?? undefined}
+                onSelect={onValueChange}
+              />
+              {value ? (
+                <div className="flex justify-end border-t p-container-sm">
+                  <Button variant="ghost" size="sm" onClick={() => onValueChange(null)}>
+                    Clear
+                  </Button>
+                </div>
+              ) : null}
+            </>
+          )}
+        >
+          {row.original.next ? dayFormat.format(row.original.next) : "Not booked"}
+        </DataTableEditableCell>
+      ),
+    }),
+  ]);
+}
+
+export function Visits({ initial }: { initial: Visit[] }) {
+  const [visits, setVisits] = useState(initial);
+  const [columns] = useState(() =>
+    visitColumns((id, change) =>
+      setVisits((current) =>
+        current.map((visit) => (visit.id === id ? { ...visit, ...change } : visit)),
+      ),
+    ),
+  );
+  const table = useTable({
+    features: dataTableFeatures,
+    data: visits,
+    columns,
+    getRowId: (row) => row.id,
+  });
+  return <DataTable table={table} aria-label="Visits" />;
+}
+```
+
+Pass `readOnly` for a row whose value cannot be changed here, and the cell is plain text.
+
+## Rows that open on a click
+
+Set `onRowClick` when a row opens a record, and put a button in each row that does the same, for the keyboard and a screen reader. The open row is selected, so the table marks it with its fill and a bar at the start of its first cell. A click on the button, or on any other control in the row, does only what that control does.
+
+<DataTableClickablePreview />
+
+```tsx
+"use client";
+
+import { Button } from "@cadence-clinical/ui";
+import { DataTable, dataTableFeatures } from "@cadence-clinical/ui/data-table";
+import { createColumnHelper, useTable } from "@tanstack/react-table";
+import { PanelRightOpen } from "lucide-react";
+import { useState } from "react";
+
+const helper = createColumnHelper<typeof dataTableFeatures, Visit>();
+
+export function Visits({ data }: { data: Visit[] }) {
+  const [openId, setOpenId] = useState<string | null>(null);
+  const [columns] = useState(() =>
+    helper.columns([
+      helper.accessor("clinic", { header: "Clinic" }),
+      helper.accessor("room", { header: "Room" }),
+      helper.display({
+        id: "open",
+        header: () => <span className="sr-only">Open</span>,
+        meta: { align: "end" },
+        cell: ({ row }) => (
+          <Button variant="ghost" size="sm" iconOnly onClick={() => setOpenId(row.original.id)}>
+            <PanelRightOpen aria-hidden />
+            {`Open ${row.original.clinic}`}
+          </Button>
+        ),
+      }),
+    ]),
+  );
+  const table = useTable({
+    features: dataTableFeatures,
+    data,
+    columns,
+    getRowId: (row) => row.id,
+    state: { rowSelection: openId ? { [openId]: true } : {} },
+  });
+  return (
+    <DataTable table={table} aria-label="Visits" onRowClick={(row) => setOpenId(row.original.id)} />
+  );
+}
+```
+
+Pass `disabled` to an editable cell that cannot be changed yet, with `aria-describedby` pointing at the reason on the screen.

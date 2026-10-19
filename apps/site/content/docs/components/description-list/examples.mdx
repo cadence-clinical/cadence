@@ -1,0 +1,146 @@
+---
+title: Description list examples
+description: A Description list side by side, stacked in a narrow space, always stacked, with several details for a term, and with badges, each with its code.
+---
+
+import {
+  Badge,
+  DescriptionDetails,
+  DescriptionItem,
+  DescriptionList,
+  DescriptionTerm,
+} from "@cadence-clinical/ui";
+
+## Default
+
+Each term beside its details, while the list is 18rem wide or more.
+
+<ComponentPreview>
+  <DescriptionList className="w-full max-w-md">
+    <DescriptionItem>
+      <DescriptionTerm>Working problem</DescriptionTerm>
+      <DescriptionDetails>Community-acquired pneumonia</DescriptionDetails>
+    </DescriptionItem>
+    <DescriptionItem>
+      <DescriptionTerm>Expected discharge</DescriptionTerm>
+      <DescriptionDetails>Wed 21 Oct</DescriptionDetails>
+    </DescriptionItem>
+  </DescriptionList>
+</ComponentPreview>
+
+```tsx
+import {
+  DescriptionDetails,
+  DescriptionItem,
+  DescriptionList,
+  DescriptionTerm,
+} from "@cadence-clinical/ui";
+
+<DescriptionList>
+  <DescriptionItem>
+    <DescriptionTerm>Working problem</DescriptionTerm>
+    <DescriptionDetails>Community-acquired pneumonia</DescriptionDetails>
+  </DescriptionItem>
+  <DescriptionItem>
+    <DescriptionTerm>Expected discharge</DescriptionTerm>
+    <DescriptionDetails>Wed 21 Oct</DescriptionDetails>
+  </DescriptionItem>
+</DescriptionList>;
+```
+
+## In a narrow space
+
+Below 18rem the list stacks each term over its details. It measures its own width, so this happens in a narrow pane as well as on a phone.
+
+<ComponentPreview>
+  <DescriptionList className="w-60">
+    <DescriptionItem>
+      <DescriptionTerm>Working problem</DescriptionTerm>
+      <DescriptionDetails>Community-acquired pneumonia</DescriptionDetails>
+    </DescriptionItem>
+    <DescriptionItem>
+      <DescriptionTerm>Expected discharge</DescriptionTerm>
+      <DescriptionDetails>Wed 21 Oct</DescriptionDetails>
+    </DescriptionItem>
+  </DescriptionList>
+</ComponentPreview>
+
+```tsx
+<DescriptionList className="w-60">{/* The same items */}</DescriptionList>
+```
+
+## Always stacked
+
+`orientation="vertical"` stacks every pair at any width, for a long detail such as a note's opening line. `orientation="horizontal"` keeps every pair side by side.
+
+<ComponentPreview>
+  <DescriptionList orientation="vertical" className="w-full max-w-md">
+    <DescriptionItem>
+      <DescriptionTerm>Overnight</DescriptionTerm>
+      <DescriptionDetails>
+        COPD exacerbation, day 3, on oxygen. Oxygen requirement rose this afternoon.
+      </DescriptionDetails>
+    </DescriptionItem>
+  </DescriptionList>
+</ComponentPreview>
+
+```tsx
+<DescriptionList orientation="vertical">
+  <DescriptionItem>
+    <DescriptionTerm>Overnight</DescriptionTerm>
+    <DescriptionDetails>
+      COPD exacerbation, day 3, on oxygen. Oxygen requirement rose this afternoon.
+    </DescriptionDetails>
+  </DescriptionItem>
+</DescriptionList>
+```
+
+## Several details for a term
+
+Give a term one `DescriptionDetails` for each value. Each starts on its own line beside the term.
+
+<ComponentPreview>
+  <DescriptionList className="w-full max-w-md">
+    <DescriptionItem>
+      <DescriptionTerm>Open jobs</DescriptionTerm>
+      <DescriptionDetails>Chase sputum culture</DescriptionDetails>
+      <DescriptionDetails>Repeat chest X-ray tomorrow</DescriptionDetails>
+    </DescriptionItem>
+  </DescriptionList>
+</ComponentPreview>
+
+```tsx
+<DescriptionItem>
+  <DescriptionTerm>Open jobs</DescriptionTerm>
+  <DescriptionDetails>Chase sputum culture</DescriptionDetails>
+  <DescriptionDetails>Repeat chest X-ray tomorrow</DescriptionDetails>
+</DescriptionItem>
+```
+
+## With badges
+
+The details can hold any content. Lay several badges out with `flex flex-wrap gap-1` on the details, so they wrap rather than run past the edge.
+
+<ComponentPreview>
+  <DescriptionList className="w-full max-w-md">
+    <DescriptionItem>
+      <DescriptionTerm>Discharge barriers</DescriptionTerm>
+      <DescriptionDetails className="flex flex-wrap gap-1">
+        <Badge variant="secondary">Home assessment</Badge>
+        <Badge variant="secondary">Family meeting</Badge>
+      </DescriptionDetails>
+    </DescriptionItem>
+  </DescriptionList>
+</ComponentPreview>
+
+```tsx
+import { Badge } from "@cadence-clinical/ui";
+
+<DescriptionItem>
+  <DescriptionTerm>Discharge barriers</DescriptionTerm>
+  <DescriptionDetails className="flex flex-wrap gap-1">
+    <Badge variant="secondary">Home assessment</Badge>
+    <Badge variant="secondary">Family meeting</Badge>
+  </DescriptionDetails>
+</DescriptionItem>;
+```

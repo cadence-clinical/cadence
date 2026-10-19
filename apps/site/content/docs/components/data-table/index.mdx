@@ -1,0 +1,110 @@
+---
+title: Data table
+description: Shows records in rows to sort, filter, select and page through, with columns that stay in view, rows in groups, rows of two or three lines, and cells that can be edited in place.
+---
+
+<GradeBadge component="data-table" />
+
+<DataTablePreview />
+
+## Use it for
+
+- A list of records that people sort, filter, select or page through, such as a clinic's appointments or a team's patients.
+- A list that is wider than the screen, where the columns that say which record a row is have to stay in view.
+- A list where one value at a time changes often, such as a working problem or an expected date of discharge.
+
+## Do not use it for
+
+- **Observations over time**, such as a patient's vital signs by hour. Use the [Observation table](/docs/components/observation-table).
+- **A few values with nothing to sort or select.** Use a [Table](/docs/components/table).
+- **A list that is empty before anything has been added.** Show an [Empty](/docs/components/empty) in place of the table, with what to do next.
+- **A change that needs more than one value, a reason or a confirmation.** Open a [Form](/docs/components/form) in a [Dialog](/docs/components/dialog) or a [Sheet](/docs/components/sheet).
+
+## Name the table
+
+Give every data table an `aria-label` that says what is in it, such as "Appointments" or the name of the list. A screen reader reads the name when someone moves to the table, and the box that scrolls sideways takes the same name.
+
+## Keep the columns that identify a row in view
+
+When a table scrolls sideways, pin the columns that say which record a row is, such as the bed and the patient. Pinned columns stay at the start of the table while the rest scroll under them, so people can always tell whose row they are reading. Pin as few as that takes: everything pinned is space that no longer scrolls.
+
+Pinned columns stop sticking when together they would cover more than two thirds of the table's box, as on a phone, because then too little would be left to scroll through. They scroll with the rest instead.
+
+## Give a column the width its content needs
+
+Give a pinned column a width, so it keeps the same width in every view of the list. A column with a width keeps it whatever is in it. Text that can wrap wraps inside it, but text that must not wrap, such as a name or an identifier, runs past the edge if the column is too narrow. Cadence never cuts a name or an identifier short.
+
+Measure the longest value the list can hold at each density, and give the width in `em` with `meta.width`, so the column grows with its text when the density is comfortable and stays narrow when it is compact. A width in pixels has to fit the comfortable density everywhere, which leaves the compact table wider than it needs to be. Leave a pixel or two to spare, because a typeface can draw a little wider in another browser.
+
+## Keep every row the same height
+
+A list is read by scanning down it, and rows of one height are easier to scan. Set `rowLines` to `2` or `3`, and every row is that many lines tall, whatever is in it.
+
+- **Use two lines** when people scan many rows at once. A name and an identifier fit on two lines.
+- **Use three lines** when the table is wider than its place. Each cell can show more of its text in a narrower column, so the table scrolls sideways less.
+- **Let people choose**, and remember the choice for the list, because the right height depends on the screen and the task.
+
+Text in a cell that follows the row is cut to the row's lines with an ellipsis. Cut text only where the whole text is one step away, such as in the record the row opens. Never cut a name, an identifier, a dose or a unit: lay them out on lines of their own instead, as a name, then age and gender, then the identifier.
+
+## Group rows when people work through the list in parts
+
+Group the rows when people take the list one part at a time, such as patients by expected discharge, or jobs by who they are assigned to. Each group has a heading row with its name and count, and collapses to its heading.
+
+- **Order the groups by meaning**, not the alphabet: Passed, Today, Tomorrow, Later, then Not set.
+- **Put what needs attention first**, in the info tone, and do not let it collapse, such as patients waiting to be accepted.
+- **Keep one set of column headings.** The groups share the columns, so values line up from group to group.
+- **Do not group a paged table.** Counts are of the rows on the page, so a group would look smaller than it is.
+
+A collapsed group keeps its heading and count, so nobody is out of sight without the list saying so. A column's sort applies within each group, and the groups keep their order.
+
+## Edit in place only one value at a time
+
+Let people edit a cell where it is when the change is one value that stands on its own, such as a working problem, an expected date of discharge or a note. Editing in place keeps people in the list, and a wrong value is put right the same way.
+
+Open a [Form](/docs/components/form) in a [Dialog](/docs/components/dialog) or a [Sheet](/docs/components/sheet) instead when:
+
+- the change needs more than one value, such as a dose with its unit and frequency
+- the value has to be checked against a rule and the error explained
+- the change needs a reason, a confirmation or a second person
+- the change cannot be undone, such as discharging a patient
+- people need more context than the row shows to decide
+
+An edited cell saves when the person presses Enter or moves on, and Escape puts the value back. In a cell, choose a date from a [Calendar](/docs/components/calendar), and give a date that can be empty a Clear button.
+
+## Show who changed a value
+
+A value changed in a list is easy to miss. Where the record is read in full, such as a patient's detail, show who changed the value and when. Use the time the change was made, not when the page was loaded.
+
+## Keep a cell that cannot be edited plain
+
+Make a cell read-only when the person cannot change that value here. It shows as plain text, with no boundary or pencil, so nothing invites a press that does nothing.
+
+## Open a row's record with a control, and let a click on the row do the same
+
+When a row opens a record, such as a patient's summary beside the list, put a control in the row that opens it, and set `onRowClick` so a click anywhere else in the row does the same. A row cannot take focus, so the control is how a keyboard or a screen reader opens it. Mark the open row by selecting it: the table fills it and draws a bar at the start of its first cell, so the open row does not rest on colour. Pin the first column, and the bar stays in view while the table scrolls sideways.
+
+A click on a control in the row, such as a link, a checkbox or a cell edited in place, does only what that control does. So does a click that ends a selection of text, so a value can still be copied.
+
+Do not make the whole row the only way in, and do not turn the table into a grid for it. A grid changes how every key works in the table, to give the row a focus that one control already gives it.
+
+## Disable a control with its reason
+
+When a control in a row cannot be used yet, such as a field of a patient the team has not accepted, disable it rather than hiding it, so the row keeps its shape and the person sees what will be there. Say why in words on the screen, and give the control that text as its description with `aria-describedby`.
+
+## Write the label
+
+Every editable cell has a label that says what is edited and for whom.
+
+- **Name the value and the record**: "Working problem for Margaret Holloway", not "Edit" or "Working problem".
+- **Use sentence case**, and the same words as the column's heading.
+- **Say "updated" after a change**, which is the default. Say "saved" only once your own save has succeeded.
+
+## Accessibility
+
+- Name the table with `aria-label`.
+- Give each editable cell a `label` that says what is edited and for whom. A screen reader reads it with the value, and again after a change.
+- Give the selection column a `rowLabel`, so each checkbox says which row it selects.
+- Name each control in a column of actions by its row.
+- With `onRowClick`, put a control in each row that does the same, and name it by its row, such as "Open Margaret Holloway's summary".
+
+[Code](/docs/components/data-table/code#accessibility) covers how the table meets the standard.
