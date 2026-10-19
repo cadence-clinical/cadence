@@ -22,5 +22,8 @@ supersedes an earlier one.
 | [0014](0014-headless-libraries.md)      | How a pattern depends on a headless library                                        | Accepted                              |
 | [0015](0015-charts.md)                  | Cadence draws its charts in SVG, on d3-scale                                       | Accepted                              |
 | [0016](0016-fhir-transforms.md)         | FHIR transforms are written by hand, and a schema interprets outside the component | Accepted                              |
+| [0017](0017-ai-provenance.md)           | AI-drafted content is always marked and linked to its source                       | Accepted                              |
+| [0018](0018-simulated-collaboration.md) | Prototypes simulate live collaboration                                             | Accepted                              |
+| [0019](0019-synthetic-ward-data.md)     | Synthetic ward data is adapted from Synthea, within what Oracle Health serves      | Accepted                              |
 
 To add a record, copy the structure of an existing one, take the next number and add a row here.

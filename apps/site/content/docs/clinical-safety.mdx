@@ -11,6 +11,14 @@ No Cadence component contains a clinical threshold. A component that shows a hea
 
 Cadence works this way because what counts as abnormal is a clinical decision. It varies by site, by patient age and by criteria a clinician has modified for one patient. A design system that ships a default threshold is making that decision for every patient on every screen that uses it.
 
+## AI-drafted content is marked and linked to its source
+
+Text that an AI drafted is always marked as AI-drafted wherever Cadence shows it: in the draft, after a clinician accepts or edits it, and in the signed record. Once the text has been reviewed, the mark also says who reviewed it. The mark is never colour alone.
+
+Each drafted statement links to the source it was drawn from, such as a note, a result or an observation, so a reviewer can check it. A statement with no source is shown as having none.
+
+A component displays the provenance you give it and never infers it, in the same way that it displays an interpretation and never makes one. You supply which text was drafted and what its sources are. In FHIR, a `Provenance` resource can carry it, but not every clinical system records it there, so your app may need to hold it. Cadence has no component that displays provenance yet.
+
 ## Regional rule sets are opt-in and cited
 
 Published rule sets, such as reference intervals or track and trigger chart bands, belong in a Region package that you choose to supply. The planned `@cadence-clinical/au` package is the first.
