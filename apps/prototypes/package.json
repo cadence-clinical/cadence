@@ -21,7 +21,7 @@
     "@tanstack/react-table": "^9.2.0",
     "lucide-react": "^1.46.0",
     "react": "catalog:",
-    "react-day-picker": "^10.0.1",
+    "react-day-picker": "^10.0.2",
     "react-dom": "catalog:"
   },
   "devDependencies": {
