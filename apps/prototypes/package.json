@@ -19,6 +19,7 @@
     "@cadence-clinical/ui": "workspace:*",
     "@dagrejs/dagre": "^3.1.1",
     "@tanstack/react-table": "^9.2.0",
+    "@vercel/toolbar": "^0.2.7",
     "lucide-react": "^1.46.0",
     "react": "catalog:",
     "react-day-picker": "^10.0.2",
