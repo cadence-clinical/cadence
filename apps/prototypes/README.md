@@ -39,5 +39,22 @@ The site asks search engines not to index it three ways: a `robots` meta tag in 
 `public/robots.txt`, and an `X-Robots-Tag` header from `vercel.json`. Anyone with the link can
 still open it. To limit it to testers, turn on Vercel's deployment protection for the project.
 
+## Collect feedback
+
+Testers comment on a prototype with the Vercel Toolbar: they click a spot on the page and leave a
+comment there, and the team sees every thread in Vercel.
+
+- **On a preview deployment** (every pull request), the toolbar shows to members of the Vercel team
+  without anything else.
+- **On prototypes.cadenceclinical.dev**, it shows only to a visitor who asks for it, because
+  anyone else would be asked to sign in to Vercel. Give testers a link with `?feedback` before the
+  `#`, such as `https://prototypes.cadenceclinical.dev/?feedback#/patient-list/a`. The browser
+  remembers it, and `?feedback=off` turns it off again. `src/feedback.ts` does this.
+- **Who can comment:** members of the Vercel team. Someone outside the team needs a Vercel account
+  and an invitation, through the deployment's **Share** menu.
+- **Notifications:** comments on production don't notify anyone by default. Connect the project to
+  Slack with Vercel's Slack app, or mention someone when you start a thread.
+- In the project's **Settings → General → Vercel Toolbar**, Production must not be **Off**.
+
 `vercel.json` doesn't block framing, so a research tool can show a prototype inside its own page
 during a test session.
