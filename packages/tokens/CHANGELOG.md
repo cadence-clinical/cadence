@@ -1,5 +1,11 @@
 # @cadence-clinical/tokens
 
+## 0.2.0
+
+### Patch Changes
+
+- [#120](https://github.com/cadence-clinical/cadence/pull/120) [`748cc1a`](https://github.com/cadence-clinical/cadence/commit/748cc1aa8d1d6cb23542040fb0e916e6e897cdba) Thanks [@ronaldh46](https://github.com/ronaldh46)! - theme.css sets `color-scheme`, so the browser's own parts, such as scrollbars, form controls and autofill, follow the mode: both schemes under the operating system's setting, and only the chosen one when `data-mode` or a `.light` or `.dark` class sets it.
+
 ## 0.1.0
 
 ### Minor Changes
