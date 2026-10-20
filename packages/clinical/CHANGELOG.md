@@ -1,5 +1,14 @@
 # @cadence-clinical/clinical
 
+## 0.2.0
+
+### Patch Changes
+
+- [#128](https://github.com/cadence-clinical/cadence/pull/128) [`30a9ad1`](https://github.com/cadence-clinical/cadence/commit/30a9ad109b18d2a2371cb6bd6aa80a7e73d0209c) Thanks [@ronaldh46](https://github.com/ronaldh46)! - Update Base UI to 1.9.0 and react-day-picker to 10.0.2. With Base UI 1.9.0, a disabled Collapsible's trigger is a natively disabled button: it says it is disabled and ignores a press as before, and the Tab key now passes over it rather than stopping on it.
+- Updated dependencies [[`748cc1a`](https://github.com/cadence-clinical/cadence/commit/748cc1aa8d1d6cb23542040fb0e916e6e897cdba), [`748cc1a`](https://github.com/cadence-clinical/cadence/commit/748cc1aa8d1d6cb23542040fb0e916e6e897cdba), [`748cc1a`](https://github.com/cadence-clinical/cadence/commit/748cc1aa8d1d6cb23542040fb0e916e6e897cdba), [`748cc1a`](https://github.com/cadence-clinical/cadence/commit/748cc1aa8d1d6cb23542040fb0e916e6e897cdba), [`748cc1a`](https://github.com/cadence-clinical/cadence/commit/748cc1aa8d1d6cb23542040fb0e916e6e897cdba), [`748cc1a`](https://github.com/cadence-clinical/cadence/commit/748cc1aa8d1d6cb23542040fb0e916e6e897cdba), [`748cc1a`](https://github.com/cadence-clinical/cadence/commit/748cc1aa8d1d6cb23542040fb0e916e6e897cdba), [`748cc1a`](https://github.com/cadence-clinical/cadence/commit/748cc1aa8d1d6cb23542040fb0e916e6e897cdba), [`748cc1a`](https://github.com/cadence-clinical/cadence/commit/748cc1aa8d1d6cb23542040fb0e916e6e897cdba), [`748cc1a`](https://github.com/cadence-clinical/cadence/commit/748cc1aa8d1d6cb23542040fb0e916e6e897cdba), [`748cc1a`](https://github.com/cadence-clinical/cadence/commit/748cc1aa8d1d6cb23542040fb0e916e6e897cdba), [`30a9ad1`](https://github.com/cadence-clinical/cadence/commit/30a9ad109b18d2a2371cb6bd6aa80a7e73d0209c), [`748cc1a`](https://github.com/cadence-clinical/cadence/commit/748cc1aa8d1d6cb23542040fb0e916e6e897cdba), [`748cc1a`](https://github.com/cadence-clinical/cadence/commit/748cc1aa8d1d6cb23542040fb0e916e6e897cdba), [`748cc1a`](https://github.com/cadence-clinical/cadence/commit/748cc1aa8d1d6cb23542040fb0e916e6e897cdba), [`748cc1a`](https://github.com/cadence-clinical/cadence/commit/748cc1aa8d1d6cb23542040fb0e916e6e897cdba), [`748cc1a`](https://github.com/cadence-clinical/cadence/commit/748cc1aa8d1d6cb23542040fb0e916e6e897cdba), [`748cc1a`](https://github.com/cadence-clinical/cadence/commit/748cc1aa8d1d6cb23542040fb0e916e6e897cdba), [`748cc1a`](https://github.com/cadence-clinical/cadence/commit/748cc1aa8d1d6cb23542040fb0e916e6e897cdba)]:
+  - @cadence-clinical/ui@0.2.0
+  - @cadence-clinical/core@0.2.0
+
 ## 0.1.0
 
 ### Minor Changes

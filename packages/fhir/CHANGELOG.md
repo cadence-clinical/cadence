@@ -1,5 +1,12 @@
 # @cadence-clinical/fhir
 
+## 0.2.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @cadence-clinical/core@0.2.0
+
 ## 0.1.0
 
 ### Minor Changes

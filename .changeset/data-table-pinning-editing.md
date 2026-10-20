@@ -1,5 +1,0 @@
----
-"@cadence-clinical/ui": minor
----
-
-Data table: pinned columns, fixed column widths and cells edited in place. `dataTableFeatures` now registers TanStack Table's column pinning and column sizing. A column pinned with `columnPinning` stays at its side while the table scrolls sideways, on an opaque background that takes the row's fill, and the pinned column nearest the scrolling ones shows an edge once something is under it. The table measures the pinned columns, so their offsets are right at either density. Pinned columns stop sticking when together they would cover more than two thirds of the table's box. A column with a `size` keeps that width in pixels, and a column without one fits its content as before. Add `DataTableEditableCell`: text edited in an Input in place, or any value edited in a popover through `editor`, such as a date chosen from a Calendar. Enter or leaving saves, Escape cancels, focus returns to the cell, the row keeps its height, and the change is announced politely. The data table's registry item now depends on Input and Popover. Its grade stays tested.
