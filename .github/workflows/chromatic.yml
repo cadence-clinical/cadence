@@ -48,7 +48,7 @@ jobs:
         if: steps.token.outputs.present == 'true'
       - run: pnpm turbo run build --filter=@cadence-clinical/storybook
         if: steps.token.outputs.present == 'true'
-      - uses: chromaui/action@18599f2ae5010524d496b86099c9b69a37f5d8d2 # v18.12.2
+      - uses: chromaui/action@e50abd573c8a789526f165fec06137a7c21d7299 # v18.13.0
         if: steps.token.outputs.present == 'true'
         with:
           projectToken: ${{ env.CHROMATIC_PROJECT_TOKEN }}
