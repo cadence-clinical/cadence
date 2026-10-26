@@ -42,7 +42,7 @@
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "eslint": "catalog:",
-    "eslint-config-next": "^16.4.0",
+    "eslint-config-next": "^16.4.2",
     "eslint-config-prettier": "^10.1.8",
     "postcss": "^8.5.28",
     "react-day-picker": "^10.0.2",
