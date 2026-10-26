@@ -28,10 +28,10 @@ catalog:
   "@tailwindcss/postcss": ^4.3.3
   "@tailwindcss/vite": ^4.3.3
   # Vitest 5 is out, but @storybook/addon-vitest supports 3 and 4 only.
-  vitest: ^4.1.11
-  "@vitest/coverage-v8": ^4.1.11
-  "@vitest/browser-playwright": ^4.1.11
-  playwright: ^1.63.0
+  vitest: ^4.1.12
+  "@vitest/coverage-v8": ^4.1.12
+  "@vitest/browser-playwright": ^4.1.12
+  playwright: ^1.64.1
   tsdown: ^0.23.0
   # ESLint 10 is out, but eslint-plugin-jsx-a11y supports 9 only, and a11y linting is not optional here.
   eslint: ^9.39.5
