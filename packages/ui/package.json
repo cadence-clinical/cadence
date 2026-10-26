@@ -64,7 +64,7 @@
   },
   "devDependencies": {
     "@cadence-clinical/config": "workspace:*",
-    "@storybook/react-vite": "^10.6.1",
+    "@storybook/react-vite": "^10.6.2",
     "@tanstack/react-table": "^9.2.0",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
@@ -72,7 +72,7 @@
     "react": "catalog:",
     "react-day-picker": "^10.0.2",
     "react-dom": "catalog:",
-    "storybook": "^10.6.1",
+    "storybook": "^10.6.2",
     "tsdown": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
